@@ -195,7 +195,7 @@ yarn
 yarn dev
 
 # Build and run
-yarn build && yarn start
+yarn build && npx serve@latest out
 
 # Build for a single language
 yarn build:lang en

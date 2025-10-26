@@ -194,7 +194,7 @@ yarn
 yarn dev
 
 # 构建并启动
-yarn build && yarn start
+yarn build && npx serve@latest out
 
 # 单一语言构建
 yarn build:lang en
