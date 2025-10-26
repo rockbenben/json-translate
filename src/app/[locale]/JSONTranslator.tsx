@@ -6,7 +6,7 @@ import { CopyOutlined, DownloadOutlined, InboxOutlined, ExportOutlined, UploadOu
 import { JSONPath } from "jsonpath-plus";
 import { filterObjectPropertyMatches } from "@/app/utils/jsonPathUtils";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
-import { getTextStats, preprocessJson, stripJsonWrapper, loadFromLocalStorage, saveToLocalStorage, downloadFile } from "@/app/utils";
+import { getTextStats, preprocessJson, stripJsonWrapper, loadFromLocalStorage, saveToLocalStorage, downloadFile, splitBySpaces } from "@/app/utils";
 import { categorizedOptions, findMethodLabel, generateCacheSuffix } from "@/app/components/translateAPI";
 import { useLanguageOptions, filterLanguageOption } from "@/app/components/languages";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
@@ -40,6 +40,8 @@ const JSONTranslator = () => {
     setTarget_langs,
     useCache,
     setUseCache,
+    removeChars,
+    setRemoveChars,
     sysPrompt,
     userPrompt,
     multiLanguageMode,
@@ -158,7 +160,15 @@ const JSONTranslator = () => {
           await handleI18nTranslation(jsonObject, currentTargetLang);
         }
 
-        const resultText = JSON.stringify(jsonObject, null, 2);
+        let resultText = JSON.stringify(jsonObject, null, 2);
+
+        // Remove specified characters from the final JSON text (after all formatting is done)
+        if (removeChars.trim()) {
+          const charsToRemove = splitBySpaces(removeChars);
+          charsToRemove.forEach((char) => {
+            resultText = resultText.replaceAll(char, "");
+          });
+        }
 
         // Store the combined result for all languages
         setTranslatedText(resultText);
@@ -194,7 +204,15 @@ const JSONTranslator = () => {
               await handleI18nTranslation(jsonObject, currentTargetLang);
             }
 
-            const resultText = JSON.stringify(jsonObject, null, 2);
+            let resultText = JSON.stringify(jsonObject, null, 2);
+
+            // Remove specified characters from the final JSON text (after all formatting is done)
+            if (removeChars.trim()) {
+              const charsToRemove = splitBySpaces(removeChars);
+              charsToRemove.forEach((char) => {
+                resultText = resultText.replaceAll(char, "");
+              });
+            }
 
             // Store result for this language
             allResults[currentTargetLang] = resultText;
@@ -656,6 +674,11 @@ const JSONTranslator = () => {
                     <Switch checked={multiLanguageMode} onChange={(checked) => setMultiLanguageMode(checked)} checkedChildren={t("multiLanguageMode")} unCheckedChildren={t("singleLanguageMode")} />
                   </Tooltip>
                 </Space>
+              </Form.Item>
+              <Form.Item label={t("removeCharsAfterTranslation")}>
+                <Tooltip title={t("removeCharsAfterTranslationTooltip")}>
+                  <Input placeholder={`${t("example")}: ♪ <i> </i>`} value={removeChars} onChange={(e) => setRemoveChars(e.target.value)} style={{ minWidth: 200 }} allowClear />
+                </Tooltip>
               </Form.Item>
 
               {translateMode === "keyMapping" && (
