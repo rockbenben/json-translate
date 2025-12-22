@@ -1,23 +1,26 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import { Row, Col, Button, Typography, Tooltip, Form, Checkbox, Input, Select, App, Card, Space, Spin, Flex, Upload, Divider } from "antd";
-import { CopyOutlined, DownloadOutlined, InboxOutlined, ExportOutlined, UploadOutlined, SettingOutlined, DownOutlined, UpOutlined, GlobalOutlined, ClearOutlined } from "@ant-design/icons";
+import { DownloadOutlined, InboxOutlined, ExportOutlined, UploadOutlined, SettingOutlined, DownOutlined, UpOutlined, GlobalOutlined, ClearOutlined } from "@ant-design/icons";
 import { JSONPath } from "jsonpath-plus";
-import { filterObjectPropertyMatches, preprocessJson, downloadFile, getErrorMessage, stripJsonWrapper, splitBySpaces } from "@/app/utils";
-import KeyMappingInput from "@/app/components/KeyMappingInput";
+import { useTranslations } from "next-intl";
+import pLimit from "p-limit";
 import type { JsonPathNode, JsonValue, KeyMapping, ValidMapping } from "@/app/types";
 import { generateCacheSuffix } from "@/app/lib/translation";
-import { useLanguageOptions } from "@/app/components/languages";
-import LanguageSelector from "@/app/components/LanguageSelector";
-import TranslationAPISelector from "@/app/components/TranslationAPISelector";
-import { useTranslationContext } from "@/app/components/TranslationContext";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 import useFileUpload from "@/app/hooks/useFileUpload";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useTextStats } from "@/app/hooks/useTextStats";
-import { useTranslations } from "next-intl";
-import pLimit from "p-limit";
+
+import { filterObjectPropertyMatches, preprocessJson, downloadFile, getErrorMessage, stripJsonWrapper, splitBySpaces } from "@/app/utils";
+import KeyMappingInput from "@/app/components/KeyMappingInput";
+import { useLanguageOptions } from "@/app/components/languages";
+import LanguageSelector from "@/app/components/LanguageSelector";
+import TranslationAPISelector from "@/app/components/TranslationAPISelector";
+import { useTranslationContext } from "@/app/components/TranslationContext";
+import ResultCard from "@/app/components/ResultCard";
+import TranslationProgressModal from "@/app/components/TranslationProgressModal";
 
 const { TextArea } = Input;
 const { Dragger } = Upload;
@@ -64,6 +67,11 @@ const JSONTranslator = () => {
   const [directExport, setDirectExport] = useState(false);
   const [translationResults, setTranslationResults] = useState<Record<string, string>>({}); // Store results by language
 
+  // Progress tracking
+  const translatedCountRef = useRef(0);
+  const totalCountRef = useRef(0);
+  const [progressPercent, setProgressPercent] = useState(0);
+
   const [translateMode, setTranslateMode] = useLocalStorage<TranslateMode>("translateMode", "allKeys"); // 翻译模式状态：'allKeys', 'nodeKeys', 'keyMapping', "selectiveKey", 'i18nMode'
   const [jsonPathForNodeTranslation, setJsonPathForNodeTranslation] = useLocalStorage("jsonPathForNodeTranslation", ""); // 局部节点路径
   const [showSimpleInput, setShowSimpleInput] = useLocalStorage<boolean>("showSimpleInput", true);
@@ -85,6 +93,14 @@ const JSONTranslator = () => {
     userPrompt: userPrompt,
     useCache: useCache,
     ...config,
+  };
+
+  // Progress tracking helper
+  const updateProgress = () => {
+    translatedCountRef.current++;
+    if (totalCountRef.current > 0) {
+      setProgressPercent((translatedCountRef.current / totalCountRef.current) * 100);
+    }
   };
 
   const toggleInputType = () => {
@@ -131,6 +147,7 @@ const JSONTranslator = () => {
       // 检查当前对象是否有 sourceField 字段
       const sourceValue = record[sourceField];
       if (typeof sourceValue === "string") {
+        totalCountRef.current++;
         promises.push(
           limit(async () => {
             // 在多语言模式下，我们只翻译当前目标语言字段不存在的情况
@@ -144,6 +161,7 @@ const JSONTranslator = () => {
               // 添加翻译结果到同一个对象中的目标语言字段
               record[currentTargetLang] = translatedText;
             }
+            updateProgress();
           })
         );
       }
@@ -159,6 +177,9 @@ const JSONTranslator = () => {
   // 处理全局键值翻译
   const handleAllKeysTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
     const allNodes = JSONPath({ path: "$..*", json: jsonObject, resultType: "all" }) as JsonPathNode[];
+    const stringNodes = allNodes.filter((node) => typeof node.value === "string");
+    totalCountRef.current += stringNodes.length;
+
     const cacheSuffix = generateCacheSuffix(sourceLanguage, currentTargetLang, translationMethod, {
       model: config?.model as string,
       temperature: config?.temperature as number,
@@ -167,9 +188,8 @@ const JSONTranslator = () => {
     });
     const tasks: Promise<void>[] = [];
 
-    for (const node of allNodes) {
-      if (typeof node.value !== "string") continue;
-      const sourceText = node.value;
+    for (const node of stringNodes) {
+      const sourceText = node.value as string;
 
       tasks.push(
         limit(async () => {
@@ -180,6 +200,7 @@ const JSONTranslator = () => {
             ...translationConfig,
           });
           applyTranslation(jsonObject, node.path, translatedText || "");
+          updateProgress();
         })
       );
     }
@@ -269,6 +290,7 @@ const JSONTranslator = () => {
     // 处理所有有效的映射
     const allPromises: Promise<void>[] = [];
     for (const { inputNodes, outputNodes } of validMappings) {
+      totalCountRef.current += inputNodes.length;
       const cacheSuffix = generateCacheSuffix(sourceLanguage, currentTargetLang, translationMethod, {
         model: config?.model as string,
         temperature: config?.temperature as number,
@@ -285,6 +307,7 @@ const JSONTranslator = () => {
             ...translationConfig,
           });
           applyTranslation(jsonObject, outputNodes[index].path, translatedText || "");
+          updateProgress();
         });
       });
       allPromises.push(...promises);
@@ -340,6 +363,7 @@ const JSONTranslator = () => {
         throw new Error(`${tJson("invalidPathKey")}: ${inputKey}`);
       }
 
+      totalCountRef.current += nodesToTranslate.length;
       const cacheSuffix = generateCacheSuffix(sourceLanguage, currentTargetLang, translationMethod, {
         model: config?.model as string,
         temperature: config?.temperature as number,
@@ -357,6 +381,7 @@ const JSONTranslator = () => {
           });
           // Update the value in the original object
           rootRecord[node.key][outputKey] = translatedText;
+          updateProgress();
         });
       });
 
@@ -392,6 +417,11 @@ const JSONTranslator = () => {
   const handleTranslate = async () => {
     setTranslatedText("");
     setTranslationResults({});
+
+    // Reset progress
+    translatedCountRef.current = 0;
+    totalCountRef.current = 0;
+    setProgressPercent(0);
 
     if (!sourceText.trim()) {
       message.error(t("noSourceText"));
@@ -525,12 +555,18 @@ const JSONTranslator = () => {
       if (!multiLanguageMode && allResults[targetLanguage]) {
         setTranslatedText(allResults[targetLanguage]);
       }
+
+      // Show success message
+      if (!directExport) {
+        message.success(t("textProcessed"));
+      }
     } catch (error: unknown) {
       console.error("Translation process error:", error);
       const errMsg = getErrorMessage(error);
       message.error(`Translation process error: ${errMsg}`);
     } finally {
       setTranslateInProgress(false);
+      setProgressPercent(100); // Ensure progress shows complete
     }
   };
 
@@ -570,22 +606,16 @@ const JSONTranslator = () => {
           const langLabel = sourceOptions.find((option) => option.value === langCode)?.label || langCode;
 
           return (
-            <Card
+            <ResultCard
               key={langCode}
               title={`${t("translationResult")} - ${langLabel}`}
-              extra={
-                <Space wrap>
-                  <Button icon={<CopyOutlined />} onClick={() => copyToClipboard(translationResults[langCode])}>
-                    {t("copy")}
-                  </Button>
-                  <Button onClick={() => copyToClipboard(stripJsonWrapper(translationResults[langCode]))}>{tJson("copyNode")}</Button>
-                  <Button icon={<DownloadOutlined />} onClick={() => handleExportFile(langCode)}>
-                    {t("exportFile")}
-                  </Button>
-                </Space>
-              }>
-              <TextArea value={translationResults[langCode]} rows={8} readOnly aria-label={`${t("translationResult")} - ${langLabel}`} />
-            </Card>
+              content={translationResults[langCode]}
+              showStats={false}
+              rows={8}
+              onCopy={() => copyToClipboard(translationResults[langCode])}
+              onCopyNode={() => copyToClipboard(stripJsonWrapper(translationResults[langCode]))}
+              onExport={() => handleExportFile(langCode)}
+            />
           );
         })}
       </Space>
@@ -593,7 +623,7 @@ const JSONTranslator = () => {
   };
 
   return (
-    <Spin spinning={translateInProgress || isFileProcessing} size="large">
+    <Spin spinning={isFileProcessing} size="large">
       <Row gutter={[24, 24]}>
         {/* Left Column: Source Area */}
         <Col xs={24} lg={14} xl={15}>
@@ -856,37 +886,22 @@ const JSONTranslator = () => {
           {multiLanguageMode && translateMode !== "i18nMode"
             ? renderMultiLanguageResults()
             : translatedText && (
-                <Card
-                  title={t("translationResult")}
-                  className="shadow-sm"
-                  extra={
-                    <Space wrap>
-                      <Button type="text" icon={<CopyOutlined />} onClick={() => copyToClipboard(translatedText)}>
-                        {t("copy")}
-                      </Button>
-                      <Button type="text" onClick={() => copyToClipboard(stripJsonWrapper(translatedText))}>
-                        {tJson("copyNode")}
-                      </Button>
-                      <Button
-                        type="primary"
-                        ghost
-                        icon={<DownloadOutlined />}
-                        onClick={() => {
-                          const fileName = handleExportFile();
-                          message.success(`${t("exportedFile")}: ${fileName}`);
-                        }}>
-                        {t("exportFile")}
-                      </Button>
-                    </Space>
-                  }>
-                  <TextArea value={resultStats.displayText} rows={10} readOnly aria-label={t("translationResult")} />
-                  <Paragraph type="secondary" className="text-right">
-                    {t("outputStatsTitle")}: {resultStats.charCount} {t("charLabel")}, {resultStats.lineCount} {t("lineLabel")}
-                  </Paragraph>
-                </Card>
+                <ResultCard
+                  content={resultStats.displayText}
+                  charCount={resultStats.charCount}
+                  lineCount={resultStats.lineCount}
+                  onCopy={() => copyToClipboard(translatedText)}
+                  onCopyNode={() => copyToClipboard(stripJsonWrapper(translatedText))}
+                  onExport={() => {
+                    const fileName = handleExportFile();
+                    message.success(`${t("exportedFile")}: ${fileName}`);
+                  }}
+                />
               )}
         </div>
       )}
+
+      <TranslationProgressModal open={translateInProgress} percent={progressPercent} multiLanguageMode={multiLanguageMode} targetLanguageCount={target_langs.length} />
     </Spin>
   );
 };
