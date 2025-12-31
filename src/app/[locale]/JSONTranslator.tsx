@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useMemo, useState, useRef } from "react";
-import { Row, Col, Button, Typography, Tooltip, Form, Checkbox, Input, Select, App, Card, Space, Spin, Flex, Upload, Divider } from "antd";
-import { DownloadOutlined, InboxOutlined, ExportOutlined, UploadOutlined, SettingOutlined, DownOutlined, UpOutlined, GlobalOutlined, ClearOutlined } from "@ant-design/icons";
+import { Row, Col, Button, Typography, Tooltip, Form, Checkbox, Input, InputNumber, Select, App, Card, Space, Spin, Flex, Upload, Divider } from "antd";
+import { InboxOutlined, ExportOutlined, ImportOutlined, SettingOutlined, DownOutlined, UpOutlined, GlobalOutlined, ClearOutlined, SaveOutlined } from "@ant-design/icons";
 import { JSONPath } from "jsonpath-plus";
 import { useTranslations } from "next-intl";
 import pLimit from "p-limit";
@@ -21,6 +21,8 @@ import TranslationAPISelector from "@/app/components/TranslationAPISelector";
 import { useTranslationContext } from "@/app/components/TranslationContext";
 import ResultCard from "@/app/components/ResultCard";
 import TranslationProgressModal from "@/app/components/TranslationProgressModal";
+
+import MultiLanguageSettingsModal from "@/app/components/MultiLanguageSettingsModal";
 
 const { TextArea } = Input;
 const { Dragger } = Upload;
@@ -62,6 +64,10 @@ const JSONTranslator = () => {
     setTranslateInProgress,
     handleLanguageChange,
     validateTranslate,
+    retryCount,
+    setRetryCount,
+    retryTimeout,
+    setRetryTimeout,
   } = useTranslationContext();
   const [largeMode, setLargeMode] = useState(false);
   const [directExport, setDirectExport] = useState(false);
@@ -81,6 +87,7 @@ const JSONTranslator = () => {
   const [jsonStartNode, setJsonStartNode] = useLocalStorage("jsonStartNode", ""); // 开始翻译的节点位置
   const [translationField, setTranslationField] = useLocalStorage("translationField", ""); // 待翻译字段
   const [showAdvancedPanel, setShowAdvancedPanel] = useState(true);
+  const [multiLangModalOpen, setMultiLangModalOpen] = useState(false);
 
   const sourceStats = useTextStats(sourceText);
   const resultStats = useTextStats(translatedText);
@@ -563,7 +570,7 @@ const JSONTranslator = () => {
     } catch (error: unknown) {
       console.error("Translation process error:", error);
       const errMsg = getErrorMessage(error);
-      message.error(`Translation process error: ${errMsg}`);
+      message.error(`${errMsg} ${t("translationError")}`, 5);
     } finally {
       setTranslateInProgress(false);
       setProgressPercent(100); // Ensure progress shows complete
@@ -716,10 +723,21 @@ const JSONTranslator = () => {
               className="shadow-sm"
               extra={
                 <Space>
+                  <Tooltip title={t("exportSettingTooltip")}>
+                    <Button
+                      type="text"
+                      icon={<SaveOutlined />}
+                      size="small"
+                      onClick={async () => {
+                        await exportSettings();
+                      }}
+                      aria-label={t("exportSettingTooltip")}
+                    />
+                  </Tooltip>
                   <Tooltip title={t("importSettingTooltip")}>
                     <Button
                       type="text"
-                      icon={<UploadOutlined />}
+                      icon={<ImportOutlined />}
                       size="small"
                       onClick={async () => {
                         await importSettings();
@@ -727,16 +745,8 @@ const JSONTranslator = () => {
                       aria-label={t("importSettingTooltip")}
                     />
                   </Tooltip>
-                  <Tooltip title={t("exportSettingTooltip")}>
-                    <Button
-                      type="text"
-                      icon={<DownloadOutlined />}
-                      size="small"
-                      onClick={async () => {
-                        await exportSettings();
-                      }}
-                      aria-label={t("exportSettingTooltip")}
-                    />
+                  <Tooltip title={t("batchEditMultiLangTooltip")}>
+                    <Button type="text" icon={<GlobalOutlined />} size="small" disabled={translateInProgress} onClick={() => setMultiLangModalOpen(true)} />
                   </Tooltip>
                 </Space>
               }>
@@ -873,6 +883,20 @@ const JSONTranslator = () => {
                       />
                     </Form.Item>
                   </Col>
+                  <Col span={12}>
+                    <Tooltip title={t("retryCountTooltip")}>
+                      <Form.Item label={t("retryCount")} style={{ marginBottom: 0 }}>
+                        <InputNumber min={1} max={10} value={retryCount} onChange={(value) => setRetryCount(value ?? 3)} style={{ width: "100%" }} />
+                      </Form.Item>
+                    </Tooltip>
+                  </Col>
+                  <Col span={12}>
+                    <Tooltip title={t("retryTimeoutTooltip")}>
+                      <Form.Item label={t("retryTimeout")} style={{ marginBottom: 0 }}>
+                        <InputNumber min={5} max={120} value={retryTimeout} onChange={(value) => setRetryTimeout(value ?? 30)} addonAfter="s" style={{ width: "100%" }} />
+                      </Form.Item>
+                    </Tooltip>
+                  </Col>
                 </Row>
               </Form>
             </Card>
@@ -902,6 +926,14 @@ const JSONTranslator = () => {
       )}
 
       <TranslationProgressModal open={translateInProgress} percent={progressPercent} multiLanguageMode={multiLanguageMode} targetLanguageCount={target_langs.length} />
+
+      <MultiLanguageSettingsModal
+        open={multiLangModalOpen}
+        onClose={() => setMultiLangModalOpen(false)}
+        target_langs={target_langs}
+        setTarget_langs={setTarget_langs}
+        setMultiLanguageMode={setMultiLanguageMode}
+      />
     </Spin>
   );
 };
