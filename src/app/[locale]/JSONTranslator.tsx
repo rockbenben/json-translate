@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useMemo, useState, useRef } from "react";
-import { Row, Col, Button, Typography, Tooltip, Form, Checkbox, Input, InputNumber, Select, App, Card, Space, Spin, Flex, Upload, Divider } from "antd";
-import { InboxOutlined, ExportOutlined, ImportOutlined, SettingOutlined, DownOutlined, UpOutlined, GlobalOutlined, ClearOutlined, SaveOutlined } from "@ant-design/icons";
+import { Row, Col, Button, Typography, Tooltip, Form, Input, InputNumber, Select, App, Card, Space, Spin, Flex, Upload, Divider, Switch, Collapse, theme } from "antd";
+import { InboxOutlined, ExportOutlined, ImportOutlined, SettingOutlined, GlobalOutlined, ClearOutlined, SaveOutlined, FileTextOutlined, ControlOutlined } from "@ant-design/icons";
 import { JSONPath } from "jsonpath-plus";
 import { useTranslations } from "next-intl";
 import pLimit from "p-limit";
@@ -37,6 +37,7 @@ const JSONTranslator = () => {
   const { copyToClipboard } = useCopyToClipboard();
 
   const { message } = App.useApp();
+  const { token } = theme.useToken();
   const { isFileProcessing, fileList, multipleFiles, sourceText, setSourceText, handleFileUpload, handleUploadRemove, handleUploadChange, resetUpload } = useFileUpload();
   const {
     exportSettings,
@@ -86,7 +87,7 @@ const JSONTranslator = () => {
 
   const [jsonStartNode, setJsonStartNode] = useLocalStorage("jsonStartNode", ""); // 开始翻译的节点位置
   const [translationField, setTranslationField] = useLocalStorage("translationField", ""); // 待翻译字段
-  const [showAdvancedPanel, setShowAdvancedPanel] = useState(true);
+  const [activeCollapseKeys, setActiveCollapseKeys] = useLocalStorage<string[]>("jsonTranslatorCollapseKeys", ["jsonmode"]);
   const [multiLangModalOpen, setMultiLangModalOpen] = useState(false);
 
   const sourceStats = useTextStats(sourceText);
@@ -710,205 +711,227 @@ const JSONTranslator = () => {
           </Card>
         </Col>
 
-        {/* Right Column: Configuration */}
+        {/* Right Column: Settings and Configuration */}
         <Col xs={24} lg={10} xl={9}>
-          <Flex vertical gap="middle">
-            {/* Configuration Card */}
-            <Card
-              title={
-                <Space>
-                  <SettingOutlined /> {t("configuration")}
-                </Space>
-              }
-              className="shadow-sm"
-              extra={
-                <Space>
-                  <Tooltip title={t("exportSettingTooltip")}>
-                    <Button
-                      type="text"
-                      icon={<SaveOutlined />}
-                      size="small"
-                      onClick={async () => {
-                        await exportSettings();
-                      }}
-                      aria-label={t("exportSettingTooltip")}
-                    />
-                  </Tooltip>
-                  <Tooltip title={t("importSettingTooltip")}>
-                    <Button
-                      type="text"
-                      icon={<ImportOutlined />}
-                      size="small"
-                      onClick={async () => {
-                        await importSettings();
-                      }}
-                      aria-label={t("importSettingTooltip")}
-                    />
-                  </Tooltip>
-                  <Tooltip title={t("batchEditMultiLangTooltip")}>
-                    <Button type="text" icon={<GlobalOutlined />} size="small" disabled={translateInProgress} onClick={() => setMultiLangModalOpen(true)} />
-                  </Tooltip>
-                </Space>
-              }>
-              <Form layout="vertical" className="w-full">
-                {/* Language Selection */}
-                <LanguageSelector
-                  sourceLanguage={sourceLanguage}
-                  targetLanguage={targetLanguage}
-                  target_langs={target_langs}
-                  multiLanguageMode={multiLanguageMode}
-                  handleLanguageChange={handleLanguageChange}
-                  setTarget_langs={setTarget_langs}
-                  setMultiLanguageMode={setMultiLanguageMode}
-                />
-
-                {/* API Settings */}
-                <TranslationAPISelector translationMethod={translationMethod} setTranslationMethod={setTranslationMethod} config={config} handleConfigChange={handleConfigChange} />
-
-                {/* Mode Specific Inputs */}
-                <Form.Item label={t("translationMode")} style={{ marginTop: -12, marginBottom: 6 }} extra={translateMode === "i18nMode" ? tJson("i18nModeExtra") : null}>
-                  <Select
-                    value={translateMode}
-                    onChange={(value) => {
-                      setTranslateMode(value);
+          <Card
+            title={
+              <Space>
+                <SettingOutlined /> {t("configuration")}
+              </Space>
+            }
+            className="shadow-sm"
+            extra={
+              <Space>
+                <Tooltip title={t("exportSettingTooltip")}>
+                  <Button
+                    type="text"
+                    icon={<SaveOutlined />}
+                    size="small"
+                    disabled={translateInProgress}
+                    onClick={async () => {
+                      await exportSettings();
                     }}
-                    options={[
-                      { label: tJson("allKeys"), value: "allKeys" },
-                      { label: tJson("nodeKeys"), value: "nodeKeys" },
-                      { label: tJson("keyMapping"), value: "keyMapping" },
-                      { label: tJson("selectiveKey"), value: "selectiveKey" },
-                      { label: tJson("i18nMode"), value: "i18nMode" },
-                    ]}
-                    aria-label={t("translationMode")}
+                    aria-label={t("exportSettingTooltip")}
                   />
-                </Form.Item>
-                {translateMode === "keyMapping" && (
-                  <div className="p-3 rounded-lg border border-gray-100 dark:border-gray-700 dark:bg-gray-800/50">
-                    <Flex justify="space-between" align="center">
-                      <Text strong>{tJson("keyMapping")}</Text>
-                      <Tooltip title={tJson("keyMappingTooltip")} placement="top">
-                        <Button size="small" onClick={toggleInputType}>
-                          {showSimpleInput ? tJson("toggleKeyMapping") : tJson("toggleKeyOriginal")}
-                        </Button>
-                      </Tooltip>
-                    </Flex>
-                    {showSimpleInput ? (
-                      <Form.Item label={tJson("keyToTranslate")} extra={`${tJson("keyToTranslateExtra")}. ${tJson("multiValueHint")}`}>
-                        <Input
-                          value={simpleInputKey}
-                          onChange={(e) => setSimpleInputKey(e.target.value)}
-                          placeholder={`${t("example")}: langName,object,attribute`}
-                          aria-label={tJson("keyToTranslate")}
+                </Tooltip>
+                <Tooltip title={t("importSettingTooltip")}>
+                  <Button
+                    type="text"
+                    icon={<ImportOutlined />}
+                    size="small"
+                    disabled={translateInProgress}
+                    onClick={async () => {
+                      await importSettings();
+                    }}
+                    aria-label={t("importSettingTooltip")}
+                  />
+                </Tooltip>
+                <Tooltip title={t("batchEditMultiLangTooltip")}>
+                  <Button type="text" icon={<GlobalOutlined />} size="small" disabled={translateInProgress} onClick={() => setMultiLangModalOpen(true)} aria-label={t("batchEditMultiLangTooltip")} />
+                </Tooltip>
+              </Space>
+            }>
+            <Form layout="vertical" className="w-full">
+              {/* Language Selection */}
+              <LanguageSelector
+                sourceLanguage={sourceLanguage}
+                targetLanguage={targetLanguage}
+                target_langs={target_langs}
+                multiLanguageMode={multiLanguageMode}
+                handleLanguageChange={handleLanguageChange}
+                setTarget_langs={setTarget_langs}
+                setMultiLanguageMode={setMultiLanguageMode}
+              />
+
+              {/* API Settings */}
+              <TranslationAPISelector translationMethod={translationMethod} setTranslationMethod={setTranslationMethod} config={config} handleConfigChange={handleConfigChange} />
+            </Form>
+
+            <Divider style={{ margin: "12px 0" }} />
+
+            <Collapse
+              ghost
+              activeKey={activeCollapseKeys}
+              onChange={(keys) => setActiveCollapseKeys(typeof keys === "string" ? [keys] : keys)}
+              expandIconPlacement="end"
+              items={[
+                {
+                  key: "jsonmode",
+                  label: (
+                    <Space>
+                      <FileTextOutlined />
+                      <Text strong>{t("translationMode")}</Text>
+                    </Space>
+                  ),
+                  children: (
+                    <Form layout="vertical" className="w-full">
+                      <Form.Item style={{ marginBottom: 6 }}>
+                        <Select
+                          value={translateMode}
+                          onChange={setTranslateMode}
+                          options={[
+                            { label: tJson("allKeys"), value: "allKeys" },
+                            { label: tJson("nodeKeys"), value: "nodeKeys" },
+                            { label: tJson("keyMapping"), value: "keyMapping" },
+                            { label: tJson("selectiveKey"), value: "selectiveKey" },
+                            { label: tJson("i18nMode"), value: "i18nMode" },
+                          ]}
+                          aria-label={t("translationMode")}
                         />
                       </Form.Item>
-                    ) : (
-                      <KeyMappingInput keyMappings={keyMappings} setKeyMappings={setKeyMappings} />
-                    )}
-                  </div>
-                )}
 
-                {translateMode === "selectiveKey" && (
-                  <div className="p-3 rounded-lg border border-gray-100 dark:border-gray-700 dark:bg-gray-800/50">
-                    <Form.Item label={tJson("startKey")} extra={tJson("StartKeyExtra")} style={{ marginBottom: 6 }}>
-                      <Input value={jsonStartNode} onChange={(e) => setJsonStartNode(e.target.value)} placeholder={`${t("example")}: fetchError`} aria-label={tJson("startKey")} />
-                    </Form.Item>
-                    <Form.Item label={tJson("fieldToTranslate")} extra={tJson("fieldToTranslateExtra")}>
-                      <Input value={translationField} onChange={(e) => setTranslationField(e.target.value)} placeholder={`${t("example")}: message`} aria-label={tJson("fieldToTranslate")} />
-                    </Form.Item>
-                  </div>
-                )}
+                      {/* Mode-specific configurations */}
+                      {translateMode === "keyMapping" && (
+                        <div style={{ padding: "12px", backgroundColor: token.colorFillQuaternary, borderRadius: token.borderRadiusLG }}>
+                          <Flex justify="space-between" align="center" style={{ marginBottom: 8 }}>
+                            <Text style={{ fontSize: token.fontSizeSM, color: token.colorTextSecondary }}>{tJson("keyMapping")}</Text>
+                            <Switch
+                              size="small"
+                              checked={showSimpleInput}
+                              onChange={setShowSimpleInput}
+                              checkedChildren={tJson("toggleKeyMapping")}
+                              unCheckedChildren={tJson("toggleKeyOriginal")}
+                              aria-label={tJson("keyMapping")}
+                            />
+                          </Flex>
 
-                {translateMode === "nodeKeys" && (
-                  <div className="p-3 rounded-lg border border-gray-100 dark:border-gray-700 dark:bg-gray-800/50">
-                    <Form.Item label={tJson("nodeToTranslate")} extra={`${tJson("nodeToTranslateExtra")} ${tJson("multiValueHint")}`}>
-                      <Input
-                        value={jsonPathForNodeTranslation}
-                        onChange={(e) => setJsonPathForNodeTranslation(e.target.value)}
-                        placeholder={`${t("example")}: content,data.title`}
-                        aria-label={tJson("nodeToTranslate")}
-                      />
-                    </Form.Item>
-                  </div>
-                )}
-              </Form>
-            </Card>
+                          {showSimpleInput ? (
+                            <Form.Item label={tJson("keyToTranslate")} style={{ marginBottom: 0 }}>
+                              <Input
+                                value={simpleInputKey}
+                                onChange={(e) => setSimpleInputKey(e.target.value)}
+                                placeholder={`${t("example")}: langName,object,attribute`}
+                                aria-label={tJson("keyToTranslate")}
+                              />
+                            </Form.Item>
+                          ) : (
+                            <KeyMappingInput keyMappings={keyMappings} setKeyMappings={setKeyMappings} />
+                          )}
+                        </div>
+                      )}
 
-            {/* Advanced Settings Card */}
-            <Card
-              title={
-                <div className="cursor-pointer flex items-center justify-between w-full" onClick={() => setShowAdvancedPanel(!showAdvancedPanel)}>
-                  <Space>
-                    <SettingOutlined /> {t("advancedSettings")}
-                  </Space>
-                  {showAdvancedPanel ? <UpOutlined style={{ fontSize: "12px" }} /> : <DownOutlined style={{ fontSize: "12px" }} />}
-                </div>
-              }
-              className="shadow-sm"
-              styles={{
-                body: {
-                  display: showAdvancedPanel ? "block" : "none",
+                      {translateMode === "selectiveKey" && (
+                        <div style={{ padding: "12px", backgroundColor: token.colorFillQuaternary, borderRadius: token.borderRadiusLG }}>
+                          <Form.Item label={tJson("startKey")} extra={tJson("StartKeyExtra")} style={{ marginBottom: 6 }}>
+                            <Input value={jsonStartNode} onChange={(e) => setJsonStartNode(e.target.value)} placeholder={`${t("example")}: fetchError`} aria-label={tJson("startKey")} />
+                          </Form.Item>
+                          <Form.Item label={tJson("fieldToTranslate")} extra={tJson("fieldToTranslateExtra")}>
+                            <Input value={translationField} onChange={(e) => setTranslationField(e.target.value)} placeholder={`${t("example")}: message`} aria-label={tJson("fieldToTranslate")} />
+                          </Form.Item>
+                        </div>
+                      )}
+
+                      {translateMode === "nodeKeys" && (
+                        <div style={{ padding: "12px", backgroundColor: token.colorFillQuaternary, borderRadius: token.borderRadiusLG }}>
+                          <Form.Item label={tJson("nodeToTranslate")} extra={`${tJson("nodeToTranslateExtra")} ${tJson("multiValueHint")}`}>
+                            <Input
+                              value={jsonPathForNodeTranslation}
+                              onChange={(e) => setJsonPathForNodeTranslation(e.target.value)}
+                              placeholder={`${t("example")}: content,data.title`}
+                              aria-label={tJson("nodeToTranslate")}
+                            />
+                          </Form.Item>
+                        </div>
+                      )}
+                    </Form>
+                  ),
                 },
-              }}>
-              <Form layout="vertical">
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <Tooltip title={t("largeModeTooltip")}>
-                      <Checkbox checked={largeMode} onChange={(e) => setLargeMode(e.target.checked)}>
-                        {t("largeMode")}
-                      </Checkbox>
-                    </Tooltip>
-                  </Col>
-                  <Col span={12}>
-                    <Tooltip title={t("directExportTooltip")}>
-                      <Checkbox checked={directExport} onChange={(e) => setDirectExport(e.target.checked)}>
-                        {t("directExport")}
-                      </Checkbox>
-                    </Tooltip>
-                  </Col>
-                  <Col span={12}>
-                    <Tooltip title={t("useCacheTooltip")}>
-                      <Checkbox checked={useCache} onChange={(e) => setUseCache(e.target.checked)}>
-                        {t("useCache")}
-                      </Checkbox>
-                    </Tooltip>
-                  </Col>
-                  <Col span={24}>
-                    <Form.Item label={t("removeCharsAfterTranslation")}>
-                      <Input
-                        placeholder={`${t("example")}: ♪ <i> </i>`}
-                        value={removeChars}
-                        onChange={(e) => setRemoveChars(e.target.value)}
-                        allowClear
-                        aria-label={t("removeCharsAfterTranslation")}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Tooltip title={t("retryCountTooltip")}>
-                      <Form.Item label={t("retryCount")} style={{ marginBottom: 0 }}>
-                        <InputNumber min={1} max={10} value={retryCount} onChange={(value) => setRetryCount(value ?? 3)} style={{ width: "100%" }} aria-label={t("retryCount")} />
-                      </Form.Item>
-                    </Tooltip>
-                  </Col>
-                  <Col span={12}>
-                    <Tooltip title={t("retryTimeoutTooltip")}>
-                      <Form.Item label={t("retryTimeout")} style={{ marginBottom: 0 }}>
-                        <InputNumber
-                          min={5}
-                          max={1200}
-                          value={retryTimeout}
-                          onChange={(value) => setRetryTimeout(value ?? 30)}
-                          addonAfter="s"
-                          style={{ width: "100%" }}
-                          aria-label={t("retryTimeout")}
+                {
+                  key: "advanced",
+                  label: (
+                    <Space>
+                      <ControlOutlined />
+                      <Text strong>{t("advancedSettings")}</Text>
+                    </Space>
+                  ),
+                  children: (
+                    <Flex vertical gap="small">
+                      <Flex justify="space-between" align="center">
+                        <Tooltip title={t("largeModeTooltip")}>
+                          <span>{t("largeMode")}</span>
+                        </Tooltip>
+                        <Switch size="small" checked={largeMode} onChange={setLargeMode} aria-label={t("largeMode")} />
+                      </Flex>
+
+                      <Flex justify="space-between" align="center">
+                        <Tooltip title={t("directExportTooltip")}>
+                          <span>{t("directExport")}</span>
+                        </Tooltip>
+                        <Switch size="small" checked={directExport} onChange={setDirectExport} aria-label={t("directExport")} />
+                      </Flex>
+
+                      <Flex justify="space-between" align="center">
+                        <Tooltip title={t("useCacheTooltip")}>
+                          <span>{t("useCache")}</span>
+                        </Tooltip>
+                        <Switch size="small" checked={useCache} onChange={setUseCache} aria-label={t("useCache")} />
+                      </Flex>
+
+                      <Divider style={{ margin: "8px 0" }} />
+
+                      <Flex vertical gap={4}>
+                        <span>{t("removeCharsAfterTranslation")}</span>
+                        <Input
+                          placeholder={`${t("example")}: ♪ <i> </i>`}
+                          value={removeChars}
+                          onChange={(e) => setRemoveChars(e.target.value)}
+                          allowClear
+                          aria-label={t("removeCharsAfterTranslation")}
                         />
-                      </Form.Item>
-                    </Tooltip>
-                  </Col>
-                </Row>
-              </Form>
-            </Card>
-          </Flex>
+                      </Flex>
+
+                      <Row gutter={16}>
+                        <Col span={12}>
+                          <Tooltip title={t("retryCountTooltip")}>
+                            <Flex vertical gap={4}>
+                              <span>{t("retryCount")}</span>
+                              <InputNumber min={1} max={10} value={retryCount} onChange={(value) => setRetryCount(value ?? 3)} style={{ width: "100%" }} aria-label={t("retryCount")} />
+                            </Flex>
+                          </Tooltip>
+                        </Col>
+                        <Col span={12}>
+                          <Tooltip title={t("retryTimeoutTooltip")}>
+                            <Flex vertical gap={4}>
+                              <span>{t("retryTimeout")}</span>
+                              <InputNumber
+                                min={5}
+                                max={1200}
+                                value={retryTimeout}
+                                onChange={(value) => setRetryTimeout(value ?? 30)}
+                                addonAfter="s"
+                                style={{ width: "100%" }}
+                                aria-label={t("retryTimeout")}
+                              />
+                            </Flex>
+                          </Tooltip>
+                        </Col>
+                      </Row>
+                    </Flex>
+                  ),
+                },
+              ]}
+            />
+          </Card>
         </Col>
       </Row>
 
