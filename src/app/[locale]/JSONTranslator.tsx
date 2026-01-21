@@ -12,6 +12,7 @@ import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 import useFileUpload from "@/app/hooks/useFileUpload";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useTextStats } from "@/app/hooks/useTextStats";
+import { useExportFilename } from "@/app/hooks/useExportFilename";
 
 import { filterObjectPropertyMatches, preprocessJson, downloadFile, getErrorMessage, stripJsonWrapper, splitBySpaces } from "@/app/utils";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
@@ -21,6 +22,7 @@ import TranslationAPISelector from "@/app/components/TranslationAPISelector";
 import { useTranslationContext } from "@/app/components/TranslationContext";
 import ResultCard from "@/app/components/ResultCard";
 import TranslationProgressModal from "@/app/components/TranslationProgressModal";
+import AdvancedTranslationSettings from "@/app/components/AdvancedTranslationSettings";
 
 import MultiLanguageSettingsModal from "@/app/components/MultiLanguageSettingsModal";
 
@@ -70,7 +72,7 @@ const JSONTranslator = () => {
     retryTimeout,
     setRetryTimeout,
   } = useTranslationContext();
-  const [largeMode, setLargeMode] = useState(false);
+
   const [directExport, setDirectExport] = useState(false);
   const [translationResults, setTranslationResults] = useState<Record<string, string>>({}); // Store results by language
 
@@ -89,6 +91,7 @@ const JSONTranslator = () => {
   const [translationField, setTranslationField] = useLocalStorage("translationField", ""); // 待翻译字段
   const [activeCollapseKeys, setActiveCollapseKeys] = useLocalStorage<string[]>("jsonTranslatorCollapseKeys", ["jsonmode"]);
   const [multiLangModalOpen, setMultiLangModalOpen] = useState(false);
+  const { customFileName, setCustomFileName, generateFileName } = useExportFilename("json");
 
   const sourceStats = useTextStats(sourceText);
   const resultStats = useTextStats(translatedText);
@@ -402,23 +405,14 @@ const JSONTranslator = () => {
 
     if (currentTargetLang && multiLanguageMode) {
       const content = translationResults[currentTargetLang];
-
-      // 处理文件命名
-      let downloadFileName;
-      if (fileName.endsWith(".json")) {
-        downloadFileName = fileName.replace(/\.json$/, `_${currentTargetLang}.json`);
-      } else if (fileName.endsWith(".txt")) {
-        downloadFileName = fileName.replace(/\.txt$/, `_${currentTargetLang}.json`);
-      } else {
-        // 如果原文件名没有.json 后缀，直接添加语言代码和.json
-        downloadFileName = `${fileName}_${currentTargetLang}.json`;
-      }
+      const downloadFileName = generateFileName(fileName, currentTargetLang, "json");
       await downloadFile(content, downloadFileName, "application/json;charset=utf-8");
-      return downloadFileName; // 返回文件名，用于显示确认消息
+      return downloadFileName;
     } else {
-      // 导出单语言结果
-      await downloadFile(translatedText, fileName, "application/json;charset=utf-8");
-      return fileName;
+      // Export single language result - use generateFileName with targetLanguage
+      const downloadFileName = generateFileName(fileName, targetLanguage, "json");
+      await downloadFile(translatedText, downloadFileName, "application/json;charset=utf-8");
+      return downloadFileName;
     }
   };
 
@@ -536,14 +530,7 @@ const JSONTranslator = () => {
             if (directExport) {
               const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
               const fileName = multipleFiles[0]?.name || `translated.json`;
-              let downloadFileName;
-              if (fileName.endsWith(".json")) {
-                downloadFileName = fileName.replace(/\.json$/, `_${currentTargetLang}.json`);
-              } else if (fileName.endsWith(".txt")) {
-                downloadFileName = fileName.replace(/\.txt$/, `_${currentTargetLang}.json`);
-              } else {
-                downloadFileName = `${fileName}_${currentTargetLang}.json`;
-              }
+              const downloadFileName = generateFileName(fileName, currentTargetLang, "json");
               await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
 
               message.success(`${langLabel} ${t("exportedFile")}: ${downloadFileName}`);
@@ -631,7 +618,7 @@ const JSONTranslator = () => {
   };
 
   return (
-    <Spin spinning={isFileProcessing} size="large">
+    <Spin spinning={isFileProcessing} tip="Please wait..." size="large">
       <Row gutter={[24, 24]}>
         {/* Left Column: Source Area */}
         <Col xs={24} lg={14} xl={15}>
@@ -673,27 +660,25 @@ const JSONTranslator = () => {
               <p className="ant-upload-hint">{t("supportedFormats")} .txt, .json</p>
             </Dragger>
 
-            {!largeMode && (
-              <>
-                <TextArea
-                  placeholder={t("pasteUploadContent")}
-                  value={sourceStats.isEditable ? sourceText : sourceStats.displayText}
-                  onChange={sourceStats.isEditable ? (e) => setSourceText(e.target.value) : undefined}
-                  rows={8}
-                  className="mt-1"
-                  allowClear
-                  readOnly={!sourceStats.isEditable}
-                  aria-label={t("sourceArea")}
-                />
-                {sourceText && (
-                  <Flex justify="end">
-                    <Paragraph type="secondary">
-                      {t("inputStatsTitle")}: {sourceStats.charCount} {t("charLabel")}, {sourceStats.lineCount} {t("lineLabel")}
-                    </Paragraph>
-                  </Flex>
-                )}
-              </>
-            )}
+            <>
+              <TextArea
+                placeholder={t("pasteUploadContent")}
+                value={sourceStats.isEditable ? sourceText : sourceStats.displayText}
+                onChange={sourceStats.isEditable ? (e) => setSourceText(e.target.value) : undefined}
+                rows={8}
+                className="mt-1"
+                allowClear
+                readOnly={!sourceStats.isEditable}
+                aria-label={t("sourceArea")}
+              />
+              {sourceText && (
+                <Flex justify="end" className="mt-2">
+                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                    {sourceStats.charCount} {t("charLabel")} / {sourceStats.lineCount} {t("lineLabel")}
+                  </Typography.Text>
+                </Flex>
+              )}
+            </>
 
             <Divider />
 
@@ -805,14 +790,16 @@ const JSONTranslator = () => {
                         <div style={{ padding: "12px", backgroundColor: token.colorFillQuaternary, borderRadius: token.borderRadiusLG }}>
                           <Flex justify="space-between" align="center" style={{ marginBottom: 8 }}>
                             <Text style={{ fontSize: token.fontSizeSM, color: token.colorTextSecondary }}>{tJson("keyMapping")}</Text>
-                            <Switch
-                              size="small"
-                              checked={showSimpleInput}
-                              onChange={setShowSimpleInput}
-                              checkedChildren={tJson("toggleKeyMapping")}
-                              unCheckedChildren={tJson("toggleKeyOriginal")}
-                              aria-label={tJson("keyMapping")}
-                            />
+                            <Tooltip title={tJson("keyMappingTooltip")} placement="top">
+                              <Switch
+                                size="small"
+                                checked={showSimpleInput}
+                                onChange={setShowSimpleInput}
+                                checkedChildren={tJson("toggleKeyMapping")}
+                                unCheckedChildren={tJson("toggleKeyOriginal")}
+                                aria-label={tJson("keyMapping")}
+                              />
+                            </Tooltip>
                           </Flex>
 
                           {showSimpleInput ? (
@@ -853,6 +840,14 @@ const JSONTranslator = () => {
                           </Form.Item>
                         </div>
                       )}
+
+                      {translateMode === "i18nMode" && (
+                        <div style={{ padding: "12px", backgroundColor: token.colorFillQuaternary, borderRadius: token.borderRadiusLG }}>
+                          <Text type="secondary" style={{ fontSize: token.fontSizeSM }}>
+                            {tJson("i18nModeExtra")}
+                          </Text>
+                        </div>
+                      )}
                     </Form>
                   ),
                 },
@@ -865,68 +860,25 @@ const JSONTranslator = () => {
                     </Space>
                   ),
                   children: (
-                    <Flex vertical gap="small">
-                      <Flex justify="space-between" align="center">
-                        <Tooltip title={t("largeModeTooltip")}>
-                          <span>{t("largeMode")}</span>
-                        </Tooltip>
-                        <Switch size="small" checked={largeMode} onChange={setLargeMode} aria-label={t("largeMode")} />
-                      </Flex>
-
+                    <AdvancedTranslationSettings
+                      customFileName={customFileName}
+                      setCustomFileName={setCustomFileName}
+                      removeChars={removeChars}
+                      setRemoveChars={setRemoveChars}
+                      retryCount={retryCount}
+                      setRetryCount={setRetryCount}
+                      retryTimeout={retryTimeout}
+                      setRetryTimeout={setRetryTimeout}
+                      useCache={useCache}
+                      setUseCache={setUseCache}>
+                      {/* Component-specific settings */}
                       <Flex justify="space-between" align="center">
                         <Tooltip title={t("directExportTooltip")}>
                           <span>{t("directExport")}</span>
                         </Tooltip>
                         <Switch size="small" checked={directExport} onChange={setDirectExport} aria-label={t("directExport")} />
                       </Flex>
-
-                      <Flex justify="space-between" align="center">
-                        <Tooltip title={t("useCacheTooltip")}>
-                          <span>{t("useCache")}</span>
-                        </Tooltip>
-                        <Switch size="small" checked={useCache} onChange={setUseCache} aria-label={t("useCache")} />
-                      </Flex>
-
-                      <Divider style={{ margin: "8px 0" }} />
-
-                      <Flex vertical gap={4}>
-                        <span>{t("removeCharsAfterTranslation")}</span>
-                        <Input
-                          placeholder={`${t("example")}: ♪ <i> </i>`}
-                          value={removeChars}
-                          onChange={(e) => setRemoveChars(e.target.value)}
-                          allowClear
-                          aria-label={t("removeCharsAfterTranslation")}
-                        />
-                      </Flex>
-
-                      <Row gutter={16}>
-                        <Col span={12}>
-                          <Tooltip title={t("retryCountTooltip")}>
-                            <Flex vertical gap={4}>
-                              <span>{t("retryCount")}</span>
-                              <InputNumber min={1} max={10} value={retryCount} onChange={(value) => setRetryCount(value ?? 3)} style={{ width: "100%" }} aria-label={t("retryCount")} />
-                            </Flex>
-                          </Tooltip>
-                        </Col>
-                        <Col span={12}>
-                          <Tooltip title={t("retryTimeoutTooltip")}>
-                            <Flex vertical gap={4}>
-                              <span>{t("retryTimeout")}</span>
-                              <InputNumber
-                                min={5}
-                                max={1200}
-                                value={retryTimeout}
-                                onChange={(value) => setRetryTimeout(value ?? 30)}
-                                addonAfter="s"
-                                style={{ width: "100%" }}
-                                aria-label={t("retryTimeout")}
-                              />
-                            </Flex>
-                          </Tooltip>
-                        </Col>
-                      </Row>
-                    </Flex>
+                    </AdvancedTranslationSettings>
                   ),
                 },
               ]}

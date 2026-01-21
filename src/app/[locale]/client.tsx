@@ -7,7 +7,7 @@ import { TranslationOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import JSONTranslator from "./JSONTranslator";
 import { useTranslations, useLocale } from "next-intl";
 import { TranslationProvider } from "@/app/components/TranslationContext";
-import { getUserGuideUrl } from "@/app/utils";
+import { getDocUrl } from "@/app/utils";
 
 const TranslationSettings = dynamic(() => import("@/app/components/TranslationSettings"), {
   loading: () => (
@@ -23,7 +23,7 @@ const ClientPage = () => {
   const tJson = useTranslations("json");
   const t = useTranslations("common");
   const locale = useLocale();
-  const userGuideUrl = getUserGuideUrl("json-translate", locale);
+  const userGuideUrl = getDocUrl("guide/translation/json-translate/index.html", locale);
   // 使用时间戳来强制重新渲染
   const [activeKey, setActiveKey] = useState("basic");
 
@@ -55,7 +55,7 @@ const ClientPage = () => {
         </Link>{" "}
         {tJson("clientDescription")}
         <br />
-        {t("bigNotice")} {t("privacyNotice")}
+        {t("privacyNotice")}
       </Paragraph>
       <Tabs activeKey={activeKey} onChange={handleTabChange} items={items} type="card" className="w-full" animated={{ inkBar: true, tabPane: true }} />
     </TranslationProvider>
