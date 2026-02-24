@@ -33,12 +33,12 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
   return (
     <>
       {keyMappings.map((mapping, index) => (
-        <div key={mapping.id} className="flex mb-2">
+        <div key={mapping.id} className="flex ">
           <Space align="baseline">
-            <Form.Item label={`${t("inputKey")} ${index + 1}`} className="mb-0">
+            <Form.Item label={`${t("inputKey")} ${index + 1}`} className="!mb-1">
               <Input value={mapping.inputKey} onChange={(e) => handleInputChange(index, "inputKey", e.target.value)} />
             </Form.Item>
-            <Form.Item label={`${t("outputKey")} ${index + 1}`} className="mb-0">
+            <Form.Item label={`${t("outputKey")} ${index + 1}`} className="!mb-1">
               <Input value={mapping.outputKey} onChange={(e) => handleInputChange(index, "outputKey", e.target.value)} />
             </Form.Item>
             <Tooltip title={t("deleteMapping")}>
@@ -47,7 +47,7 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
           </Space>
         </div>
       ))}
-      <Button type="dashed" block onClick={addMapping} icon={<PlusOutlined />} className="mb-2">
+      <Button type="dashed" block className="mt-2" onClick={addMapping} icon={<PlusOutlined />}>
         {t("addMapping")}
       </Button>
     </>

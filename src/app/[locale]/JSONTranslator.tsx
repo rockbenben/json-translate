@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, useRef } from "react";
-import { Row, Col, Button, Typography, Tooltip, Form, Input, InputNumber, Select, App, Card, Space, Spin, Flex, Upload, Divider, Switch, Collapse, theme } from "antd";
+import { Row, Col, Button, Typography, Tooltip, Form, Input, Select, App, Card, Space, Spin, Flex, Upload, Divider, Switch, Collapse, theme } from "antd";
 import { InboxOutlined, ExportOutlined, ImportOutlined, SettingOutlined, GlobalOutlined, ClearOutlined, SaveOutlined, FileTextOutlined, ControlOutlined } from "@ant-design/icons";
 import { JSONPath } from "jsonpath-plus";
 import { useTranslations } from "next-intl";
@@ -28,7 +28,7 @@ import MultiLanguageSettingsModal from "@/app/components/MultiLanguageSettingsMo
 
 const { TextArea } = Input;
 const { Dragger } = Upload;
-const { Paragraph, Text } = Typography;
+const { Text } = Typography;
 
 type TranslateMode = "allKeys" | "nodeKeys" | "keyMapping" | "selectiveKey" | "i18nMode";
 
@@ -114,10 +114,6 @@ const JSONTranslator = () => {
     }
   };
 
-  const toggleInputType = () => {
-    setShowSimpleInput(!showSimpleInput);
-  };
-
   // 应用翻译结果
   const applyTranslation = (jsonObject: JsonValue, path: string, translatedText: string) => {
     const outputNodePathArray = JSONPath.toPathArray(path) as Array<string | number>;
@@ -173,7 +169,7 @@ const JSONTranslator = () => {
               record[currentTargetLang] = translatedText;
             }
             updateProgress();
-          })
+          }),
         );
       }
 
@@ -212,7 +208,7 @@ const JSONTranslator = () => {
           });
           applyTranslation(jsonObject, node.path, translatedText || "");
           updateProgress();
-        })
+        }),
       );
     }
 
@@ -328,7 +324,7 @@ const JSONTranslator = () => {
   };
 
   // 扁平 json，单一键名，可选择起始翻译节点
-  const handldSelectiveKeyTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
+  const handleSelectiveKeyTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
     if (translationField.trim() === "") {
       throw new Error(`${t("enter")} ${tJson("fieldToTranslate")}`);
     }
@@ -508,7 +504,7 @@ const JSONTranslator = () => {
             } else if (translateMode === "keyMapping") {
               await handleKeyMappingTranslation(jsonObject, currentTargetLang);
             } else if (translateMode === "selectiveKey") {
-              await handldSelectiveKeyTranslation(jsonObject, currentTargetLang);
+              await handleSelectiveKeyTranslation(jsonObject, currentTargetLang);
             } else if (translateMode === "i18nMode") {
               await handleI18nTranslation(jsonObject, currentTargetLang);
             }
@@ -595,7 +591,7 @@ const JSONTranslator = () => {
     }
 
     return (
-      <Space orientation="vertical" style={{ width: "100%" }}>
+      <Space orientation="vertical" className="w-full">
         {target_langs.map((langCode) => {
           if (!translationResults[langCode]) return null;
           const langLabel = sourceOptions.find((option) => option.value === langCode)?.label || langCode;
@@ -610,6 +606,7 @@ const JSONTranslator = () => {
               onCopy={() => copyToClipboard(translationResults[langCode])}
               onCopyNode={() => copyToClipboard(stripJsonWrapper(translationResults[langCode]))}
               onExport={() => handleExportFile(langCode)}
+              className="mb-4 shadow-md border-transparent hover:shadow-lg transition-shadow duration-300"
             />
           );
         })}
@@ -644,7 +641,7 @@ const JSONTranslator = () => {
                 </Button>
               </Tooltip>
             }
-            className="h-full shadow-sm">
+            className="shadow-md border-transparent hover:shadow-lg transition-shadow duration-300">
             <Dragger
               customRequest={({ file }) => handleFileUpload(file as File)}
               accept=".txt,.json"
@@ -673,7 +670,7 @@ const JSONTranslator = () => {
               />
               {sourceText && (
                 <Flex justify="end" className="mt-2">
-                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                  <Typography.Text type="secondary" className="!text-xs">
                     {sourceStats.charCount} {t("charLabel")} / {sourceStats.lineCount} {t("lineLabel")}
                   </Typography.Text>
                 </Flex>
@@ -704,7 +701,7 @@ const JSONTranslator = () => {
                 <SettingOutlined /> {t("configuration")}
               </Space>
             }
-            className="shadow-sm"
+            className="shadow-md border-transparent hover:shadow-lg transition-shadow duration-300"
             extra={
               <Space>
                 <Tooltip title={t("exportSettingTooltip")}>
@@ -752,13 +749,13 @@ const JSONTranslator = () => {
               <TranslationAPISelector translationMethod={translationMethod} setTranslationMethod={setTranslationMethod} config={config} handleConfigChange={handleConfigChange} />
             </Form>
 
-            <Divider style={{ margin: "12px 0" }} />
+            <Divider className="!my-3" />
 
             <Collapse
               ghost
+              size="small"
               activeKey={activeCollapseKeys}
               onChange={(keys) => setActiveCollapseKeys(typeof keys === "string" ? [keys] : keys)}
-              expandIconPlacement="end"
               items={[
                 {
                   key: "jsonmode",
@@ -770,7 +767,7 @@ const JSONTranslator = () => {
                   ),
                   children: (
                     <Form layout="vertical" className="w-full">
-                      <Form.Item style={{ marginBottom: 6 }}>
+                      <Form.Item className="!mb-1">
                         <Select
                           value={translateMode}
                           onChange={setTranslateMode}
@@ -787,9 +784,9 @@ const JSONTranslator = () => {
 
                       {/* Mode-specific configurations */}
                       {translateMode === "keyMapping" && (
-                        <div style={{ padding: "12px", backgroundColor: token.colorFillQuaternary, borderRadius: token.borderRadiusLG }}>
-                          <Flex justify="space-between" align="center" style={{ marginBottom: 8 }}>
-                            <Text style={{ fontSize: token.fontSizeSM, color: token.colorTextSecondary }}>{tJson("keyMapping")}</Text>
+                        <Card type="inner" size="small" className="mb-4 bg-gray-50/50 dark:bg-white/5 border-transparent">
+                          <Flex justify="space-between" align="center" className="!mb-2">
+                            <Text type="secondary">{tJson("keyMapping")}</Text>
                             <Tooltip title={tJson("keyMappingTooltip")} placement="top">
                               <Switch
                                 size="small"
@@ -803,7 +800,7 @@ const JSONTranslator = () => {
                           </Flex>
 
                           {showSimpleInput ? (
-                            <Form.Item label={tJson("keyToTranslate")} style={{ marginBottom: 0 }}>
+                            <Form.Item label={tJson("keyToTranslate")} className="!mb-0">
                               <Input
                                 value={simpleInputKey}
                                 onChange={(e) => setSimpleInputKey(e.target.value)}
@@ -814,23 +811,23 @@ const JSONTranslator = () => {
                           ) : (
                             <KeyMappingInput keyMappings={keyMappings} setKeyMappings={setKeyMappings} />
                           )}
-                        </div>
+                        </Card>
                       )}
 
                       {translateMode === "selectiveKey" && (
-                        <div style={{ padding: "12px", backgroundColor: token.colorFillQuaternary, borderRadius: token.borderRadiusLG }}>
-                          <Form.Item label={tJson("startKey")} extra={tJson("StartKeyExtra")} style={{ marginBottom: 6 }}>
+                        <Card type="inner" size="small" className="mb-4 bg-gray-50/50 dark:bg-white/5 border-transparent">
+                          <Form.Item label={tJson("startKey")} extra={tJson("StartKeyExtra")} className="!mb-1">
                             <Input value={jsonStartNode} onChange={(e) => setJsonStartNode(e.target.value)} placeholder={`${t("example")}: fetchError`} aria-label={tJson("startKey")} />
                           </Form.Item>
-                          <Form.Item label={tJson("fieldToTranslate")} extra={tJson("fieldToTranslateExtra")}>
+                          <Form.Item label={tJson("fieldToTranslate")} extra={tJson("fieldToTranslateExtra")} className="!mb-0">
                             <Input value={translationField} onChange={(e) => setTranslationField(e.target.value)} placeholder={`${t("example")}: message`} aria-label={tJson("fieldToTranslate")} />
                           </Form.Item>
-                        </div>
+                        </Card>
                       )}
 
                       {translateMode === "nodeKeys" && (
-                        <div style={{ padding: "12px", backgroundColor: token.colorFillQuaternary, borderRadius: token.borderRadiusLG }}>
-                          <Form.Item label={tJson("nodeToTranslate")} extra={`${tJson("nodeToTranslateExtra")} ${tJson("multiValueHint")}`}>
+                        <Card type="inner" size="small" className="mb-4 bg-gray-50/50 dark:bg-white/5 border-transparent">
+                          <Form.Item label={tJson("nodeToTranslate")} extra={`${tJson("nodeToTranslateExtra")} ${tJson("multiValueHint")}`} className="!mb-0">
                             <Input
                               value={jsonPathForNodeTranslation}
                               onChange={(e) => setJsonPathForNodeTranslation(e.target.value)}
@@ -838,15 +835,15 @@ const JSONTranslator = () => {
                               aria-label={tJson("nodeToTranslate")}
                             />
                           </Form.Item>
-                        </div>
+                        </Card>
                       )}
 
                       {translateMode === "i18nMode" && (
-                        <div style={{ padding: "12px", backgroundColor: token.colorFillQuaternary, borderRadius: token.borderRadiusLG }}>
+                        <Card type="inner" size="small" className="mb-4 bg-gray-50/50 dark:bg-white/5 border-transparent">
                           <Text type="secondary" style={{ fontSize: token.fontSizeSM }}>
                             {tJson("i18nModeExtra")}
                           </Text>
-                        </div>
+                        </Card>
                       )}
                     </Form>
                   ),
@@ -874,7 +871,7 @@ const JSONTranslator = () => {
                       {/* Component-specific settings */}
                       <Flex justify="space-between" align="center">
                         <Tooltip title={t("directExportTooltip")}>
-                          <span>{t("directExport")}</span>
+                          <Text>{t("directExport")}</Text>
                         </Tooltip>
                         <Switch size="small" checked={directExport} onChange={setDirectExport} aria-label={t("directExport")} />
                       </Flex>
@@ -903,6 +900,7 @@ const JSONTranslator = () => {
                     const fileName = handleExportFile();
                     message.success(`${t("exportedFile")}: ${fileName}`);
                   }}
+                  className="shadow-md border-transparent hover:shadow-lg transition-shadow duration-300"
                 />
               )}
         </div>
