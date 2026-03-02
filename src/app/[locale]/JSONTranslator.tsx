@@ -615,7 +615,7 @@ const JSONTranslator = () => {
   };
 
   return (
-    <Spin spinning={isFileProcessing} tip="Please wait..." size="large">
+    <Spin spinning={isFileProcessing} description="Please wait..." size="large">
       <Row gutter={[24, 24]}>
         {/* Left Column: Source Area */}
         <Col xs={24} lg={14} xl={15}>

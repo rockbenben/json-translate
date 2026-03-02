@@ -54,7 +54,6 @@ const ClientPage = () => {
           <QuestionCircleOutlined /> {t("userGuide")}
         </Link>{" "}
         {tJson("clientDescription")}
-        <br />
         {t("privacyNotice")}
       </Paragraph>
       <Tabs activeKey={activeKey} onChange={handleTabChange} items={items} type="card" className="w-full" animated={{ inkBar: true, tabPane: true }} />
