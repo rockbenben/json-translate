@@ -284,7 +284,6 @@ const JSONTranslator = () => {
       // 如果所有检查都通过，添加到有效映射列表
       validMappings.push({ id, inputKey, outputKey, inputNodes, outputNodes });
     }
-    console.log(`validMappings:`, validMappings);
 
     // 如果没有有效的映射，抛出错误
     if (validMappings.length === 0) {
@@ -292,7 +291,6 @@ const JSONTranslator = () => {
       throw new Error("No valid key mappings found. Please check if the specified keys exist in the JSON.");
     }
 
-    console.log(`Processing ${validMappings.length} valid mappings out of ${mappings.length} total mappings`);
 
     // 处理所有有效的映射
     const allPromises: Promise<void>[] = [];
@@ -896,8 +894,8 @@ const JSONTranslator = () => {
                   lineCount={resultStats.lineCount}
                   onCopy={() => copyToClipboard(translatedText)}
                   onCopyNode={() => copyToClipboard(stripJsonWrapper(translatedText))}
-                  onExport={() => {
-                    const fileName = handleExportFile();
+                  onExport={async () => {
+                    const fileName = await handleExportFile();
                     message.success(`${t("exportedFile")}: ${fileName}`);
                   }}
                   className="shadow-md border-transparent hover:shadow-lg transition-shadow duration-300"
