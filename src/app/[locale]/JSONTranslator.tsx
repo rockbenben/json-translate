@@ -14,7 +14,7 @@ import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useTextStats } from "@/app/hooks/useTextStats";
 import { useExportFilename } from "@/app/hooks/useExportFilename";
 
-import { filterObjectPropertyMatches, preprocessJson, downloadFile, getErrorMessage, stripJsonWrapper, splitBySpaces } from "@/app/utils";
+import { filterObjectPropertyMatches, preprocessJson, downloadFile, getErrorMessage, stripJsonWrapper, splitBySpaces, getFileTypePresetConfig } from "@/app/utils";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
 import { useLanguageOptions } from "@/app/components/languages";
 import LanguageSelector from "@/app/components/LanguageSelector";
@@ -29,6 +29,8 @@ import MultiLanguageSettingsModal from "@/app/components/MultiLanguageSettingsMo
 const { TextArea } = Input;
 const { Dragger } = Upload;
 const { Text } = Typography;
+
+const uploadFileTypes = getFileTypePresetConfig("jsonText");
 
 type TranslateMode = "allKeys" | "nodeKeys" | "keyMapping" | "selectiveKey" | "i18nMode";
 
@@ -114,19 +116,6 @@ const JSONTranslator = () => {
     }
   };
 
-  // 应用翻译结果
-  const applyTranslation = (jsonObject: JsonValue, path: string, translatedText: string) => {
-    const outputNodePathArray = JSONPath.toPathArray(path) as Array<string | number>;
-    if (!outputNodePathArray || outputNodePathArray.length === 0) {
-      throw new Error(tJson("invalidOutputKey"));
-    }
-    let currentNode = jsonObject as unknown as Record<string | number, unknown>;
-    for (let i = 1; i < outputNodePathArray.length - 1; i++) {
-      currentNode = currentNode[outputNodePathArray[i]] as Record<string | number, unknown>;
-    }
-    currentNode[outputNodePathArray[outputNodePathArray.length - 1]] = translatedText;
-  };
-
   const handleI18nTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
     // 使用选择的源语言作为 i18n 源字段
     const sourceField = sourceLanguage === "auto" ? "en" : sourceLanguage;
@@ -139,6 +128,7 @@ const JSONTranslator = () => {
 
     // 遍历所有可能包含 sourceField 字段的对象
     const promises: Promise<void>[] = [];
+    let aborted = false;
 
     const processObject = (obj: JsonValue) => {
       if (typeof obj !== "object" || obj === null) return;
@@ -157,16 +147,22 @@ const JSONTranslator = () => {
         totalCountRef.current++;
         promises.push(
           limit(async () => {
+            if (aborted) return;
             // 在多语言模式下，我们只翻译当前目标语言字段不存在的情况
             if (record[currentTargetLang] == null) {
-              const translatedText = await retryTranslate(sourceValue, cacheSuffix, {
-                translationMethod,
-                targetLanguage: currentTargetLang,
-                sourceLanguage,
-                ...translationConfig,
-              });
-              // 添加翻译结果到同一个对象中的目标语言字段
-              record[currentTargetLang] = translatedText;
+              try {
+                const translatedText = await retryTranslate(sourceValue, cacheSuffix, {
+                  translationMethod,
+                  targetLanguage: currentTargetLang,
+                  sourceLanguage,
+                  ...translationConfig,
+                });
+                // 添加翻译结果到同一个对象中的目标语言字段
+                record[currentTargetLang] = translatedText;
+              } catch (error) {
+                aborted = true;
+                throw error;
+              }
             }
             updateProgress();
           }),
@@ -194,19 +190,26 @@ const JSONTranslator = () => {
       userPrompt,
     });
     const tasks: Promise<void>[] = [];
+    let aborted = false;
 
     for (const node of stringNodes) {
       const sourceText = node.value as string;
 
       tasks.push(
         limit(async () => {
-          const translatedText = await retryTranslate(sourceText, cacheSuffix, {
-            translationMethod,
-            targetLanguage: currentTargetLang,
-            sourceLanguage,
-            ...translationConfig,
-          });
-          applyTranslation(jsonObject, node.path, translatedText || "");
+          if (aborted) return;
+          try {
+            const translatedText = await retryTranslate(sourceText, cacheSuffix, {
+              translationMethod,
+              targetLanguage: currentTargetLang,
+              sourceLanguage,
+              ...translationConfig,
+            });
+            node.parent[node.parentProperty] = translatedText || "";
+          } catch (error) {
+            aborted = true;
+            throw error;
+          }
           updateProgress();
         }),
       );
@@ -291,9 +294,9 @@ const JSONTranslator = () => {
       throw new Error("No valid key mappings found. Please check if the specified keys exist in the JSON.");
     }
 
-
     // 处理所有有效的映射
     const allPromises: Promise<void>[] = [];
+    let aborted = false;
     for (const { inputNodes, outputNodes } of validMappings) {
       totalCountRef.current += inputNodes.length;
       const cacheSuffix = generateCacheSuffix(sourceLanguage, currentTargetLang, translationMethod, {
@@ -304,14 +307,20 @@ const JSONTranslator = () => {
       });
       const promises = inputNodes.map((node, index: number) => {
         return limit(async () => {
-          const sourceValue = typeof node.value === "string" ? node.value : JSON.stringify(node.value);
-          const translatedText = await retryTranslate(sourceValue, cacheSuffix, {
-            translationMethod,
-            targetLanguage: currentTargetLang,
-            sourceLanguage,
-            ...translationConfig,
-          });
-          applyTranslation(jsonObject, outputNodes[index].path, translatedText || "");
+          if (aborted) return;
+          try {
+            const sourceValue = typeof node.value === "string" ? node.value : JSON.stringify(node.value);
+            const translatedText = await retryTranslate(sourceValue, cacheSuffix, {
+              translationMethod,
+              targetLanguage: currentTargetLang,
+              sourceLanguage,
+              ...translationConfig,
+            });
+            outputNodes[index].parent[outputNodes[index].parentProperty] = translatedText || "";
+          } catch (error) {
+            aborted = true;
+            throw error;
+          }
           updateProgress();
         });
       });
@@ -376,16 +385,23 @@ const JSONTranslator = () => {
         userPrompt,
       });
       // Translate all nodes
+      let aborted = false;
       const promises = nodesToTranslate.map(async (node) => {
         return limit(async () => {
-          const translatedText = await retryTranslate(String(node.value), cacheSuffix, {
-            translationMethod,
-            targetLanguage: currentTargetLang,
-            sourceLanguage,
-            ...translationConfig,
-          });
-          // Update the value in the original object
-          rootRecord[node.key][outputKey] = translatedText;
+          if (aborted) return;
+          try {
+            const translatedText = await retryTranslate(String(node.value), cacheSuffix, {
+              translationMethod,
+              targetLanguage: currentTargetLang,
+              sourceLanguage,
+              ...translationConfig,
+            });
+            // Update the value in the original object
+            rootRecord[node.key][outputKey] = translatedText;
+          } catch (error) {
+            aborted = true;
+            throw error;
+          }
           updateProgress();
         });
       });
@@ -532,7 +548,7 @@ const JSONTranslator = () => {
           } catch (error: unknown) {
             console.error(`Error translating to ${currentTargetLang}:`, error);
             const errMsg = getErrorMessage(error);
-            message.error(`${errMsg} ${sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang}  ${t("translationError")}`, 5);
+            message.error(`${errMsg} ${sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang}  ${t("translationError")}`, 60);
           }
         }
       }
@@ -546,16 +562,16 @@ const JSONTranslator = () => {
       }
 
       // Show success message
+      setProgressPercent(100);
       if (!directExport) {
         message.success(t("textProcessed"));
       }
     } catch (error: unknown) {
       console.error("Translation process error:", error);
       const errMsg = getErrorMessage(error);
-      message.error(`${errMsg} ${t("translationError")}`, 5);
+      message.error(`${errMsg} ${t("translationError")}`, 60);
     } finally {
       setTranslateInProgress(false);
-      setProgressPercent(100); // Ensure progress shows complete
     }
   };
 
@@ -642,7 +658,7 @@ const JSONTranslator = () => {
             className="shadow-md border-transparent hover:shadow-lg transition-shadow duration-300">
             <Dragger
               customRequest={({ file }) => handleFileUpload(file as File)}
-              accept=".txt,.json"
+              accept={uploadFileTypes.accept}
               showUploadList
               beforeUpload={resetUpload}
               onRemove={handleUploadRemove}
@@ -652,7 +668,9 @@ const JSONTranslator = () => {
                 <InboxOutlined />
               </p>
               <p className="ant-upload-text">{t("dragAndDropText")}</p>
-              <p className="ant-upload-hint">{t("supportedFormats")} .txt, .json</p>
+              <p className="ant-upload-hint">
+                {t("supportedFormats")} {uploadFileTypes.label}
+              </p>
             </Dragger>
 
             <>
