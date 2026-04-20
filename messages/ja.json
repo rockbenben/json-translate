@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "ノード名を使用する場合、第1レベルの子ノードのみ一致します",
     "keyMappingTooltip": "翻訳モード切替：元キーモードは同じキー名を使用（A→A）、マッピングモードはキー名を変換可能（A→B）",
     "toggleKeyMapping": "マッピングモードに切替",
-    "toggleKeyOriginal": "元キーモードに切替"
+    "toggleKeyOriginal": "元キーモードに切替",
+    "faq1q": "この JSON 翻訳ツールはどのエンジンとファイルサイズをサポートしますか？",
+    "faq1a": "Google 無料版、DeepSeek、DeepL、Azure、OpenAI、Qwen-MT を含む 15+ のエンジンに対応。任意サイズの JSON ファイルを処理でき、翻訳キャッシュにより次回ビルドの増分更新が可能です。",
+    "faq2q": "翻訳後に JSON のキー名やネスト構造は壊れますか？",
+    "faq2a": "壊れません。ツールは値のみを翻訳し、キー名・ネスト階層・配列構造はすべて保持されます。翻訳後のファイルは React や Vue などの i18n フレームワークでそのまま使用できます。",
+    "faq3q": "JSON を一度に複数の言語に翻訳できますか？",
+    "faq3a": "多言語モードを有効にすると、複数の対象言語を選択して en.json、ja.json、ko.json などを一括生成でき、国際化作業の時間を大幅に節約できます。"
   },
   "TranslationSettings": {
     "docs": "ドキュメント",
@@ -169,9 +175,9 @@
     "delayTime": "遅延時間",
     "CurrentTransConfig": "現在の設定",
     "useRelay": "API 中継",
-    "useRelayTooltip": "CORS や 403 エラーが発生した場合は、API 中継を有効にして DeepSeek にアクセスしてください",
+    "useRelayTooltip": "CORS や 403 エラーが発生した場合は API 中継を有効にしてください",
     "enableThinking": "思考モードを有効化",
-    "enableThinkingTooltip": "対応モデル（Kimi、DeepSeek、GLM、GPT-OSS）で思考モードを有効にする",
+    "enableThinkingTooltip": "対応モデルで思考 / 推論モードを有効にします",
     "presetSelect": "プリセットを選択",
     "presetSave": "プリセットを保存",
     "presetDelete": "プリセットを削除",
@@ -183,7 +189,11 @@
     "presetUpdate": "プリセットを更新",
     "presetUpdated": "プリセットを更新しました",
     "presetDeleteConfirm": "このプリセットを削除しますか？",
-    "qwenMtDomains": "ドメインプロンプト（英語のみ）"
+    "qwenMtDomains": "ドメインプロンプト（英語のみ）",
+    "selectService": "翻訳サービスを選択",
+    "configuredServices": "設定済み",
+    "globalPrompts": "LLM プロンプト（グローバル）",
+    "globalPromptsExtra": "すべての LLM サービスでこのプロンプトを共有します。サービスを切り替えてもリセットされません"
   },
   "tools": {
     "subtitleTranslator": {

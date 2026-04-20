@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "Con nome nodo, solo figli di primo livello corrispondono",
     "keyMappingTooltip": "Cambia Modalità: Chiave Originale (A→A) vs Mappatura (A→B)",
     "toggleKeyMapping": "Passa a Modalità Mappatura",
-    "toggleKeyOriginal": "Passa a Modalità Chiave Originale"
+    "toggleKeyOriginal": "Passa a Modalità Chiave Originale",
+    "faq1q": "Quali motori di traduzione e dimensioni di file supporta questo strumento JSON?",
+    "faq1a": "Supporta oltre 15 motori inclusi Google (gratuito), DeepSeek, DeepL, Azure, OpenAI e Qwen-MT. Gestisce file JSON di qualsiasi dimensione con cache di traduzione per aggiornamenti incrementali tra build.",
+    "faq2q": "Le chiavi e la struttura JSON vengono preservate dopo la traduzione?",
+    "faq2a": "Sì. Lo strumento traduce solo i valori — chiavi, gerarchia e array sono completamente preservati.",
+    "faq3q": "Si può tradurre JSON in più lingue contemporaneamente?",
+    "faq3a": "Attiva la modalità multilingue per generare in batch file come en.json, ja.json, ko.json in una sola operazione."
   },
   "TranslationSettings": {
     "docs": "Docs",
@@ -169,9 +175,9 @@
     "delayTime": "Ritardo",
     "CurrentTransConfig": "Config Corrente",
     "useRelay": "Relay API",
-    "useRelayTooltip": "Attiva il relay API per DeepSeek in caso di errori CORS o 403",
+    "useRelayTooltip": "Attiva il relay API in caso di errori CORS o 403",
     "enableThinking": "Abilita modalità Pensiero",
-    "enableThinkingTooltip": "Abilita la modalità di pensiero per i modelli supportati (Kimi, DeepSeek, GLM, GPT-OSS)",
+    "enableThinkingTooltip": "Abilita la modalità pensiero / ragionamento per i modelli supportati",
     "presetSelect": "Seleziona preset",
     "presetSave": "Salva preset",
     "presetDelete": "Elimina preset",
@@ -183,7 +189,11 @@
     "presetUpdate": "Aggiorna preset",
     "presetUpdated": "Preset aggiornato",
     "presetDeleteConfirm": "Eliminare questo preset?",
-    "qwenMtDomains": "Prompt di dominio (solo in inglese)"
+    "qwenMtDomains": "Prompt di dominio (solo in inglese)",
+    "selectService": "Seleziona il servizio di traduzione",
+    "configuredServices": "Configurati",
+    "globalPrompts": "Prompt LLM (globali)",
+    "globalPromptsExtra": "Tutti i servizi LLM condividono questi prompt; cambiare servizio non li ripristinerà"
   },
   "tools": {
     "subtitleTranslator": {

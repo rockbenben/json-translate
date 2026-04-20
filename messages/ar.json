@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "مع اسم العقدة، تتطابق فقط الأبناء من المستوى الأول",
     "keyMappingTooltip": "تبديل الوضع: المفتاح الأصلي (A→A) مقابل التعيين (A→B)",
     "toggleKeyMapping": "التبديل إلى وضع التعيين",
-    "toggleKeyOriginal": "التبديل إلى وضع المفتاح الأصلي"
+    "toggleKeyOriginal": "التبديل إلى وضع المفتاح الأصلي",
+    "faq1q": "ما محركات الترجمة وأحجام الملفات التي تدعمها أداة JSON هذه؟",
+    "faq1a": "تدعم أكثر من 15 محركًا بما في ذلك Google (مجاني)، DeepSeek، DeepL، Azure، OpenAI و Qwen-MT. تعالج ملفات JSON بأي حجم مع ذاكرة تخزين مؤقت للترجمة للتحديثات التراكمية.",
+    "faq2q": "هل تُحفظ مفاتيح JSON وبنيته بعد الترجمة؟",
+    "faq2a": "نعم. تترجم الأداة القيم فقط — المفاتيح والتداخل والمصفوفات تُحفظ بالكامل. تعمل الملفات المترجمة مباشرة في React وVue.",
+    "faq3q": "هل يمكن ترجمة JSON إلى عدة لغات دفعة واحدة؟",
+    "faq3a": "فعّل وضع اللغات المتعددة لاختيار عدة لغات مستهدفة وتوليد ملفات مثل en.json وja.json دفعة واحدة."
   },
   "TranslationSettings": {
     "docs": "وثائق",
@@ -169,9 +175,9 @@
     "delayTime": "تأخير",
     "CurrentTransConfig": "التكوين الحالي",
     "useRelay": "ترحيل API",
-    "useRelayTooltip": "قم بتمكين ترحيل API لـ DeepSeek في حالة حدوث أخطاء CORS أو 403",
+    "useRelayTooltip": "قم بتمكين ترحيل API في حالة حدوث أخطاء CORS أو 403",
     "enableThinking": "تمكين وضع التفكير",
-    "enableThinkingTooltip": "تمكين وضع التفكير للنماذج المدعومة (Kimi, DeepSeek, GLM, GPT-OSS)",
+    "enableThinkingTooltip": "تمكين وضع التفكير / الاستدلال للنماذج المدعومة",
     "presetSelect": "اختيار إعداد مسبق",
     "presetSave": "حفظ الإعداد المسبق",
     "presetDelete": "حذف الإعداد المسبق",
@@ -183,7 +189,11 @@
     "presetUpdate": "تحديث الإعداد المسبق",
     "presetUpdated": "تم تحديث الإعداد المسبق",
     "presetDeleteConfirm": "هل تريد حذف هذا الإعداد المسبق؟",
-    "qwenMtDomains": "مطالبات المجال (باللغة الإنجليزية فقط)"
+    "qwenMtDomains": "مطالبات المجال (باللغة الإنجليزية فقط)",
+    "selectService": "اختر خدمة الترجمة",
+    "configuredServices": "مُهيّأ",
+    "globalPrompts": "موجهات LLM (عامة)",
+    "globalPromptsExtra": "تشترك جميع خدمات LLM في هذه الموجهات؛ التبديل بين الخدمات لن يعيد ضبطها"
   },
   "tools": {
     "subtitleTranslator": {

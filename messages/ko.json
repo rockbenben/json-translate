@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "노드 이름 사용 시 1단계 자식 노드만 매칭",
     "keyMappingTooltip": "번역 모드 전환: 원본 키 모드는 동일한 키 이름 사용(A→A), 매핑 모드는 키 이름 변환 가능(A→B)",
     "toggleKeyMapping": "매핑 모드로 전환",
-    "toggleKeyOriginal": "원본 키 모드로 전환"
+    "toggleKeyOriginal": "원본 키 모드로 전환",
+    "faq1q": "이 JSON 번역 도구는 어떤 엔진과 파일 크기를 지원합니까?",
+    "faq1a": "Google 무료, DeepSeek, DeepL, Azure, OpenAI, Qwen-MT 등 15개 이상의 엔진을 지원합니다. 크기 제한 없는 JSON 파일을 처리하며, 번역 캐시로 빌드 간 증분 업데이트를 지원합니다.",
+    "faq2q": "번역 후 JSON 키와 중첩 구조가 깨지나요?",
+    "faq2a": "아닙니다. 도구는 값만 번역하며 키 이름, 중첩 구조, 배열 구조가 모두 보존됩니다. 번역된 파일은 React, Vue 등의 i18n 프레임워크에서 바로 사용할 수 있습니다.",
+    "faq3q": "JSON을 한 번에 여러 언어로 번역할 수 있나요?",
+    "faq3a": "다국어 모드를 활성화하면 여러 대상 언어를 선택하여 en.json, ja.json, ko.json 등을 일괄 생성할 수 있어 국제화 작업 시간을 크게 절약할 수 있습니다."
   },
   "TranslationSettings": {
     "docs": "문서",
@@ -169,9 +175,9 @@
     "delayTime": "지연 시간",
     "CurrentTransConfig": "현재 구성",
     "useRelay": "API 중계",
-    "useRelayTooltip": "CORS 또는 403 오류가 발생하면 API 중계를 활성화하여 DeepSeek에 액세스하세요",
+    "useRelayTooltip": "CORS 또는 403 오류가 발생하면 API 중계를 활성화하세요",
     "enableThinking": "Thinking 모드 활성화",
-    "enableThinkingTooltip": "지원되는 모델(Kimi, DeepSeek, GLM, GPT-OSS)에 대해 Thinking 모드 활성화",
+    "enableThinkingTooltip": "지원되는 모델에 대해 사고 / 추론 모드 활성화",
     "presetSelect": "프리셋 선택",
     "presetSave": "프리셋 저장",
     "presetDelete": "프리셋 삭제",
@@ -183,7 +189,11 @@
     "presetUpdate": "프리셋 업데이트",
     "presetUpdated": "프리셋 업데이트됨",
     "presetDeleteConfirm": "이 프리셋을 삭제하시겠습니까?",
-    "qwenMtDomains": "도메인 프롬프트(영어로만 제공)"
+    "qwenMtDomains": "도메인 프롬프트(영어로만 제공)",
+    "selectService": "번역 서비스 선택",
+    "configuredServices": "구성됨",
+    "globalPrompts": "LLM 프롬프트 (전역)",
+    "globalPromptsExtra": "모든 LLM 서비스가 이 프롬프트를 공유하며, 서비스를 전환해도 초기화되지 않습니다"
   },
   "tools": {
     "subtitleTranslator": {

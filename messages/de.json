@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "Bei Verwendung von Knotennamen werden nur direkte Unterknoten abgeglichen",
     "keyMappingTooltip": "Übersetzungsmodus umschalten: Originalschlüssel-Modus verwendet gleiche Schlüsselnamen (A→A), Mapping-Modus erlaubt Schlüsselnamen-Konvertierung (A→B)",
     "toggleKeyMapping": "In Mapping-Modus wechseln",
-    "toggleKeyOriginal": "In Originalschlüssel-Modus wechseln"
+    "toggleKeyOriginal": "In Originalschlüssel-Modus wechseln",
+    "faq1q": "Welche Übersetzungs-Engines und Dateigrößen unterstützt dieses JSON-Tool?",
+    "faq1a": "Unterstützt 15+ Engines einschließlich Google (kostenlos), DeepSeek, DeepL, Azure, OpenAI und Qwen-MT. Verarbeitet JSON-Dateien jeder Größe mit Übersetzungs-Cache für inkrementelle Updates.",
+    "faq2q": "Bleiben JSON-Schlüssel und Verschachtelung nach der Übersetzung erhalten?",
+    "faq2a": "Ja. Das Tool übersetzt nur Werte — Schlüssel, Verschachtelungshierarchie und Array-Strukturen bleiben vollständig erhalten. Übersetzte Dateien funktionieren direkt in React, Vue und anderen i18n-Frameworks.",
+    "faq3q": "Kann ich JSON gleichzeitig in mehrere Sprachen übersetzen?",
+    "faq3a": "Aktivieren Sie den Mehrsprachenmodus, um mehrere Zielsprachen auszuwählen und Dateien wie en.json, ja.json, ko.json in einem Vorgang zu generieren."
   },
   "TranslationSettings": {
     "docs": "Dokumentation",
@@ -169,9 +175,9 @@
     "delayTime": "Verzögerungszeit",
     "CurrentTransConfig": "Aktuelle Konfiguration",
     "useRelay": "API-Relay",
-    "useRelayTooltip": "Aktivieren Sie API-Relay für DeepSeek bei CORS- oder 403-Fehlern",
+    "useRelayTooltip": "Aktivieren Sie API-Relay bei CORS- oder 403-Fehlern",
     "enableThinking": "Thinking-Modus aktivieren",
-    "enableThinkingTooltip": "Aktiviert den Thinking-Modus für unterstützte Modelle (Kimi, DeepSeek, GLM, GPT-OSS)",
+    "enableThinkingTooltip": "Aktiviert den Thinking- / Reasoning-Modus für unterstützte Modelle",
     "presetSelect": "Voreinstellung wählen",
     "presetSave": "Voreinstellung speichern",
     "presetDelete": "Voreinstellung löschen",
@@ -183,7 +189,11 @@
     "presetUpdate": "Voreinstellung aktualisieren",
     "presetUpdated": "Voreinstellung aktualisiert",
     "presetDeleteConfirm": "Diese Voreinstellung löschen?",
-    "qwenMtDomains": "Domänen-Prompts (nur Englisch)"
+    "qwenMtDomains": "Domänen-Prompts (nur Englisch)",
+    "selectService": "Übersetzungsdienst auswählen",
+    "configuredServices": "Konfiguriert",
+    "globalPrompts": "LLM-Prompts (global)",
+    "globalPromptsExtra": "Alle LLM-Dienste teilen sich diese Prompts; ein Dienstwechsel setzt sie nicht zurück"
   },
   "tools": {
     "subtitleTranslator": {

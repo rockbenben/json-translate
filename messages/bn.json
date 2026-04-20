@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "নোড নামের সাথে, শুধুমাত্র প্রথম স্তরের সন্তানরা মেলে",
     "keyMappingTooltip": "মোড পরিবর্তন করুন: মূল কী (A→A) বনাম ম্যাপিং (A→B)",
     "toggleKeyMapping": "ম্যাপিং মোডে পরিবর্তন করুন",
-    "toggleKeyOriginal": "মূল কী মোডে পরিবর্তন করুন"
+    "toggleKeyOriginal": "মূল কী মোডে পরিবর্তন করুন",
+    "faq1q": "এই JSON টুল কোন অনুবাদ ইঞ্জিন এবং ফাইলের আকার সমর্থন করে?",
+    "faq1a": "Google (বিনামূল্যে), DeepSeek, DeepL, Azure, OpenAI এবং Qwen-MT সহ 15+ ইঞ্জিন সমর্থিত। যেকোনো আকারের JSON ফাইল পরিচালনা করে, বিল্ডের মধ্যে ইনক্রিমেন্টাল আপডেটের জন্য অনুবাদ ক্যাশ সহ।",
+    "faq2q": "অনুবাদের পর JSON কী এবং কাঠামো সংরক্ষিত থাকে?",
+    "faq2a": "হ্যাঁ। টুল শুধু মান অনুবাদ করে — কী, নেস্টিং এবং অ্যারে কাঠামো সম্পূর্ণ সংরক্ষিত থাকে।",
+    "faq3q": "একসাথে একাধিক ভাষায় JSON অনুবাদ করা যায়?",
+    "faq3a": "বহুভাষিক মোড সক্রিয় করে en.json, ja.json, ko.json একবারে তৈরি করুন।"
   },
   "TranslationSettings": {
     "docs": "ডকুমেন্টেশন",
@@ -169,9 +175,9 @@
     "delayTime": "বিলম্ব",
     "CurrentTransConfig": "বর্তমান কনফিগারেশন",
     "useRelay": "API রিলে",
-    "useRelayTooltip": "CORS বা 403 ত্রুটির ক্ষেত্রে DeepSeek-এর জন্য API রিলে সক্ষম করুন",
+    "useRelayTooltip": "CORS বা 403 ত্রুটির ক্ষেত্রে API রিলে সক্ষম করুন",
     "enableThinking": "Thinking মোড চালু করুন",
-    "enableThinkingTooltip": "সমर्थित মডেলের (Kimi, DeepSeek, GLM, GPT-OSS) জন্য Thinking মোড চালু করুন",
+    "enableThinkingTooltip": "সমর্থিত মডেলের জন্য চিন্তা / যুক্তি মোড চালু করুন",
     "presetSelect": "প্রিসেট নির্বাচন করুন",
     "presetSave": "প্রিসেট সংরক্ষণ করুন",
     "presetDelete": "প্রিসেট মুছুন",
@@ -183,7 +189,11 @@
     "presetUpdate": "প্রিসেট আপডেট করুন",
     "presetUpdated": "প্রিসেট আপডেট হয়েছে",
     "presetDeleteConfirm": "এই প্রিসেটটি মুছবেন?",
-    "qwenMtDomains": "ডোমেইন প্রম্পট (শুধুমাত্র ইংরেজি)"
+    "qwenMtDomains": "ডোমেইন প্রম্পট (শুধুমাত্র ইংরেজি)",
+    "selectService": "অনুবাদ পরিষেবা নির্বাচন করুন",
+    "configuredServices": "কনফিগার করা",
+    "globalPrompts": "LLM প্রম্পট (গ্লোবাল)",
+    "globalPromptsExtra": "সব LLM পরিষেবা এই প্রম্পট ভাগ করে নেয়; পরিষেবা পরিবর্তন করলেও রিসেট হবে না"
   },
   "tools": {
     "subtitleTranslator": {

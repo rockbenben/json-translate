@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "Con nombre de nodo, solo coinciden hijos de primer nivel",
     "keyMappingTooltip": "Alternar Modo: Clave Original (A→A) vs Mapeo (A→B)",
     "toggleKeyMapping": "Cambiar a Modo Mapeo",
-    "toggleKeyOriginal": "Cambiar a Modo Clave Original"
+    "toggleKeyOriginal": "Cambiar a Modo Clave Original",
+    "faq1q": "¿Qué motores de traducción y tamaños de archivo admite esta herramienta JSON?",
+    "faq1a": "Compatible con 15+ motores incluyendo Google (gratis), DeepSeek, DeepL, Azure, OpenAI y Qwen-MT. Gestiona archivos JSON de cualquier tamaño con caché de traducción para actualizaciones incrementales.",
+    "faq2q": "¿Se mantienen las claves y estructura JSON tras la traducción?",
+    "faq2a": "Sí. La herramienta solo traduce los valores — claves, jerarquía y arrays se conservan íntegramente. Los archivos traducidos funcionan directamente en React, Vue y otros frameworks i18n.",
+    "faq3q": "¿Se puede traducir JSON a varios idiomas a la vez?",
+    "faq3a": "Activa el modo multilingüe para seleccionar varios idiomas de destino y generar archivos como en.json, ja.json, ko.json en una sola operación."
   },
   "TranslationSettings": {
     "docs": "Docs",
@@ -169,9 +175,9 @@
     "delayTime": "Retraso",
     "CurrentTransConfig": "Config Actual",
     "useRelay": "Relé API",
-    "useRelayTooltip": "Habilita el relé API para DeepSeek si encuentras errores CORS o 403",
+    "useRelayTooltip": "Habilita el relé API si encuentras errores CORS o 403",
     "enableThinking": "Activar modo Pensamiento",
-    "enableThinkingTooltip": "Habilita el modo de pensamiento para modelos compatibles (Kimi, DeepSeek, GLM, GPT-OSS)",
+    "enableThinkingTooltip": "Habilita el modo de pensamiento / razonamiento para modelos compatibles",
     "presetSelect": "Seleccionar preset",
     "presetSave": "Guardar preset",
     "presetDelete": "Eliminar preset",
@@ -183,7 +189,11 @@
     "presetUpdate": "Actualizar preset",
     "presetUpdated": "Preset actualizado",
     "presetDeleteConfirm": "¿Eliminar este preset?",
-    "qwenMtDomains": "Avisos de dominio (solo en inglés)"
+    "qwenMtDomains": "Avisos de dominio (solo en inglés)",
+    "selectService": "Seleccionar servicio de traducción",
+    "configuredServices": "Configurado",
+    "globalPrompts": "Prompts LLM (globales)",
+    "globalPromptsExtra": "Todos los servicios LLM comparten estos prompts; cambiar de servicio no los restablecerá"
   },
   "tools": {
     "subtitleTranslator": {

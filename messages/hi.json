@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "नोड नाम के साथ, केवल पहले स्तर के बच्चे मेल खाते हैं",
     "keyMappingTooltip": "मोड स्विच करें: मूल कुंजी (A→A) बनाम मैपिंग (A→B)",
     "toggleKeyMapping": "मैपिंग मोड पर स्विच करें",
-    "toggleKeyOriginal": "मूल कुंजी मोड पर स्विच करें"
+    "toggleKeyOriginal": "मूल कुंजी मोड पर स्विच करें",
+    "faq1q": "यह JSON टूल कौन से अनुवाद इंजन और फ़ाइल आकार समर्थन करता है?",
+    "faq1a": "Google (मुफ्त), DeepSeek, DeepL, Azure, OpenAI और Qwen-MT सहित 15+ इंजन समर्थित हैं। किसी भी आकार की JSON फ़ाइलों को संभालता है और बिल्ड के बीच वृद्धिशील अपडेट के लिए अनुवाद कैश।",
+    "faq2q": "क्या अनुवाद के बाद JSON कुंजियाँ और संरचना सुरक्षित रहती हैं?",
+    "faq2a": "हाँ। टूल केवल मानों का अनुवाद करता है — कुंजियाँ, नेस्टिंग और ऐरे संरचनाएँ पूरी तरह संरक्षित रहती हैं।",
+    "faq3q": "क्या JSON को एक साथ कई भाषाओं में अनुवाद किया जा सकता है?",
+    "faq3a": "बहुभाषी मोड सक्षम करें और en.json, ja.json, ko.json जैसी फाइलें एक ही ऑपरेशन में बैच-जनरेट करें।"
   },
   "TranslationSettings": {
     "docs": "दस्तावेज़",
@@ -169,9 +175,9 @@
     "delayTime": "विलंब",
     "CurrentTransConfig": "वर्तमान कॉन्फ़िगरेशन",
     "useRelay": "API रिले",
-    "useRelayTooltip": "CORS या 403 त्रुटियों के मामले में DeepSeek के लिए API रिले सक्षम करें",
+    "useRelayTooltip": "CORS या 403 त्रुटि होने पर API रिले सक्षम करें",
     "enableThinking": "Thinking मोड सक्षम करें",
-    "enableThinkingTooltip": "समर्थित मॉडल (Kimi, DeepSeek, GLM, GPT-OSS) के लिए Thinking मोड सक्षम करें",
+    "enableThinkingTooltip": "समर्थित मॉडल के लिए सोचने / तर्क मोड सक्षम करें",
     "presetSelect": "प्रीसेट चुनें",
     "presetSave": "प्रीसेट सहेजें",
     "presetDelete": "प्रीसेट हटाएं",
@@ -183,7 +189,11 @@
     "presetUpdate": "प्रीसेट अपडेट करें",
     "presetUpdated": "प्रीसेट अपडेट हो गया",
     "presetDeleteConfirm": "क्या आप इस प्रीसेट को हटाना चाहते हैं?",
-    "qwenMtDomains": "डोमेन प्रॉम्प्ट (केवल अंग्रेजी)"
+    "qwenMtDomains": "डोमेन प्रॉम्प्ट (केवल अंग्रेजी)",
+    "selectService": "अनुवाद सेवा चुनें",
+    "configuredServices": "कॉन्फ़िगर किया गया",
+    "globalPrompts": "LLM प्रॉम्प्ट (वैश्विक)",
+    "globalPromptsExtra": "सभी LLM सेवाएँ इन प्रॉम्प्ट को साझा करती हैं; सेवा बदलने से वे रीसेट नहीं होंगे"
   },
   "tools": {
     "subtitleTranslator": {

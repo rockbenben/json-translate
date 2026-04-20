@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "Avec un nom de nœud, seuls les enfants de premier niveau correspondent",
     "keyMappingTooltip": "Basculer mode : Clé originale (A→A) vs Mappage (A→B)",
     "toggleKeyMapping": "Passer en mode Mappage",
-    "toggleKeyOriginal": "Passer en mode Clé originale"
+    "toggleKeyOriginal": "Passer en mode Clé originale",
+    "faq1q": "Quels moteurs de traduction et tailles de fichiers ce JSON supporte-t-il ?",
+    "faq1a": "Compatible avec 15+ moteurs dont Google (gratuit), DeepSeek, DeepL, Azure, OpenAI et Qwen-MT. Gère les fichiers JSON de toute taille avec cache de traduction pour des mises à jour incrémentales.",
+    "faq2q": "Les clés et la structure JSON sont-elles préservées après traduction ?",
+    "faq2a": "Oui. L'outil ne traduit que les valeurs — clés, hiérarchie et tableaux sont intégralement conservés. Les fichiers traduits fonctionnent directement dans React, Vue et autres frameworks i18n.",
+    "faq3q": "Peut-on traduire un JSON en plusieurs langues à la fois ?",
+    "faq3a": "Activez le mode multilingue pour sélectionner plusieurs langues cibles et générer en lot des fichiers comme en.json, ja.json, ko.json, ce qui réduit considérablement le temps d'internationalisation."
   },
   "TranslationSettings": {
     "docs": "Docs",
@@ -169,9 +175,9 @@
     "delayTime": "Délai",
     "CurrentTransConfig": "Config actuelle",
     "useRelay": "Relais API",
-    "useRelayTooltip": "Activez le relais API pour DeepSeek en cas d'erreurs CORS ou 403",
+    "useRelayTooltip": "Activez le relais API en cas d'erreurs CORS ou 403",
     "enableThinking": "Activer le mode Pensée",
-    "enableThinkingTooltip": "Activer le mode pensée pour les modèles pris en charge (Kimi, DeepSeek, GLM, GPT-OSS)",
+    "enableThinkingTooltip": "Activer le mode pensée / raisonnement pour les modèles pris en charge",
     "presetSelect": "Sélectionner un préréglage",
     "presetSave": "Enregistrer le préréglage",
     "presetDelete": "Supprimer le préréglage",
@@ -183,7 +189,11 @@
     "presetUpdate": "Mettre à jour le préréglage",
     "presetUpdated": "Préréglage mis à jour",
     "presetDeleteConfirm": "Supprimer ce préréglage ?",
-    "qwenMtDomains": "Invites de domaine (en anglais uniquement)"
+    "qwenMtDomains": "Invites de domaine (en anglais uniquement)",
+    "selectService": "Sélectionner le service de traduction",
+    "configuredServices": "Configurés",
+    "globalPrompts": "Prompts LLM (globaux)",
+    "globalPromptsExtra": "Tous les services LLM partagent ces prompts ; changer de service ne les réinitialisera pas"
   },
   "tools": {
     "subtitleTranslator": {

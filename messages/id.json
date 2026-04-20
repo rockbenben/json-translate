@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "Dengan nama node, hanya anak tingkat pertama yang cocok",
     "keyMappingTooltip": "Ganti Mode: Kunci Asli (A→A) vs Pemetaan (A→B)",
     "toggleKeyMapping": "Beralih ke Mode Pemetaan",
-    "toggleKeyOriginal": "Beralih ke Mode Kunci Asli"
+    "toggleKeyOriginal": "Beralih ke Mode Kunci Asli",
+    "faq1q": "Alat JSON ini mendukung mesin terjemahan dan ukuran file apa?",
+    "faq1a": "Mendukung 15+ mesin termasuk Google (gratis), DeepSeek, DeepL, Azure, OpenAI, dan Qwen-MT. Menangani file JSON ukuran berapa pun dengan cache terjemahan untuk pembaruan inkremental antar build.",
+    "faq2q": "Apakah kunci dan struktur JSON tetap setelah diterjemahkan?",
+    "faq2a": "Ya. Alat hanya menerjemahkan nilai — kunci, hierarki dan array sepenuhnya dipertahankan.",
+    "faq3q": "Bisakah menerjemahkan JSON ke banyak bahasa sekaligus?",
+    "faq3a": "Aktifkan mode multibahasa untuk menghasilkan file en.json, ja.json, ko.json dalam satu operasi."
   },
   "TranslationSettings": {
     "docs": "Dokumen",
@@ -169,9 +175,9 @@
     "delayTime": "Penundaan",
     "CurrentTransConfig": "Konfigurasi Saat Ini",
     "useRelay": "Relay API",
-    "useRelayTooltip": "Aktifkan relay API untuk DeepSeek jika terjadi kesalahan CORS atau 403",
+    "useRelayTooltip": "Aktifkan relay API jika terjadi kesalahan CORS atau 403",
     "enableThinking": "Aktifkan Mode Berpikir",
-    "enableThinkingTooltip": "Aktifkan mode berpikir untuk model yang didukung (Kimi, DeepSeek, GLM, GPT-OSS)",
+    "enableThinkingTooltip": "Aktifkan mode berpikir / penalaran untuk model yang didukung",
     "presetSelect": "Pilih Preset",
     "presetSave": "Simpan Preset",
     "presetDelete": "Hapus Preset",
@@ -183,7 +189,11 @@
     "presetUpdate": "Perbarui Preset",
     "presetUpdated": "Preset diperbarui",
     "presetDeleteConfirm": "Hapus preset ini?",
-    "qwenMtDomains": "Prompt Domain (hanya bahasa Inggris)"
+    "qwenMtDomains": "Prompt Domain (hanya bahasa Inggris)",
+    "selectService": "Pilih layanan terjemahan",
+    "configuredServices": "Terkonfigurasi",
+    "globalPrompts": "Prompt LLM (global)",
+    "globalPromptsExtra": "Semua layanan LLM berbagi prompt ini; berpindah layanan tidak akan mereset-nya"
   },
   "tools": {
     "subtitleTranslator": {

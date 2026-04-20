@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "When using node name, matches only first-level children",
     "keyMappingTooltip": "Toggle Mode: Original Key (A→A) vs Mapping (A→B)",
     "toggleKeyMapping": "Switch to Mapping Mode",
-    "toggleKeyOriginal": "Switch to Original Key Mode"
+    "toggleKeyOriginal": "Switch to Original Key Mode",
+    "faq1q": "Which translation engines and file sizes does this JSON tool support?",
+    "faq1a": "Supports 15+ engines including Google (free), DeepSeek, DeepL, Azure, OpenAI, and Qwen-MT. Handles JSON files of any size with translation cache for incremental updates across builds.",
+    "faq2q": "Will JSON keys and nesting structure break after translation?",
+    "faq2a": "No. The tool only translates values — keys, nesting hierarchy, and array structures are fully preserved. Translated files work directly in React, Vue, and other frontend i18n frameworks.",
+    "faq3q": "How do I translate JSON into multiple languages at once?",
+    "faq3a": "Enable Multi-Language Mode to select multiple target languages and batch-generate files like en.json, ja.json, ko.json in one operation, saving significant internationalization time."
   },
   "TranslationSettings": {
     "docs": "Docs",
@@ -169,9 +175,9 @@
     "delayTime": "Delay Time",
     "CurrentTransConfig": "Current Config",
     "useRelay": "API Relay",
-    "useRelayTooltip": "Enable API relay for DeepSeek if you encounter CORS or 403 errors",
+    "useRelayTooltip": "Enable API relay if you encounter CORS or 403 errors",
     "enableThinking": "Enable Thinking",
-    "enableThinkingTooltip": "Enable thinking mode for supported models (Kimi, DeepSeek, GLM, GPT-OSS)",
+    "enableThinkingTooltip": "Enable thinking / reasoning mode for supported models",
     "presetSelect": "Select Preset",
     "presetSave": "Save Preset",
     "presetDelete": "Delete Preset",
@@ -183,7 +189,11 @@
     "presetUpdate": "Update Preset",
     "presetUpdated": "Preset updated",
     "presetDeleteConfirm": "Delete this preset?",
-    "qwenMtDomains": "Domain Prompts (English only)"
+    "qwenMtDomains": "Domain Prompts (English only)",
+    "selectService": "Select translation service",
+    "configuredServices": "Configured",
+    "globalPrompts": "LLM Prompts (Global)",
+    "globalPromptsExtra": "All LLM services share these prompts; switching services will not reset them"
   },
   "tools": {
     "subtitleTranslator": {

@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "使用节点名称时，仅匹配一级子节点",
     "keyMappingTooltip": "切换翻译模式：原键模式使用相同键名（A→A），映射模式可转换键名（A→B）",
     "toggleKeyMapping": "切换到映射模式",
-    "toggleKeyOriginal": "切换到原键模式"
+    "toggleKeyOriginal": "切换到原键模式",
+    "faq1q": "这个 JSON 翻译工具支持哪些翻译引擎和文件大小？",
+    "faq1a": "支持 15+ 翻译引擎，包括 Google 免费版、DeepSeek、DeepL、Azure、OpenAI 和 Qwen-MT。可处理任意大小的 JSON 文件，翻译缓存支持构建间的增量更新。",
+    "faq2q": "JSON 翻译后键名和嵌套结构会乱吗？",
+    "faq2a": "不会。工具只翻译值内容，键名、嵌套层级、数组结构全部原样保留，翻译后的 JSON 可直接用于 React、Vue 等前端 i18n 项目。",
+    "faq3q": "怎么把 JSON 一次翻译成多种语言？",
+    "faq3a": "开启「多语言模式」后可同时选择多个目标语言，一次操作即可批量生成 en.json、ja.json、ko.json 等多语言文件，大幅节省国际化工作时间。"
   },
   "TranslationSettings": {
     "docs": "文档",
@@ -169,9 +175,9 @@
     "delayTime": "延迟时间",
     "CurrentTransConfig": "当前配置",
     "useRelay": "中转 API",
-    "useRelayTooltip": "如遇到 CORS 或 403 错误，请开启中转 API 来访问 DeepSeek",
+    "useRelayTooltip": "如遇到 CORS 或 403 错误，请开启中转 API",
     "enableThinking": "启用思考模式",
-    "enableThinkingTooltip": "为支持的模型启用思考模式（Kimi、DeepSeek、GLM、GPT-OSS）",
+    "enableThinkingTooltip": "为支持的模型启用思考 / 推理模式",
     "presetSelect": "选择预设",
     "presetSave": "保存预设",
     "presetDelete": "删除预设",
@@ -183,7 +189,11 @@
     "presetUpdate": "更新预设",
     "presetUpdated": "预设已更新",
     "presetDeleteConfirm": "确定要删除此预设吗？",
-    "qwenMtDomains": "领域提示词 (仅支持英文)"
+    "qwenMtDomains": "领域提示词 (仅支持英文)",
+    "selectService": "选择翻译服务",
+    "configuredServices": "已配置",
+    "globalPrompts": "LLM 提示词（全局）",
+    "globalPromptsExtra": "所有 LLM 服务共用这组提示词，切换服务不会重置"
   },
   "tools": {
     "subtitleTranslator": {

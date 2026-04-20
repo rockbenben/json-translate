@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "ด้วยชื่อโหนด เฉพาะโหนดลูกระดับแรกที่ตรงกัน",
     "keyMappingTooltip": "สลับโหมด: คีย์เดิม (A→A) vs การแมป (A→B)",
     "toggleKeyMapping": "เปลี่ยนเป็นโหมดการแมป",
-    "toggleKeyOriginal": "เปลี่ยนเป็นโหมดคีย์เดิม"
+    "toggleKeyOriginal": "เปลี่ยนเป็นโหมดคีย์เดิม",
+    "faq1q": "เครื่องมือ JSON นี้รองรับเอนจินการแปลและขนาดไฟล์ใดบ้าง?",
+    "faq1a": "รองรับเอนจินมากกว่า 15 รายการ รวมถึง Google (ฟรี), DeepSeek, DeepL, Azure, OpenAI และ Qwen-MT จัดการไฟล์ JSON ทุกขนาดพร้อมแคชการแปลสำหรับอัปเดตแบบเพิ่มหน่วย",
+    "faq2q": "คีย์และโครงสร้าง JSON จะเปลี่ยนหลังแปลไหม?",
+    "faq2a": "ไม่ เครื่องมือแปลเฉพาะค่า — คีย์ โครงสร้างซ้อน และอาร์เรย์ถูกรักษาไว้ทั้งหมด",
+    "faq3q": "แปล JSON เป็นหลายภาษาพร้อมกันได้ไหม?",
+    "faq3a": "เปิดโหมดหลายภาษาเพื่อสร้างไฟล์ en.json, ja.json, ko.json ในการดำเนินการเดียว"
   },
   "TranslationSettings": {
     "docs": "เอกสาร",
@@ -169,9 +175,9 @@
     "delayTime": "หน่วงเวลา",
     "CurrentTransConfig": "การตั้งค่าปัจจุบัน",
     "useRelay": "API Relay",
-    "useRelayTooltip": "เปิด API relay สำหรับ DeepSeek เมื่อพบข้อผิดพลาด CORS หรือ 403",
+    "useRelayTooltip": "เปิด API relay เมื่อพบข้อผิดพลาด CORS หรือ 403",
     "enableThinking": "เปิดใช้งานโหมดการคิด",
-    "enableThinkingTooltip": "เปิดใช้งานโหมดการคิดสำหรับโมเดลที่รองรับ (Kimi, DeepSeek, GLM, GPT-OSS)",
+    "enableThinkingTooltip": "เปิดใช้งานโหมดการคิด / การให้เหตุผลสำหรับโมเดลที่รองรับ",
     "presetSelect": "เลือกพรีเซ็ต",
     "presetSave": "บันทึกพรีเซ็ต",
     "presetDelete": "ลบพรีเซ็ต",
@@ -183,7 +189,11 @@
     "presetUpdate": "อัปเดตพรีเซ็ต",
     "presetUpdated": "อัปเดตพรีเซ็ตแล้ว",
     "presetDeleteConfirm": "ลบพรีเซ็ตนี้หรือไม่?",
-    "qwenMtDomains": "พรอมต์โดเมน (ภาษาอังกฤษเท่านั้น)"
+    "qwenMtDomains": "พรอมต์โดเมน (ภาษาอังกฤษเท่านั้น)",
+    "selectService": "เลือกบริการแปล",
+    "configuredServices": "ตั้งค่าแล้ว",
+    "globalPrompts": "พรอมต์ LLM (ทั่วทั้งระบบ)",
+    "globalPromptsExtra": "บริการ LLM ทั้งหมดใช้พรอมต์ชุดนี้ร่วมกัน การเปลี่ยนบริการจะไม่รีเซ็ต"
   },
   "tools": {
     "subtitleTranslator": {

@@ -136,7 +136,13 @@
     "nodeToTranslateExtra": "Düğüm adıyla, yalnızca birinci seviye alt öğeler eşleşir",
     "keyMappingTooltip": "Mod Değiştir: Orijinal Anahtar (A→A) vs Haritalama (A→B)",
     "toggleKeyMapping": "Haritalama Moduna Geç",
-    "toggleKeyOriginal": "Orijinal Anahtar Moduna Geç"
+    "toggleKeyOriginal": "Orijinal Anahtar Moduna Geç",
+    "faq1q": "Bu JSON aracı hangi çeviri motorlarını ve dosya boyutlarını destekliyor?",
+    "faq1a": "Google (ücretsiz), DeepSeek, DeepL, Azure, OpenAI ve Qwen-MT dahil 15+ motoru destekler. Her boyuttaki JSON dosyalarını işler ve derlemeler arası artımlı güncelleme için çeviri önbelleği sağlar.",
+    "faq2q": "Çeviriden sonra JSON anahtarları ve yapısı korunur mu?",
+    "faq2a": "Evet. Araç yalnızca değerleri çevirir — anahtarlar, iç içe yapı ve diziler tamamen korunur.",
+    "faq3q": "JSON'u aynı anda birden fazla dile çevirebilir miyim?",
+    "faq3a": "Çoklu dil modunu etkinleştirerek en.json, ja.json, ko.json dosyalarını tek işlemde toplu oluşturun."
   },
   "TranslationSettings": {
     "docs": "Belgeler",
@@ -169,9 +175,9 @@
     "delayTime": "Gecikme",
     "CurrentTransConfig": "Mevcut Yapılandırma",
     "useRelay": "API Aktarıcı",
-    "useRelayTooltip": "CORS veya 403 hatalarında DeepSeek için API aktarıcıyı etkinleştirin",
+    "useRelayTooltip": "CORS veya 403 hatalarında API aktarıcıyı etkinleştirin",
     "enableThinking": "Düşünme Modunu Etkinleştir",
-    "enableThinkingTooltip": "Desteklenen modeller için düşünme modunu etkinleştir (Kimi, DeepSeek, GLM, GPT-OSS)",
+    "enableThinkingTooltip": "Desteklenen modeller için düşünme / akıl yürütme modunu etkinleştir",
     "presetSelect": "Ön Ayar Seç",
     "presetSave": "Ön Ayarı Kaydet",
     "presetDelete": "Ön Ayarı Sil",
@@ -183,7 +189,11 @@
     "presetUpdate": "Ön Ayarı Güncelle",
     "presetUpdated": "Ön ayar güncellendi",
     "presetDeleteConfirm": "Bu ön ayarı silmek istiyor musunuz?",
-    "qwenMtDomains": "Etki Alanı İpuçları (yalnızca İngilizce)"
+    "qwenMtDomains": "Etki Alanı İpuçları (yalnızca İngilizce)",
+    "selectService": "Çeviri hizmeti seç",
+    "configuredServices": "Yapılandırılmış",
+    "globalPrompts": "LLM İstemleri (global)",
+    "globalPromptsExtra": "Tüm LLM hizmetleri bu istemleri paylaşır; hizmet değiştirmek onları sıfırlamaz"
   },
   "tools": {
     "subtitleTranslator": {
