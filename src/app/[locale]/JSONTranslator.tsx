@@ -82,6 +82,7 @@ const JSONTranslator = () => {
   const translatedCountRef = useRef(0);
   const totalCountRef = useRef(0);
   const [progressPercent, setProgressPercent] = useState(0);
+  const [progressInfo, setProgressInfo] = useState<{ current: number; total: number }>({ current: 0, total: 0 });
 
   const [translateMode, setTranslateMode] = useLocalStorage<TranslateMode>("translateMode", "allKeys"); // 翻译模式状态：'allKeys', 'nodeKeys', 'keyMapping', "selectiveKey", 'i18nMode'
   const [jsonPathForNodeTranslation, setJsonPathForNodeTranslation] = useLocalStorage("jsonPathForNodeTranslation", ""); // 局部节点路径
@@ -113,6 +114,7 @@ const JSONTranslator = () => {
     translatedCountRef.current++;
     if (totalCountRef.current > 0) {
       setProgressPercent((translatedCountRef.current / totalCountRef.current) * 100);
+      setProgressInfo({ current: translatedCountRef.current, total: totalCountRef.current });
     }
   };
 
@@ -434,6 +436,7 @@ const JSONTranslator = () => {
     translatedCountRef.current = 0;
     totalCountRef.current = 0;
     setProgressPercent(0);
+    setProgressInfo({ current: 0, total: 0 });
 
     if (!sourceText.trim()) {
       message.error(t("noSourceText"));
@@ -455,6 +458,9 @@ const JSONTranslator = () => {
 
     setSourceText(JSON.stringify(originalJsonObject, null, 2));
     setTranslateInProgress(true);
+    // Show non-zero progress immediately so users see the modal is alive while
+    // the first LLM request is in-flight (DeepSeek etc. can take 10-30s per item).
+    setProgressPercent(0.5);
 
     // Determine target languages to translate to
     const targetLanguagesToUse = multiLanguageMode ? target_langs : [targetLanguage];
@@ -922,7 +928,14 @@ const JSONTranslator = () => {
         </div>
       )}
 
-      <TranslationProgressModal open={translateInProgress} percent={progressPercent} multiLanguageMode={multiLanguageMode} targetLanguageCount={target_langs.length} />
+      <TranslationProgressModal
+        open={translateInProgress}
+        percent={progressPercent}
+        multiLanguageMode={multiLanguageMode}
+        targetLanguageCount={target_langs.length}
+        currentCount={progressInfo.current}
+        totalCount={progressInfo.total}
+      />
 
       <MultiLanguageSettingsModal
         open={multiLangModalOpen}
