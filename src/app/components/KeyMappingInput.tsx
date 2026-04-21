@@ -1,3 +1,5 @@
+"use client";
+
 import React, { memo } from "react";
 import { Button, Form, Input, Space, Tooltip } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
