@@ -1,8 +1,8 @@
 "use client";
 
 import React, { memo } from "react";
-import { Button, Form, Input, Space, Tooltip } from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Flex, Input, Space, Tooltip, Typography } from "antd";
+import { MinusCircleOutlined, PlusOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 
 import type { KeyMapping } from "@/app/types";
@@ -32,27 +32,48 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
     setKeyMappings(newMappings);
   };
 
+  const canDelete = keyMappings.length > 1;
+
   return (
-    <>
+    <Flex vertical gap="small">
       {keyMappings.map((mapping, index) => (
-        <div key={mapping.id} className="flex ">
-          <Space align="baseline">
-            <Form.Item label={`${t("inputKey")} ${index + 1}`} className="!mb-1">
-              <Input value={mapping.inputKey} onChange={(e) => handleInputChange(index, "inputKey", e.target.value)} />
-            </Form.Item>
-            <Form.Item label={`${t("outputKey")} ${index + 1}`} className="!mb-1">
-              <Input value={mapping.outputKey} onChange={(e) => handleInputChange(index, "outputKey", e.target.value)} />
-            </Form.Item>
-            <Tooltip title={t("deleteMapping")}>
-              <Button onClick={() => deleteMapping(mapping.id)} type="default" icon={<MinusCircleOutlined />} />
-            </Tooltip>
-          </Space>
-        </div>
+        <Flex key={mapping.id} align="center" gap="small" wrap>
+          <Space.Compact className="flex-1" style={{ minWidth: 140 }}>
+            <Space.Addon>
+              <Typography.Text type="secondary" className="!text-xs">
+                {t("inputKey")}
+              </Typography.Text>
+            </Space.Addon>
+            <Input
+              value={mapping.inputKey}
+              placeholder={t("inputKey")}
+              onChange={(e) => handleInputChange(index, "inputKey", e.target.value)}
+              aria-label={`${t("inputKey")} ${index + 1}`}
+            />
+          </Space.Compact>
+          <ArrowRightOutlined style={{ opacity: 0.6 }} />
+          <Space.Compact className="flex-1" style={{ minWidth: 140 }}>
+            <Space.Addon>
+              <Typography.Text type="secondary" className="!text-xs">
+                {t("outputKey")}
+              </Typography.Text>
+            </Space.Addon>
+            <Input
+              value={mapping.outputKey}
+              placeholder={t("outputKey")}
+              onChange={(e) => handleInputChange(index, "outputKey", e.target.value)}
+              aria-label={`${t("outputKey")} ${index + 1}`}
+            />
+          </Space.Compact>
+          <Tooltip title={t("deleteMapping")}>
+            <Button onClick={() => deleteMapping(mapping.id)} disabled={!canDelete} type="default" icon={<MinusCircleOutlined />} aria-label={t("deleteMapping")} />
+          </Tooltip>
+        </Flex>
       ))}
-      <Button type="dashed" block className="mt-2" onClick={addMapping} icon={<PlusOutlined />}>
+      <Button type="dashed" block onClick={addMapping} icon={<PlusOutlined />}>
         {t("addMapping")}
       </Button>
-    </>
+    </Flex>
   );
 };
 
