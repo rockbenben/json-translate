@@ -13,7 +13,7 @@ interface KeyMappingInputProps {
 }
 
 const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], setKeyMappings }) => {
-  const t = useTranslations("json");
+  const t = useTranslations("JSON");
 
   const deleteMapping = (id: number) => {
     if (keyMappings.length > 1) {
@@ -27,9 +27,7 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
   };
 
   const handleInputChange = (index: number, field: "inputKey" | "outputKey", value: string) => {
-    const newMappings = [...keyMappings];
-    newMappings[index][field] = value;
-    setKeyMappings(newMappings);
+    setKeyMappings((prev) => prev.map((mapping, i) => (i === index ? { ...mapping, [field]: value } : mapping)));
   };
 
   const canDelete = keyMappings.length > 1;
