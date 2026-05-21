@@ -7,44 +7,56 @@
   <a href="https://tools.newzone.top/en/json-translate"><img src="https://img.shields.io/badge/Live%20Demo-json--translate-blue" alt="Live Demo"></a>
 </p>
 
-**JSON Translate** translates JSON safely and fast—it only touches string values and never breaks your schema. It works with popular translation APIs (Google/Azure/DeepL) and modern LLMs (DeepSeek, OpenAI, Gemini, Azure OpenAI, Siliconflow, Groq, OpenRouter, Perplexity, or Custom LLM). Use it to localize apps, sites, and datasets with **global**, **JSONPath-targeted**, **key-based**, or **i18n aggregation** modes.
+**JSON Translate** translates JSON safely and fast — it only touches string values and never breaks your schema. It works with 7 traditional translation APIs (DeepL, Google, Azure, DeepLX, Qwen-MT, TranslateGemma, GTX) and 17+ LLM providers (DeepSeek, OpenAI, Claude, Gemini, plus the catch-all Custom OpenAI-compatible endpoint). Use it to localize apps, sites, and datasets with **global**, **JSONPath-targeted**, **key-based**, **selective**, or **i18n aggregation** modes.
 
 👉 **Try it online**: <https://tools.newzone.top/en/json-translate>
 
+![JSON Translate workflow demo](https://img.newzone.top/2023-12-18-16-09-04.gif?imageMogr2/format/webp "JSON Translate workflow")
+
 ## Key Features
 
-- **Preserve JSON Schema**: Translate only string values; keep structure and order intact.
-- **High-Performance Caching (IndexedDB)**: Stores translation results with **unlimited capacity**—no browser storage limits.
-- **Multiple Translation Providers**: Google, Azure, DeepL(X), plus 9 LLM models.
-- **Flexible Scopes**: Global, JSONPath-targeted, specific keys, selective start node, and i18n mode.
-- **Mapped Translation**: Write results to different output keys without overwriting originals.
-- **Multi-language Output**: Translate into multiple target languages in one pass.
-- **Dark Mode & Multi-locale UI**: Full internationalization support.
+- **Schema-Preserving**: Translate only string values; structure, key order, and types stay intact.
+- **5 Translation Modes**: Global, JSONPath-targeted, specific keys, selective start node, and i18n aggregation.
+- **Mapped Translation**: Write results to different output keys (e.g. `name` → `name_zh`) without overwriting originals.
+- **Multi-Language Output**: Translate into multiple target languages in one pass; each language exports as its own file or aggregates inline.
+- **Unlimited Caching** (IndexedDB): All results cached locally with no browser-storage size limit.
+- **Context-Aware Translation** (LLM only): Surrounding lines included in each request for better coherence and terminology consistency.
+- **Multi-Locale UI**: Powered by next-intl, with full UI translation across 18 languages.
+- **Dark Mode**: Built-in theme switching.
 
 ## Translation Modes
 
 ### Global Translation
 
-Recursively translates all string values in the entire JSON while preserving hierarchy.
+Recursively translates every string value in the JSON while preserving hierarchy. Best for translating an entire file in one go.
 
 ### Targeted Nodes (JSONPath)
 
-Use JSONPath expressions to precisely locate and translate specific nodes. Multiple paths can be comma-separated.
+Use JSONPath expressions to pinpoint specific nodes; multiple paths can be comma-separated. Best for large files where only a subset needs translation.
 
 ### Specific Keys
 
 Translate only specified key names:
 
-- **Simple Mode**: Comma-separated key names.
-- **Advanced Mode**: Define input-output key mappings; translations written to new keys.
+- **Simple Mode**: comma-separated key names
+- **Advanced Mode**: define input → output key mappings; translations are written to new keys, originals preserved
+
+Keys are case-sensitive. Avoid dot-containing keys — they conflict with JSONPath nesting syntax.
 
 ### Selective Translation
 
-Specify a starting node and target field names for flat JSON structures.
+For flat structures: specify a starting key (optional) and the field names to translate. The tool walks every object from the start key onward and translates the named fields.
 
 ### i18n Mode
 
-Aggregates translations under the same structure—perfect for multilingual apps. Adds new language fields alongside the source field.
+Aggregates per-language translations under the same structure — perfect for multilingual i18n message files.
+
+```json
+// Source: 'en' is the source language
+{ "title": { "en": "Settings" } }
+```
+
+Translating to `zh` and `fr`:
 
 ```json
 {
@@ -56,28 +68,65 @@ Aggregates translations under the same structure—perfect for multilingual apps
 }
 ```
 
+Existing target-language fields are skipped (won't overwrite). When combined with Multi-Language Output, the result is a unified JSON containing the source and every target language.
+
 ## Translation APIs
 
 ### Traditional APIs
 
-| API                  | Quality | Stability | Free Tier                        |
-| -------------------- | ------- | --------- | -------------------------------- |
-| **DeepL (X)**        | ★★★★★   | ★★★★☆     | 500K chars/month                 |
-| **Google Translate** | ★★★★☆   | ★★★★★     | 500K chars/month                 |
-| **Azure Translate**  | ★★★★☆   | ★★★★★     | 2M chars/month (first 12 months) |
-| **GTX API (Free)**   | ★★★☆☆   | ★★★☆☆     | Free (rate-limited)              |
-| **GTX Web (Free)**   | ★★★☆☆   | ★★☆☆☆     | Free                             |
+| API                  | Quality | Stability | Free Tier                             |
+| -------------------- | ------- | --------- | ------------------------------------- |
+| **DeepL**            | ★★★★★   | ★★★★☆     | 500K chars/month                      |
+| **Google Translate** | ★★★★☆   | ★★★★★     | 500K chars/month                      |
+| **Azure Translate**  | ★★★★☆   | ★★★★★     | 2M chars/month (first 12 months)      |
+| **DeepLX (Free)**    | ★★★★☆   | ★★★☆☆     | Self-host or free public endpoints    |
+| **Qwen-MT**          | ★★★★☆   | ★★★★☆     | Alibaba DashScope quota               |
+| **TranslateGemma**   | ★★★★☆   | ★★★★☆     | Self-host (LM Studio / Ollama / etc.) |
+| **GTX API (Free)**   | ★★★☆☆   | ★★★☆☆     | Free (rate-limited)                   |
 
-### LLM Models
+### LLM Providers
 
-Supports **DeepSeek**, **OpenAI**, **Gemini**, **Azure OpenAI**, **Siliconflow**, **Groq**, **OpenRouter**, **Perplexity**, and **Custom LLM**.
+Supports **DeepSeek**, **OpenAI**, **Claude**, **Gemini**, **Qwen**, **Moonshot**, **Doubao**, **Zhipu GLM**, **MiniMax**, **Mistral**, **Perplexity**, **Cohere**, **OpenRouter**, **Groq**, **SiliconFlow**, **Nvidia NIM**, **Azure OpenAI**, plus any **Custom (OpenAI-compatible)** endpoint (Ollama / LM Studio / vLLM / Together AI / Fireworks AI etc.). Each provider has a configurable model list, temperature, system / user prompts, and per-request thinking-mode toggle.
 
-## Performance Tuning
+## Context-Aware Translation (LLM only)
 
-Two key parameters for optimizing translation speed:
+LLM modes can send surrounding lines as context for each batch, improving paragraph-level coherence and terminology consistency.
 
-- **Concurrent Lines**: Maximum lines translated simultaneously (default: 20). Too high may trigger rate limits.
-- **Context Lines**: Lines included per batch for context-aware translation (default: 50).
+- **Concurrent Lines**: max lines translated in parallel (default 20). Too high triggers rate limits.
+- **Context Lines**: lines included per batch as context (default 50). Higher = better coherence but more tokens.
+
+## Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router) + React 19 with the React Compiler
+- **UI**: [Ant Design 6](https://ant.design/) + [Tailwind CSS 4](https://tailwindcss.com/)
+- **i18n**: [next-intl](https://next-intl-docs.vercel.app/)
+- **Caching**: [idb](https://github.com/jakearchibald/idb) (IndexedDB)
+- **JSONPath**: [jsonpath-plus](https://github.com/JSONPath-Plus/JSONPath)
+
+## Getting Started
+
+### Requirements
+
+- Node.js >= 20.9.0
+- Yarn (recommended), npm, or pnpm
+
+### Install & Run
+
+```bash
+git clone https://github.com/rockbenben/json-translate.git
+cd json-translate
+
+yarn install
+yarn dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000).
+
+### Production Build
+
+```bash
+yarn build
+```
 
 ## Documentation & Deployment
 
