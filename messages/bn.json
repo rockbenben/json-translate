@@ -39,7 +39,6 @@
     "multiLanguageModeTooltip": "একসাথে একাধিক ভাষায় অনুবাদ করুন, আলাদাভাবে সংরক্ষিত",
     "translate": "অনুবাদ করুন",
     "totalLanguages": "মোট ভাষা:",
-    "resetUpload": "মুছুন",
     "resetUploadTooltip": "বর্তমান ইনপুট এবং আপলোড করা ফাইল মুছুন",
     "resetUploadSuccess": "মুছে ফেলা হয়েছে",
     "extractText": "টেক্সট বের করুন",
@@ -94,8 +93,8 @@
     "settingsApplied": "সেটিংস প্রয়োগ করা হয়েছে",
     "retryCount": "পুনরায় চেষ্টার সংখ্যা",
     "retryCountTooltip": "অনুবাদ ব্যর্থ হলে পুনরায় চেষ্টার সংখ্যা",
-    "retryTimeout": "সময়সীমা",
-    "retryTimeoutTooltip": "প্রতি অনুরোধের সর্বাধিক অপেক্ষার সময় (সেকেন্ডে)। LLM চিন্তা করতে সময় নেয়; 180 সেকেন্ড বা তার বেশি সুপারিশ করা হয়।",
+    "requestTimeoutSec": "সময়সীমা",
+    "requestTimeoutSecTooltip": "প্রতি অনুরোধের সর্বাধিক অপেক্ষার সময় (সেকেন্ডে)। LLM চিন্তা করতে সময় নেয়; 180 সেকেন্ড বা তার বেশি সুপারিশ করা হয়।",
     "customExportFilename": "এক্সপোর্ট ফাইলের নাম বিন্যাস",
     "customExportFilenameTooltip": "'{'name'}' = মূল ফাইলের নাম, '{'lang'}' = ভাষা, '{'ext'}' = এক্সটেনশন, '{'date'}' = তারিখ, '{'time'}' = সময়",
     "partialFailureTitle": "{count}টি লাইন অনুবাদ করতে ব্যর্থ হয়েছে",
@@ -112,12 +111,25 @@
     "apiStatusConnected": "✓ সংযুক্ত",
     "apiStatusFailed": "সংযোগ ব্যর্থ",
     "testConnection": "সংযোগ পরীক্ষা",
-    "moreProviderSettings": "আরও Provider সেটিংস"
+    "moreProviderSettings": "আরও Provider সেটিংস",
+    "format": "ফরম্যাট করুন",
+    "formatTooltip": "ফরম্যাট: খালি লাইন এবং আগে-পরের স্পেস সরান",
+    "resultToSource": "ফলাফল ➔ উৎস",
+    "resultToSourceTooltip": "ইনপুট বাক্সে ফলাফল টেক্সট প্রতিস্থাপন করুন",
+    "readOnlyMode": "শুধুমাত্র-পঠন মোড",
+    "readOnlyModeTooltip": "টেক্সট অনেক দীর্ঘ, পৃষ্ঠার কার্যকারিতা নিশ্চিত করতে স্বয়ংক্রিয়ভাবে শুধুমাত্র-পঠন মোডে স্যুইচ করা হয়েছে",
+    "clearInputTooltip": "ইনপুট বিষয়বস্তু এবং আপলোড করা ফাইল মুছুন",
+    "fileExported": "ফাইল রপ্তানি হয়েছে: {fileName}",
+    "exportSuccess": "রপ্তানি সফল: {fileName}",
+    "batchDownloaded": "প্রক্রিয়াকরণ সম্পন্ন, ফাইল স্বয়ংক্রিয়ভাবে ডাউনলোড হয়েছে",
+    "sourceTextPlaceholder": "প্রক্রিয়াকরণের জন্য টেক্সট লিখুন বা পেস্ট করুন...",
+    "smartLineBreak": "স্মার্ট লাইন ব্রেক",
+    "replaceText": "টেক্সট প্রতিস্থাপন করুন",
+    "generateJson": "JSON তৈরি করুন",
+    "gtxFreeAPIUnavailable": "বিনামূল্যের Google Translate API (GTX) বর্তমানে উপলব্ধ নয়। অনুগ্রহ করে আপনার নেটওয়ার্ক সংযোগ পরীক্ষা করুন।",
+    "translategemmaUnavailable": "TranslateGemma নোড উপলব্ধ নয়। অনুগ্রহ করে নিশ্চিত করুন যে স্থানীয় সার্ভার (LM Studio / llama.cpp / Ollama) চলছে এবং URL সঠিক।"
   },
-  "json": {
-    "title": "বহুভাষিক JSON অনুবাদক - i18n এবং JSONPath সমর্থন",
-    "description": "AI দিয়ে অ্যাপ আন্তর্জাতিকীকরণের (i18n) জন্য JSON ফাইল অনুবাদ করুন। JSONPath, DeepL এবং ChatGPT সমর্থন করে। বিশ্বব্যাপী ডেভেলপারদের জন্য আদর্শ সমাধান।",
-    "clientTitle": "বহুভাষিক JSON অনুবাদ",
+  "JSON": {
     "clientDescription": "ডেভেলপারদের জন্য JSON অনুবাদ টুল। দ্রুত আন্তর্জাতিকীকরণের জন্য JSONPath মিল এবং কী ম্যাপিং সমর্থন করে।",
     "jsonPaths": "JSON পাথ",
     "copyNode": "নোড কপি করুন",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "নোড নামের সাথে, শুধুমাত্র প্রথম স্তরের সন্তানরা মেলে",
     "keyMappingTooltip": "মোড পরিবর্তন করুন: মূল কী (A→A) বনাম ম্যাপিং (A→B)",
     "toggleKeyMapping": "ম্যাপিং মোডে পরিবর্তন করুন",
-    "toggleKeyOriginal": "মূল কী মোডে পরিবর্তন করুন",
-    "faq1q": "এই JSON টুল কোন অনুবাদ ইঞ্জিন এবং ফাইলের আকার সমর্থন করে?",
-    "faq1a": "Google (বিনামূল্যে), DeepSeek, DeepL, Azure, OpenAI এবং Qwen-MT সহ 15+ ইঞ্জিন সমর্থিত। যেকোনো আকারের JSON ফাইল পরিচালনা করে, বিল্ডের মধ্যে ইনক্রিমেন্টাল আপডেটের জন্য অনুবাদ ক্যাশ সহ।",
-    "faq2q": "অনুবাদের পর JSON কী এবং কাঠামো সংরক্ষিত থাকে?",
-    "faq2a": "হ্যাঁ। টুল শুধু মান অনুবাদ করে — কী, নেস্টিং এবং অ্যারে কাঠামো সম্পূর্ণ সংরক্ষিত থাকে।",
-    "faq3q": "একসাথে একাধিক ভাষায় JSON অনুবাদ করা যায়?",
-    "faq3a": "বহুভাষিক মোড সক্রিয় করে en.json, ja.json, ko.json একবারে তৈরি করুন।"
+    "toggleKeyOriginal": "মূল কী মোডে পরিবর্তন করুন"
   },
   "TranslationSettings": {
     "docs": "ডকুমেন্টেশন",
@@ -204,7 +210,7 @@
     "presetUpdate": "বর্তমান প্রিসেটে সংরক্ষণ করুন",
     "presetUpdated": "বর্তমান প্রিসেটে সংরক্ষিত",
     "presetDeleteConfirm": "এই প্রিসেটটি মুছবেন?",
-    "presetEmptyHint": "No presets yet — edit and click Save",
+    "presetEmptyHint": "এখনও কোনো প্রিসেট নেই — সম্পাদনা করুন এবং সংরক্ষণে ক্লিক করুন",
     "qwenMtDomains": "ডোমেইন প্রম্পট (শুধুমাত্র ইংরেজি)",
     "sendSystemPrompt": "system প্রম্পট পাঠান",
     "sendSystemPromptExtra": "শুধুমাত্র যখন chat template system ভূমিকা প্রত্যাখ্যান করে তখনই বন্ধ করুন — সাধারণ ত্রুটি \"Conversations must start with a user prompt\" (যেমন Gemma পরিবার)।",
@@ -217,57 +223,47 @@
     "callParamsGroup": "কল প্যারামিটার"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "সাবটাইটেল অনুবাদক",
-      "description": "ব্যাচ SRT, ASS, VTT, LRC অনুবাদ। 50+ ভাষা।"
-    },
     "jsonTranslate": {
       "title": "i18n JSON অনুবাদক",
-      "description": "দক্ষ বহুভাষিক JSON অনুবাদ টুল"
-    },
-    "mdTranslator": {
-      "title": "Markdown অনুবাদক",
-      "description": "ব্যাচ Markdown অনুবাদ, ফরম্যাট এবং কোড সংরক্ষণ করুন"
-    },
-    "textSplitter": {
-      "title": "টেক্সট স্প্লিটার",
-      "description": "AI এবং সোশ্যাল মিডিয়ার জন্য স্মার্ট দীর্ঘ টেক্সট বিভাজন"
-    },
-    "jsonValueExtractor": {
-      "title": "JSON মান এক্সট্র্যাক্টর",
-      "description": "ব্যাচ JSON মান বের করুন, ফরম্যাট করা আউটপুট"
-    },
-    "jsonNodeEdit": {
-      "title": "ব্যাচ JSON সম্পাদনা",
-      "description": "ব্যাচ JSON নোড সম্পাদনা করুন, প্রিফিক্স/সাফিক্স/প্রতিস্থাপন"
-    },
-    "jsonValueTransformer": {
-      "title": "JSON মান ম্যাপার",
-      "description": "JSONPath দিয়ে মান ম্যাপিং এবং মাইগ্রেশন"
-    },
-    "jsonValueSwapper": {
-      "title": "JSON মান সোয়্যাপার",
-      "description": "এক ক্লিকে দুই ফিল্ড মান সোয়্যাপ করুন"
-    },
-    "jsonNodeInserter": {
-      "title": "JSON নোড ইনসার্টার",
-      "description": "ব্যাচে নির্দিষ্ট অবস্থানে নতুন নোড ঢোকান"
-    },
-    "jsonSortClassify": {
-      "title": "JSON সাজান এবং শ্রেণীবদ্ধ করুন",
-      "description": "অ্যারে সাজান এবং গ্রুপ করুন, কাস্টম নিয়ম"
-    },
-    "jsonMatchUpdate": {
-      "title": "JSON ম্যাচ আপডেট",
-      "description": "ফিল্ড মিলের উপর ভিত্তি করে ব্যাচ আপডেট"
-    },
-    "dataParserFlare": {
-      "title": "ফ্লেয়ার কনভার্টার",
-      "description": "ব্রাউজার বুকমার্ক এবং ফ্লেয়ার ফরম্যাট রূপান্তর"
-    },
-    "dataParserImgPrompt": {
-      "title": "IMGPrompt ডেটা জেনারেটর",
-      "description": "ব্যাচ IMGPrompt JSON ডেটা তৈরি করুন"
+      "description": "দক্ষ বহুভাষিক JSON অনুবাদ টুল",
+      "metaTitle": "বহুভাষিক JSON অনুবাদক - i18n এবং JSONPath সমর্থন",
+      "metaDescription": "JSON অনুবাদ কঠিন? AI দিয়ে i18n এর জন্য JSON ফাইল অনুবাদ করুন। JSONPath, DeepL এবং ChatGPT সমর্থিত। বৈশ্বিক ডেভেলপারদের জন্য আদর্শ!",
+      "faq": [
+        {
+          "q": "এই JSON টুল কোন অনুবাদ ইঞ্জিন এবং ফাইলের আকার সমর্থন করে?",
+          "a": "Google (বিনামূল্যে), DeepSeek, DeepL, Azure, OpenAI এবং Qwen-MT সহ 15+ ইঞ্জিন সমর্থিত। যেকোনো আকারের JSON ফাইল পরিচালনা করে, বিল্ডের মধ্যে ইনক্রিমেন্টাল আপডেটের জন্য অনুবাদ ক্যাশ সহ।"
+        },
+        {
+          "q": "অনুবাদের পর JSON কী এবং কাঠামো সংরক্ষিত থাকে?",
+          "a": "হ্যাঁ। টুল শুধু মান অনুবাদ করে — কী, নেস্টিং এবং অ্যারে কাঠামো সম্পূর্ণ সংরক্ষিত থাকে।"
+        },
+        {
+          "q": "একসাথে একাধিক ভাষায় JSON অনুবাদ করা যায়?",
+          "a": "বহুভাষিক মোড সক্রিয় করে একাধিক লক্ষ্য ভাষা নির্বাচন করুন এবং একটি অপারেশনে en.json, ja.json, ko.json এর মতো ফাইল ব্যাচে তৈরি করুন — আন্তর্জাতিকীকরণের সময় উল্লেখযোগ্যভাবে সাশ্রয় করে।"
+        }
+      ],
+      "howto": [
+        {
+          "name": "JSON পেস্ট বা আপলোড করুন",
+          "text": "ইনপুট এলাকায় ক্লিক করে JSON পেস্ট করুন বা .json ফাইল টেনে আনুন।"
+        },
+        {
+          "name": "লক্ষ্য ভাষা নির্বাচন করুন",
+          "text": "এক বা একাধিক ভাষা নির্বাচন করুন।"
+        },
+        {
+          "name": "অনুবাদ ও রপ্তানি করুন",
+          "text": "অনুবাদ ক্লিক করুন। সম্পন্ন হলে অনূদিত JSON ফাইল ডাউনলোড করুন বা পৃথক ফলাফল কপি করুন।"
+        }
+      ],
+      "features": [
+        "15+ অনুবাদ ইঞ্জিন সমর্থন (Google, DeepSeek, DeepL, Azure, OpenAI)",
+        "সঠিক JSONPath মিল",
+        "বহু-ভাষা ব্যাচ জেনারেশন (en.json, ja.json, ko.json ইত্যাদি)",
+        "অনুবাদের সময় কী নামকরণ",
+        "ইনক্রিমেন্টাল আপডেটের জন্য ক্যাশ",
+        "i18n মার্জ মোড সমস্ত ভাষাকে একটি ফাইলে একত্রিত করে"
+      ]
     }
   },
   "navigation": {

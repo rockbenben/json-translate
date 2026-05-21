@@ -39,8 +39,7 @@
     "multiLanguageModeTooltip": "同時に複数の言語に翻訳し、それぞれ独立したファイルとして保存します",
     "translate": "翻訳開始",
     "totalLanguages": "翻訳先言語数：",
-    "resetUpload": "クリア",
-    "resetUploadTooltip": "現在の入力内容とアップロードされたファイルをクリア",
+    "resetUploadTooltip": "現在の入力内容とアップロードしたファイルをクリア",
     "resetUploadSuccess": "クリアしました",
     "extractText": "テキスト抽出",
     "translationResult": "翻訳結果",
@@ -94,8 +93,8 @@
     "settingsApplied": "設定が適用されました",
     "retryCount": "リトライ回数",
     "retryCountTooltip": "翻訳失敗時のリトライ試行回数",
-    "retryTimeout": "タイムアウト",
-    "retryTimeoutTooltip": "リクエストあたりの最大待機時間（秒）。LLMの思考時間は長いため、180秒以上を推奨します。",
+    "requestTimeoutSec": "タイムアウト",
+    "requestTimeoutSecTooltip": "リクエストあたりの最大待機時間（秒）。LLMの思考時間は長いため、180秒以上を推奨します。",
     "customExportFilename": "エクスポートファイル名の形式",
     "customExportFilenameTooltip": "'{'name'}' = 元のファイル名, '{'lang'}' = 言語, '{'ext'}' = 拡張子, '{'date'}' = 日付, '{'time'}' = 時間",
     "partialFailureTitle": "{count}行の翻訳に失敗しました",
@@ -112,12 +111,25 @@
     "apiStatusConnected": "✓ 接続済み",
     "apiStatusFailed": "接続失敗",
     "testConnection": "接続テスト",
-    "moreProviderSettings": "その他のProvider設定"
+    "moreProviderSettings": "その他のProvider設定",
+    "format": "フォーマット",
+    "formatTooltip": "フォーマット：空行および先頭・末尾の空白を除去",
+    "resultToSource": "結果 ➔ 原文",
+    "resultToSourceTooltip": "結果テキストを入力欄に上書き",
+    "readOnlyMode": "読み取り専用モード",
+    "readOnlyModeTooltip": "テキストが長すぎるため、ページのパフォーマンスを確保するため自動的に読み取り専用モードに切り替わりました",
+    "clearInputTooltip": "入力内容とアップロードされたファイルをクリア",
+    "fileExported": "ファイルをエクスポートしました：{fileName}",
+    "exportSuccess": "エクスポート成功：{fileName}",
+    "batchDownloaded": "処理完了、ファイルを自動ダウンロードしました",
+    "sourceTextPlaceholder": "処理するテキストを入力または貼り付けてください...",
+    "smartLineBreak": "スマート改行",
+    "replaceText": "テキスト置換",
+    "generateJson": "JSON生成",
+    "gtxFreeAPIUnavailable": "GTX Free API は現在利用できません。ネットワーク接続を確認してください。",
+    "translategemmaUnavailable": "TranslateGemma ノードが利用できません。ローカルサーバー（LM Studio / llama.cpp / Ollama）が起動し、URL が正しいことを確認してください。"
   },
-  "json": {
-    "title": "JSON Translator | JSONPath対応のi18n翻訳ツール",
-    "description": "JSON翻訳にお困りですか？JSONPath一致やキーマッピング対応のAIツールで、プロジェクトの国際化を簡単に。DeepSeek等に対応、完全無料のオープンソース！",
-    "clientTitle": "JSON多言語翻訳",
+  "JSON": {
     "clientDescription": "開発者向けのJSON翻訳ツール。JSONPath完全一致とキー名マッピングをサポートし、プロジェクトの国際化を迅速に実現します。",
     "jsonPaths": "JSONパス",
     "copyNode": "ノードをコピー",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "ノード名を使用する場合、第1レベルの子ノードのみ一致します",
     "keyMappingTooltip": "翻訳モード切替：元キーモードは同じキー名を使用（A→A）、マッピングモードはキー名を変換可能（A→B）",
     "toggleKeyMapping": "マッピングモードに切替",
-    "toggleKeyOriginal": "元キーモードに切替",
-    "faq1q": "この JSON 翻訳ツールはどのエンジンとファイルサイズをサポートしますか？",
-    "faq1a": "Google 無料版、DeepSeek、DeepL、Azure、OpenAI、Qwen-MT を含む 15+ のエンジンに対応。任意サイズの JSON ファイルを処理でき、翻訳キャッシュにより次回ビルドの増分更新が可能です。",
-    "faq2q": "翻訳後に JSON のキー名やネスト構造は壊れますか？",
-    "faq2a": "壊れません。ツールは値のみを翻訳し、キー名・ネスト階層・配列構造はすべて保持されます。翻訳後のファイルは React や Vue などの i18n フレームワークでそのまま使用できます。",
-    "faq3q": "JSON を一度に複数の言語に翻訳できますか？",
-    "faq3a": "多言語モードを有効にすると、複数の対象言語を選択して en.json、ja.json、ko.json などを一括生成でき、国際化作業の時間を大幅に節約できます。"
+    "toggleKeyOriginal": "元キーモードに切替"
   },
   "TranslationSettings": {
     "docs": "ドキュメント",
@@ -204,7 +210,7 @@
     "presetUpdate": "現在のプリセットに保存",
     "presetUpdated": "現在のプリセットに保存しました",
     "presetDeleteConfirm": "このプリセットを削除しますか？",
-    "presetEmptyHint": "No presets yet — edit and click Save",
+    "presetEmptyHint": "プリセットがありません — 編集して保存をクリック",
     "qwenMtDomains": "ドメインプロンプト（英語のみ）",
     "sendSystemPrompt": "system プロンプトを送信",
     "sendSystemPromptExtra": "chat template が system ロールを拒否する場合のみオフに — 典型的なエラー \"Conversations must start with a user prompt\"（Gemma 系列など）。",
@@ -217,57 +223,47 @@
     "callParamsGroup": "呼び出しパラメータ"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "字幕翻訳機",
-      "description": "SRT、ASS、VTT、LRC字幕を一括翻訳、50以上の言語に対応"
-    },
     "jsonTranslate": {
       "title": "i18n JSON翻訳",
-      "description": "効率的な多言語JSON翻訳ツール"
-    },
-    "mdTranslator": {
-      "title": "Markdown翻訳",
-      "description": "Markdownドキュメントを一括翻訳、書式とコードを保持"
-    },
-    "textSplitter": {
-      "title": "テキスト分割",
-      "description": "長文をスマートに分割、AI入力とSNSに最適"
-    },
-    "jsonValueExtractor": {
-      "title": "JSON値抽出",
-      "description": "JSONフィールド値を一括抽出、フォーマット出力対応"
-    },
-    "jsonNodeEdit": {
-      "title": "JSON一括編集",
-      "description": "JSONノード値を一括編集、接頭辞/接尾辞と置換に対応"
-    },
-    "jsonValueTransformer": {
-      "title": "JSONキー値マッピング",
-      "description": "フィールド値のマッピングと移行、JSONPath位置特定に対応"
-    },
-    "jsonValueSwapper": {
-      "title": "JSONキー値交換",
-      "description": "2つのフィールドの値をワンクリックで交換"
-    },
-    "jsonNodeInserter": {
-      "title": "JSONノード挿入",
-      "description": "指定位置に新規ノードを一括挿入"
-    },
-    "jsonSortClassify": {
-      "title": "JSONソート分類",
-      "description": "配列のソートとグループ化、カスタムルールに対応"
-    },
-    "jsonMatchUpdate": {
-      "title": "JSONマッチング更新",
-      "description": "フィールドマッチングに基づいてデータを一括更新"
-    },
-    "dataParserFlare": {
-      "title": "Flareブックマーク変換",
-      "description": "ブラウザブックマークとFlare形式の相互変換"
-    },
-    "dataParserImgPrompt": {
-      "title": "IMGPromptデータ生成",
-      "description": "IMGPrompt JSONデータを一括生成"
+      "description": "効率的な多言語JSON翻訳ツール",
+      "metaTitle": "JSON 翻訳ツール - i18n 多言語一括翻訳、JSONPath 対応",
+      "metaDescription": "JSON翻訳にお困りですか？JSONPath一致やキーマッピング対応のAIツールで、プロジェクトの国際化を簡単に。DeepSeek等に対応、完全無料のオープンソース！",
+      "faq": [
+        {
+          "q": "この JSON 翻訳ツールはどのエンジンとファイルサイズをサポートしますか？",
+          "a": "Google 無料版、DeepSeek、DeepL、Azure、OpenAI、Qwen-MT を含む 15+ のエンジンに対応。任意サイズの JSON ファイルを処理でき、翻訳キャッシュにより次回ビルドの増分更新が可能です。"
+        },
+        {
+          "q": "翻訳後に JSON のキー名やネスト構造は壊れますか？",
+          "a": "壊れません。ツールは値のみを翻訳し、キー名・ネスト階層・配列構造はすべて保持されます。翻訳後のファイルは React や Vue などの i18n フレームワークでそのまま使用できます。"
+        },
+        {
+          "q": "JSON を一度に複数の言語に翻訳できますか？",
+          "a": "多言語モードを有効にすると、複数の対象言語を選択して en.json、ja.json、ko.json などを一括生成でき、国際化作業の時間を大幅に節約できます。"
+        }
+      ],
+      "howto": [
+        {
+          "name": "JSON を貼り付けまたはアップロード",
+          "text": "入力エリアをクリックして JSON をペーストするか、.json ファイルをドラッグ＆ドロップでアップロード。"
+        },
+        {
+          "name": "対象言語を選択",
+          "text": "ドロップダウンから1つまたは複数の対象言語を選択。多言語モードで一括翻訳も可能。"
+        },
+        {
+          "name": "翻訳してエクスポート",
+          "text": "「翻訳」をクリック。完了後、翻訳された JSON ファイルをダウンロードまたは結果をコピー。"
+        }
+      ],
+      "features": [
+        "15+ 翻訳エンジン対応（Google、DeepSeek、DeepL、Azure、OpenAI、Qwen-MT）",
+        "JSONPath マッチングによる精密なキー指定",
+        "多言語一括生成（en.json、ja.json、ko.json など）",
+        "翻訳時のキー名変更（キーマッピングモード）",
+        "増分更新のための翻訳キャッシュ",
+        "i18n マージモードで全言語を1ファイルに統合"
+      ]
     }
   },
   "navigation": {

@@ -19,7 +19,7 @@ const TranslationSettings = dynamic(() => import("@/app/components/TranslationSe
 });
 
 const ClientPage = () => {
-  const tJson = useTranslations("json");
+  const tJson = useTranslations("JSON");
   const t = useTranslations("common");
   const locale = useLocale();
   const userGuideUrl = getDocUrl("guide/translation/json-translate/index.html", locale);
@@ -45,8 +45,8 @@ const ClientPage = () => {
 
   return (
     <TranslationProvider>
-      <ToolPage icon={<TranslationOutlined />} title={tJson("clientTitle")} description={tJson("clientDescription")} guideUrl={userGuideUrl}>
-        <Tabs activeKey={activeKey} onChange={handleTabChange} items={items} type="card" className="w-full" animated={{ inkBar: true, tabPane: true }} />
+      <ToolPage icon={<TranslationOutlined />} toolKey="jsonTranslate" description={tJson("clientDescription")} guideUrl={userGuideUrl}>
+        <Tabs activeKey={activeKey} onChange={handleTabChange} items={items} type="card" className="w-full" animated={false} />
       </ToolPage>
     </TranslationProvider>
   );

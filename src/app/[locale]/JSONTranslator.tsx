@@ -26,8 +26,8 @@ import AdvancedTranslationSettings from "@/app/components/AdvancedTranslationSet
 import TranslateFailurePanel from "@/app/components/TranslateFailurePanel";
 
 import MultiLanguageSettingsModal from "@/app/components/MultiLanguageSettingsModal";
+import SourceArea from "@/app/components/SourceArea";
 
-const { TextArea } = Input;
 const { Dragger } = Upload;
 const { Text } = Typography;
 
@@ -40,7 +40,7 @@ interface JSONTranslatorProps {
 }
 
 const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
-  const tJson = useTranslations("json");
+  const tJson = useTranslations("JSON");
   const t = useTranslations("common");
   const { sourceOptions } = useLanguageOptions();
   const { copyToClipboard } = useCopyToClipboard();
@@ -53,16 +53,16 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
     exportSettings,
     importSettings,
     translationMethod,
-    getCurrentConfig,
+    getSelectedConfig,
     sourceLanguage,
     targetLanguage,
-    target_langs,
-    setTarget_langs,
+    targetLanguages,
+    setTargetLanguages,
     useCache,
     setUseCache,
     removeChars,
     setRemoveChars,
-    sysPrompt,
+    systemPrompt,
     userPrompt,
     multiLanguageMode,
     setMultiLanguageMode,
@@ -71,15 +71,15 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
     setTranslatedText,
     translateFailedCount,
     translateFailedLines,
-    translateInProgress,
-    setTranslateInProgress,
+    isTranslating,
+    setIsTranslating,
     handleLanguageChange,
     handleSwapLanguages,
     validateTranslate,
     retryCount,
     setRetryCount,
-    retryTimeout,
-    setRetryTimeout,
+    requestTimeoutSec,
+    setRequestTimeoutSec,
   } = useTranslationContext();
 
   const [directExport, setDirectExport] = useState(false);
@@ -91,26 +91,26 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
   const [progressPercent, setProgressPercent] = useState(0);
   const [progressInfo, setProgressInfo] = useState<{ current: number; total: number }>({ current: 0, total: 0 });
 
-  const [translateMode, setTranslateMode] = useLocalStorage<TranslateMode>("translateMode", "allKeys"); // 翻译模式状态：'allKeys', 'nodeKeys', 'keyMapping', "selectiveKey", 'i18nMode'
-  const [jsonPathForNodeTranslation, setJsonPathForNodeTranslation] = useLocalStorage("jsonPathForNodeTranslation", ""); // 局部节点路径
-  const [showSimpleInput, setShowSimpleInput] = useLocalStorage<boolean>("showSimpleInput", true);
-  const [simpleInputKey, setSimpleInputKey] = useLocalStorage<string>("simpleInputKey", "");
-  const [keyMappings, setKeyMappings] = useLocalStorage<KeyMapping[]>("keyMappings", [{ inputKey: "", outputKey: "", id: 1 }]);
+  const [translateMode, setTranslateMode] = useLocalStorage<TranslateMode>("json-translate-mode", "allKeys"); // 翻译模式状态：'allKeys', 'nodeKeys', 'keyMapping', "selectiveKey", 'i18nMode'
+  const [nodeKeysPath, setNodeKeysPath] = useLocalStorage("json-translate-nodeKeysPath", ""); // 局部节点路径（nodeKeys mode）
+  const [showSimpleInput, setShowSimpleInput] = useLocalStorage<boolean>("json-translate-showSimpleInput", true);
+  const [simpleInputKey, setSimpleInputKey] = useLocalStorage<string>("json-translate-simpleInputKey", "");
+  const [keyMappings, setKeyMappings] = useLocalStorage<KeyMapping[]>("json-translate-keyMappings", [{ inputKey: "", outputKey: "", id: 1 }]);
 
-  const [jsonStartNode, setJsonStartNode] = useLocalStorage("jsonStartNode", ""); // 开始翻译的节点位置
-  const [translationField, setTranslationField] = useLocalStorage("translationField", ""); // 待翻译字段
-  const [activeCollapseKeys, setActiveCollapseKeys] = useLocalStorage<string[]>("jsonTranslatorCollapseKeys", ["jsonmode"]);
+  const [selectiveStartKey, setSelectiveStartKey] = useLocalStorage("json-translate-selectiveStartKey", ""); // 开始翻译的键（selectiveKey mode）
+  const [selectiveField, setSelectiveField] = useLocalStorage("json-translate-selectiveField", ""); // 待翻译字段（selectiveKey mode）
+  const [collapseKeys, setCollapseKeys] = useLocalStorage<string[]>("json-translate-collapseKeys", ["jsonmode"]);
   const [multiLangModalOpen, setMultiLangModalOpen] = useState(false);
-  const { customFileName, setCustomFileName, generateFileName } = useExportFilename("json");
+  const { customFileName, setCustomFileName, generateFileName } = useExportFilename("json-translate");
 
   const sourceStats = useTextStats(sourceText);
   const resultStats = useTextStats(translatedText);
 
-  const config = getCurrentConfig();
+  const config = getSelectedConfig();
   const concurrency = Math.max(Number(config?.batchSize) || 10, 1);
   const limit = useMemo(() => pLimit(concurrency), [concurrency]);
-  const translationConfig = {
-    sysPrompt: sysPrompt,
+  const runtimeConfig = {
+    systemPrompt: systemPrompt,
     userPrompt: userPrompt,
     useCache: useCache,
     ...config,
@@ -133,7 +133,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
       targetLanguage: currentTargetLang,
       translationMethod,
       config,
-      sysPrompt,
+      systemPrompt,
       userPrompt,
     });
 
@@ -166,7 +166,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
                   translationMethod,
                   targetLanguage: currentTargetLang,
                   sourceLanguage,
-                  ...translationConfig,
+                  ...runtimeConfig,
                 });
                 // 添加翻译结果到同一个对象中的目标语言字段
                 record[currentTargetLang] = translatedText;
@@ -199,7 +199,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
       targetLanguage: currentTargetLang,
       translationMethod,
       config,
-      sysPrompt,
+      systemPrompt,
       userPrompt,
     });
     const tasks: Promise<void>[] = [];
@@ -216,7 +216,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
-              ...translationConfig,
+              ...runtimeConfig,
             });
             node.parent[node.parentProperty] = translatedText || "";
           } catch (error) {
@@ -317,7 +317,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
         targetLanguage: currentTargetLang,
         translationMethod,
         config,
-        sysPrompt,
+        systemPrompt,
         userPrompt,
       });
       const promises = inputNodes.map((node, index: number) => {
@@ -329,7 +329,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
-              ...translationConfig,
+              ...runtimeConfig,
             });
             outputNodes[index].parent[outputNodes[index].parentProperty] = translatedText || "";
           } catch (error) {
@@ -347,7 +347,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
 
   // 扁平 json，单一键名，可选择起始翻译节点
   const handleSelectiveKeyTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
-    if (translationField.trim() === "") {
+    if (selectiveField.trim() === "") {
       throw new Error(`${t("enter")} ${tJson("fieldToTranslate")}`);
     }
 
@@ -357,7 +357,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
 
     const rootRecord = jsonObject as Record<string, Record<string, JsonValue>>;
 
-    const keys = translationField
+    const keys = selectiveField
       .replace(/，/g, ",")
       .split(",")
       .filter((k) => k.trim() !== "");
@@ -371,10 +371,10 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
       // Get all object keys
       const objectKeys = Object.keys(rootRecord);
 
-      // Find start index if jsonStartNode is provided
-      const startIndex = jsonStartNode ? objectKeys.indexOf(jsonStartNode) : 0;
-      if (jsonStartNode && startIndex === -1) {
-        throw new Error(`${tJson("invalidStartKey")}: ${jsonStartNode}`);
+      // Find start index if selectiveStartKey is provided
+      const startIndex = selectiveStartKey ? objectKeys.indexOf(selectiveStartKey) : 0;
+      if (selectiveStartKey && startIndex === -1) {
+        throw new Error(`${tJson("invalidStartKey")}: ${selectiveStartKey}`);
       }
 
       // Get relevant keys (all keys if no start node, or keys from start index onwards)
@@ -398,7 +398,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
         targetLanguage: currentTargetLang,
         translationMethod,
         config,
-        sysPrompt,
+        systemPrompt,
         userPrompt,
       });
       // Translate all nodes
@@ -411,7 +411,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
-              ...translationConfig,
+              ...runtimeConfig,
             });
             // Update the value in the original object
             rootRecord[node.key][outputKey] = translatedText;
@@ -472,17 +472,17 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
     }
 
     setSourceText(JSON.stringify(originalJsonObject, null, 2));
-    setTranslateInProgress(true);
+    setIsTranslating(true);
     // Show non-zero progress immediately so users see the modal is alive while
     // the first LLM request is in-flight (DeepSeek etc. can take 10-30s per item).
     setProgressPercent(0.5);
 
     // Determine target languages to translate to
-    const targetLanguagesToUse = multiLanguageMode ? target_langs : [targetLanguage];
+    const targetLanguagesToUse = multiLanguageMode ? targetLanguages : [targetLanguage];
 
     if (multiLanguageMode && targetLanguagesToUse.length === 0) {
       message.error(t("noTargetLanguage"));
-      setTranslateInProgress(false);
+      setIsTranslating(false);
       return;
     }
 
@@ -535,7 +535,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
             if (translateMode === "allKeys") {
               await handleAllKeysTranslation(jsonObject, currentTargetLang);
             } else if (translateMode === "nodeKeys") {
-              await handleNodeKeysTranslation(jsonObject, currentTargetLang, jsonPathForNodeTranslation);
+              await handleNodeKeysTranslation(jsonObject, currentTargetLang, nodeKeysPath);
             } else if (translateMode === "keyMapping") {
               await handleKeyMappingTranslation(jsonObject, currentTargetLang);
             } else if (translateMode === "selectiveKey") {
@@ -592,7 +592,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
       const errMsg = getErrorMessage(error);
       message.error(`${errMsg} ${t("translationError")}`, 60);
     } finally {
-      setTranslateInProgress(false);
+      setIsTranslating(false);
     }
   };
 
@@ -627,7 +627,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
 
     return (
       <Space orientation="vertical" className="w-full">
-        {target_langs.map((langCode) => {
+        {targetLanguages.map((langCode) => {
           if (!translationResults[langCode]) return null;
           const langLabel = sourceOptions.find((option) => option.value === langCode)?.label || langCode;
 
@@ -640,6 +640,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
               rows={8}
               onCopy={() => copyToClipboard(translationResults[langCode])}
               onCopyNode={() => copyToClipboard(stripJsonWrapper(translationResults[langCode]))}
+              copyNodeLabel={tJson("copyNode")}
               onExport={() => handleExportFile(langCode)}
               className="mb-4"
             />
@@ -665,14 +666,14 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
                 <Button
                   type="text"
                   danger
-                  disabled={translateInProgress}
+                  disabled={isTranslating}
                   onClick={() => {
                     resetUpload();
                     message.success(t("resetUploadSuccess"));
                   }}
                   icon={<ClearOutlined />}
-                  aria-label={t("resetUpload")}>
-                  {t("resetUpload")}
+                  aria-label={t("clearAll")}>
+                  {t("clearAll")}
                 </Button>
               </Tooltip>
             }
@@ -695,30 +696,21 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
             </Dragger>
 
             <>
-              <TextArea
+              <SourceArea
+                sourceText={sourceText}
+                setSourceText={setSourceText}
+                stats={sourceStats}
                 placeholder={t("pasteUploadContent")}
-                value={sourceStats.isEditable ? sourceText : sourceStats.displayText}
-                onChange={sourceStats.isEditable ? (e) => setSourceText(e.target.value) : undefined}
-                rows={8}
+                ariaLabel={t("sourceArea")}
                 className="mt-1"
-                allowClear
-                readOnly={!sourceStats.isEditable}
-                aria-label={t("sourceArea")}
               />
-              {sourceText && (
-                <Flex justify="end" className="mt-2">
-                  <Typography.Text type="secondary" className="!text-xs">
-                    {sourceStats.charCount} {t("charLabel")} / {sourceStats.lineCount} {t("lineLabel")}
-                  </Typography.Text>
-                </Flex>
-              )}
             </>
 
             <Divider />
 
             <Flex gap="small" wrap className="mt-auto pt-4">
-              <Button type="primary" size="large" onClick={handleTranslate} loading={translateInProgress} icon={<GlobalOutlined spin={translateInProgress} />} className="flex-1">
-                {multiLanguageMode ? `${t("translate")} | ${t("totalLanguages")}${target_langs.length || 0}` : t("translate")}
+              <Button type="primary" size="large" onClick={handleTranslate} loading={isTranslating} icon={<GlobalOutlined spin={isTranslating} />} className="flex-1">
+                {multiLanguageMode ? `${t("translate")} | ${t("totalLanguages")}${targetLanguages.length || 0}` : t("translate")}
               </Button>
 
               {multiLanguageMode && Object.keys(translationResults).length > 0 && (
@@ -746,7 +738,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
                     type="text"
                     icon={<SaveOutlined />}
                     size="small"
-                    disabled={translateInProgress}
+                    disabled={isTranslating}
                     onClick={async () => {
                       await exportSettings();
                     }}
@@ -758,7 +750,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
                     type="text"
                     icon={<ImportOutlined />}
                     size="small"
-                    disabled={translateInProgress}
+                    disabled={isTranslating}
                     onClick={async () => {
                       await importSettings();
                     }}
@@ -766,7 +758,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
                   />
                 </Tooltip>
                 <Tooltip title={t("batchEditMultiLangTooltip")}>
-                  <Button type="text" icon={<GlobalOutlined />} size="small" disabled={translateInProgress} onClick={() => setMultiLangModalOpen(true)} aria-label={t("batchEditMultiLangTooltip")} />
+                  <Button type="text" icon={<GlobalOutlined />} size="small" disabled={isTranslating} onClick={() => setMultiLangModalOpen(true)} aria-label={t("batchEditMultiLangTooltip")} />
                 </Tooltip>
               </Space>
             }>
@@ -774,22 +766,22 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
               <LanguageSelector
                 sourceLanguage={sourceLanguage}
                 targetLanguage={targetLanguage}
-                target_langs={target_langs}
+                targetLanguages={targetLanguages}
                 multiLanguageMode={multiLanguageMode}
                 handleLanguageChange={handleLanguageChange}
                 handleSwapLanguages={handleSwapLanguages}
-                setTarget_langs={setTarget_langs}
+                setTargetLanguages={setTargetLanguages}
                 setMultiLanguageMode={setMultiLanguageMode}
               />
             </Form>
 
-            <ApiStatusBlock onOpenApiSettings={onOpenApiSettings} disabled={translateInProgress} />
+            <ApiStatusBlock onOpenApiSettings={onOpenApiSettings} disabled={isTranslating} />
 
             <Collapse
               ghost
               size="small"
-              activeKey={activeCollapseKeys}
-              onChange={(keys) => setActiveCollapseKeys(typeof keys === "string" ? [keys] : keys)}
+              activeKey={collapseKeys}
+              onChange={(keys) => setCollapseKeys(typeof keys === "string" ? [keys] : keys)}
               items={[
                 {
                   key: "jsonmode",
@@ -865,10 +857,10 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
                             marginBottom: token.marginMD,
                           }}>
                           <Form.Item label={tJson("startKey")} extra={tJson("StartKeyExtra")} className="!mb-1">
-                            <Input value={jsonStartNode} onChange={(e) => setJsonStartNode(e.target.value)} placeholder={`${t("example")}: fetchError`} aria-label={tJson("startKey")} />
+                            <Input value={selectiveStartKey} onChange={(e) => setSelectiveStartKey(e.target.value)} placeholder={`${t("example")}: fetchError`} aria-label={tJson("startKey")} />
                           </Form.Item>
                           <Form.Item label={tJson("fieldToTranslate")} extra={tJson("fieldToTranslateExtra")} className="!mb-0">
-                            <Input value={translationField} onChange={(e) => setTranslationField(e.target.value)} placeholder={`${t("example")}: message`} aria-label={tJson("fieldToTranslate")} />
+                            <Input value={selectiveField} onChange={(e) => setSelectiveField(e.target.value)} placeholder={`${t("example")}: message`} aria-label={tJson("fieldToTranslate")} />
                           </Form.Item>
                         </div>
                       )}
@@ -884,8 +876,8 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
                           }}>
                           <Form.Item label={tJson("nodeToTranslate")} extra={`${tJson("nodeToTranslateExtra")} ${tJson("multiValueHint")}`} className="!mb-0">
                             <Input
-                              value={jsonPathForNodeTranslation}
-                              onChange={(e) => setJsonPathForNodeTranslation(e.target.value)}
+                              value={nodeKeysPath}
+                              onChange={(e) => setNodeKeysPath(e.target.value)}
                               placeholder={`${t("example")}: content,data.title`}
                               aria-label={tJson("nodeToTranslate")}
                             />
@@ -926,8 +918,8 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
                       setRemoveChars={setRemoveChars}
                       retryCount={retryCount}
                       setRetryCount={setRetryCount}
-                      retryTimeout={retryTimeout}
-                      setRetryTimeout={setRetryTimeout}
+                      requestTimeoutSec={requestTimeoutSec}
+                      setRequestTimeoutSec={setRequestTimeoutSec}
                       useCache={useCache}
                       setUseCache={setUseCache}>
                       {/* Component-specific settings */}
@@ -947,7 +939,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
       </Row>
 
       {/* Partial-failure panel: auto-retried once, still-failed lines kept originals */}
-      <TranslateFailurePanel count={translateFailedCount} lines={translateFailedLines} disabled={translateInProgress} onRetry={handleTranslate} />
+      <TranslateFailurePanel count={translateFailedCount} lines={translateFailedLines} disabled={isTranslating} onRetry={handleTranslate} />
 
       {/* Results Section */}
       {!directExport && (translatedText || (multiLanguageMode && Object.keys(translationResults).length > 0)) && (
@@ -956,11 +948,13 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
             ? renderMultiLanguageResults()
             : translatedText && (
                 <ResultCard
+                  title={t("translationResult")}
                   content={resultStats.displayText}
                   charCount={resultStats.charCount}
                   lineCount={resultStats.lineCount}
                   onCopy={() => copyToClipboard(translatedText)}
                   onCopyNode={() => copyToClipboard(stripJsonWrapper(translatedText))}
+                  copyNodeLabel={tJson("copyNode")}
                   onExport={async () => {
                     const fileName = await handleExportFile();
                     message.success(`${t("exportedFile")}: ${fileName}`);
@@ -971,10 +965,10 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
       )}
 
       <TranslationProgressModal
-        open={translateInProgress}
+        open={isTranslating}
         percent={progressPercent}
         multiLanguageMode={multiLanguageMode}
-        targetLanguageCount={target_langs.length}
+        targetLanguageCount={targetLanguages.length}
         currentCount={progressInfo.current}
         totalCount={progressInfo.total}
       />
@@ -982,8 +976,8 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
       <MultiLanguageSettingsModal
         open={multiLangModalOpen}
         onClose={() => setMultiLangModalOpen(false)}
-        target_langs={target_langs}
-        setTarget_langs={setTarget_langs}
+        targetLanguages={targetLanguages}
+        setTargetLanguages={setTargetLanguages}
         setMultiLanguageMode={setMultiLanguageMode}
       />
     </Spin>

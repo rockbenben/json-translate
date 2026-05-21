@@ -3,7 +3,7 @@
     "userGuide": "使用说明",
     "privacyNotice": "您的 API 密钥及数据仅存储在本地浏览器，确保隐私安全。如有问题或建议，欢迎通过社群或反馈页面联系我们。",
     "dragAndDropText": "点击或将文件拖拽至此上传",
-    "supportedFormats": "支持格式：",
+    "supportedFormats": "支持的格式：",
     "configuration": "配置选项",
     "operation": "操作",
     "optional": "可选",
@@ -25,7 +25,7 @@
     "charLabel": "字符",
     "lineLabel": "行",
     "advancedSettings": "高级设置",
-    "singleFileModeTooltip": "仅保留一个文件，新上传的文件会替换当前文件",
+    "singleFileModeTooltip": "每次只处理一个文件，上传新文件时自动替换",
     "singleFileMode": "单文件模式",
     "hideResultsTooltip": "隐藏结果预览，避免大量内容导致页面卡顿",
     "hideResults": "隐藏结果预览",
@@ -39,13 +39,18 @@
     "multiLanguageModeTooltip": "同时翻译为多种语言，分别保存为独立文件",
     "translate": "开始翻译",
     "totalLanguages": "目标语言数：",
-    "resetUpload": "清空",
     "resetUploadTooltip": "清空当前输入内容和已上传文件",
     "resetUploadSuccess": "已清空",
     "extractText": "提取纯文本",
     "translationResult": "翻译结果",
     "copy": "复制",
     "remove": "删除",
+    "format": "格式化",
+    "formatTooltip": "格式化：移除空行及首尾空格",
+    "resultToSource": "结果 ➔ 原文",
+    "resultToSourceTooltip": "将结果文本覆盖到输入框",
+    "readOnlyMode": "只读模式",
+    "readOnlyModeTooltip": "文本过长，为保证页面性能已自动切换为只读模式",
     "exportFile": "导出",
     "exportAllFile": "导出所有文件",
     "exportedFile": "已导出",
@@ -94,8 +99,8 @@
     "settingsApplied": "设置已应用",
     "retryCount": "重试次数",
     "retryCountTooltip": "翻译失败时的重试次数",
-    "retryTimeout": "超时时间",
-    "retryTimeoutTooltip": "单次请求的最大等待时间（秒）。LLM 思考耗时较长，建议 180 秒以上",
+    "requestTimeoutSec": "超时时间",
+    "requestTimeoutSecTooltip": "单次请求的最大等待时间（秒）。LLM 思考耗时较长，建议 180 秒以上",
     "customExportFilename": "导出文件名格式",
     "customExportFilenameTooltip": "'{'name'}' = 原始文件名, '{'lang'}' = 语言, '{'ext'}' = 扩展名, '{'date'}' = 日期, '{'time'}' = 时间",
     "partialFailureTitle": "翻译失败 {count} 行",
@@ -112,12 +117,19 @@
     "apiStatusConnected": "✓ 已连接",
     "apiStatusFailed": "连接失败",
     "testConnection": "测试连接",
-    "moreProviderSettings": "更多 Provider 设置"
+    "moreProviderSettings": "更多 Provider 设置",
+    "clearInputTooltip": "清空输入内容和上传的文件",
+    "fileExported": "已导出文件：{fileName}",
+    "exportSuccess": "导出成功：{fileName}",
+    "batchDownloaded": "处理完成，文件已自动下载",
+    "sourceTextPlaceholder": "请输入或粘贴待处理文本...",
+    "smartLineBreak": "智能换行",
+    "replaceText": "替换文本",
+    "generateJson": "生成 JSON",
+    "gtxFreeAPIUnavailable": "GTX Free 接口当前不可用，请检查您的网络连接",
+    "translategemmaUnavailable": "TranslateGemma 节点不可用，请确认本地服务器（LM Studio / llama.cpp / Ollama）已启动且 URL 正确"
   },
-  "json": {
-    "title": "JSONTranslator | 支持 JSONPath 的多语言 i18n 翻译工具",
-    "description": "还在手动翻译 JSON？这款工具支持 DeepSeek 等多模型，提供 i18n 国际化、JSONPath 精准匹配及键名映射功能。完全免费且开源，轻松搞定项目本地化！",
-    "clientTitle": "JSON 多语言翻译",
+  "JSON": {
     "clientDescription": "为开发者打造的 JSON 翻译工具，支持 JSONPath 精准匹配和键名映射，快速实现项目国际化。",
     "jsonPaths": "JSON 路径",
     "copyNode": "复制节点",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "使用节点名称时，仅匹配一级子节点",
     "keyMappingTooltip": "切换翻译模式：原键模式使用相同键名（A→A），映射模式可转换键名（A→B）",
     "toggleKeyMapping": "切换到映射模式",
-    "toggleKeyOriginal": "切换到原键模式",
-    "faq1q": "这个 JSON 翻译工具支持哪些翻译引擎和文件大小？",
-    "faq1a": "支持 15+ 翻译引擎，包括 Google 免费版、DeepSeek、DeepL、Azure、OpenAI 和 Qwen-MT。可处理任意大小的 JSON 文件，翻译缓存支持构建间的增量更新。",
-    "faq2q": "JSON 翻译后键名和嵌套结构会乱吗？",
-    "faq2a": "不会。工具只翻译值内容，键名、嵌套层级、数组结构全部原样保留，翻译后的 JSON 可直接用于 React、Vue 等前端 i18n 项目。",
-    "faq3q": "怎么把 JSON 一次翻译成多种语言？",
-    "faq3a": "开启「多语言模式」后可同时选择多个目标语言，一次操作即可批量生成 en.json、ja.json、ko.json 等多语言文件，大幅节省国际化工作时间。"
+    "toggleKeyOriginal": "切换到原键模式"
   },
   "TranslationSettings": {
     "docs": "文档",
@@ -217,57 +223,47 @@
     "callParamsGroup": "调用参数"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "字幕翻译器",
-      "description": "批量翻译 SRT、ASS、VTT、LRC 字幕，支持 50+ 语言"
-    },
     "jsonTranslate": {
-      "title": "i18n JSON 翻译",
-      "description": "高效的多语言 JSON 翻译工具"
-    },
-    "mdTranslator": {
-      "title": "Markdown 翻译",
-      "description": "批量翻译 Markdown 文档，保留格式和代码"
-    },
-    "textSplitter": {
-      "title": "文本分割",
-      "description": "智能分割长文本，适用于 AI 输入和社交媒体"
-    },
-    "jsonValueExtractor": {
-      "title": "JSON 值提取",
-      "description": "批量提取 JSON 字段值，支持格式化输出"
-    },
-    "jsonNodeEdit": {
-      "title": "JSON 批量编辑",
-      "description": "批量编辑 JSON 节点值，支持前后缀和替换"
-    },
-    "jsonValueTransformer": {
-      "title": "JSON 键值映射",
-      "description": "字段值映射和迁移，支持 JSONPath 定位"
-    },
-    "jsonValueSwapper": {
-      "title": "JSON 键值互换",
-      "description": "一键交换两个字段的值"
-    },
-    "jsonNodeInserter": {
-      "title": "JSON 节点插入",
-      "description": "在指定位置批量插入新节点"
-    },
-    "jsonSortClassify": {
-      "title": "JSON 排序分类",
-      "description": "数组排序和分组，支持自定义规则"
-    },
-    "jsonMatchUpdate": {
-      "title": "JSON 匹配更新",
-      "description": "根据字段匹配批量更新数据"
-    },
-    "dataParserFlare": {
-      "title": "Flare 书签转换",
-      "description": "浏览器书签与 Flare 格式互转"
-    },
-    "dataParserImgPrompt": {
-      "title": "IMGPrompt 数据生成",
-      "description": "批量生成 IMGPrompt JSON 数据"
+      "title": "JSON 多语言翻译",
+      "description": "高效的多语言 JSON 翻译工具",
+      "metaTitle": "JSON 翻译工具 - i18n 多语言批量翻译，JSONPath 精准定位",
+      "metaDescription": "还在手动翻译 JSON？这款工具支持 DeepSeek 等多模型，提供 i18n 国际化、JSONPath 精准匹配及键名映射功能。完全免费且开源，轻松搞定项目本地化！",
+      "faq": [
+        {
+          "q": "这个 JSON 翻译工具支持哪些翻译引擎和文件大小？",
+          "a": "支持 15+ 翻译引擎，包括 Google 免费版、DeepSeek、DeepL、Azure、OpenAI 和 Qwen-MT。可处理任意大小的 JSON 文件，翻译缓存支持构建间的增量更新。"
+        },
+        {
+          "q": "JSON 翻译后键名和嵌套结构会乱吗？",
+          "a": "不会。工具只翻译值内容，键名、嵌套层级、数组结构全部原样保留，翻译后的 JSON 可直接用于 React、Vue 等前端 i18n 项目。"
+        },
+        {
+          "q": "怎么把 JSON 一次翻译成多种语言？",
+          "a": "开启「多语言模式」后可同时选择多个目标语言，一次操作即可批量生成 en.json、ja.json、ko.json 等多语言文件，大幅节省国际化工作时间。"
+        }
+      ],
+      "howto": [
+        {
+          "name": "粘贴或上传 JSON",
+          "text": "点击输入区粘贴 JSON 内容，或拖拽 .json 文件上传。"
+        },
+        {
+          "name": "选择目标语言",
+          "text": "从下拉菜单选择一个或多个目标语言。启用多语言模式可一次翻译为多种语言。"
+        },
+        {
+          "name": "翻译并导出",
+          "text": "点击翻译按钮。完成后下载翻译好的 JSON 文件或复制单个结果。"
+        }
+      ],
+      "features": [
+        "支持 15+ 翻译引擎（Google、DeepSeek、DeepL、Azure、OpenAI、Qwen-MT）",
+        "JSONPath 精准键名匹配",
+        "多语言一次生成（en.json、ja.json、ko.json 等）",
+        "翻译时键名重命名（映射模式）",
+        "增量更新的翻译缓存",
+        "i18n 合并模式将所有语言合并为一个文件"
+      ]
     }
   },
   "navigation": {

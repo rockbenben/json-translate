@@ -39,8 +39,7 @@
     "multiLanguageModeTooltip": "แปลเป็นหลายภาษาพร้อมกัน บันทึกเป็นไฟล์แยก",
     "translate": "แปล",
     "totalLanguages": "จำนวนภาษาทั้งหมด:",
-    "resetUpload": "ล้าง",
-    "resetUploadTooltip": "ล้างอินพุตปัจจุบันและไฟล์ที่อัปโหลด",
+    "resetUploadTooltip": "ล้างเนื้อหาที่ป้อนและไฟล์ที่อัปโหลด",
     "resetUploadSuccess": "ล้างแล้ว",
     "extractText": "แยกข้อความ",
     "translationResult": "ผลลัพธ์",
@@ -94,8 +93,8 @@
     "settingsApplied": "ใช้การตั้งค่าแล้ว",
     "retryCount": "จำนวนครั้งที่ลองใหม่",
     "retryCountTooltip": "จำนวนครั้งที่ลองใหม่เมื่อการแปลล้มเหลว",
-    "retryTimeout": "หมดเวลา",
-    "retryTimeoutTooltip": "เวลารอสูงสุดต่อคำขอ (วินาที). LLM ใช้เวลาคิดนานกว่า; แนะนำ 180 วินาทีขึ้นไป.",
+    "requestTimeoutSec": "หมดเวลา",
+    "requestTimeoutSecTooltip": "เวลารอสูงสุดต่อคำขอ (วินาที). LLM ใช้เวลาคิดนานกว่า; แนะนำ 180 วินาทีขึ้นไป.",
     "customExportFilename": "รูปแบบชื่อไฟล์ส่งออก",
     "customExportFilenameTooltip": "'{'name'}' = ชื่อไฟล์เดิม, '{'lang'}' = ภาษา, '{'ext'}' = นามสกุล, '{'date'}' = วันที่, '{'time'}' = เวลา",
     "partialFailureTitle": "แปลล้มเหลว {count} บรรทัด",
@@ -112,12 +111,25 @@
     "apiStatusConnected": "✓ เชื่อมต่อแล้ว",
     "apiStatusFailed": "เชื่อมต่อล้มเหลว",
     "testConnection": "ทดสอบการเชื่อมต่อ",
-    "moreProviderSettings": "การตั้งค่า Provider เพิ่มเติม"
+    "moreProviderSettings": "การตั้งค่า Provider เพิ่มเติม",
+    "format": "จัดรูปแบบ",
+    "formatTooltip": "จัดรูปแบบ: ลบบรรทัดว่างและช่องว่างหน้า/หลัง",
+    "resultToSource": "ผลลัพธ์ ➔ ต้นฉบับ",
+    "resultToSourceTooltip": "เขียนทับข้อความผลลัพธ์ลงในช่องอินพุต",
+    "readOnlyMode": "โหมดอ่านอย่างเดียว",
+    "readOnlyModeTooltip": "ข้อความยาวเกินไป ระบบเปลี่ยนเป็นโหมดอ่านอย่างเดียวอัตโนมัติเพื่อรักษาประสิทธิภาพหน้า",
+    "clearInputTooltip": "ล้างเนื้อหาที่ป้อนและไฟล์ที่อัปโหลด",
+    "fileExported": "ส่งออกไฟล์แล้ว: {fileName}",
+    "exportSuccess": "ส่งออกสำเร็จ: {fileName}",
+    "batchDownloaded": "ประมวลผลเสร็จสิ้น ไฟล์ถูกดาวน์โหลดอัตโนมัติ",
+    "sourceTextPlaceholder": "ป้อนหรือวางข้อความที่ต้องการประมวลผล...",
+    "smartLineBreak": "ขึ้นบรรทัดใหม่อัจฉริยะ",
+    "replaceText": "แทนที่ข้อความ",
+    "generateJson": "สร้าง JSON",
+    "gtxFreeAPIUnavailable": "API Google Translate ฟรี (GTX) ไม่สามารถใช้งานได้ในขณะนี้ โปรดตรวจสอบการเชื่อมต่อเครือข่ายของคุณ",
+    "translategemmaUnavailable": "โหนด TranslateGemma ไม่พร้อมใช้งาน โปรดตรวจสอบว่าเซิร์ฟเวอร์ภายในเครื่อง (LM Studio / llama.cpp / Ollama) กำลังทำงานและ URL ถูกต้อง"
   },
-  "json": {
-    "title": "ตัวแปล JSON หลายภาษา - รองรับ i18n & JSONPath",
-    "description": "แปลไฟล์ JSON สำหรับแอปพลิเคชันสากล (i18n) ด้วย AI รองรับ JSONPath, DeepL, Google และ ChatGPT โซลูชันที่ดีที่สุดสำหรับนักพัฒนาเว็บและแอปทั่วโลก",
-    "clientTitle": "แปล JSON หลายภาษา",
+  "JSON": {
     "clientDescription": "เครื่องมือแปล JSON สำหรับนักพัฒนา รองรับการจับคู่ JSONPath และการแมปคีย์เพื่อการสากลอย่างรวดเร็ว",
     "jsonPaths": "เส้นทาง JSON",
     "copyNode": "คัดลอกโหนด",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "ด้วยชื่อโหนด เฉพาะโหนดลูกระดับแรกที่ตรงกัน",
     "keyMappingTooltip": "สลับโหมด: คีย์เดิม (A→A) vs การแมป (A→B)",
     "toggleKeyMapping": "เปลี่ยนเป็นโหมดการแมป",
-    "toggleKeyOriginal": "เปลี่ยนเป็นโหมดคีย์เดิม",
-    "faq1q": "เครื่องมือ JSON นี้รองรับเอนจินการแปลและขนาดไฟล์ใดบ้าง?",
-    "faq1a": "รองรับเอนจินมากกว่า 15 รายการ รวมถึง Google (ฟรี), DeepSeek, DeepL, Azure, OpenAI และ Qwen-MT จัดการไฟล์ JSON ทุกขนาดพร้อมแคชการแปลสำหรับอัปเดตแบบเพิ่มหน่วย",
-    "faq2q": "คีย์และโครงสร้าง JSON จะเปลี่ยนหลังแปลไหม?",
-    "faq2a": "ไม่ เครื่องมือแปลเฉพาะค่า — คีย์ โครงสร้างซ้อน และอาร์เรย์ถูกรักษาไว้ทั้งหมด",
-    "faq3q": "แปล JSON เป็นหลายภาษาพร้อมกันได้ไหม?",
-    "faq3a": "เปิดโหมดหลายภาษาเพื่อสร้างไฟล์ en.json, ja.json, ko.json ในการดำเนินการเดียว"
+    "toggleKeyOriginal": "เปลี่ยนเป็นโหมดคีย์เดิม"
   },
   "TranslationSettings": {
     "docs": "เอกสาร",
@@ -173,9 +179,9 @@
     "urlAutoCompleted": "เติม URL อัตโนมัติแล้ว",
     "modelExtra": "ชื่อโมเดล LLM ดูเอกสาร API",
     "temperatureExtra": "อุณหภูมิ (0-2): สูง = สุ่มมากขึ้น ต่ำ = แน่นอนมากขึ้น แนะนำ: 0.2-0.8",
-    "systemPrompt": "System Prompt",
+    "systemPrompt": "พรอมต์ระบบ",
     "systemPromptExtra": "System prompt สำหรับแปล LLM ปล่อยว่างสำหรับค่าเริ่มต้น",
-    "userPrompt": "User Prompt",
+    "userPrompt": "พรอมต์ผู้ใช้",
     "userPromptExtra": "Prompt แปลกำหนดเอง ปล่อยว่างสำหรับค่าเริ่มต้น ตัวแปร:",
     "for": "สำหรับ",
     "textToTranslate": "ข้อความที่ต้องแปล",
@@ -188,7 +194,7 @@
     "contextWindow": "บรรทัดบริบท",
     "contextWindowExtra": "บรรทัดต่อชุดในโหมดบริบท ค่าที่สูงขึ้นให้บริบทที่ดีขึ้นแต่อาจเกินขีดจำกัดโทเคนของโมเดล.",
     "delayTime": "หน่วงเวลา",
-    "useRelay": "API Relay",
+    "useRelay": "ใช้ API Relay",
     "useRelayTooltip": "เปิด API relay เมื่อพบข้อผิดพลาด CORS หรือ 403",
     "enableThinking": "เปิดใช้งานโหมดการคิด",
     "enableThinkingTooltip": "เปิดใช้งานโหมดการคิด / การให้เหตุผลสำหรับโมเดลที่รองรับ",
@@ -204,7 +210,7 @@
     "presetUpdate": "บันทึกในพรีเซ็ตปัจจุบัน",
     "presetUpdated": "บันทึกในพรีเซ็ตปัจจุบันแล้ว",
     "presetDeleteConfirm": "ลบพรีเซ็ตนี้หรือไม่?",
-    "presetEmptyHint": "No presets yet — edit and click Save",
+    "presetEmptyHint": "ยังไม่มีพรีเซ็ต — แก้ไขแล้วคลิกบันทึก",
     "qwenMtDomains": "พรอมต์โดเมน (ภาษาอังกฤษเท่านั้น)",
     "sendSystemPrompt": "ส่ง system prompt",
     "sendSystemPromptExtra": "ปิดเฉพาะเมื่อ chat template ปฏิเสธบทบาท system — ข้อผิดพลาดทั่วไป \"Conversations must start with a user prompt\" (เช่น ตระกูล Gemma)",
@@ -217,57 +223,47 @@
     "callParamsGroup": "พารามิเตอร์การเรียก"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "ตัวแปลซับไตเติล",
-      "description": "แปล SRT, ASS, VTT, LRC เป็นชุด 50+ ภาษา"
-    },
     "jsonTranslate": {
       "title": "ตัวแปล JSON i18n",
-      "description": "เครื่องมือแปล JSON หลายภาษาที่มีประสิทธิภาพ"
-    },
-    "mdTranslator": {
-      "title": "ตัวแปล Markdown",
-      "description": "แปล Markdown เป็นชุด รักษาการจัดรูปแบบและโค้ด"
-    },
-    "textSplitter": {
-      "title": "ตัวแบ่งข้อความ",
-      "description": "แบ่งข้อความยาวอย่างชาญฉลาดสำหรับ AI และโซเชียลมีเดีย"
-    },
-    "jsonValueExtractor": {
-      "title": "ตัวแยกค่า JSON",
-      "description": "แยกค่า JSON เป็นชุด เอาต์พุตมีการจัดรูปแบบ"
-    },
-    "jsonNodeEdit": {
-      "title": "แก้ไข JSON เป็นชุด",
-      "description": "แก้ไขโหนด JSON เป็นชุด คำนำหน้า/คำต่อท้าย/แทนที่"
-    },
-    "jsonValueTransformer": {
-      "title": "ตัวแมปค่า JSON",
-      "description": "แมปและย้ายค่าด้วย JSONPath"
-    },
-    "jsonValueSwapper": {
-      "title": "ตัวสลับค่า JSON",
-      "description": "สลับค่าสองฟิลด์ได้ในคลิกเดียว"
-    },
-    "jsonNodeInserter": {
-      "title": "ตัวแทรกโหนด JSON",
-      "description": "แทรกโหนดใหม่ที่ตำแหน่งที่ระบุเป็นชุด"
-    },
-    "jsonSortClassify": {
-      "title": "เรียงลำดับ & จัดประเภท JSON",
-      "description": "เรียงลำดับและจัดกลุ่มอาร์เรย์ กฎที่กำหนดเอง"
-    },
-    "jsonMatchUpdate": {
-      "title": "อัปเดต JSON Match",
-      "description": "อัปเดตเป็นชุดตามการจับคู่ฟิลด์"
-    },
-    "dataParserFlare": {
-      "title": "ตัวแปลง Flare",
-      "description": "แปลงบุ๊กมาร์กเบราว์เซอร์และรูปแบบ Flare"
-    },
-    "dataParserImgPrompt": {
-      "title": "ตัวสร้างข้อมูล IMGPrompt",
-      "description": "สร้างข้อมูล JSON IMGPrompt เป็นชุด"
+      "description": "เครื่องมือแปล JSON หลายภาษาที่มีประสิทธิภาพ",
+      "metaTitle": "ตัวแปล JSON หลายภาษา - รองรับ i18n & JSONPath",
+      "metaDescription": "ปัญหาการแปล JSON? แปลไฟล์ JSON สำหรับแอปพลิเคชันสากล (i18n) ด้วย AI รองรับ JSONPath, DeepL, Google และ ChatGPT โซลูชันที่ดีที่สุดสำหรับนักพัฒนาเว็บและแอปทั่วโลก",
+      "faq": [
+        {
+          "q": "เครื่องมือ JSON นี้รองรับเอนจินการแปลและขนาดไฟล์ใดบ้าง?",
+          "a": "รองรับเอนจินมากกว่า 15 รายการ รวมถึง Google (ฟรี), DeepSeek, DeepL, Azure, OpenAI และ Qwen-MT จัดการไฟล์ JSON ทุกขนาดพร้อมแคชการแปลสำหรับอัปเดตแบบเพิ่มหน่วย"
+        },
+        {
+          "q": "คีย์และโครงสร้าง JSON จะเปลี่ยนหลังแปลไหม?",
+          "a": "ไม่ เครื่องมือแปลเฉพาะค่าเท่านั้น — คีย์ ลำดับชั้นที่ซ้อนกัน และโครงสร้างอาร์เรย์ถูกรักษาไว้อย่างสมบูรณ์ ไฟล์ที่แปลแล้วใช้งานได้โดยตรงใน React, Vue และเฟรมเวิร์ก i18n อื่น ๆ"
+        },
+        {
+          "q": "แปล JSON เป็นหลายภาษาพร้อมกันได้ไหม?",
+          "a": "เปิดโหมดหลายภาษาเพื่อเลือกหลายภาษาเป้าหมายและสร้างไฟล์เช่น en.json, ja.json, ko.json พร้อมกันในการดำเนินการเดียว ช่วยประหยัดเวลาในการแปลเป็นภาษาสากลอย่างมาก"
+        }
+      ],
+      "howto": [
+        {
+          "name": "วางหรืออัปโหลด JSON",
+          "text": "คลิกที่พื้นที่ป้อนข้อมูลและวาง JSON หรืออัปโหลดไฟล์ .json"
+        },
+        {
+          "name": "เลือกภาษาเป้าหมาย",
+          "text": "เลือกภาษาเป้าหมายหนึ่งภาษาหรือมากกว่า เปิดใช้งานโหมดหลายภาษาสำหรับการแปลเป็นชุด"
+        },
+        {
+          "name": "แปลและส่งออก",
+          "text": "คลิกแปล ดาวน์โหลดไฟล์ JSON ที่แปลแล้วหรือคัดลอกผลลัพธ์"
+        }
+      ],
+      "features": [
+        "รองรับเอนจินมากกว่า 15 รายการ (Google, DeepSeek, DeepL, Azure, OpenAI)",
+        "การจับคู่ JSONPath ที่แม่นยำ",
+        "การสร้างหลายภาษาเป็นชุด",
+        "เปลี่ยนชื่อคีย์ขณะแปล",
+        "แคชการแปลสำหรับอัปเดต",
+        "โหมดรวม i18n รวมทุกภาษาเป็นไฟล์เดียว"
+      ]
     }
   },
   "navigation": {

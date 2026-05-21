@@ -39,8 +39,7 @@
     "multiLanguageModeTooltip": "Terjemahkan ke beberapa bahasa sekaligus, disimpan secara terpisah",
     "translate": "Terjemahkan",
     "totalLanguages": "Total Bahasa:",
-    "resetUpload": "Bersihkan",
-    "resetUploadTooltip": "Bersihkan input saat ini dan file yang diunggah",
+    "resetUploadTooltip": "Bersihkan input dan file yang diunggah saat ini",
     "resetUploadSuccess": "Dibersihkan",
     "extractText": "Ekstrak Teks",
     "translationResult": "Hasil",
@@ -94,8 +93,8 @@
     "settingsApplied": "Pengaturan diterapkan",
     "retryCount": "Jumlah Percobaan Ulang",
     "retryCountTooltip": "Jumlah percobaan ulang saat terjemahan gagal",
-    "retryTimeout": "Batas Waktu",
-    "retryTimeoutTooltip": "Waktu tunggu maksimum per permintaan (detik). Pemikiran LLM membutuhkan waktu lebih lama; direkomendasikan 180 detik atau lebih.",
+    "requestTimeoutSec": "Batas Waktu",
+    "requestTimeoutSecTooltip": "Waktu tunggu maksimum per permintaan (detik). Pemikiran LLM membutuhkan waktu lebih lama; direkomendasikan 180 detik atau lebih.",
     "customExportFilename": "Pola Nama File Ekspor",
     "customExportFilenameTooltip": "'{'name'}' = nama file asli, '{'lang'}' = bahasa, '{'ext'}' = ekstensi, '{'date'}' = tanggal, '{'time'}' = waktu",
     "partialFailureTitle": "{count} baris gagal diterjemahkan",
@@ -112,12 +111,25 @@
     "apiStatusConnected": "✓ Terhubung",
     "apiStatusFailed": "Koneksi gagal",
     "testConnection": "Uji koneksi",
-    "moreProviderSettings": "Pengaturan Provider lain"
+    "moreProviderSettings": "Pengaturan Provider lain",
+    "format": "Format",
+    "formatTooltip": "Format: hapus baris kosong dan spasi di awal/akhir",
+    "resultToSource": "Hasil ➔ Sumber",
+    "resultToSourceTooltip": "Timpa kotak input dengan teks hasil",
+    "readOnlyMode": "Mode Hanya-Baca",
+    "readOnlyModeTooltip": "Teks terlalu panjang, otomatis beralih ke mode hanya-baca untuk menjaga performa halaman",
+    "clearInputTooltip": "Bersihkan konten input dan file yang diunggah",
+    "fileExported": "File diekspor: {fileName}",
+    "exportSuccess": "Ekspor berhasil: {fileName}",
+    "batchDownloaded": "Pemrosesan selesai, file diunduh otomatis",
+    "sourceTextPlaceholder": "Masukkan atau tempel teks yang akan diproses...",
+    "smartLineBreak": "Jeda Baris Cerdas",
+    "replaceText": "Ganti Teks",
+    "generateJson": "Hasilkan JSON",
+    "gtxFreeAPIUnavailable": "API Google Translate gratis (GTX) saat ini tidak tersedia. Silakan periksa koneksi jaringan Anda.",
+    "translategemmaUnavailable": "Node TranslateGemma tidak tersedia. Harap pastikan server lokal (LM Studio / llama.cpp / Ollama) berjalan dan URL benar."
   },
-  "json": {
-    "title": "Penerjemah JSON Multi-Bahasa - Dukungan i18n & JSONPath",
-    "description": "Terjemahkan file JSON untuk internasionalisasi aplikasi (i18n) dengan AI. Mendukung JSONPath, DeepL, dan ChatGPT. Solusi cepat untuk developer global.",
-    "clientTitle": "Terjemahan JSON Multi-Bahasa",
+  "JSON": {
     "clientDescription": "Alat terjemahan JSON untuk pengembang. Mendukung pencocokan JSONPath dan pemetaan kunci untuk internasionalisasi cepat.",
     "jsonPaths": "Jalur JSON",
     "copyNode": "Salin Node",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "Dengan nama node, hanya anak tingkat pertama yang cocok",
     "keyMappingTooltip": "Ganti Mode: Kunci Asli (A→A) vs Pemetaan (A→B)",
     "toggleKeyMapping": "Beralih ke Mode Pemetaan",
-    "toggleKeyOriginal": "Beralih ke Mode Kunci Asli",
-    "faq1q": "Alat JSON ini mendukung mesin terjemahan dan ukuran file apa?",
-    "faq1a": "Mendukung 15+ mesin termasuk Google (gratis), DeepSeek, DeepL, Azure, OpenAI, dan Qwen-MT. Menangani file JSON ukuran berapa pun dengan cache terjemahan untuk pembaruan inkremental antar build.",
-    "faq2q": "Apakah kunci dan struktur JSON tetap setelah diterjemahkan?",
-    "faq2a": "Ya. Alat hanya menerjemahkan nilai — kunci, hierarki dan array sepenuhnya dipertahankan.",
-    "faq3q": "Bisakah menerjemahkan JSON ke banyak bahasa sekaligus?",
-    "faq3a": "Aktifkan mode multibahasa untuk menghasilkan file en.json, ja.json, ko.json dalam satu operasi."
+    "toggleKeyOriginal": "Beralih ke Mode Kunci Asli"
   },
   "TranslationSettings": {
     "docs": "Dokumen",
@@ -204,7 +210,7 @@
     "presetUpdate": "Simpan ke Preset Saat Ini",
     "presetUpdated": "Disimpan ke preset saat ini",
     "presetDeleteConfirm": "Hapus preset ini?",
-    "presetEmptyHint": "No presets yet — edit and click Save",
+    "presetEmptyHint": "Belum ada preset — edit lalu klik Simpan",
     "qwenMtDomains": "Prompt Domain (hanya bahasa Inggris)",
     "sendSystemPrompt": "Kirim prompt system",
     "sendSystemPromptExtra": "Matikan hanya ketika chat template menolak peran system — kesalahan tipikal \"Conversations must start with a user prompt\" (mis. keluarga Gemma).",
@@ -217,57 +223,47 @@
     "callParamsGroup": "Parameter Panggilan"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "Penerjemah Subtitle",
-      "description": "Terjemahan batch SRT, ASS, VTT, LRC. 50+ bahasa."
-    },
     "jsonTranslate": {
       "title": "Penerjemah JSON i18n",
-      "description": "Alat terjemahan JSON multi-bahasa yang efisien"
-    },
-    "mdTranslator": {
-      "title": "Penerjemah Markdown",
-      "description": "Terjemahan Markdown batch, pertahankan format dan kode"
-    },
-    "textSplitter": {
-      "title": "Pemisah Teks",
-      "description": "Pemisahan teks panjang cerdas untuk AI dan media sosial"
-    },
-    "jsonValueExtractor": {
-      "title": "Pengekstrak Nilai JSON",
-      "description": "Ekstrak nilai JSON batch, output terformat"
-    },
-    "jsonNodeEdit": {
-      "title": "Pengeditan JSON Batch",
-      "description": "Edit node JSON batch, awalan/akhiran/ganti"
-    },
-    "jsonValueTransformer": {
-      "title": "Pemeta Nilai JSON",
-      "description": "Pemetaan dan migrasi nilai dengan JSONPath"
-    },
-    "jsonValueSwapper": {
-      "title": "Penukar Nilai JSON",
-      "description": "Tukar nilai dua bidang dengan satu klik"
-    },
-    "jsonNodeInserter": {
-      "title": "Penyisip Node JSON",
-      "description": "Sisipkan node baru di posisi yang ditentukan secara batch"
-    },
-    "jsonSortClassify": {
-      "title": "Urutkan & Klasifikasikan JSON",
-      "description": "Urutkan dan kelompokkan array, aturan kustom"
-    },
-    "jsonMatchUpdate": {
-      "title": "Pembaruan JSON Match",
-      "description": "Pembaruan batch berdasarkan pencocokan bidang"
-    },
-    "dataParserFlare": {
-      "title": "Konverter Flare",
-      "description": "Konversi bookmark browser dan format Flare"
-    },
-    "dataParserImgPrompt": {
-      "title": "Generator Data IMGPrompt",
-      "description": "Hasilkan data JSON IMGPrompt secara batch"
+      "description": "Alat terjemahan JSON multi-bahasa yang efisien",
+      "metaTitle": "Penerjemah JSON Multi-Bahasa - Dukungan i18n & JSONPath",
+      "metaDescription": "Kesulitan terjemahkan JSON? Terjemahkan file JSON untuk internasionalisasi aplikasi (i18n) dengan AI. Mendukung JSONPath, DeepL, dan ChatGPT.",
+      "faq": [
+        {
+          "q": "Alat JSON ini mendukung mesin terjemahan dan ukuran file apa?",
+          "a": "Mendukung 15+ mesin termasuk Google (gratis), DeepSeek, DeepL, Azure, OpenAI, dan Qwen-MT. Menangani file JSON ukuran berapa pun dengan cache terjemahan untuk pembaruan inkremental antar build."
+        },
+        {
+          "q": "Apakah kunci dan struktur JSON tetap setelah diterjemahkan?",
+          "a": "Ya. Alat hanya menerjemahkan nilai — kunci, hierarki dan array sepenuhnya dipertahankan."
+        },
+        {
+          "q": "Bisakah menerjemahkan JSON ke banyak bahasa sekaligus?",
+          "a": "Aktifkan mode multibahasa untuk menghasilkan file en.json, ja.json, ko.json dalam satu operasi."
+        }
+      ],
+      "howto": [
+        {
+          "name": "Tempel atau unggah JSON",
+          "text": "Klik area input dan tempel JSON, atau unggah file .json dengan drag-and-drop."
+        },
+        {
+          "name": "Pilih bahasa target",
+          "text": "Pilih satu atau beberapa bahasa. Aktifkan mode multibahasa untuk terjemahan batch."
+        },
+        {
+          "name": "Terjemahkan dan ekspor",
+          "text": "Klik Terjemahkan. Unduh file JSON terjemahan atau salin hasil."
+        }
+      ],
+      "features": [
+        "Mendukung 15+ mesin terjemahan (Google, DeepSeek, DeepL, Azure, OpenAI)",
+        "Pencocokan JSONPath yang tepat",
+        "Generasi batch multi-bahasa",
+        "Penggantian nama kunci saat terjemahan",
+        "Cache terjemahan untuk pembaruan inkremental",
+        "Mode penggabungan i18n menggabungkan semua bahasa dalam satu file"
+      ]
     }
   },
   "navigation": {

@@ -39,8 +39,7 @@
     "multiLanguageModeTooltip": "Dịch sang nhiều ngôn ngữ cùng lúc, lưu thành các tệp riêng biệt",
     "translate": "Dịch",
     "totalLanguages": "Tổng số ngôn ngữ:",
-    "resetUpload": "Xóa",
-    "resetUploadTooltip": "Xóa đầu vào hiện tại và tệp đã tải lên",
+    "resetUploadTooltip": "Xóa nội dung hiện tại và các tệp đã tải lên",
     "resetUploadSuccess": "Đã xóa",
     "extractText": "Trích xuất văn bản",
     "translationResult": "Kết quả",
@@ -94,8 +93,8 @@
     "settingsApplied": "Đã áp dụng cài đặt",
     "retryCount": "Số lần thử lại",
     "retryCountTooltip": "Số lần thử lại khi dịch thất bại",
-    "retryTimeout": "Thời gian chờ",
-    "retryTimeoutTooltip": "Thời gian chờ tối đa mỗi yêu cầu (giây). LLM suy nghĩ mất nhiều thời gian hơn; khuyến nghị 180 giây trở lên.",
+    "requestTimeoutSec": "Thời gian chờ",
+    "requestTimeoutSecTooltip": "Thời gian chờ tối đa mỗi yêu cầu (giây). LLM suy nghĩ mất nhiều thời gian hơn; khuyến nghị 180 giây trở lên.",
     "customExportFilename": "Mẫu tên tệp xuất",
     "customExportFilenameTooltip": "'{'name'}' = tên tệp gốc, '{'lang'}' = ngôn ngữ, '{'ext'}' = phần mở rộng, '{'date'}' = ngày, '{'time'}' = thời gian",
     "partialFailureTitle": "{count} dòng dịch thất bại",
@@ -112,12 +111,25 @@
     "apiStatusConnected": "✓ Đã kết nối",
     "apiStatusFailed": "Kết nối thất bại",
     "testConnection": "Kiểm tra kết nối",
-    "moreProviderSettings": "Thêm cài đặt Provider"
+    "moreProviderSettings": "Thêm cài đặt Provider",
+    "format": "Định dạng",
+    "formatTooltip": "Định dạng: xóa dòng trống và khoảng trắng đầu/cuối",
+    "resultToSource": "Kết quả ➔ Nguồn",
+    "resultToSourceTooltip": "Ghi đè văn bản kết quả vào ô nhập liệu",
+    "readOnlyMode": "Chế độ chỉ đọc",
+    "readOnlyModeTooltip": "Văn bản quá dài, đã tự động chuyển sang chế độ chỉ đọc để đảm bảo hiệu suất trang",
+    "clearInputTooltip": "Xóa nội dung đã nhập và tệp đã tải lên",
+    "fileExported": "Đã xuất tệp: {fileName}",
+    "exportSuccess": "Xuất thành công: {fileName}",
+    "batchDownloaded": "Xử lý hoàn tất, tệp đã được tải xuống tự động",
+    "sourceTextPlaceholder": "Nhập hoặc dán văn bản cần xử lý...",
+    "smartLineBreak": "Xuống dòng thông minh",
+    "replaceText": "Thay thế văn bản",
+    "generateJson": "Tạo JSON",
+    "gtxFreeAPIUnavailable": "API Google Translate miễn phí (GTX) hiện không khả dụng. Vui lòng kiểm tra kết nối mạng của bạn.",
+    "translategemmaUnavailable": "Node TranslateGemma không khả dụng. Vui lòng xác minh máy chủ cục bộ (LM Studio / llama.cpp / Ollama) đang chạy và URL chính xác."
   },
-  "json": {
-    "title": "Dịch Giả JSON Đa Ngôn Ngữ - Hỗ Trợ i18n & JSONPath",
-    "description": "Dịch tệp JSON cho ứng dụng quốc tế hóa (i18n) với AI. Hỗ trợ JSONPath, DeepL, Google và ChatGPT. Giải pháp tối ưu cho nhà phát triển web và app toàn cầu.",
-    "clientTitle": "Dịch JSON Đa ngôn ngữ",
+  "JSON": {
     "clientDescription": "Công cụ dịch JSON cho nhà phát triển. Hỗ trợ khớp JSONPath và ánh xạ khóa để quốc tế hóa nhanh chóng.",
     "jsonPaths": "Đường dẫn JSON",
     "copyNode": "Sao chép nút",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "Với tên nút, chỉ các con cấp một khớp",
     "keyMappingTooltip": "Chuyển chế độ: Khóa gốc (A→A) vs Ánh xạ (A→B)",
     "toggleKeyMapping": "Chuyển sang Chế độ Ánh xạ",
-    "toggleKeyOriginal": "Chuyển sang Chế độ Khóa Gốc",
-    "faq1q": "Công cụ JSON này hỗ trợ những engine dịch và kích thước file nào?",
-    "faq1a": "Hỗ trợ 15+ engine bao gồm Google (miễn phí), DeepSeek, DeepL, Azure, OpenAI và Qwen-MT. Xử lý file JSON mọi kích thước với bộ nhớ đệm bản dịch cho cập nhật gia tăng.",
-    "faq2q": "Khóa và cấu trúc JSON có bị thay đổi sau khi dịch?",
-    "faq2a": "Không. Công cụ chỉ dịch giá trị — khóa, cấu trúc lồng và mảng được bảo toàn hoàn toàn.",
-    "faq3q": "Có thể dịch JSON sang nhiều ngôn ngữ cùng lúc?",
-    "faq3a": "Bật chế độ đa ngôn ngữ để tạo hàng loạt file en.json, ja.json, ko.json trong một thao tác."
+    "toggleKeyOriginal": "Chuyển sang Chế độ Khóa Gốc"
   },
   "TranslationSettings": {
     "docs": "Tài liệu",
@@ -204,7 +210,7 @@
     "presetUpdate": "Lưu vào cài đặt sẵn hiện tại",
     "presetUpdated": "Đã lưu vào cài đặt sẵn hiện tại",
     "presetDeleteConfirm": "Xóa cài đặt sẵn này?",
-    "presetEmptyHint": "No presets yet — edit and click Save",
+    "presetEmptyHint": "Chưa có cài đặt sẵn — chỉnh sửa và nhấn Lưu",
     "qwenMtDomains": "Lời nhắc tên miền (chỉ tiếng Anh)",
     "sendSystemPrompt": "Gửi lời nhắc system",
     "sendSystemPromptExtra": "Chỉ tắt khi chat template từ chối vai trò system — lỗi điển hình \"Conversations must start with a user prompt\" (ví dụ họ Gemma).",
@@ -217,57 +223,47 @@
     "callParamsGroup": "Tham số gọi"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "Dịch giả Phụ đề",
-      "description": "Dịch hàng loạt SRT, ASS, VTT, LRC. 50+ ngôn ngữ."
-    },
     "jsonTranslate": {
       "title": "Dịch giả JSON i18n",
-      "description": "Công cụ dịch JSON đa ngôn ngữ hiệu quả"
-    },
-    "mdTranslator": {
-      "title": "Dịch giả Markdown",
-      "description": "Dịch Markdown hàng loạt, giữ định dạng và mã"
-    },
-    "textSplitter": {
-      "title": "Bộ chia văn bản",
-      "description": "Chia văn bản dài thông minh cho AI và mạng xã hội"
-    },
-    "jsonValueExtractor": {
-      "title": "Trình trích xuất Giá trị JSON",
-      "description": "Trích xuất giá trị JSON hàng loạt, đầu ra có định dạng"
-    },
-    "jsonNodeEdit": {
-      "title": "Chỉnh sửa JSON Hàng loạt",
-      "description": "Chỉnh sửa nút JSON hàng loạt, tiền tố/hậu tố/thay thế"
-    },
-    "jsonValueTransformer": {
-      "title": "Trình ánh xạ Giá trị JSON",
-      "description": "Ánh xạ và di chuyển giá trị với JSONPath"
-    },
-    "jsonValueSwapper": {
-      "title": "Trình hoán đổi Giá trị JSON",
-      "description": "Hoán đổi giá trị hai trường bằng một cú nhấp chuột"
-    },
-    "jsonNodeInserter": {
-      "title": "Trình chèn Nút JSON",
-      "description": "Chèn nút mới tại vị trí được chỉ định hàng loạt"
-    },
-    "jsonSortClassify": {
-      "title": "Sắp xếp & Phân loại JSON",
-      "description": "Sắp xếp và nhóm mảng, quy tắc tùy chỉnh"
-    },
-    "jsonMatchUpdate": {
-      "title": "Cập nhật JSON Match",
-      "description": "Cập nhật hàng loạt dựa trên khớp trường"
-    },
-    "dataParserFlare": {
-      "title": "Trình chuyển đổi Flare",
-      "description": "Chuyển đổi bookmark trình duyệt và định dạng Flare"
-    },
-    "dataParserImgPrompt": {
-      "title": "Trình tạo dữ liệu IMGPrompt",
-      "description": "Tạo dữ liệu JSON IMGPrompt hàng loạt"
+      "description": "Công cụ dịch JSON đa ngôn ngữ hiệu quả",
+      "metaTitle": "Dịch Giả JSON Đa Ngôn Ngữ - Hỗ Trợ i18n & JSONPath",
+      "metaDescription": "Khó dịch JSON? Dịch tệp JSON cho i18n với AI. Hỗ trợ JSONPath, DeepL và ChatGPT. Giải pháp tối ưu cho nhà phát triển đa ngôn ngữ!",
+      "faq": [
+        {
+          "q": "Công cụ JSON này hỗ trợ những engine dịch và kích thước file nào?",
+          "a": "Hỗ trợ 15+ engine bao gồm Google (miễn phí), DeepSeek, DeepL, Azure, OpenAI và Qwen-MT. Xử lý file JSON mọi kích thước với bộ nhớ đệm bản dịch cho cập nhật gia tăng."
+        },
+        {
+          "q": "Khóa và cấu trúc JSON có bị thay đổi sau khi dịch?",
+          "a": "Không. Công cụ chỉ dịch giá trị — khóa, cấu trúc lồng và mảng được bảo toàn hoàn toàn."
+        },
+        {
+          "q": "Có thể dịch JSON sang nhiều ngôn ngữ cùng lúc?",
+          "a": "Bật chế độ đa ngôn ngữ để tạo hàng loạt file en.json, ja.json, ko.json trong một thao tác."
+        }
+      ],
+      "howto": [
+        {
+          "name": "Dán hoặc tải JSON lên",
+          "text": "Nhấp vào khu vực nhập và dán JSON, hoặc tải tệp .json lên bằng kéo thả."
+        },
+        {
+          "name": "Chọn ngôn ngữ đích",
+          "text": "Chọn một hoặc nhiều ngôn ngữ. Bật chế độ đa ngôn ngữ cho dịch hàng loạt."
+        },
+        {
+          "name": "Dịch và xuất",
+          "text": "Nhấp Dịch. Tải xuống các tệp JSON đã dịch hoặc sao chép kết quả."
+        }
+      ],
+      "features": [
+        "Hỗ trợ 15+ engine dịch (Google, DeepSeek, DeepL, Azure, OpenAI)",
+        "Khớp JSONPath chính xác",
+        "Tạo hàng loạt đa ngôn ngữ",
+        "Đổi tên khóa khi dịch",
+        "Bộ nhớ đệm cho cập nhật gia tăng",
+        "Chế độ hợp nhất i18n kết hợp tất cả ngôn ngữ vào một tệp"
+      ]
     }
   },
   "navigation": {

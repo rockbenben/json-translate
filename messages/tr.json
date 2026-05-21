@@ -39,7 +39,6 @@
     "multiLanguageModeTooltip": "Aynı anda birden fazla dile çevirin, ayrı dosyalar olarak kaydedilir",
     "translate": "Çevir",
     "totalLanguages": "Toplam Dil:",
-    "resetUpload": "Temizle",
     "resetUploadTooltip": "Mevcut girişi ve yüklenen dosyaları temizle",
     "resetUploadSuccess": "Temizlendi",
     "extractText": "Metni Çıkar",
@@ -94,8 +93,8 @@
     "settingsApplied": "Ayarlar uygulandı",
     "retryCount": "Yeniden Deneme Sayısı",
     "retryCountTooltip": "Çeviri başarısız olduğunda yeniden deneme sayısı",
-    "retryTimeout": "Zaman Aşımı",
-    "retryTimeoutTooltip": "İstek başına maksimum bekleme süresi (saniye). LLM düşünmesi daha uzun sürer; 180 saniye veya daha fazlası önerilir.",
+    "requestTimeoutSec": "Zaman Aşımı",
+    "requestTimeoutSecTooltip": "İstek başına maksimum bekleme süresi (saniye). LLM düşünmesi daha uzun sürer; 180 saniye veya daha fazlası önerilir.",
     "customExportFilename": "Dışa Aktarma Dosya Adı Kalıbı",
     "customExportFilenameTooltip": "'{'name'}' = orijinal dosya adı, '{'lang'}' = dil, '{'ext'}' = uzantı, '{'date'}' = tarih, '{'time'}' = saat",
     "partialFailureTitle": "{count} satır çevrilemedi",
@@ -112,12 +111,25 @@
     "apiStatusConnected": "✓ Bağlandı",
     "apiStatusFailed": "Bağlantı başarısız",
     "testConnection": "Bağlantıyı test et",
-    "moreProviderSettings": "Daha fazla Provider ayarı"
+    "moreProviderSettings": "Daha fazla Provider ayarı",
+    "format": "Biçimlendir",
+    "formatTooltip": "Biçimlendir: boş satırları ve baş/son boşlukları kaldır",
+    "resultToSource": "Sonuç ➔ Kaynak",
+    "resultToSourceTooltip": "Giriş kutusunun içeriğini sonuç metniyle değiştir",
+    "readOnlyMode": "Salt Okunur Mod",
+    "readOnlyModeTooltip": "Metin çok uzun; sayfa performansını korumak için salt okunur mod otomatik olarak etkinleştirildi",
+    "clearInputTooltip": "Giriş içeriğini ve yüklenen dosyaları temizle",
+    "fileExported": "Dışa aktarılan dosya: {fileName}",
+    "exportSuccess": "Dışa aktarma başarılı: {fileName}",
+    "batchDownloaded": "İşlem tamamlandı, dosyalar otomatik olarak indirildi",
+    "sourceTextPlaceholder": "İşlenecek metni girin veya yapıştırın...",
+    "smartLineBreak": "Akıllı satır sonu",
+    "replaceText": "Metni değiştir",
+    "generateJson": "JSON Oluştur",
+    "gtxFreeAPIUnavailable": "Ücretsiz Google Translate API (GTX) şu anda kullanılamıyor. Lütfen ağ bağlantınızı kontrol edin.",
+    "translategemmaUnavailable": "TranslateGemma düğümü kullanılamıyor. Lütfen yerel sunucunun (LM Studio / llama.cpp / Ollama) çalıştığını ve URL'nin doğru olduğunu doğrulayın."
   },
-  "json": {
-    "title": "Çok Dilli JSON Çevirici - i18n ve JSONPath Desteği",
-    "description": "Uygulama yerelleştirme (i18n) için JSON dosyalarını yapay zeka ile çevirin. JSONPath, DeepL ve ChatGPT desteği. Geliştiriciler için hızlı ve güvenli çözüm.",
-    "clientTitle": "Çok Dilli JSON Çeviri",
+  "JSON": {
     "clientDescription": "Geliştiriciler için JSON çeviri aracı. Hızlı uluslararasılaştırma için JSONPath eşleştirme ve anahtar haritalamayı destekler.",
     "jsonPaths": "JSON Yolları",
     "copyNode": "Düğümü Kopyala",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "Düğüm adıyla, yalnızca birinci seviye alt öğeler eşleşir",
     "keyMappingTooltip": "Mod Değiştir: Orijinal Anahtar (A→A) vs Haritalama (A→B)",
     "toggleKeyMapping": "Haritalama Moduna Geç",
-    "toggleKeyOriginal": "Orijinal Anahtar Moduna Geç",
-    "faq1q": "Bu JSON aracı hangi çeviri motorlarını ve dosya boyutlarını destekliyor?",
-    "faq1a": "Google (ücretsiz), DeepSeek, DeepL, Azure, OpenAI ve Qwen-MT dahil 15+ motoru destekler. Her boyuttaki JSON dosyalarını işler ve derlemeler arası artımlı güncelleme için çeviri önbelleği sağlar.",
-    "faq2q": "Çeviriden sonra JSON anahtarları ve yapısı korunur mu?",
-    "faq2a": "Evet. Araç yalnızca değerleri çevirir — anahtarlar, iç içe yapı ve diziler tamamen korunur.",
-    "faq3q": "JSON'u aynı anda birden fazla dile çevirebilir miyim?",
-    "faq3a": "Çoklu dil modunu etkinleştirerek en.json, ja.json, ko.json dosyalarını tek işlemde toplu oluşturun."
+    "toggleKeyOriginal": "Orijinal Anahtar Moduna Geç"
   },
   "TranslationSettings": {
     "docs": "Belgeler",
@@ -204,7 +210,7 @@
     "presetUpdate": "Mevcut Ön Ayara Kaydet",
     "presetUpdated": "Mevcut ön ayara kaydedildi",
     "presetDeleteConfirm": "Bu ön ayarı silmek istiyor musunuz?",
-    "presetEmptyHint": "No presets yet — edit and click Save",
+    "presetEmptyHint": "Henüz ön ayar yok — düzenleyin ve Kaydet'e tıklayın",
     "qwenMtDomains": "Etki Alanı İpuçları (yalnızca İngilizce)",
     "sendSystemPrompt": "system istemini gönder",
     "sendSystemPromptExtra": "Yalnızca chat template system rolünü reddettiğinde kapatın — tipik hata \"Conversations must start with a user prompt\" (örn. Gemma ailesi).",
@@ -217,57 +223,47 @@
     "callParamsGroup": "Çağrı Parametreleri"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "Altyazı Çevirici",
-      "description": "Toplu SRT, ASS, VTT, LRC çevirisi. 50+ dil."
-    },
     "jsonTranslate": {
       "title": "i18n JSON Çevirici",
-      "description": "Verimli çok dilli JSON çeviri aracı"
-    },
-    "mdTranslator": {
-      "title": "Markdown Çevirici",
-      "description": "Toplu Markdown çevirisi, format ve kodu korur"
-    },
-    "textSplitter": {
-      "title": "Metin Bölücü",
-      "description": "AI ve sosyal medya için akıllı uzun metin bölme"
-    },
-    "jsonValueExtractor": {
-      "title": "JSON Değer Çıkarıcı",
-      "description": "JSON değerlerini toplu çıkar, formatlı çıktı"
-    },
-    "jsonNodeEdit": {
-      "title": "Toplu JSON Düzenleme",
-      "description": "JSON düğümlerini toplu düzenle, önek/sonek/değiştir"
-    },
-    "jsonValueTransformer": {
-      "title": "JSON Değer Eşleyici",
-      "description": "JSONPath ile değer eşleme ve taşıma"
-    },
-    "jsonValueSwapper": {
-      "title": "JSON Değer Değiştirici",
-      "description": "Tek tıkla iki alanın değerlerini değiştir"
-    },
-    "jsonNodeInserter": {
-      "title": "JSON Düğüm Ekleyici",
-      "description": "Belirtilen konuma toplu yeni düğümler ekle"
-    },
-    "jsonSortClassify": {
-      "title": "JSON Sırala & Sınıflandır",
-      "description": "Dizileri sırala ve grupla, özel kurallar"
-    },
-    "jsonMatchUpdate": {
-      "title": "JSON Match Update",
-      "description": "Alan eşleşmesine dayalı toplu güncelleme"
-    },
-    "dataParserFlare": {
-      "title": "Flare Dönüştürücü",
-      "description": "Tarayıcı yer imleri ve Flare formatı dönüşümü"
-    },
-    "dataParserImgPrompt": {
-      "title": "IMGPrompt Veri Oluşturucu",
-      "description": "Toplu IMGPrompt JSON verileri oluştur"
+      "description": "Verimli çok dilli JSON çeviri aracı",
+      "metaTitle": "Çok Dilli JSON Çevirici - i18n ve JSONPath Desteği",
+      "metaDescription": "JSON çevirisi zor mu? Uygulama yerelleştirme (i18n) için JSON dosyalarını yapay zeka ile çevirin. JSONPath, DeepL ve ChatGPT desteği.",
+      "faq": [
+        {
+          "q": "Bu JSON aracı hangi çeviri motorlarını ve dosya boyutlarını destekliyor?",
+          "a": "Google (ücretsiz), DeepSeek, DeepL, Azure, OpenAI ve Qwen-MT dahil 15+ motoru destekler. Her boyuttaki JSON dosyalarını işler ve derlemeler arası artımlı güncelleme için çeviri önbelleği sağlar."
+        },
+        {
+          "q": "Çeviriden sonra JSON anahtarları ve yapısı korunur mu?",
+          "a": "Evet. Araç yalnızca değerleri çevirir — anahtarlar, iç içe yapı ve diziler tamamen korunur."
+        },
+        {
+          "q": "JSON'u aynı anda birden fazla dile çevirebilir miyim?",
+          "a": "Çoklu dil modunu etkinleştirerek en.json, ja.json, ko.json dosyalarını tek işlemde toplu oluşturun."
+        }
+      ],
+      "howto": [
+        {
+          "name": "JSON yapıştır veya yükle",
+          "text": "Giriş alanına tıklayıp JSON yapıştırın veya .json dosyasını sürükleyip bırakın."
+        },
+        {
+          "name": "Hedef dil(ler)i seç",
+          "text": "Bir veya daha fazla hedef dil seçin. Toplu çeviri için çok dilli modu etkinleştirin."
+        },
+        {
+          "name": "Çevir ve dışa aktar",
+          "text": "Çevir'e tıklayın. Çevrilen JSON dosyalarını indirin veya sonuçları kopyalayın."
+        }
+      ],
+      "features": [
+        "15+ çeviri motoru desteği (Google, DeepSeek, DeepL, Azure, OpenAI)",
+        "Hassas JSONPath eşleştirme",
+        "Çoklu dil toplu üretim",
+        "Çeviri sırasında anahtar yeniden adlandırma",
+        "Artımlı güncellemeler için önbellek",
+        "i18n birleştirme modu tüm dilleri tek dosyada birleştirir"
+      ]
     }
   },
   "navigation": {

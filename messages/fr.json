@@ -39,7 +39,6 @@
     "multiLanguageModeTooltip": "Traduire vers plusieurs langues simultanément, enregistrées séparément",
     "translate": "Traduire",
     "totalLanguages": "Total langues :",
-    "resetUpload": "Effacer",
     "resetUploadTooltip": "Effacer l'entrée actuelle et les fichiers téléchargés",
     "resetUploadSuccess": "Effacé",
     "extractText": "Extraire le texte",
@@ -49,6 +48,9 @@
     "exportFile": "Exporter",
     "exportAllFile": "Tout exporter",
     "exportedFile": "Exporté",
+    "fileExported": "Fichier exporté : {fileName}",
+    "exportSuccess": "Export réussi : {fileName}",
+    "batchDownloaded": "Traitement terminé, le fichier a été téléchargé automatiquement",
     "extractedText": "Texte extrait",
     "translating": "Traduction...",
     "multiTranslating": "Traduction en cours, total langues :",
@@ -62,6 +64,7 @@
     "llmUnavailable": "Nœud LLM indisponible, vérifiez la configuration dans 'Paramètres API'",
     "noFileUploaded": "Veuillez d'abord télécharger un fichier",
     "translationExported": "Traduction terminée, fichiers exportés",
+    "sourceTextPlaceholder": "Entrez ou collez le texte à traiter...",
     "noSourceText": "Veuillez entrer ou coller du texte",
     "textExtracted": "Texte extrait, ",
     "sourceArea": "Zone d'entrée",
@@ -71,6 +74,16 @@
     "updateCount": "Entrées mises à jour",
     "startProcess": "Démarrer",
     "result": "Résultat",
+    "format": "Formater",
+    "formatTooltip": "Formater : supprimer les lignes vides et les espaces en début/fin",
+    "resultToSource": "Résultat ➔ Source",
+    "resultToSourceTooltip": "Écraser la zone de saisie avec le texte du résultat",
+    "readOnlyMode": "Mode lecture seule",
+    "readOnlyModeTooltip": "Texte trop long ; basculé automatiquement en mode lecture seule pour maintenir les performances",
+    "clearInputTooltip": "Effacer le contenu saisi et les fichiers téléchargés",
+    "smartLineBreak": "Saut de ligne intelligent",
+    "replaceText": "Remplacer le texte",
+    "generateJson": "Générer JSON",
     "multiValueHint": "Séparez les valeurs multiples par des espaces",
     "exportSettingTooltip": "Exporter la configuration vers un fichier",
     "importSettingTooltip": "Importer la configuration depuis un fichier",
@@ -94,8 +107,8 @@
     "settingsApplied": "Paramètres appliqués",
     "retryCount": "Nombre de tentatives",
     "retryCountTooltip": "Nombre de tentatives en cas d'échec de la traduction",
-    "retryTimeout": "Délai d'attente",
-    "retryTimeoutTooltip": "Attente maximale par requête (secondes). La réflexion des LLM prend plus de temps ; 180 s ou plus recommandé.",
+    "requestTimeoutSec": "Délai d'attente",
+    "requestTimeoutSecTooltip": "Attente maximale par requête (secondes). La réflexion des LLM prend plus de temps ; 180 s ou plus recommandé.",
     "customExportFilename": "Modèle de nom de fichier",
     "customExportFilenameTooltip": "'{'name'}' = nom original, '{'lang'}' = langue, '{'ext'}' = extension, '{'date'}' = date, '{'time'}' = heure",
     "partialFailureTitle": "{count} ligne(s) ont échoué",
@@ -112,12 +125,11 @@
     "apiStatusConnected": "✓ Connecté",
     "apiStatusFailed": "Échec de connexion",
     "testConnection": "Tester la connexion",
-    "moreProviderSettings": "Plus de paramètres Provider"
+    "moreProviderSettings": "Plus de paramètres Provider",
+    "gtxFreeAPIUnavailable": "L'API Google Translate gratuite (GTX) est actuellement indisponible. Veuillez vérifier votre connexion réseau.",
+    "translategemmaUnavailable": "Nœud TranslateGemma indisponible. Veuillez vérifier que le serveur local (LM Studio / llama.cpp / Ollama) est en cours d'exécution et que l'URL est correcte."
   },
-  "json": {
-    "title": "JSONTranslator | Traducteur i18n avec JSONPath",
-    "description": "Traduire des fichiers i18n à la main ? Utilisez DeepSeek pour automatiser la localisation JSON. Supporte JSONPath et clés. Gratuit et sécurisé.",
-    "clientTitle": "Traduction JSON Multilingue",
+  "JSON": {
     "clientDescription": "Outil de traduction JSON pour développeurs. Supporte la correspondance JSONPath et le mappage de clés pour une internationalisation rapide.",
     "jsonPaths": "Chemins JSON",
     "copyNode": "Copier nœud",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "Avec un nom de nœud, seuls les enfants de premier niveau correspondent",
     "keyMappingTooltip": "Basculer mode : Clé originale (A→A) vs Mappage (A→B)",
     "toggleKeyMapping": "Passer en mode Mappage",
-    "toggleKeyOriginal": "Passer en mode Clé originale",
-    "faq1q": "Quels moteurs de traduction et tailles de fichiers ce JSON supporte-t-il ?",
-    "faq1a": "Compatible avec 15+ moteurs dont Google (gratuit), DeepSeek, DeepL, Azure, OpenAI et Qwen-MT. Gère les fichiers JSON de toute taille avec cache de traduction pour des mises à jour incrémentales.",
-    "faq2q": "Les clés et la structure JSON sont-elles préservées après traduction ?",
-    "faq2a": "Oui. L'outil ne traduit que les valeurs — clés, hiérarchie et tableaux sont intégralement conservés. Les fichiers traduits fonctionnent directement dans React, Vue et autres frameworks i18n.",
-    "faq3q": "Peut-on traduire un JSON en plusieurs langues à la fois ?",
-    "faq3a": "Activez le mode multilingue pour sélectionner plusieurs langues cibles et générer en lot des fichiers comme en.json, ja.json, ko.json, ce qui réduit considérablement le temps d'internationalisation."
+    "toggleKeyOriginal": "Passer en mode Clé originale"
   },
   "TranslationSettings": {
     "docs": "Docs",
@@ -204,7 +210,7 @@
     "presetUpdate": "Enregistrer dans le préréglage actuel",
     "presetUpdated": "Enregistré dans le préréglage actuel",
     "presetDeleteConfirm": "Supprimer ce préréglage ?",
-    "presetEmptyHint": "No presets yet — edit and click Save",
+    "presetEmptyHint": "Aucun préréglage — modifiez et cliquez sur Enregistrer",
     "qwenMtDomains": "Invites de domaine (en anglais uniquement)",
     "sendSystemPrompt": "Envoyer le prompt system",
     "sendSystemPromptExtra": "À désactiver uniquement quand le chat template rejette le rôle system — erreur typique \"Conversations must start with a user prompt\" (par ex. famille Gemma).",
@@ -217,57 +223,47 @@
     "callParamsGroup": "Paramètres d'appel"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "Traducteur Sous-titres",
-      "description": "Traduction par lot SRT, ASS, VTT, LRC. 50+ langues."
-    },
     "jsonTranslate": {
       "title": "Traducteur JSON i18n",
-      "description": "Outil de traduction JSON multilingue efficace"
-    },
-    "mdTranslator": {
-      "title": "Traducteur Markdown",
-      "description": "Traduction Markdown par lot, format et code préservés"
-    },
-    "textSplitter": {
-      "title": "Découpeur de Texte",
-      "description": "Découpe intelligente de texte long pour IA et réseaux sociaux"
-    },
-    "jsonValueExtractor": {
-      "title": "Extracteur Valeur JSON",
-      "description": "Extraire valeurs JSON par lot, sortie formatée"
-    },
-    "jsonNodeEdit": {
-      "title": "Édition JSON par Lot",
-      "description": "Éditer nœuds JSON par lot, préfixe/suffixe/remplacer"
-    },
-    "jsonValueTransformer": {
-      "title": "Mappeur Valeur JSON",
-      "description": "Mappage et migration de valeurs avec JSONPath"
-    },
-    "jsonValueSwapper": {
-      "title": "Échangeur Valeur JSON",
-      "description": "Échanger valeurs de deux champs en un clic"
-    },
-    "jsonNodeInserter": {
-      "title": "Inséreur Nœud JSON",
-      "description": "Insérer nouveaux nœuds à position spécifiée par lot"
-    },
-    "jsonSortClassify": {
-      "title": "Tri & Classification JSON",
-      "description": "Trier et grouper tableaux, règles personnalisées"
-    },
-    "jsonMatchUpdate": {
-      "title": "Mise à jour Match JSON",
-      "description": "Mise à jour par lot basée sur correspondance de champs"
-    },
-    "dataParserFlare": {
-      "title": "Convertisseur Flare",
-      "description": "Conversion favoris navigateur et format Flare"
-    },
-    "dataParserImgPrompt": {
-      "title": "Générateur Données IMGPrompt",
-      "description": "Générer données JSON IMGPrompt par lot"
+      "description": "Outil de traduction JSON multilingue efficace",
+      "metaTitle": "Traducteur JSON | i18n traduction par lots avec JSONPath",
+      "metaDescription": "Traduire des fichiers i18n à la main ? Utilisez DeepSeek pour automatiser la localisation JSON. Supporte JSONPath et clés. Gratuit et sécurisé.",
+      "faq": [
+        {
+          "q": "Quels moteurs de traduction et tailles de fichiers ce JSON supporte-t-il ?",
+          "a": "Compatible avec 15+ moteurs dont Google (gratuit), DeepSeek, DeepL, Azure, OpenAI et Qwen-MT. Gère les fichiers JSON de toute taille avec cache de traduction pour des mises à jour incrémentales."
+        },
+        {
+          "q": "Les clés et la structure JSON sont-elles préservées après traduction ?",
+          "a": "Oui. L'outil ne traduit que les valeurs — clés, hiérarchie et tableaux sont intégralement conservés. Les fichiers traduits fonctionnent directement dans React, Vue et autres frameworks i18n."
+        },
+        {
+          "q": "Peut-on traduire un JSON en plusieurs langues à la fois ?",
+          "a": "Activez le mode multilingue pour sélectionner plusieurs langues cibles et générer en lot des fichiers comme en.json, ja.json, ko.json, ce qui réduit considérablement le temps d'internationalisation."
+        }
+      ],
+      "howto": [
+        {
+          "name": "Coller ou importer le JSON",
+          "text": "Cliquez sur la zone de saisie et collez votre JSON, ou importez un fichier .json par glisser-déposer."
+        },
+        {
+          "name": "Sélectionner les langues cibles",
+          "text": "Choisissez une ou plusieurs langues cibles. Activez le mode multilingue pour une traduction groupée."
+        },
+        {
+          "name": "Traduire et exporter",
+          "text": "Cliquez sur Traduire. Téléchargez les fichiers JSON traduits ou copiez les résultats."
+        }
+      ],
+      "features": [
+        "Compatible avec 15+ moteurs de traduction (Google, DeepSeek, DeepL, Azure, OpenAI, Qwen-MT)",
+        "Ciblage précis via JSONPath",
+        "Génération multilingue en lot (en.json, ja.json, ko.json, etc.)",
+        "Renommage de clés pendant la traduction (mode mapping)",
+        "Cache de traduction pour mises à jour incrémentales",
+        "Mode fusion i18n combine toutes les langues en un fichier"
+      ]
     }
   },
   "navigation": {
@@ -375,7 +371,7 @@
     "failure": "Échec copie, copiez manuellement"
   },
   "feedback": {
-    "feedback1": "Feedback & Suggestions",
+    "feedback1": "Commentaires & Suggestions",
     "feedback2": "Si vous rencontrez des problèmes ou avez des suggestions, dites-le moi ! Votre feedback influence le développement futur et nous aide à créer de meilleurs outils.",
     "feedback3": "Décrivez votre cas d'usage, problème ou idée. Je lis chaque message et répondrai/optimiserai dès que possible.",
     "reaction0": "J'aime",

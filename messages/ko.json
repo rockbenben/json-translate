@@ -39,8 +39,7 @@
     "multiLanguageModeTooltip": "동시에 여러 언어로 번역하여 각각 독립된 파일로 저장",
     "translate": "번역 시작",
     "totalLanguages": "목표 언어 수:",
-    "resetUpload": "지우기",
-    "resetUploadTooltip": "현재 입력 내용 및 업로드된 파일 지우기",
+    "resetUploadTooltip": "현재 입력 내용과 업로드된 파일 지우기",
     "resetUploadSuccess": "지워짐",
     "extractText": "텍스트 추출",
     "translationResult": "번역 결과",
@@ -94,8 +93,8 @@
     "settingsApplied": "설정이 적용되었습니다",
     "retryCount": "재시도 횟수",
     "retryCountTooltip": "번역 실패 시 재시도 횟수",
-    "retryTimeout": "시간 초과",
-    "retryTimeoutTooltip": "요청당 최대 대기 시간(초). LLM 사고 시간이 길어지므로 180초 이상 권장합니다.",
+    "requestTimeoutSec": "시간 초과",
+    "requestTimeoutSecTooltip": "요청당 최대 대기 시간(초). LLM 사고 시간이 길어지므로 180초 이상 권장합니다.",
     "customExportFilename": "내보내기 파일명 패턴",
     "customExportFilenameTooltip": "'{'name'}' = 원본 파일명, '{'lang'}' = 언어, '{'ext'}' = 확장자, '{'date'}' = 날짜, '{'time'}' = 시간",
     "partialFailureTitle": "{count}개 줄 번역 실패",
@@ -112,12 +111,25 @@
     "apiStatusConnected": "✓ 연결됨",
     "apiStatusFailed": "연결 실패",
     "testConnection": "연결 테스트",
-    "moreProviderSettings": "더 많은 Provider 설정"
+    "moreProviderSettings": "더 많은 Provider 설정",
+    "format": "포맷",
+    "formatTooltip": "포맷: 빈 줄 및 앞뒤 공백 제거",
+    "resultToSource": "결과 ➔ 원문",
+    "resultToSourceTooltip": "결과 텍스트를 입력란에 덮어씁니다",
+    "readOnlyMode": "읽기 전용 모드",
+    "readOnlyModeTooltip": "텍스트가 너무 길어 페이지 성능을 위해 자동으로 읽기 전용 모드로 전환되었습니다",
+    "clearInputTooltip": "입력 내용 및 업로드된 파일 지우기",
+    "fileExported": "파일이 내보내졌습니다: {fileName}",
+    "exportSuccess": "내보내기 성공: {fileName}",
+    "batchDownloaded": "처리 완료, 파일이 자동으로 다운로드되었습니다",
+    "sourceTextPlaceholder": "처리할 텍스트를 입력하거나 붙여넣으세요...",
+    "smartLineBreak": "스마트 줄바꿈",
+    "replaceText": "텍스트 치환",
+    "generateJson": "JSON 생성",
+    "gtxFreeAPIUnavailable": "GTX Free API를 현재 사용할 수 없습니다. 네트워크 연결을 확인하세요.",
+    "translategemmaUnavailable": "TranslateGemma 노드를 사용할 수 없습니다. 로컬 서버(LM Studio / llama.cpp / Ollama)가 실행 중이고 URL이 올바른지 확인하세요."
   },
-  "json": {
-    "title": "JSON Translator | JSONPath 지원 i18n 번역 도구",
-    "description": "JSON 번역이 고민이신가요? JSONPath 매칭 및 키 매핑을 지원하는 AI 도구로 프로젝트 국제화를 쉽게 해결하세요. DeepSeek 지원, 완전 무료 오픈 소스!",
-    "clientTitle": "JSON 다국어 번역",
+  "JSON": {
     "clientDescription": "개발자를 위한 JSON 번역 도구. JSONPath 정밀 매칭과 키 매핑을 지원하여 프로젝트 국제화를 빠르게 실현합니다.",
     "jsonPaths": "JSON 경로",
     "copyNode": "노드 복사",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "노드 이름 사용 시 1단계 자식 노드만 매칭",
     "keyMappingTooltip": "번역 모드 전환: 원본 키 모드는 동일한 키 이름 사용(A→A), 매핑 모드는 키 이름 변환 가능(A→B)",
     "toggleKeyMapping": "매핑 모드로 전환",
-    "toggleKeyOriginal": "원본 키 모드로 전환",
-    "faq1q": "이 JSON 번역 도구는 어떤 엔진과 파일 크기를 지원합니까?",
-    "faq1a": "Google 무료, DeepSeek, DeepL, Azure, OpenAI, Qwen-MT 등 15개 이상의 엔진을 지원합니다. 크기 제한 없는 JSON 파일을 처리하며, 번역 캐시로 빌드 간 증분 업데이트를 지원합니다.",
-    "faq2q": "번역 후 JSON 키와 중첩 구조가 깨지나요?",
-    "faq2a": "아닙니다. 도구는 값만 번역하며 키 이름, 중첩 구조, 배열 구조가 모두 보존됩니다. 번역된 파일은 React, Vue 등의 i18n 프레임워크에서 바로 사용할 수 있습니다.",
-    "faq3q": "JSON을 한 번에 여러 언어로 번역할 수 있나요?",
-    "faq3a": "다국어 모드를 활성화하면 여러 대상 언어를 선택하여 en.json, ja.json, ko.json 등을 일괄 생성할 수 있어 국제화 작업 시간을 크게 절약할 수 있습니다."
+    "toggleKeyOriginal": "원본 키 모드로 전환"
   },
   "TranslationSettings": {
     "docs": "문서",
@@ -204,7 +210,7 @@
     "presetUpdate": "현재 프리셋에 저장",
     "presetUpdated": "현재 프리셋에 저장됨",
     "presetDeleteConfirm": "이 프리셋을 삭제하시겠습니까?",
-    "presetEmptyHint": "No presets yet — edit and click Save",
+    "presetEmptyHint": "프리셋이 없습니다 — 편집 후 저장을 클릭하세요",
     "qwenMtDomains": "도메인 프롬프트(영어로만 제공)",
     "sendSystemPrompt": "system 프롬프트 전송",
     "sendSystemPromptExtra": "chat template이 system 역할을 거부할 때만 끄세요 — 전형적인 오류 \"Conversations must start with a user prompt\" (예: Gemma 계열).",
@@ -217,57 +223,47 @@
     "callParamsGroup": "호출 매개변수"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "자막 번역기",
-      "description": "SRT, ASS, VTT, LRC 자막 일괄 번역, 50개 이상 언어 지원"
-    },
     "jsonTranslate": {
       "title": "i18n JSON 번역",
-      "description": "효율적인 다국어 JSON 번역 도구"
-    },
-    "mdTranslator": {
-      "title": "Markdown 번역",
-      "description": "Markdown 문서 일괄 번역, 서식 및 코드 유지"
-    },
-    "textSplitter": {
-      "title": "텍스트 분할",
-      "description": "장문 스마트 분할, AI 입력 및 SNS에 최적"
-    },
-    "jsonValueExtractor": {
-      "title": "JSON 값 추출",
-      "description": "JSON 필드 값 일괄 추출, 포맷 출력 지원"
-    },
-    "jsonNodeEdit": {
-      "title": "JSON 일괄 편집",
-      "description": "JSON 노드 값 일괄 편집, 접두사/접미사 및 치환 지원"
-    },
-    "jsonValueTransformer": {
-      "title": "JSON 키 값 매핑",
-      "description": "필드 값 매핑 및 마이그레이션, JSONPath 위치 지정 지원"
-    },
-    "jsonValueSwapper": {
-      "title": "JSON 키 값 교환",
-      "description": "두 필드의 값 원클릭 교환"
-    },
-    "jsonNodeInserter": {
-      "title": "JSON 노드 삽입",
-      "description": "지정 위치에 새 노드 일괄 삽입"
-    },
-    "jsonSortClassify": {
-      "title": "JSON 정렬 분류",
-      "description": "배열 정렬 및 그룹화, 사용자 정의 규칙 지원"
-    },
-    "jsonMatchUpdate": {
-      "title": "JSON 매칭 업데이트",
-      "description": "필드 매칭 기반 데이터 일괄 업데이트"
-    },
-    "dataParserFlare": {
-      "title": "Flare 북마크 변환",
-      "description": "브라우저 북마크와 Flare 형식 상호 변환"
-    },
-    "dataParserImgPrompt": {
-      "title": "IMGPrompt 데이터 생성",
-      "description": "IMGPrompt JSON 데이터 일괄 생성"
+      "description": "효율적인 다국어 JSON 번역 도구",
+      "metaTitle": "JSON 번역 - i18n 다국어 일괄 번역, JSONPath 지원",
+      "metaDescription": "JSON 번역이 고민이신가요? JSONPath 매칭 및 키 매핑을 지원하는 AI 도구로 프로젝트 국제화를 쉽게 해결하세요. DeepSeek 지원, 완전 무료 오픈 소스!",
+      "faq": [
+        {
+          "q": "이 JSON 번역 도구는 어떤 엔진과 파일 크기를 지원합니까?",
+          "a": "Google 무료, DeepSeek, DeepL, Azure, OpenAI, Qwen-MT 등 15개 이상의 엔진을 지원합니다. 크기 제한 없는 JSON 파일을 처리하며, 번역 캐시로 빌드 간 증분 업데이트를 지원합니다."
+        },
+        {
+          "q": "번역 후 JSON 키와 중첩 구조가 깨지나요?",
+          "a": "아닙니다. 도구는 값만 번역하며 키 이름, 중첩 구조, 배열 구조가 모두 보존됩니다. 번역된 파일은 React, Vue 등의 i18n 프레임워크에서 바로 사용할 수 있습니다."
+        },
+        {
+          "q": "JSON을 한 번에 여러 언어로 번역할 수 있나요?",
+          "a": "다국어 모드를 활성화하면 여러 대상 언어를 선택하여 en.json, ja.json, ko.json 등을 일괄 생성할 수 있어 국제화 작업 시간을 크게 절약할 수 있습니다."
+        }
+      ],
+      "howto": [
+        {
+          "name": "JSON 붙여넣기 또는 업로드",
+          "text": "입력 영역을 클릭하여 JSON을 붙여넣거나 .json 파일을 드래그 앤 드롭으로 업로드합니다."
+        },
+        {
+          "name": "대상 언어 선택",
+          "text": "드롭다운에서 하나 이상의 대상 언어를 선택합니다. 다국어 모드로 일괄 번역 가능."
+        },
+        {
+          "name": "번역 및 내보내기",
+          "text": "번역 버튼을 클릭. 완료되면 번역된 JSON 파일을 다운로드하거나 결과를 복사합니다."
+        }
+      ],
+      "features": [
+        "15개 이상의 번역 엔진 지원 (Google, DeepSeek, DeepL, Azure, OpenAI, Qwen-MT)",
+        "JSONPath 매칭을 통한 정확한 키 타겟팅",
+        "다국어 일괄 생성 (en.json, ja.json, ko.json 등)",
+        "번역 중 키 이름 변경 (키 매핑 모드)",
+        "증분 업데이트를 위한 번역 캐시",
+        "i18n 병합 모드로 모든 언어를 하나의 파일로"
+      ]
     }
   },
   "navigation": {

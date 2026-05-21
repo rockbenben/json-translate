@@ -39,7 +39,6 @@
     "multiLanguageModeTooltip": "Translate to multiple languages simultaneously, saved as separate files",
     "translate": "Translate",
     "totalLanguages": "Total Languages:",
-    "resetUpload": "Clear",
     "resetUploadTooltip": "Clear current input and uploaded files",
     "resetUploadSuccess": "Cleared",
     "extractText": "Extract Text",
@@ -49,6 +48,9 @@
     "exportFile": "Export",
     "exportAllFile": "Export All",
     "exportedFile": "Exported",
+    "fileExported": "File exported: {fileName}",
+    "exportSuccess": "Export successful: {fileName}",
+    "batchDownloaded": "Processing complete, file downloaded automatically",
     "extractedText": "Extracted Text",
     "translating": "Translating",
     "multiTranslating": "Translating, total target languages:",
@@ -62,6 +64,7 @@
     "llmUnavailable": "LLM node unavailable, please check configuration in 'API Settings'",
     "noFileUploaded": "Please upload a file to process first",
     "translationExported": "Translation complete, files exported",
+    "sourceTextPlaceholder": "Enter or paste text to process...",
     "noSourceText": "Please enter or paste text content",
     "textExtracted": "Text extracted,",
     "sourceArea": "Input Area",
@@ -71,6 +74,16 @@
     "updateCount": "Updated entries",
     "startProcess": "Start Processing",
     "result": "Result",
+    "format": "Format",
+    "formatTooltip": "Format: remove blank lines and trim leading/trailing spaces",
+    "resultToSource": "Result ➔ Source",
+    "resultToSourceTooltip": "Overwrite input area with result text",
+    "readOnlyMode": "Read-Only Mode",
+    "readOnlyModeTooltip": "Text is too long; automatically switched to read-only mode to maintain page performance",
+    "clearInputTooltip": "Clear input content and uploaded files",
+    "smartLineBreak": "Smart Line Break",
+    "replaceText": "Replace Text",
+    "generateJson": "Generate JSON",
     "multiValueHint": "Separate multiple values with spaces",
     "exportSettingTooltip": "Export configuration to file",
     "importSettingTooltip": "Import configuration from file",
@@ -94,8 +107,8 @@
     "settingsApplied": "Settings applied",
     "retryCount": "Retry Count",
     "retryCountTooltip": "Number of retry attempts when translation fails",
-    "retryTimeout": "Timeout",
-    "retryTimeoutTooltip": "Maximum wait per request (seconds). LLM thinking takes longer; 180s or more recommended.",
+    "requestTimeoutSec": "Timeout",
+    "requestTimeoutSecTooltip": "Maximum wait per request (seconds). LLM thinking takes longer; 180s or more recommended.",
     "customExportFilename": "Export Filename Pattern",
     "customExportFilenameTooltip": "'{'name'}' = original filename, '{'lang'}' = language, '{'ext'}' = extension, '{'date'}' = date, '{'time'}' = time",
     "partialFailureTitle": "{count} line(s) failed",
@@ -112,12 +125,11 @@
     "apiStatusConnected": "✓ Connected",
     "apiStatusFailed": "Connection Failed",
     "testConnection": "Test Connection",
-    "moreProviderSettings": "More Provider Settings"
+    "moreProviderSettings": "More Provider Settings",
+    "gtxFreeAPIUnavailable": "The free Google Translate API (GTX) is currently unavailable. Please check your network connection.",
+    "translategemmaUnavailable": "TranslateGemma node unavailable. Please verify the local server (LM Studio / llama.cpp / Ollama) is running and the URL is correct."
   },
-  "json": {
-    "title": "JSON Translator | i18n Localization with JSONPath Support",
-    "description": "Struggling with JSON translation? Use our AI-powered tool with JSONPath matching & key mapping. Perfect for i18n. Supports DeepSeek/Google. Free & open source!",
-    "clientTitle": "JSON Multi-language Translation",
+  "JSON": {
     "clientDescription": "JSON translation tool for developers. Supports JSONPath matching and key mapping for fast project internationalization.",
     "jsonPaths": "JSON Paths",
     "copyNode": "Copy Node",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "When using node name, matches only first-level children",
     "keyMappingTooltip": "Toggle Mode: Original Key (A→A) vs Mapping (A→B)",
     "toggleKeyMapping": "Switch to Mapping Mode",
-    "toggleKeyOriginal": "Switch to Original Key Mode",
-    "faq1q": "Which translation engines and file sizes does this JSON tool support?",
-    "faq1a": "Supports 15+ engines including Google (free), DeepSeek, DeepL, Azure, OpenAI, and Qwen-MT. Handles JSON files of any size with translation cache for incremental updates across builds.",
-    "faq2q": "Will JSON keys and nesting structure break after translation?",
-    "faq2a": "No. The tool only translates values — keys, nesting hierarchy, and array structures are fully preserved. Translated files work directly in React, Vue, and other frontend i18n frameworks.",
-    "faq3q": "How do I translate JSON into multiple languages at once?",
-    "faq3a": "Enable Multi-Language Mode to select multiple target languages and batch-generate files like en.json, ja.json, ko.json in one operation, saving significant internationalization time."
+    "toggleKeyOriginal": "Switch to Original Key Mode"
   },
   "TranslationSettings": {
     "docs": "Docs",
@@ -217,57 +223,47 @@
     "callParamsGroup": "Call Parameters"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "Subtitle Translator",
-      "description": "Batch translate SRT, ASS, VTT, LRC subtitles. 50+ languages."
-    },
     "jsonTranslate": {
-      "title": "i18n JSON Translator",
-      "description": "Efficient multi-language JSON translation tool"
-    },
-    "mdTranslator": {
-      "title": "Markdown Translator",
-      "description": "Batch translate Markdown, preserving format and code"
-    },
-    "textSplitter": {
-      "title": "Text Splitter",
-      "description": "Smart long text splitter for AI and social media"
-    },
-    "jsonValueExtractor": {
-      "title": "JSON Value Extractor",
-      "description": "Batch extract JSON fields with formatting"
-    },
-    "jsonNodeEdit": {
-      "title": "JSON Batch Edit",
-      "description": "Batch edit JSON nodes with prefix/suffix/replace"
-    },
-    "jsonValueTransformer": {
-      "title": "JSON Value Mapper",
-      "description": "Field value mapping and migration with JSONPath"
-    },
-    "jsonValueSwapper": {
-      "title": "JSON Value Swapper",
-      "description": "One-click swap of two field values"
-    },
-    "jsonNodeInserter": {
-      "title": "JSON Node Inserter",
-      "description": "Batch insert new nodes at specified position"
-    },
-    "jsonSortClassify": {
-      "title": "JSON Sort & Classify",
-      "description": "Sort and group arrays with custom rules"
-    },
-    "jsonMatchUpdate": {
-      "title": "JSON Match Update",
-      "description": "Batch update data by matching fields"
-    },
-    "dataParserFlare": {
-      "title": "Flare Bookmark Converter",
-      "description": "Convert bookmarks to/from Flare format"
-    },
-    "dataParserImgPrompt": {
-      "title": "IMGPrompt Data Gen",
-      "description": "Batch generate IMGPrompt JSON data"
+      "title": "JSON Multi-Language Translator",
+      "description": "Efficient multi-language JSON translation tool",
+      "metaTitle": "JSON Translator | i18n Localization with JSONPath Support",
+      "metaDescription": "Struggling with JSON translation? Use our AI-powered tool with JSONPath matching & key mapping. Perfect for i18n. Supports DeepSeek/Google. Free & open source!",
+      "faq": [
+        {
+          "q": "Which translation engines and file sizes does this JSON tool support?",
+          "a": "Supports 15+ engines including Google (free), DeepSeek, DeepL, Azure, OpenAI, and Qwen-MT. Handles JSON files of any size with translation cache for incremental updates across builds."
+        },
+        {
+          "q": "Will JSON keys and nesting structure break after translation?",
+          "a": "No. The tool only translates values — keys, nesting hierarchy, and array structures are fully preserved. Translated files work directly in React, Vue, and other frontend i18n frameworks."
+        },
+        {
+          "q": "How do I translate JSON into multiple languages at once?",
+          "a": "Enable Multi-Language Mode to select multiple target languages and batch-generate files like en.json, ja.json, ko.json in one operation, saving significant internationalization time."
+        }
+      ],
+      "howto": [
+        {
+          "name": "Paste or upload JSON",
+          "text": "Click the input area and paste your JSON content, or upload a .json file via drag-and-drop."
+        },
+        {
+          "name": "Select target language(s)",
+          "text": "Choose one or more target languages from the dropdown. Enable Multi-Language Mode for batch translation."
+        },
+        {
+          "name": "Translate and export",
+          "text": "Click Translate. Once complete, download the translated JSON files or copy individual results."
+        }
+      ],
+      "features": [
+        "Supports 15+ translation engines (Google, DeepSeek, DeepL, Azure, OpenAI, Qwen-MT)",
+        "JSONPath matching for precise key targeting",
+        "Multi-language batch generation (en.json, ja.json, ko.json, etc.)",
+        "Key mapping mode for renaming during translation",
+        "Translation cache for incremental updates",
+        "i18n merge mode combines all languages into one file"
+      ]
     }
   },
   "navigation": {

@@ -39,7 +39,6 @@
     "multiLanguageModeTooltip": "Gleichzeitig in mehrere Sprachen übersetzen, als separate Dateien gespeichert",
     "translate": "Übersetzen",
     "totalLanguages": "Anzahl Zielsprachen:",
-    "resetUpload": "Leeren",
     "resetUploadTooltip": "Aktuelle Eingabe und hochgeladene Dateien löschen",
     "resetUploadSuccess": "Geleert",
     "extractText": "Text extrahieren",
@@ -49,6 +48,9 @@
     "exportFile": "Exportieren",
     "exportAllFile": "Alle exportieren",
     "exportedFile": "Exportiert",
+    "fileExported": "Datei exportiert: {fileName}",
+    "exportSuccess": "Export erfolgreich: {fileName}",
+    "batchDownloaded": "Verarbeitung abgeschlossen, Datei wurde automatisch heruntergeladen",
     "extractedText": "Extrahierter Text",
     "translating": "Übersetze...",
     "multiTranslating": "Übersetze, Zielsprachen gesamt:",
@@ -62,6 +64,7 @@
     "llmUnavailable": "LLM-Knoten vorübergehend nicht verfügbar, bitte Konfiguration in 'API-Einstellungen' prüfen",
     "noFileUploaded": "Bitte laden Sie zuerst eine Datei hoch",
     "translationExported": "Übersetzung abgeschlossen, Dateien exportiert",
+    "sourceTextPlaceholder": "Text zum Verarbeiten eingeben oder einfügen...",
     "noSourceText": "Bitte Text eingeben oder einfügen",
     "textExtracted": "Text extrahiert, ",
     "sourceArea": "Eingabebereich",
@@ -71,6 +74,16 @@
     "updateCount": "Aktualisierte Einträge",
     "startProcess": "Verarbeitung starten",
     "result": "Ergebnis",
+    "format": "Formatieren",
+    "formatTooltip": "Formatieren: Leerzeilen entfernen und führende/nachfolgende Leerzeichen bereinigen",
+    "resultToSource": "Ergebnis ➔ Quelle",
+    "resultToSourceTooltip": "Eingabefeld mit dem Ergebnistext überschreiben",
+    "readOnlyMode": "Nur-Lese-Modus",
+    "readOnlyModeTooltip": "Text zu lang; automatisch in den Nur-Lese-Modus gewechselt, um die Seitenleistung zu erhalten",
+    "clearInputTooltip": "Eingabe und hochgeladene Dateien löschen",
+    "smartLineBreak": "Intelligenter Zeilenumbruch",
+    "replaceText": "Text ersetzen",
+    "generateJson": "JSON generieren",
     "multiValueHint": "Mehrere Werte durch Leerzeichen trennen",
     "exportSettingTooltip": "Konfiguration in Datei exportieren",
     "importSettingTooltip": "Konfiguration aus Datei importieren",
@@ -94,8 +107,8 @@
     "settingsApplied": "Einstellungen angewendet",
     "retryCount": "Wiederholungsversuche",
     "retryCountTooltip": "Anzahl der Wiederholungen bei Übersetzungsfehlern",
-    "retryTimeout": "Zeitüberschreitung",
-    "retryTimeoutTooltip": "Maximale Wartezeit pro Anfrage (in Sekunden). Das Denken von LLMs dauert länger; 180 Sekunden oder mehr werden empfohlen.",
+    "requestTimeoutSec": "Zeitüberschreitung",
+    "requestTimeoutSecTooltip": "Maximale Wartezeit pro Anfrage (in Sekunden). Das Denken von LLMs dauert länger; 180 Sekunden oder mehr werden empfohlen.",
     "customExportFilename": "Dateinamenmuster",
     "customExportFilenameTooltip": "'{'name'}' = Originalname, '{'lang'}' = Sprache, '{'ext'}' = Endung, '{'date'}' = Datum, '{'time'}' = Zeit",
     "partialFailureTitle": "{count} Zeile(n) fehlgeschlagen",
@@ -112,12 +125,11 @@
     "apiStatusConnected": "✓ Verbunden",
     "apiStatusFailed": "Verbindung fehlgeschlagen",
     "testConnection": "Verbindung testen",
-    "moreProviderSettings": "Weitere Provider-Einstellungen"
+    "moreProviderSettings": "Weitere Provider-Einstellungen",
+    "gtxFreeAPIUnavailable": "Die kostenlose Google Translate API (GTX) ist derzeit nicht verfügbar. Bitte überprüfen Sie Ihre Netzwerkverbindung.",
+    "translategemmaUnavailable": "TranslateGemma-Knoten nicht verfügbar. Bitte stellen Sie sicher, dass der lokale Server (LM Studio / llama.cpp / Ollama) läuft und die URL korrekt ist."
   },
-  "json": {
-    "title": "JSONTranslator | i18n-Übersetzer mit JSONPath",
-    "description": "JSON manuell übersetzen? Nutze DeepSeek & Co. für i18n, Schlüssel-Mapping & JSONPath. Automatisch, sicher und kostenlos für Entwickler.",
-    "clientTitle": "JSON Mehrsprachen-Übersetzung",
+  "JSON": {
     "clientDescription": "JSON-Übersetzungstool für Entwickler. Unterstützt JSONPath-Matching und Schlüssel-Mapping für schnelle Projekt-Internationalisierung.",
     "jsonPaths": "JSON-Pfade",
     "copyNode": "Knoten kopieren",
@@ -147,13 +159,7 @@
     "nodeToTranslateExtra": "Bei Verwendung von Knotennamen werden nur direkte Unterknoten abgeglichen",
     "keyMappingTooltip": "Übersetzungsmodus umschalten: Originalschlüssel-Modus verwendet gleiche Schlüsselnamen (A→A), Mapping-Modus erlaubt Schlüsselnamen-Konvertierung (A→B)",
     "toggleKeyMapping": "In Mapping-Modus wechseln",
-    "toggleKeyOriginal": "In Originalschlüssel-Modus wechseln",
-    "faq1q": "Welche Übersetzungs-Engines und Dateigrößen unterstützt dieses JSON-Tool?",
-    "faq1a": "Unterstützt 15+ Engines einschließlich Google (kostenlos), DeepSeek, DeepL, Azure, OpenAI und Qwen-MT. Verarbeitet JSON-Dateien jeder Größe mit Übersetzungs-Cache für inkrementelle Updates.",
-    "faq2q": "Bleiben JSON-Schlüssel und Verschachtelung nach der Übersetzung erhalten?",
-    "faq2a": "Ja. Das Tool übersetzt nur Werte — Schlüssel, Verschachtelungshierarchie und Array-Strukturen bleiben vollständig erhalten. Übersetzte Dateien funktionieren direkt in React, Vue und anderen i18n-Frameworks.",
-    "faq3q": "Kann ich JSON gleichzeitig in mehrere Sprachen übersetzen?",
-    "faq3a": "Aktivieren Sie den Mehrsprachenmodus, um mehrere Zielsprachen auszuwählen und Dateien wie en.json, ja.json, ko.json in einem Vorgang zu generieren."
+    "toggleKeyOriginal": "In Originalschlüssel-Modus wechseln"
   },
   "TranslationSettings": {
     "docs": "Dokumentation",
@@ -204,7 +210,7 @@
     "presetUpdate": "In aktueller Voreinstellung speichern",
     "presetUpdated": "In aktueller Voreinstellung gespeichert",
     "presetDeleteConfirm": "Diese Voreinstellung löschen?",
-    "presetEmptyHint": "No presets yet — edit and click Save",
+    "presetEmptyHint": "Noch keine Voreinstellungen — bearbeiten und Speichern klicken",
     "qwenMtDomains": "Domänen-Prompts (nur Englisch)",
     "sendSystemPrompt": "System-Prompt senden",
     "sendSystemPromptExtra": "Nur deaktivieren, wenn die Chat-Vorlage die System-Rolle ablehnt — typischer Fehler \"Conversations must start with a user prompt\" (z. B. Gemma-Familie).",
@@ -217,57 +223,47 @@
     "callParamsGroup": "Aufrufparameter"
   },
   "tools": {
-    "subtitleTranslator": {
-      "title": "Untertitel-Übersetzer",
-      "description": "Batch-Übersetzung für SRT, ASS, VTT, LRC. 50+ Sprachen."
-    },
     "jsonTranslate": {
       "title": "i18n JSON-Übersetzer",
-      "description": "Effizientes mehrsprachiges JSON-Übersetzungstool"
-    },
-    "mdTranslator": {
-      "title": "Markdown-Übersetzer",
-      "description": "Markdown-Batch-Übersetzung, Format und Code behalten"
-    },
-    "textSplitter": {
-      "title": "Text-Splitter",
-      "description": "Smarte Langtext-Teilung für KI und Social Media"
-    },
-    "jsonValueExtractor": {
-      "title": "JSON Wert-Extraktor",
-      "description": "JSON-Werte im Batch extrahieren, formatierte Ausgabe"
-    },
-    "jsonNodeEdit": {
-      "title": "JSON Batch Edit",
-      "description": "JSON-Knoten im Batch bearbeiten, Präfix/Suffix/Ersetzen"
-    },
-    "jsonValueTransformer": {
-      "title": "JSON Wert-Mapper",
-      "description": "Feldwert-Mapping und Migration mit JSONPath"
-    },
-    "jsonValueSwapper": {
-      "title": "JSON Wert-Tauscher",
-      "description": "Werte zweier Felder per Klick tauschen"
-    },
-    "jsonNodeInserter": {
-      "title": "JSON Knoten-Inserter",
-      "description": "Neue Knoten an Position im Batch einfügen"
-    },
-    "jsonSortClassify": {
-      "title": "JSON Sort & Classify",
-      "description": "Arrays sortieren und gruppieren, benutzerdefinierte Regeln"
-    },
-    "jsonMatchUpdate": {
-      "title": "JSON Match Update",
-      "description": "Daten basierend auf Feldabgleich im Batch aktualisieren"
-    },
-    "dataParserFlare": {
-      "title": "Flare Lesezeichen-Konverter",
-      "description": "Browser-Lesezeichen und Flare-Format konvertieren"
-    },
-    "dataParserImgPrompt": {
-      "title": "IMGPrompt Datengenerator",
-      "description": "IMGPrompt JSON-Daten im Batch generieren"
+      "description": "Effizientes mehrsprachiges JSON-Übersetzungstool",
+      "metaTitle": "JSON-Übersetzer | i18n Stapelübersetzung mit JSONPath-Targeting",
+      "metaDescription": "JSON manuell übersetzen? Nutze DeepSeek & Co. für i18n, Schlüssel-Mapping & JSONPath. Automatisch, sicher und kostenlos für Entwickler.",
+      "faq": [
+        {
+          "q": "Welche Übersetzungs-Engines und Dateigrößen unterstützt dieses JSON-Tool?",
+          "a": "Unterstützt 15+ Engines einschließlich Google (kostenlos), DeepSeek, DeepL, Azure, OpenAI und Qwen-MT. Verarbeitet JSON-Dateien jeder Größe mit Übersetzungs-Cache für inkrementelle Updates."
+        },
+        {
+          "q": "Bleiben JSON-Schlüssel und Verschachtelung nach der Übersetzung erhalten?",
+          "a": "Ja. Das Tool übersetzt nur Werte — Schlüssel, Verschachtelungshierarchie und Array-Strukturen bleiben vollständig erhalten. Übersetzte Dateien funktionieren direkt in React, Vue und anderen i18n-Frameworks."
+        },
+        {
+          "q": "Kann ich JSON gleichzeitig in mehrere Sprachen übersetzen?",
+          "a": "Aktivieren Sie den Mehrsprachenmodus, um mehrere Zielsprachen auszuwählen und Dateien wie en.json, ja.json, ko.json in einem Vorgang zu generieren."
+        }
+      ],
+      "howto": [
+        {
+          "name": "JSON einfügen oder hochladen",
+          "text": "Klicken Sie in den Eingabebereich und fügen Sie JSON ein oder laden Sie eine .json-Datei per Drag-and-Drop hoch."
+        },
+        {
+          "name": "Zielsprache(n) wählen",
+          "text": "Wählen Sie eine oder mehrere Zielsprachen. Aktivieren Sie den Mehrsprachenmodus für Stapelübersetzung."
+        },
+        {
+          "name": "Übersetzen und exportieren",
+          "text": "Klicken Sie auf Übersetzen. Laden Sie die übersetzten JSON-Dateien herunter oder kopieren Sie Ergebnisse."
+        }
+      ],
+      "features": [
+        "Unterstützt 15+ Übersetzungs-Engines (Google, DeepSeek, DeepL, Azure, OpenAI, Qwen-MT)",
+        "Präzises JSONPath-Matching",
+        "Mehrsprachige Stapelerzeugung (en.json, ja.json, ko.json)",
+        "Schlüsselumbenennung beim Übersetzen (Mapping-Modus)",
+        "Übersetzungs-Cache für inkrementelle Updates",
+        "i18n-Merge-Modus vereint alle Sprachen in einer Datei"
+      ]
     }
   },
   "navigation": {
@@ -282,7 +278,7 @@
   "Metadata": {
     "title": "ToolsByAI | Kostenlose KI-Dev- & Übersetzungstools",
     "description": "20+ Open-Source-Tools: Untertitel-Übersetzung, i18n, JSON & Markdown. Mit DeepSeek & ChatGPT. Lokal, sicher & effizient für Entwickler.",
-    "homeTitle": "ToolsByAI Toolset",
+    "homeTitle": "ToolsByAI Werkzeugkasten",
     "homeDescription": "20+ Tools für Übersetzung, Text, JSON und Datenkonvertierung. Effizienzsteigerung für Entwickler und Creator.",
     "ogTitle": "ToolsByAI | Kostenlose KI-Dev- & Übersetzungstools",
     "ogDescription": "20+ Open-Source-Tools: Untertitel-Übersetzung, i18n, JSON & Markdown. Mit DeepSeek & ChatGPT. Lokal, sicher & effizient für Entwickler."
