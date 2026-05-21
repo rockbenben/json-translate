@@ -35,11 +35,7 @@ const uploadFileTypes = getFileTypePresetConfig("jsonText");
 
 type TranslateMode = "allKeys" | "nodeKeys" | "keyMapping" | "selectiveKey" | "i18nMode";
 
-interface JSONTranslatorProps {
-  onOpenApiSettings?: () => void;
-}
-
-const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
+const JSONTranslator = () => {
   const tJson = useTranslations("JSON");
   const t = useTranslations("common");
   const { sourceOptions } = useLanguageOptions();
@@ -66,7 +62,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
     userPrompt,
     multiLanguageMode,
     setMultiLanguageMode,
-    retryTranslate,
+    translateSingle,
     translatedText,
     setTranslatedText,
     translateFailedCount,
@@ -75,7 +71,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
     setIsTranslating,
     handleLanguageChange,
     handleSwapLanguages,
-    validateTranslate,
+    validate,
     retryCount,
     setRetryCount,
     requestTimeoutSec,
@@ -162,7 +158,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
             // 在多语言模式下，我们只翻译当前目标语言字段不存在的情况
             if (record[currentTargetLang] == null) {
               try {
-                const translatedText = await retryTranslate(sourceValue, cacheSuffix, {
+                const translatedText = await translateSingle(sourceValue, cacheSuffix, {
                   translationMethod,
                   targetLanguage: currentTargetLang,
                   sourceLanguage,
@@ -212,7 +208,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
         limit(async () => {
           if (aborted) return;
           try {
-            const translatedText = await retryTranslate(sourceText, cacheSuffix, {
+            const translatedText = await translateSingle(sourceText, cacheSuffix, {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
@@ -325,7 +321,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
           if (aborted) return;
           try {
             const sourceValue = typeof node.value === "string" ? node.value : JSON.stringify(node.value);
-            const translatedText = await retryTranslate(sourceValue, cacheSuffix, {
+            const translatedText = await translateSingle(sourceValue, cacheSuffix, {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
@@ -407,7 +403,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
         return limit(async () => {
           if (aborted) return;
           try {
-            const translatedText = await retryTranslate(String(node.value), cacheSuffix, {
+            const translatedText = await translateSingle(String(node.value), cacheSuffix, {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
@@ -443,7 +439,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
     }
   };
 
-  const handleTranslate = async () => {
+  const runTranslation = async () => {
     setTranslatedText("");
     setTranslationResults({});
 
@@ -458,39 +454,38 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
       return;
     }
 
-    const isValid = await validateTranslate();
-    if (!isValid) {
-      return;
-    }
-
-    let originalJsonObject: JsonValue;
-    try {
-      originalJsonObject = preprocessJson(sourceText);
-    } catch {
-      message.error(tJson("invalidJson"));
-      return;
-    }
-
-    setSourceText(JSON.stringify(originalJsonObject, null, 2));
+    // validate 不再自管 isTranslating, 这里统一用 try/finally 兜底,
+    // progress modal 在 test ping → JSON 预处理 → 翻译循环之间保持连续可见。
     setIsTranslating(true);
     // Show non-zero progress immediately so users see the modal is alive while
     // the first LLM request is in-flight (DeepSeek etc. can take 10-30s per item).
     setProgressPercent(0.5);
 
-    // Determine target languages to translate to
-    const targetLanguagesToUse = multiLanguageMode ? targetLanguages : [targetLanguage];
-
-    if (multiLanguageMode && targetLanguagesToUse.length === 0) {
-      message.error(t("noTargetLanguage"));
-      setIsTranslating(false);
-      return;
-    }
-
     // For storing results from all languages
     const allResults: Record<string, string> = {};
 
-    // Sequential processing of each target language
     try {
+      const isValid = await validate();
+      if (!isValid) return;
+
+      let originalJsonObject: JsonValue;
+      try {
+        originalJsonObject = preprocessJson(sourceText);
+      } catch {
+        message.error(tJson("invalidJson"));
+        return;
+      }
+
+      setSourceText(JSON.stringify(originalJsonObject, null, 2));
+
+      // Determine target languages to translate to
+      const targetLanguagesToUse = multiLanguageMode ? targetLanguages : [targetLanguage];
+
+      if (multiLanguageMode && targetLanguagesToUse.length === 0) {
+        message.error(t("noTargetLanguage"));
+        return;
+      }
+
       if (translateMode === "i18nMode" && multiLanguageMode) {
         // For i18nMode + multiLanguageMode, process all languages in the same JSON object
         const jsonObject = JSON.parse(JSON.stringify(originalJsonObject));
@@ -709,7 +704,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
             <Divider />
 
             <Flex gap="small" wrap className="mt-auto pt-4">
-              <Button type="primary" size="large" onClick={handleTranslate} loading={isTranslating} icon={<GlobalOutlined spin={isTranslating} />} className="flex-1">
+              <Button type="primary" size="large" onClick={runTranslation} loading={isTranslating} icon={<GlobalOutlined spin={isTranslating} />} className="flex-1">
                 {multiLanguageMode ? `${t("translate")} | ${t("totalLanguages")}${targetLanguages.length || 0}` : t("translate")}
               </Button>
 
@@ -775,7 +770,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
               />
             </Form>
 
-            <ApiStatusBlock onOpenApiSettings={onOpenApiSettings} disabled={isTranslating} />
+            <ApiStatusBlock disabled={isTranslating} />
 
             <Collapse
               ghost
@@ -939,7 +934,7 @@ const JSONTranslator = ({ onOpenApiSettings }: JSONTranslatorProps) => {
       </Row>
 
       {/* Partial-failure panel: auto-retried once, still-failed lines kept originals */}
-      <TranslateFailurePanel count={translateFailedCount} lines={translateFailedLines} disabled={isTranslating} onRetry={handleTranslate} />
+      <TranslateFailurePanel count={translateFailedCount} lines={translateFailedLines} disabled={isTranslating} onRetry={runTranslation} />
 
       {/* Results Section */}
       {!directExport && (translatedText || (multiLanguageMode && Object.keys(translationResults).length > 0)) && (
