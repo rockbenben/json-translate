@@ -14,7 +14,7 @@ import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useTextStats } from "@/app/hooks/useTextStats";
 import { useExportFilename } from "@/app/hooks/useExportFilename";
 
-import { filterObjectPropertyMatches, preprocessJson, downloadFile, getErrorMessage, stripJsonWrapper, splitBySpaces, getFileTypePresetConfig } from "@/app/utils";
+import { filterObjectPropertyMatches, preprocessJson, downloadFile, getErrorMessage, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, splitBySpaces, getFileTypePresetConfig } from "@/app/utils";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
 import { useLanguageOptions } from "@/app/components/languages";
 import LanguageSelector from "@/app/components/LanguageSelector";
@@ -563,8 +563,11 @@ const JSONTranslator = () => {
             }
           } catch (error: unknown) {
             console.error(`Error translating to ${currentTargetLang}:`, error);
-            const errMsg = getErrorMessage(error);
-            message.error(`${errMsg} ${sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang}  ${t("translationError")}`, 60);
+            if (isCascadedAbort(error)) continue;
+            const friendly = isNetworkError(error) ? t("networkUnavailable") : isAbortError(error) ? t("translationTimeout") : null;
+            const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
+            const content = friendly ? `${friendly} (${langLabel})` : `${getErrorMessage(error)} ${langLabel} ${t("translationError")}`;
+            message.error(content, 60);
           }
         }
       }
@@ -584,8 +587,15 @@ const JSONTranslator = () => {
       }
     } catch (error: unknown) {
       console.error("Translation process error:", error);
-      const errMsg = getErrorMessage(error);
-      message.error(`${errMsg} ${t("translationError")}`, 60);
+      if (isCascadedAbort(error)) {
+        // Auth error already surfaced via the inner catch — silently exit.
+      } else if (isNetworkError(error)) {
+        message.error(t("networkUnavailable"), 60);
+      } else if (isAbortError(error)) {
+        message.error(t("translationTimeout"), 60);
+      } else {
+        message.error(`${getErrorMessage(error)} ${t("translationError")}`, 60);
+      }
     } finally {
       setIsTranslating(false);
     }
