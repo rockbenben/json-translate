@@ -479,9 +479,9 @@ const JSONTranslator = () => {
       setSourceText(JSON.stringify(originalJsonObject, null, 2));
 
       // Determine target languages to translate to
-      const targetLanguagesToUse = multiLanguageMode ? targetLanguages : [targetLanguage];
+      const targetLangs = multiLanguageMode ? targetLanguages : [targetLanguage];
 
-      if (multiLanguageMode && targetLanguagesToUse.length === 0) {
+      if (multiLanguageMode && targetLangs.length === 0) {
         message.error(t("noTargetLanguage"));
         return;
       }
@@ -491,7 +491,7 @@ const JSONTranslator = () => {
         const jsonObject = JSON.parse(JSON.stringify(originalJsonObject));
 
         // Process each target language sequentially but add to the same object
-        for (const currentTargetLang of targetLanguagesToUse) {
+        for (const currentTargetLang of targetLangs) {
           await handleI18nTranslation(jsonObject, currentTargetLang);
         }
 
@@ -523,7 +523,7 @@ const JSONTranslator = () => {
           message.success(`${t("exportedFile")}: ${downloadFileName}`);
         }
       } else {
-        for (const currentTargetLang of targetLanguagesToUse) {
+        for (const currentTargetLang of targetLangs) {
           try {
             const jsonObject = JSON.parse(JSON.stringify(originalJsonObject));
 
