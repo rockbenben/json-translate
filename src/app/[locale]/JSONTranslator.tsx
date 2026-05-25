@@ -65,8 +65,10 @@ const JSONTranslator = () => {
     translateSingle,
     translatedText,
     setTranslatedText,
-    translateFailedCount,
-    translateFailedLines,
+    failedCount,
+    failedLines,
+    failedLangs,
+    setFailedLangs,
     isTranslating,
     setIsTranslating,
     handleLanguageChange,
@@ -442,6 +444,9 @@ const JSONTranslator = () => {
   const runTranslation = async () => {
     setTranslatedText("");
     setTranslationResults({});
+    // Local runTranslation — reset lang-failure manually (hook's runTranslation
+    // isn't called from this path).
+    setFailedLangs([]);
 
     // Reset progress
     translatedCountRef.current = 0;
@@ -478,7 +483,6 @@ const JSONTranslator = () => {
 
       setSourceText(JSON.stringify(originalJsonObject, null, 2));
 
-      // Determine target languages to translate to
       const targetLangs = multiLanguageMode ? targetLanguages : [targetLanguage];
 
       if (multiLanguageMode && targetLangs.length === 0) {
@@ -564,6 +568,8 @@ const JSONTranslator = () => {
           } catch (error: unknown) {
             console.error(`Error translating to ${currentTargetLang}:`, error);
             if (isCascadedAbort(error)) continue;
+            // De-duped lang-failure aggregation. Shown in TranslateFailurePanel.
+            setFailedLangs((prev) => (prev.includes(currentTargetLang) ? prev : [...prev, currentTargetLang]));
             const friendly = isNetworkError(error) ? t("networkUnavailable") : isAbortError(error) ? t("translationTimeout") : null;
             const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
             const content = friendly ? `${friendly} (${langLabel})` : `${getErrorMessage(error)} ${langLabel} ${t("translationError")}`;
@@ -605,14 +611,10 @@ const JSONTranslator = () => {
     if (multiLanguageMode && Object.keys(translationResults).length > 0) {
       const exportedFiles = [];
       const languageCodes = Object.keys(translationResults);
-      // 使用 for...of 循环来正确处理异步操作
       for (const langCode of languageCodes) {
         try {
-          // 等待 Promise 解析为实际的文件名
           const fileName = await handleExportFile(langCode);
           exportedFiles.push(fileName);
-          // 添加短暂延迟，确保浏览器能处理完一个下载后再开始下一个
-          // await new Promise((resolve) => setTimeout(resolve, 100));
         } catch (error) {
           console.error(`${langCode} Export Failure:`, error);
         }
@@ -944,7 +946,7 @@ const JSONTranslator = () => {
       </Row>
 
       {/* Partial-failure panel: auto-retried once, still-failed lines kept originals */}
-      <TranslateFailurePanel count={translateFailedCount} lines={translateFailedLines} disabled={isTranslating} onRetry={runTranslation} />
+      <TranslateFailurePanel count={failedCount} lines={failedLines} failedLangs={failedLangs} disabled={isTranslating} onRetry={runTranslation} />
 
       {/* Results Section */}
       {!directExport && (translatedText || (multiLanguageMode && Object.keys(translationResults).length > 0)) && (
