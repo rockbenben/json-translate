@@ -11,11 +11,12 @@
 
 👉 **Try it online**: <https://tools.newzone.top/en/json-translate>
 
-![JSON Translate workflow demo](https://img.newzone.top/2023-12-18-16-09-04.gif?imageMogr2/format/webp "JSON Translate workflow")
+![JSON Translate workflow demo](./public/img/json-translate-en.webp "JSON Translate workflow")
 
 ## Key Features
 
 - **Schema-Preserving**: Translate only string values; structure, key order, and types stay intact.
+- **i18n Framework Ready**: Works directly with next-intl, i18next, vue-i18n, and react-intl files — nested objects, flat-key namespaces, and ICU placeholders (`{name}`, `{count, plural, ...}`, `{0}`) are kept verbatim.
 - **5 Translation Modes**: Global, JSONPath-targeted, specific keys, selective start node, and i18n aggregation.
 - **Mapped Translation**: Write results to different output keys (e.g. `name` → `name_zh`) without overwriting originals.
 - **Multi-Language Output**: Translate into multiple target languages in one pass; each language exports as its own file or aggregates inline.

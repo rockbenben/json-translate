@@ -11,11 +11,12 @@
 
 👉 **在线体验**：<https://tools.newzone.top/zh/json-translate>
 
-![JSON Translate 工作流演示](https://img.newzone.top/2023-12-18-16-09-04.gif?imageMogr2/format/webp "JSON Translate 工作流")
+![JSON Translate 工作流演示](./public/img/json-translate-zh.webp "JSON Translate 工作流")
 
 ## 核心特性
 
 - **保持 Schema**：仅翻译字符串值，结构、键序、类型完全不变。
+- **适配 i18n 框架**：可直接用于 next-intl、i18next、vue-i18n、react-intl 文件 —— 嵌套对象、扁平 key 命名空间、ICU 占位符（`{name}`、`{count, plural, ...}`、`{0}`）均原样保留。
 - **5 种翻译模式**：全局、JSONPath 精准、指定键名、选择性、i18n 聚合。
 - **映射翻译**：把结果写入新键（如 `name` → `name_zh`），不覆盖原字段。
 - **多语言输出**：一次翻译为多个目标语言，每个语言独立导出，或与 i18n 模式联用生成统一文件。
@@ -130,9 +131,9 @@ yarn build
 
 ## 文档与部署
 
-详细配置、API 设置和自托管说明，请参阅 **[官方文档](https://docs.newzone.top/zh/guide/translation/json-translate/)**。
+详细配置、API 设置和自托管说明，请参阅 **[官方文档](https://docs.newzone.top/guide/translation/json-translate/)**。
 
-**快速部署**：[部署指南](https://docs.newzone.top/zh/guide/translation/json-translate/deploy.html)
+**快速部署**：[部署指南](https://docs.newzone.top/guide/translation/json-translate/deploy.html)
 
 ## 参与贡献
 
