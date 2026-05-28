@@ -117,7 +117,7 @@
     "resultToSource": "Kết quả ➔ Nguồn",
     "resultToSourceTooltip": "Ghi đè văn bản kết quả vào ô nhập liệu",
     "readOnlyMode": "Chế độ chỉ đọc",
-    "readOnlyModeTooltip": "Văn bản quá dài, đã tự động chuyển sang chế độ chỉ đọc để đảm bảo hiệu suất trang",
+    "readOnlyModeTooltip": "Văn bản quá dài: trình soạn thảo tạm thời ở chế độ chỉ đọc và chỉ hiển thị bản xem trước một phần. Toàn bộ nội dung của bạn không bị ảnh hưởng — xử lý và xuất vẫn dùng toàn bộ văn bản.",
     "clearInputTooltip": "Xóa nội dung đã nhập và tệp đã tải lên",
     "fileExported": "Đã xuất tệp: {fileName}",
     "exportSuccess": "Xuất thành công: {fileName}",
@@ -143,7 +143,8 @@
     "langPresetIndian": "Tiểu lục địa Ấn Độ",
     "selectedCount": "Đã chọn {count}",
     "recentLanguages": "Gần đây",
-    "langGroupAmericasOceania": "Châu Mỹ và Châu Đại Dương"
+    "langGroupAmericasOceania": "Châu Mỹ và Châu Đại Dương",
+    "relatedTools": "Công cụ liên quan"
   },
   "JSON": {
     "clientDescription": "Công cụ dịch JSON cho nhà phát triển. Hỗ trợ khớp JSONPath và ánh xạ khóa để quốc tế hóa nhanh chóng.",
@@ -243,20 +244,40 @@
     "jsonTranslate": {
       "title": "Dịch giả JSON i18n",
       "description": "Công cụ dịch JSON đa ngôn ngữ hiệu quả",
-      "metaTitle": "Dịch Giả JSON Đa Ngôn Ngữ - Hỗ Trợ i18n & JSONPath",
-      "metaDescription": "Khó dịch JSON? Dịch tệp JSON cho i18n với AI. Hỗ trợ JSONPath, DeepL và ChatGPT. Giải pháp tối ưu cho nhà phát triển đa ngôn ngữ!",
+      "metaTitle": "Dịch JSON | Dịch i18n hàng loạt với JSONPath",
+      "metaDescription": "Trình dịch JSON i18n với 25+ engine AI: DeepSeek, Claude, GPT, DeepL. Chế độ: global, JSONPath, khớp khóa, đa đích, gộp. Cho next-intl, i18next.",
       "faq": [
         {
-          "q": "Công cụ JSON này hỗ trợ những engine dịch và kích thước file nào?",
-          "a": "Hỗ trợ 15+ engine bao gồm Google (miễn phí), DeepSeek, DeepL, Azure, OpenAI và Qwen-MT. Xử lý file JSON mọi kích thước với bộ nhớ đệm bản dịch cho cập nhật gia tăng."
+          "q": "Trình dịch JSON này hỗ trợ những engine dịch và kích thước tệp nào?",
+          "a": "Trình dịch JSON i18n phía trình duyệt: nguồn không bao giờ rời máy bạn, API key vẫn ở localStorage. 25+ engine: Google bản miễn phí (không cần cấu hình), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, cùng mọi endpoint tương thích OpenAI (Ollama / LM Studio / vLLM tự host). Năm chế độ: tất cả khóa, nút-chỉ định (JSONPath), khóa-chỉ định, khóa-chọn lọc, hợp nhất đa ngôn ngữ i18n. Bộ nhớ đệm IndexedDB cho build tăng dần — chỉ khóa thay đổi mới gọi lại API."
+        },
+        {
+          "q": "Để dịch JSON, dùng dịch máy hay AI/LLM? Chọn thế nào?",
+          "a": "Chọn theo độ dài giá trị JSON: ngắn → MT, dài → AI/LLM. Cho chuỗi UI ngắn (nhãn nút, mục menu, thông báo lỗi), dịch máy là đủ — Google bản miễn phí không tốn chi phí (giới hạn 5000 ký tự/lần gọi), DeepL và Azure Translate xử lý tốt các ngôn ngữ châu Âu. Cho văn bản dài hơn (mô tả sản phẩm, hướng dẫn), dùng AI/LLM: DeepSeek là lựa chọn giá trị tốt nhất, GPT-5-mini làm phương án dự phòng; Claude Sonnet xử lý nhất quán thuật ngữ ổn định nhất — thêm bảng thuật ngữ vào System Prompt để khóa tên thương hiệu, SKU và thuật ngữ API."
+        },
+        {
+          "q": "Có hỗ trợ định dạng JSON của next-intl, i18next, vue-i18n và react-intl không?",
+          "a": "Có, hỗ trợ tất cả. Cấu trúc đối tượng lồng nhau của next-intl và vue-i18n, không gian tên khóa phẳng của i18next, và các placeholder ICU MessageFormat của react-intl đều được xử lý chính xác. Các placeholder như `{name}`, `{count, plural, ...}`, `{0}` được giữ nguyên trong quá trình dịch. Dùng chế độ 'Khóa chỉ định' để chỉ dịch giá trị mà không động vào khóa, hoặc 'Chế độ i18n' để gộp nhiều ngôn ngữ trực tiếp vào JSON gốc (ví dụ cấu trúc `{en: \"Settings\", zh: \"设置\"}`)."
+        },
+        {
+          "q": "Có thể dịch JSON sang nhiều ngôn ngữ cùng lúc?",
+          "a": "Bật chế độ đa ngôn ngữ để tạo hàng loạt file en.json, ja.json, ko.json trong một thao tác."
+        },
+        {
+          "q": "Làm sao dùng JSONPath để chỉ dịch các nút cụ thể? Ví dụ chỉ trường tên sản phẩm.",
+          "a": "Chế độ 'Nút chỉ định' chấp nhận biểu thức JSONPath chuẩn: `$.products[*].name` dịch trường name của mọi sản phẩm, `$..title` đệ quy dịch toàn bộ trường title; nhiều đường dẫn cách nhau bằng dấu phẩy. Kết hợp với chế độ ánh xạ nâng cao của 'Khóa chỉ định', bạn còn có thể ghi kết quả dịch vào trường mới (ví dụ `name` → `name_zh`) trong khi giữ lại bản gốc. Lưu ý: tên khóa chứa dấu chấm (.) sẽ bị hiểu nhầm thành đường dẫn lồng — nên tránh."
         },
         {
           "q": "Khóa và cấu trúc JSON có bị thay đổi sau khi dịch?",
           "a": "Không. Công cụ chỉ dịch giá trị — khóa, cấu trúc lồng và mảng được bảo toàn hoàn toàn."
         },
         {
-          "q": "Có thể dịch JSON sang nhiều ngôn ngữ cùng lúc?",
-          "a": "Bật chế độ đa ngôn ngữ để tạo hàng loạt file en.json, ja.json, ko.json trong một thao tác."
+          "q": "Nếu cần dịch Markdown hoặc file phụ đề thay vì JSON i18n thì sao?",
+          "a": "Với tài liệu Markdown (.md, .mdx), dùng [Dịch Markdown](../md-translator) — giữ nguyên khối mã, công thức LaTeX và metadata Front Matter. Với file phụ đề (SRT/ASS/VTT/LRC), dùng [Dịch Phụ Đề](../subtitle-translator) — giữ timecode và thẻ kiểu ASS. Cả ba công cụ chia sẻ cùng cấu hình engine và bộ nhớ đệm bản dịch, nên chuyển đổi giữa chúng không cần thiết lập lại."
+        },
+        {
+          "q": "Nội dung JSON có được gửi lên server của bạn không? File lớn có đảm bảo riêng tư?",
+          "a": "Hoàn toàn xử lý phía client: việc đọc JSON, phân tích cú pháp và gửi yêu cầu dịch đều diễn ra trong trình duyệt của bạn — nội dung gốc không bao giờ đi qua server của chúng tôi. Các yêu cầu đến engine LLM được gửi trực tiếp từ trình duyệt của bạn đến endpoint API mà bạn cấu hình (OpenAI, DeepSeek, v.v.), và API Key chỉ được lưu trong localStorage cục bộ. Bộ nhớ đệm bản dịch dùng IndexedDB của trình duyệt và hỗ trợ cập nhật gia tăng giữa các bản build — chỉ những khóa thay đổi mới gọi API mới, giúp tiết kiệm chi phí. Mã nguồn mở trên GitHub (rockbenben/json-translate)."
         }
       ],
       "howto": [
@@ -274,7 +295,7 @@
         }
       ],
       "features": [
-        "Hỗ trợ 15+ engine dịch (Google, DeepSeek, DeepL, Azure, OpenAI)",
+        "Hỗ trợ 25+ engine dịch (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
         "Khớp JSONPath chính xác",
         "Tạo hàng loạt đa ngôn ngữ",
         "Đổi tên khóa khi dịch",
@@ -294,11 +315,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI - Bộ Công Cụ Dịch Thuật & Dữ Liệu AI Online",
-    "description": "Bộ công cụ AI miễn phí cho nhà phát triển: dịch phụ đề, i18n, Markdown và chỉnh sửa JSON. Xử lý cục bộ an toàn, mã nguồn mở và hỗ trợ xử lý hàng loạt.",
+    "description": "ToolsByAI: 17 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 25+ engine AI.",
     "homeTitle": "Bộ ToolsByAI",
     "homeDescription": "20+ công cụ cho dịch, văn bản, JSON và chuyển đổi dữ liệu. Tăng cường hiệu quả cho nhà phát triển và người sáng tạo.",
     "ogTitle": "ToolsByAI - Công Cụ Dev AI Miễn Phí & Mã Nguồn Mở",
-    "ogDescription": "20+ tiện ích cho nhà phát triển: dịch thuật, xử lý dữ liệu và JSON. Bảo vệ quyền riêng tư với xử lý cục bộ ngay trên trình duyệt."
+    "ogDescription": "ToolsByAI: 17 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 25+ engine AI."
   },
   "languages": {
     "auto": "Tự động phát hiện",
@@ -432,13 +453,19 @@
   },
   "feedback": {
     "feedback1": "Phản hồi & Gợi ý",
-    "feedback2": "Nếu bạn gặp vấn đề hoặc có gợi ý, hãy cho tôi biết! Phản hồi của bạn ảnh hưởng đến sự phát triển trong tương lai và giúp chúng tôi tạo ra các công cụ tốt hơn.",
+    "feedback2": "Nếu bạn gặp vấn đề hoặc có gợi ý, hãy cho tôi biết!Phản hồi của bạn ảnh hưởng đến sự phát triển trong tương lai và giúp chúng tôi tạo ra các công cụ tốt h…",
     "feedback3": "Mô tả trường hợp sử dụng, vấn đề hoặc ý tưởng của bạn. Tôi đọc từng tin nhắn và sẽ phản hồi/tối ưu hóa sớm nhất có thể.",
     "reaction0": "Thích",
     "reaction1": "Ủng hộ",
     "reaction2": "Tuyệt",
     "reaction3": "Cái gì?",
     "reaction4": "Bối rối",
-    "placeholder": "Để lại tin nhắn (không cần đăng nhập, email tùy chọn để trả lời)"
+    "placeholder": "Để lại tin nhắn (không cần đăng nhập, email tùy chọn để trả lời)",
+    "metaDescription": "Trang phản hồi Tools By AI: báo lỗi, đề xuất tính năng, chia sẻ tình huống sử dụng. Dựa trên Waline, đăng ẩn danh được phép, miễn phí."
+  },
+  "NotFound": {
+    "title": "Không tìm thấy trang",
+    "description": "Trang bạn truy cập không tồn tại hoặc đã được di chuyển.",
+    "goHome": "Về trang chủ"
   }
 }

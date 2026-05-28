@@ -48,7 +48,7 @@
     "resultToSource": "結果 ➔ 原文",
     "resultToSourceTooltip": "將結果文字覆蓋到輸入框",
     "readOnlyMode": "只讀模式",
-    "readOnlyModeTooltip": "文字過長，為保證頁面性能已自動切換為只讀模式",
+    "readOnlyModeTooltip": "文字過長，編輯框暫為唯讀、僅顯示部分預覽；完整內容不受影響，處理與匯出仍按全文進行",
     "exportFile": "匯出",
     "exportAllFile": "匯出所有檔案",
     "exportedFile": "已匯出",
@@ -143,7 +143,8 @@
     "langPresetIndian": "印度系",
     "selectedCount": "已選 {count} 種",
     "recentLanguages": "最近使用",
-    "langGroupAmericasOceania": "美洲及大洋洲"
+    "langGroupAmericasOceania": "美洲及大洋洲",
+    "relatedTools": "相關工具"
   },
   "JSON": {
     "clientDescription": "為開發者打造的 JSON 翻譯工具，支援 JSONPath 精準匹配和鍵名映射，快速實現項目國際化。",
@@ -244,19 +245,39 @@
       "title": "JSON 多語言翻譯",
       "description": "高效的多語言 JSON 翻譯工具",
       "metaTitle": "JSON 翻譯工具 - i18n 多語言批次翻譯，JSONPath 精準定位",
-      "metaDescription": "還在手動翻譯 JSON？這款工具支援 DeepSeek 等多模型，提供 i18n 國際化、JSONPath 精準匹配及鍵名映射功能。完全免費且開源，輕鬆搞定專案本地化！",
+      "metaDescription": "JSON i18n 翻譯工具，DeepSeek/Claude/GPT 等 25+ 引擎，五種模式：全域、JSONPath、按鍵名、多語言一次產生、合併模式。",
       "faq": [
         {
           "q": "這個 JSON 翻譯工具支援哪些翻譯引擎和檔案大小？",
-          "a": "支援 15+ 翻譯引擎，包括 Google 免費版、DeepSeek、DeepL、Azure、OpenAI 和 Qwen-MT。可處理任意大小的 JSON 檔案，翻譯快取支援構建間的增量更新。"
+          "a": "瀏覽器端執行的 JSON 國際化翻譯工具，原文不經伺服器、API Key 僅存本地 localStorage。支援 25+ 引擎：Google 免費版（零設定）、DeepSeek、Claude、GPT、Gemini、DeepL、Azure、Qwen-MT，以及任何 OpenAI 相容端點（Ollama / LM Studio / vLLM 自部署）。提供全域、指定節點（JSONPath）、指定鍵名、選擇性 Key、i18n 多語言聚合 5 種模式；IndexedDB 快取做增量翻譯，只重譯變動的 Key，長 JSON 不重複消耗 token。"
+        },
+        {
+          "q": "翻譯 JSON 用機器翻譯還是 AI 翻譯？怎麼選最合適？",
+          "a": "按 JSON 值長度選：短選機器翻譯、長選 AI 大模型。短 UI 文案（按鈕、選單項目、錯誤提示）用機器翻譯夠用——Google 免費版零成本（限單條 5000 字元），DeepL 和 Azure Translate 適合歐洲語言。長文字（產品描述、教學）建議 AI 大模型：DeepSeek 性價比首選，備選 GPT-5-mini；Claude Sonnet 術語一致性最穩，可在「系統提示詞」加術語保留表保護品牌名、SKU、API 術語。引擎設定可與 [字幕翻譯](../subtitle-translator)、[Markdown 翻譯](../md-translator) 共享。"
+        },
+        {
+          "q": "支援 next-intl、i18next、vue-i18n、react-intl 這些 i18n 框架的 JSON 格式嗎？",
+          "a": "全部支援。next-intl 和 vue-i18n 的巢狀物件結構、i18next 的扁平 key 命名空間、react-intl 的 ICU MessageFormat 佔位符都能正確處理。`{name}`、`{count, plural, ...}`、`{0}` 等佔位符在翻譯時會被保留不會被改寫。建議用「指定鍵名」模式只翻譯值不動 Key，或用「i18n 模式」直接在原 JSON 上聚合多語言（如 `{en: \"Settings\", zh: \"設定\"}` 結構）。"
+        },
+        {
+          "q": "怎麼把 JSON 一次翻譯成多種語言？",
+          "a": "開啓「多語言模式」後可同時選擇多個目標語言，一次操作即可批次產生 en.json、ja.json、ko.json 等多語言檔案，大幅節省國際化工作時間。"
+        },
+        {
+          "q": "用 JSONPath 怎麼只翻譯特定節點？比如只翻譯商品名稱欄位。",
+          "a": "「指定節點」模式接受標準 JSONPath 表達式：`$.products[*].name` 翻譯所有商品的 name 欄位，`$..title` 遞迴翻譯所有 title 欄位，多個路徑用英文逗號分隔。配合「指定鍵名」的進階對應模式，還可以把翻譯結果寫入新欄位（如 `name` → `name_zh`）而保留原文。注意：鍵名含點（.）會被誤認為巢狀路徑，建議避免。"
         },
         {
           "q": "JSON 翻譯後鍵名和嵌套結構會亂嗎？",
           "a": "不會。工具只翻譯值內容，鍵名、嵌套層級、數組結構全部原樣保留，翻譯後的 JSON 可直接用於 React、Vue 等前端 i18n 項目。"
         },
         {
-          "q": "怎麼把 JSON 一次翻譯成多種語言？",
-          "a": "開啓「多語言模式」後可同時選擇多個目標語言，一次操作即可批次產生 en.json、ja.json、ko.json 等多語言檔案，大幅節省國際化工作時間。"
+          "q": "翻譯的不是 i18n JSON，是 Markdown 或字幕檔案怎麼辦？",
+          "a": "Markdown 檔案（.md、.mdx）請用 [Markdown 翻譯](../md-translator)，會保留程式碼區塊、LaTeX 公式和 Front Matter 元資料；字幕檔案（SRT/ASS/VTT/LRC）請用 [字幕翻譯](../subtitle-translator)，保留時間軸和 ASS 樣式標籤。"
+        },
+        {
+          "q": "JSON 內容會上傳到伺服器嗎？大檔案會不會洩漏隱私？",
+          "a": "完全前端處理：JSON 讀取、解析、翻譯請求都在瀏覽器內完成，原文不經過我們的伺服器儲存。LLM 引擎的請求直接從你的瀏覽器發往你設定的 API 端點（OpenAI、DeepSeek 等），API Key 僅保存在本機 localStorage。翻譯快取使用瀏覽器 IndexedDB，支援構建間的增量更新——只有改動過的 Key 會重新呼叫 API，節省成本。開放原始碼在 GitHub（rockbenben/json-translate）可審查或自部署。"
         }
       ],
       "howto": [
@@ -274,7 +295,7 @@
         }
       ],
       "features": [
-        "支援 15+ 翻譯引擎（Google、DeepSeek、DeepL、Azure、OpenAI、Qwen-MT）",
+        "支援 25+ 翻譯引擎（Google、DeepSeek、Claude、GPT、Gemini、DeepL、Azure、Qwen-MT）",
         "JSONPath 精準鍵名匹配",
         "多語言一次產生（en.json、ja.json、ko.json 等）",
         "翻譯時鍵名重命名（映射模式）",
@@ -294,11 +315,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI | 免費開源的 AI 翻譯與資料處理工具集",
-    "description": "尋找高效開發工具？ToolsByAI 匯集字幕翻譯、i18n 處理等 20+ 款免費開源應用。接入 DeepSeek 等主流模型，支援批次處理且資料隱私安全，立即開啟 AI 提效之旅！",
+    "description": "ToolsByAI 集合 17 款免費工具：字幕、Markdown、JSON i18n 翻譯，文字/JSON 批次處理。25+ AI 引擎，全前端處理。",
     "homeTitle": "ToolsByAI 工具集",
     "homeDescription": "20+ 實用工具，涵蓋多語言翻譯、文字處理、JSON 編輯和資料轉換，助力開發者和創作者提升效率。",
     "ogTitle": "ToolsByAI | 免費開源的 AI 翻譯與資料處理工具集",
-    "ogDescription": "尋找高效開發工具？ToolsByAI 匯集字幕翻譯、i18n 處理等 20+ 款免費開源應用。接入 DeepSeek 等主流模型，支援批次處理且資料隱私安全，立即開啟 AI 提效之旅！"
+    "ogDescription": "ToolsByAI 集合 17 款免費工具：字幕、Markdown、JSON i18n 翻譯，文字/JSON 批次處理。25+ AI 引擎，全前端處理。"
   },
   "languages": {
     "auto": "自動檢測",
@@ -439,6 +460,12 @@
     "reaction2": "有點酷",
     "reaction3": "啥玩意",
     "reaction4": "看不懂",
-    "placeholder": "請留言，無需登錄（填寫郵箱可獲回復提醒）"
+    "placeholder": "請留言，無需登錄（填寫郵箱可獲回復提醒）",
+    "metaDescription": "意見回饋頁：回報使用問題、提交功能建議、參與工具改進。基於 Waline 評論系統，匿名也可發言。"
+  },
+  "NotFound": {
+    "title": "頁面未找到",
+    "description": "你訪問的頁面不存在或已移動。",
+    "goHome": "返回首頁"
   }
 }

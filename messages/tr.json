@@ -117,7 +117,7 @@
     "resultToSource": "Sonuç ➔ Kaynak",
     "resultToSourceTooltip": "Giriş kutusunun içeriğini sonuç metniyle değiştir",
     "readOnlyMode": "Salt Okunur Mod",
-    "readOnlyModeTooltip": "Metin çok uzun; sayfa performansını korumak için salt okunur mod otomatik olarak etkinleştirildi",
+    "readOnlyModeTooltip": "Metin çok uzun: düzenleyici geçici olarak salt okunur ve yalnızca kısmi bir önizleme gösteriyor. Tüm içeriğiniz etkilenmez; işleme ve dışa aktarma hâlâ metnin tamamını kullanır.",
     "clearInputTooltip": "Giriş içeriğini ve yüklenen dosyaları temizle",
     "fileExported": "Dışa aktarılan dosya: {fileName}",
     "exportSuccess": "Dışa aktarma başarılı: {fileName}",
@@ -143,7 +143,8 @@
     "langPresetIndian": "Hint alt kıtası",
     "selectedCount": "{count} seçildi",
     "recentLanguages": "Son kullanılanlar",
-    "langGroupAmericasOceania": "Amerika & Okyanusya"
+    "langGroupAmericasOceania": "Amerika & Okyanusya",
+    "relatedTools": "İlgili Araçlar"
   },
   "JSON": {
     "clientDescription": "Geliştiriciler için JSON çeviri aracı. Hızlı uluslararasılaştırma için JSONPath eşleştirme ve anahtar haritalamayı destekler.",
@@ -243,20 +244,40 @@
     "jsonTranslate": {
       "title": "i18n JSON Çevirici",
       "description": "Verimli çok dilli JSON çeviri aracı",
-      "metaTitle": "Çok Dilli JSON Çevirici - i18n ve JSONPath Desteği",
-      "metaDescription": "JSON çevirisi zor mu? Uygulama yerelleştirme (i18n) için JSON dosyalarını yapay zeka ile çevirin. JSONPath, DeepL ve ChatGPT desteği.",
+      "metaTitle": "JSON Çevirici | JSONPath ile i18n Toplu Çeviri",
+      "metaDescription": "JSON i18n çevirmeni, 25+ AI motoru: DeepSeek, Claude, GPT, DeepL. Modlar: global, JSONPath, anahtar, çoklu hedef, birleştirme. next-intl için.",
       "faq": [
         {
-          "q": "Bu JSON aracı hangi çeviri motorlarını ve dosya boyutlarını destekliyor?",
-          "a": "Google (ücretsiz), DeepSeek, DeepL, Azure, OpenAI ve Qwen-MT dahil 15+ motoru destekler. Her boyuttaki JSON dosyalarını işler ve derlemeler arası artımlı güncelleme için çeviri önbelleği sağlar."
+          "q": "Bu JSON çevirici hangi çeviri motorlarını ve dosya boyutlarını destekliyor?",
+          "a": "Tarayıcı tarafı JSON i18n çevirici: kaynak makinenizden hiç ayrılmaz, API anahtarı localStorage'da kalır. 25+ motor: Google ücretsiz sürümü (sıfır yapılandırma), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, artı herhangi bir OpenAI uyumlu uç nokta (Ollama / LM Studio / vLLM kendi kendine barındırılan). Beş mod: tüm anahtarlar, belirtilen düğüm (JSONPath), belirtilen anahtar, seçici anahtar, i18n çok dilli birleştirme. Artımlı yapılar için IndexedDB önbelleği — yalnızca değişen anahtarlar API'yi yeniden çağırır."
+        },
+        {
+          "q": "JSON çevirmek için makine çevirisi mi AI/LLM çevirisi mi? Nasıl seçilir?",
+          "a": "JSON değer uzunluğuna göre seçin: kısa → MT, uzun → AI/LLM. Kısa UI dizgeleri (düğme etiketleri, menü öğeleri, hata mesajları) için makine çevirisi yeter — Google ücretsiz sürümü maliyetsiz (çağrı başına 5000 karakter sınırı), DeepL ve Azure Translate Avrupa dilleri için harika. Daha uzun metinler (ürün açıklamaları, eğitimler) için AI/LLM kullanın: DeepSeek en iyi fiyat/performans seçeneği, yedek olarak GPT-5-mini; Claude Sonnet terminoloji tutarlılığını en güvenilir şekilde yönetir — marka adlarını, ürün SKU'larını ve API terimlerini kilitlemek için Sistem İstemi'ne sözlük…"
+        },
+        {
+          "q": "next-intl, i18next, vue-i18n ve react-intl JSON formatlarını destekliyor mu?",
+          "a": "Evet, tamamı desteklenir. next-intl ve vue-i18n'in iç içe nesne yapıları, i18next'in düz anahtar ad alanları ve react-intl'in ICU MessageFormat yer tutucuları doğru şekilde işlenir. `{name}`, `{count, plural, ...}`, `{0}` gibi yer tutucular çeviri sırasında olduğu gibi korunur. Anahtarlara dokunmadan yalnızca değerleri çevirmek için 'Belirtilen Anahtarlar' modunu kullanın veya birden fazla dili doğrudan kaynak JSON üzerinde birleştirmek için 'i18n Modu'nu kullanın (örn. `{en: \"Settings\", zh: \"设置\"}` yapısı)."
+        },
+        {
+          "q": "JSON'u aynı anda birden fazla dile çevirebilir miyim?",
+          "a": "Çoklu dil modunu etkinleştirerek en.json, ja.json, ko.json dosyalarını tek işlemde toplu oluşturun."
+        },
+        {
+          "q": "JSONPath ile yalnızca belirli düğümleri nasıl çevirebilirim? Örneğin sadece ürün adı alanlarını.",
+          "a": "'Belirtilen Düğümler' modu standart JSONPath ifadelerini kabul eder: `$.products[*].name` tüm ürünlerin name alanını çevirir, `$..title` tüm title alanlarını yinelemeli olarak çevirir; birden fazla yol virgülle ayrılır. 'Belirtilen Anahtarlar' modunun gelişmiş eşleme özelliğiyle birleştirildiğinde, çeviri sonuçlarını yeni alanlara da yazabilirsiniz (örn. `name` → `name_zh`) ve orijinali koruyabilirsiniz. Dikkat: nokta (.) içeren anahtar adları iç içe yol olarak algılanır — kaçınılmalıdır."
         },
         {
           "q": "Çeviriden sonra JSON anahtarları ve yapısı korunur mu?",
           "a": "Evet. Araç yalnızca değerleri çevirir — anahtarlar, iç içe yapı ve diziler tamamen korunur."
         },
         {
-          "q": "JSON'u aynı anda birden fazla dile çevirebilir miyim?",
-          "a": "Çoklu dil modunu etkinleştirerek en.json, ja.json, ko.json dosyalarını tek işlemde toplu oluşturun."
+          "q": "i18n JSON yerine Markdown veya altyazı dosyası çevirmem gerekirse ne yapmalıyım?",
+          "a": "Markdown belgeleri (.md, .mdx) için [Markdown Çevirici](../md-translator) kullanın — kod bloklarını, LaTeX formüllerini ve Front Matter meta verilerini korur. Altyazı dosyaları (SRT/ASS/VTT/LRC) için [Altyazı Çevirici](../subtitle-translator) kullanın — zaman kodlarını ve ASS stil etiketlerini korur. Üç çeviri aracı da aynı motor yapılandırmasını ve çeviri önbelleğini paylaşır, bu yüzden aralarında geçiş yaparken yeniden ayarlama yapmanız gerekmez."
+        },
+        {
+          "q": "JSON içerikleri sunucunuza yükleniyor mu? Büyük dosyalar için gizlilik güvenli mi?",
+          "a": "Tamamen istemci tarafında: JSON okuma, ayrıştırma ve çeviri istekleri tarayıcınızda gerçekleşir — orijinal içerik sunucularımıza hiçbir zaman ulaşmaz. LLM motor istekleri doğrudan tarayıcınızdan yapılandırdığınız API uç noktasına (OpenAI, DeepSeek vb.) gider ve API Key'ler yalnızca yerel localStorage'da saklanır. Çeviri önbelleği tarayıcı IndexedDB'sini kullanır ve derlemeler arası artımlı güncellemeleri destekler — yalnızca değişen anahtarlar yeni API çağrıları tetikler, böylece maliyet düşer. Kaynak kod GitHub'da (rockbenben/json-translate)."
         }
       ],
       "howto": [
@@ -274,7 +295,7 @@
         }
       ],
       "features": [
-        "15+ çeviri motoru desteği (Google, DeepSeek, DeepL, Azure, OpenAI)",
+        "25+ çeviri motoru desteği (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
         "Hassas JSONPath eşleştirme",
         "Çoklu dil toplu üretim",
         "Çeviri sırasında anahtar yeniden adlandırma",
@@ -294,11 +315,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI - Geliştiriciler İçin Yapay Zeka ve Veri Araçları",
-    "description": "Geliştiriciler için ücretsiz AI araç seti: Altyazı çevirisi, i18n, Markdown ve JSON düzenleme. Güvenli, yerel işlem ve açık kaynaklı çözüm.",
+    "description": "ToolsByAI: altyazı, Markdown, JSON i18n çevirisi ve metin/JSON toplu işleme için 17 ücretsiz açık kaynak araç. 25+ AI motoru.",
     "homeTitle": "ToolsByAI Paketi",
     "homeDescription": "Çeviri, metin, JSON ve veri dönüşümü için 20+ araç. Geliştirici ve yaratıcı verimliliğini artırın.",
     "ogTitle": "ToolsByAI - Ücretsiz ve Açık Kaynak Geliştirici Araçları",
-    "ogDescription": "Çeviri, veri işleme ve JSON düzenleme için 20+ araç. Yerel işlem gücüyle gizliliğinizi koruyan açık kaynaklı platform."
+    "ogDescription": "ToolsByAI: altyazı, Markdown, JSON i18n çevirisi ve metin/JSON toplu işleme için 17 ücretsiz açık kaynak araç. 25+ AI motoru."
   },
   "languages": {
     "auto": "Otomatik Algılama",
@@ -432,13 +453,19 @@
   },
   "feedback": {
     "feedback1": "Geri Bildirim & Öneriler",
-    "feedback2": "Sorun yaşarsanız veya önerileriniz varsa, bana bildirin! Geri bildiriminiz gelecekteki geliştirmeleri etkiler ve daha iyi araçlar oluşturmamıza yardımcı olur.",
+    "feedback2": "Sorun yaşarsanız veya önerileriniz varsa, bana bildirin!Geri bildiriminiz gelecekteki geliştirmeleri etkiler ve daha iyi araçlar oluşturmamıza yardımcı ol…",
     "feedback3": "Kullanım durumunuzu, sorunu veya fikri açıklayın. Her mesajı okuyorum ve en kısa sürede yanıtlayacağım/optimize edeceğim.",
     "reaction0": "Beğen",
     "reaction1": "Destek",
     "reaction2": "Harika",
     "reaction3": "Ne?",
     "reaction4": "Kafam Karıştı",
-    "placeholder": "Mesaj bırakın (giriş gerekmez, yanıt için e-posta isteğe bağlı)"
+    "placeholder": "Mesaj bırakın (giriş gerekmez, yanıt için e-posta isteğe bağlı)",
+    "metaDescription": "Tools By AI geri bildirim sayfası: hata bildir, özellik öner veya kullanım örneklerini paylaş. Waline tabanlı, anonim gönderim mümkün, ücretsiz."
+  },
+  "NotFound": {
+    "title": "Sayfa Bulunamadı",
+    "description": "Ziyaret ettiğiniz sayfa mevcut değil veya taşınmış.",
+    "goHome": "Ana Sayfaya Dön"
   }
 }

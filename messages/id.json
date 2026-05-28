@@ -117,7 +117,7 @@
     "resultToSource": "Hasil ➔ Sumber",
     "resultToSourceTooltip": "Timpa kotak input dengan teks hasil",
     "readOnlyMode": "Mode Hanya-Baca",
-    "readOnlyModeTooltip": "Teks terlalu panjang, otomatis beralih ke mode hanya-baca untuk menjaga performa halaman",
+    "readOnlyModeTooltip": "Teks terlalu panjang: editor sementara hanya-baca dan hanya menampilkan pratinjau sebagian. Konten lengkap Anda tidak terpengaruh — pemrosesan dan ekspor tetap menggunakan seluruh teks.",
     "clearInputTooltip": "Bersihkan konten input dan file yang diunggah",
     "fileExported": "File diekspor: {fileName}",
     "exportSuccess": "Ekspor berhasil: {fileName}",
@@ -143,7 +143,8 @@
     "langPresetIndian": "Anak Benua India",
     "selectedCount": "{count} dipilih",
     "recentLanguages": "Terbaru",
-    "langGroupAmericasOceania": "Amerika & Oseania"
+    "langGroupAmericasOceania": "Amerika & Oseania",
+    "relatedTools": "Alat Terkait"
   },
   "JSON": {
     "clientDescription": "Alat terjemahan JSON untuk pengembang. Mendukung pencocokan JSONPath dan pemetaan kunci untuk internasionalisasi cepat.",
@@ -243,20 +244,40 @@
     "jsonTranslate": {
       "title": "Penerjemah JSON i18n",
       "description": "Alat terjemahan JSON multi-bahasa yang efisien",
-      "metaTitle": "Penerjemah JSON Multi-Bahasa - Dukungan i18n & JSONPath",
-      "metaDescription": "Kesulitan terjemahkan JSON? Terjemahkan file JSON untuk internasionalisasi aplikasi (i18n) dengan AI. Mendukung JSONPath, DeepL, dan ChatGPT.",
+      "metaTitle": "Penerjemah JSON | Terjemahan Batch i18n dengan JSONPath",
+      "metaDescription": "Penerjemah JSON i18n dengan 25+ mesin AI: DeepSeek, Claude, GPT, DeepL. Mode: global, JSONPath, kunci, multi-target, agregasi.",
       "faq": [
         {
-          "q": "Alat JSON ini mendukung mesin terjemahan dan ukuran file apa?",
-          "a": "Mendukung 15+ mesin termasuk Google (gratis), DeepSeek, DeepL, Azure, OpenAI, dan Qwen-MT. Menangani file JSON ukuran berapa pun dengan cache terjemahan untuk pembaruan inkremental antar build."
+          "q": "Mesin terjemahan dan ukuran file apa yang didukung oleh penerjemah JSON ini?",
+          "a": "Penerjemah JSON i18n sisi browser: sumber tidak pernah meninggalkan mesin Anda, kunci API tetap di localStorage. 25+ mesin: Google free tier (tanpa konfigurasi), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, ditambah endpoint kompatibel OpenAI mana saja (Ollama / LM Studio / vLLM self-hosted). Lima mode: semua kunci, simpul-tertentu (JSONPath), kunci-tertentu, kunci-selektif, penggabungan multibahasa i18n. Cache IndexedDB untuk build inkremental — hanya kunci yang berubah memanggil API kembali."
+        },
+        {
+          "q": "Untuk menerjemahkan JSON, pakai mesin terjemahan atau AI/LLM? Bagaimana memilihnya?",
+          "a": "Pilih berdasarkan panjang nilai JSON: pendek → MT, panjang → AI/LLM. Untuk string UI pendek (label tombol, item menu, pesan kesalahan), mesin terjemahan cukup — Google free tier tidak berbiaya (batas 5000 karakter/panggilan), DeepL dan Azure Translate menangani bahasa Eropa dengan baik. Untuk teks lebih panjang (deskripsi produk, tutorial), gunakan AI/LLM: DeepSeek adalah pilihan terbaik untuk nilai, GPT-5-mini sebagai cadangan; Claude Sonnet menangani konsistensi terminologi paling andal — tambahkan glosarium di System Prompt untuk mengunci nama merek, SKU, dan istilah API.…"
+        },
+        {
+          "q": "Apakah mendukung format JSON dari framework i18n seperti next-intl, i18next, vue-i18n, dan react-intl?",
+          "a": "Semua didukung. Struktur objek bertingkat next-intl dan vue-i18n, namespace kunci datar i18next, dan placeholder ICU MessageFormat react-intl semua ditangani dengan benar. Placeholder seperti `{name}`, `{count, plural, ...}`, `{0}` dipertahankan apa adanya saat diterjemahkan. Gunakan mode 'Kunci Tertentu' untuk hanya menerjemahkan nilai tanpa menyentuh kunci, atau 'Mode i18n' untuk menggabungkan beberapa bahasa langsung ke JSON sumber (mis. struktur `{en: \"Settings\", zh: \"设置\"}`)."
+        },
+        {
+          "q": "Bisakah menerjemahkan JSON ke banyak bahasa sekaligus?",
+          "a": "Aktifkan mode multibahasa untuk menghasilkan file en.json, ja.json, ko.json dalam satu operasi."
+        },
+        {
+          "q": "Bagaimana menggunakan JSONPath untuk menerjemahkan hanya node tertentu? Misalnya hanya field name produk?",
+          "a": "Mode 'Node Tertentu' menerima ekspresi JSONPath standar: `$.products[*].name` menerjemahkan field name setiap produk, `$..title` menerjemahkan semua field title secara rekursif; beberapa path dipisah dengan koma. Digabung dengan mode mapping lanjutan dari 'Kunci Tertentu', Anda juga bisa menulis hasil terjemahan ke field baru (mis. `name` → `name_zh`) sambil mempertahankan teks asli. Catatan: nama kunci yang mengandung titik (.) akan disalahartikan sebagai path bertingkat — sebaiknya dihindari."
         },
         {
           "q": "Apakah kunci dan struktur JSON tetap setelah diterjemahkan?",
           "a": "Ya. Alat hanya menerjemahkan nilai — kunci, hierarki dan array sepenuhnya dipertahankan."
         },
         {
-          "q": "Bisakah menerjemahkan JSON ke banyak bahasa sekaligus?",
-          "a": "Aktifkan mode multibahasa untuk menghasilkan file en.json, ja.json, ko.json dalam satu operasi."
+          "q": "Bagaimana jika perlu menerjemahkan Markdown atau file subtitle alih-alih JSON i18n?",
+          "a": "Untuk dokumen Markdown (.md, .mdx), gunakan [Penerjemah Markdown](../md-translator) — mempertahankan blok kode, rumus LaTeX, dan metadata Front Matter. Untuk file subtitle (SRT/ASS/VTT/LRC), gunakan [Penerjemah Subtitle](../subtitle-translator) — mempertahankan timecode dan tag style ASS. Ketiga alat terjemahan berbagi konfigurasi mesin dan cache terjemahan yang sama, jadi berpindah antar alat tidak memerlukan setup ulang."
+        },
+        {
+          "q": "Apakah konten JSON diunggah ke server? Apakah privasi aman untuk file besar?",
+          "a": "Sepenuhnya sisi klien: pembacaan JSON, parsing, dan permintaan terjemahan semua terjadi di browser Anda — konten asli tidak pernah menyentuh server kami. Permintaan mesin LLM langsung dari browser Anda ke endpoint API yang Anda konfigurasi (OpenAI, DeepSeek, dll.), dan API Key hanya disimpan di localStorage browser lokal. Cache terjemahan menggunakan IndexedDB browser dan mendukung pembaruan inkremental antar build — hanya kunci yang berubah memicu panggilan API baru, menghemat biaya. Kode sumber tersedia open-source di GitHub (rockbenben/json-translate)."
         }
       ],
       "howto": [
@@ -274,7 +295,7 @@
         }
       ],
       "features": [
-        "Mendukung 15+ mesin terjemahan (Google, DeepSeek, DeepL, Azure, OpenAI)",
+        "Mendukung 25+ mesin terjemahan (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
         "Pencocokan JSONPath yang tepat",
         "Generasi batch multi-bahasa",
         "Penggantian nama kunci saat terjemahan",
@@ -294,11 +315,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI - Peralatan Data & Terjemahan AI untuk Developer",
-    "description": "Kumpulan alat AI gratis untuk developer: terjemahan subtitle, i18n, Markdown, dan edit JSON. Proses batch cepat, aman secara lokal, dan open source.",
+    "description": "ToolsByAI: 17 alat open source gratis untuk penerjemahan subtitle, Markdown, JSON i18n, dan pemrosesan teks/JSON batch. 25+ AI engine.",
     "homeTitle": "Suite ToolsByAI",
     "homeDescription": "20+ alat untuk terjemahan, teks, JSON, dan konversi data. Tingkatkan efisiensi pengembang dan kreator.",
     "ogTitle": "ToolsByAI - Alat Dev AI Gratis dan Open Source",
-    "ogDescription": "20+ utilitas untuk pengembang: terjemahan, pemrosesan data, dan JSON. Hormati privasi Anda dengan pemrosesan lokal di browser."
+    "ogDescription": "ToolsByAI: 17 alat open source gratis untuk penerjemahan subtitle, Markdown, JSON i18n, dan pemrosesan teks/JSON batch. 25+ AI engine."
   },
   "languages": {
     "auto": "Deteksi Otomatis",
@@ -432,13 +453,19 @@
   },
   "feedback": {
     "feedback1": "Umpan Balik & Saran",
-    "feedback2": "Jika Anda menemukan masalah atau memiliki saran, beri tahu saya! Umpan balik Anda memengaruhi pengembangan masa depan dan membantu kami membuat alat yang lebih baik.",
+    "feedback2": "Jika Anda menemukan masalah atau memiliki saran, beri tahu saya!Umpan balik Anda memengaruhi pengembangan masa depan dan membantu kami membuat alat yang l…",
     "feedback3": "Jelaskan kasus penggunaan, masalah, atau ide Anda. Saya membaca setiap pesan dan akan merespons/mengoptimalkan sesegera mungkin.",
     "reaction0": "Suka",
     "reaction1": "Dukung",
     "reaction2": "Keren",
     "reaction3": "Apa?",
     "reaction4": "Bingung",
-    "placeholder": "Tinggalkan pesan (tidak perlu login, email opsional untuk balasan)"
+    "placeholder": "Tinggalkan pesan (tidak perlu login, email opsional untuk balasan)",
+    "metaDescription": "Halaman feedback Tools By AI: laporkan bug, sarankan fitur, atau bagikan ide penggunaan. Berbasis Waline, posting anonim diizinkan, gratis."
+  },
+  "NotFound": {
+    "title": "Halaman Tidak Ditemukan",
+    "description": "Halaman yang Anda kunjungi tidak ada atau telah dipindahkan.",
+    "goHome": "Kembali ke Beranda"
   }
 }

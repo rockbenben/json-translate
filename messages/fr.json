@@ -77,7 +77,7 @@
     "resultToSource": "Résultat ➔ Source",
     "resultToSourceTooltip": "Écraser la zone de saisie avec le texte du résultat",
     "readOnlyMode": "Mode lecture seule",
-    "readOnlyModeTooltip": "Texte trop long ; basculé automatiquement en mode lecture seule pour maintenir les performances",
+    "readOnlyModeTooltip": "Texte trop long : l'éditeur est temporairement en lecture seule et n'affiche qu'un aperçu partiel. Votre contenu complet n'est pas affecté — le traitement et l'export utilisent toujours l'intégralité du texte.",
     "clearInputTooltip": "Effacer le contenu saisi et les fichiers téléchargés",
     "smartLineBreak": "Saut de ligne intelligent",
     "replaceText": "Remplacer le texte",
@@ -143,7 +143,8 @@
     "langPresetIndian": "Sous-continent indien",
     "selectedCount": "{count} sélectionnées",
     "recentLanguages": "Récentes",
-    "langGroupAmericasOceania": "Amériques et Océanie"
+    "langGroupAmericasOceania": "Amériques et Océanie",
+    "relatedTools": "Outils associés"
   },
   "JSON": {
     "clientDescription": "Outil de traduction JSON pour développeurs. Supporte la correspondance JSONPath et le mappage de clés pour une internationalisation rapide.",
@@ -244,19 +245,39 @@
       "title": "Traducteur JSON i18n",
       "description": "Outil de traduction JSON multilingue efficace",
       "metaTitle": "Traducteur JSON | i18n traduction par lots avec JSONPath",
-      "metaDescription": "Traduire des fichiers i18n à la main ? Utilisez DeepSeek pour automatiser la localisation JSON. Supporte JSONPath et clés. Gratuit et sécurisé.",
+      "metaDescription": "Traducteur JSON i18n, 25+ moteurs IA: DeepSeek, Claude, GPT, DeepL. Modes: global, JSONPath, clé, multi-cible, agrégation.",
       "faq": [
         {
-          "q": "Quels moteurs de traduction et tailles de fichiers ce JSON supporte-t-il ?",
-          "a": "Compatible avec 15+ moteurs dont Google (gratuit), DeepSeek, DeepL, Azure, OpenAI et Qwen-MT. Gère les fichiers JSON de toute taille avec cache de traduction pour des mises à jour incrémentales."
+          "q": "Quels moteurs de traduction et tailles de fichier ce traducteur JSON prend-il en charge ?",
+          "a": "Traducteur JSON i18n côté navigateur : la source ne quitte jamais votre machine, la clé API reste dans localStorage. 25+ moteurs : Google free tier (zéro config), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, plus tout endpoint compatible OpenAI (Ollama / LM Studio / vLLM en self-hosted). Cinq modes : toutes clés, nœud-spécifié (JSONPath), clé-spécifiée, clé-sélective, fusion multilingue i18n. Cache IndexedDB pour builds incrémentaux — seules les clés modifiées rappellent l'API."
+        },
+        {
+          "q": "Pour traduire du JSON, faut-il utiliser la traduction automatique ou la traduction IA ? Comment choisir ?",
+          "a": "Choisissez selon la longueur des valeurs JSON : courte → MT, longue → IA/LLM. Pour les courtes chaînes d'interface (libellés, items de menu, messages d'erreur), la traduction automatique convient — Google free tier ne coûte rien (limite 5000 caractères/appel), DeepL et Azure Translate gèrent bien les langues européennes. Pour les textes plus longs (descriptions de produits, tutoriels), utilisez IA/LLM : DeepSeek est le choix qualité-prix, GPT-5-mini en alternative ; Claude Sonnet gère la terminologie le plus fiablement — ajoutez un glossaire dans le System Prompt…"
+        },
+        {
+          "q": "Les formats JSON de next-intl, i18next, vue-i18n et react-intl sont-ils pris en charge ?",
+          "a": "Oui, tous. Les structures d'objets imbriqués de next-intl et vue-i18n, les espaces de noms à clés plates de i18next et les espaces réservés ICU MessageFormat de react-intl sont tous gérés correctement. Les espaces réservés comme {name}, {count, plural, ...}, {0} sont conservés tels quels lors de la traduction. Utilisez le mode « Clés spécifiées » pour ne traduire que les valeurs sans toucher aux clés, ou le « Mode i18n » pour agréger plusieurs langues directement dans le JSON source (par exemple structure {en: \"Settings\", zh: \"设置\"})."
+        },
+        {
+          "q": "Peut-on traduire un JSON en plusieurs langues à la fois ?",
+          "a": "Activez le mode multilingue pour sélectionner plusieurs langues cibles et générer en lot des fichiers comme en.json, ja.json, ko.json, ce qui réduit considérablement le temps d'internationalisation."
+        },
+        {
+          "q": "Comment utiliser JSONPath pour ne traduire que certains nœuds ? Par exemple, uniquement les champs nom de produit.",
+          "a": "Le mode « Nœuds spécifiés » accepte les expressions JSONPath standard : `$.products[*].name` traduit le champ name de chaque produit, `$..title` traduit récursivement tous les champs title ; plusieurs chemins sont séparés par des virgules. Combiné au mode de mappage avancé des « Clés spécifiées », vous pouvez aussi écrire les résultats de traduction dans de nouveaux champs (par exemple `name` → `name_zh`) tout en conservant l'original. Attention : les noms de clés contenant des points (.) sont interprétés à tort comme des chemins imbriqués — à éviter."
         },
         {
           "q": "Les clés et la structure JSON sont-elles préservées après traduction ?",
           "a": "Oui. L'outil ne traduit que les valeurs — clés, hiérarchie et tableaux sont intégralement conservés. Les fichiers traduits fonctionnent directement dans React, Vue et autres frameworks i18n."
         },
         {
-          "q": "Peut-on traduire un JSON en plusieurs langues à la fois ?",
-          "a": "Activez le mode multilingue pour sélectionner plusieurs langues cibles et générer en lot des fichiers comme en.json, ja.json, ko.json, ce qui réduit considérablement le temps d'internationalisation."
+          "q": "Et si je dois traduire du Markdown ou des sous-titres au lieu de JSON i18n ?",
+          "a": "Pour les documents Markdown (.md, .mdx), utilisez [Traducteur Markdown](../md-translator) — préserve les blocs de code, les formules LaTeX et les métadonnées Front Matter. Pour les fichiers de sous-titres (SRT/ASS/VTT/LRC), utilisez [Traducteur de Sous-titres](../subtitle-translator) — préserve les timecodes et les balises de style ASS. Les trois outils de traduction partagent les mêmes configurations de moteurs et le même cache de traduction, donc passer de l'un à l'autre ne nécessite aucune nouvelle configuration."
+        },
+        {
+          "q": "Le contenu JSON est-il téléversé vers votre serveur ? La confidentialité est-elle assurée pour les gros fichiers ?",
+          "a": "Entièrement côté client : la lecture, l'analyse et les requêtes de traduction JSON se font toutes dans votre navigateur — le contenu original ne touche jamais nos serveurs. Les requêtes des moteurs LLM vont directement de votre navigateur vers le point de terminaison API que vous avez configuré (OpenAI, DeepSeek, etc.), et les API Keys sont stockées uniquement dans le localStorage local. Le cache de traduction utilise IndexedDB du navigateur et prend en charge les mises à jour incrémentales entre les builds — seules les clés modifiées déclenchent de nouveaux appels API Le code source est open source sur GitHub (rockbenben/json-translate), pour l'auto-hébergement ou l'audit de l'implémentation."
         }
       ],
       "howto": [
@@ -274,7 +295,7 @@
         }
       ],
       "features": [
-        "Compatible avec 15+ moteurs de traduction (Google, DeepSeek, DeepL, Azure, OpenAI, Qwen-MT)",
+        "Compatible avec 25+ moteurs de traduction (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
         "Ciblage précis via JSONPath",
         "Génération multilingue en lot (en.json, ja.json, ko.json, etc.)",
         "Renommage de clés pendant la traduction (mode mapping)",
@@ -294,11 +315,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI | Outils de Traduction & Dev IA Gratuits",
-    "description": "Suite de 20+ outils open source : traduction de sous-titres, i18n, JSON & Markdown. Supporte DeepSeek & ChatGPT. Données locales et sécurisées.",
+    "description": "ToolsByAI: 17 outils open source gratuits pour la traduction de sous-titres, Markdown, JSON i18n et le traitement par lots. 25+ moteurs IA.",
     "homeTitle": "Suite ToolsByAI",
     "homeDescription": "20+ outils pour traduction, texte, JSON et conversion de données. Boostez l'efficacité des développeurs et créateurs.",
     "ogTitle": "ToolsByAI | Outils de Traduction & Dev IA Gratuits",
-    "ogDescription": "Suite de 20+ outils open source : traduction de sous-titres, i18n, JSON & Markdown. Supporte DeepSeek & ChatGPT. Données locales et sécurisées."
+    "ogDescription": "ToolsByAI: 17 outils open source gratuits pour la traduction de sous-titres, Markdown, JSON i18n et le traitement par lots. 25+ moteurs IA."
   },
   "languages": {
     "auto": "Détection auto",
@@ -432,13 +453,19 @@
   },
   "feedback": {
     "feedback1": "Commentaires & Suggestions",
-    "feedback2": "Si vous rencontrez des problèmes ou avez des suggestions, dites-le moi ! Votre feedback influence le développement futur et nous aide à créer de meilleurs outils.",
+    "feedback2": "Si vous rencontrez des problèmes ou avez des suggestions, dites-le moi!",
     "feedback3": "Décrivez votre cas d'usage, problème ou idée. Je lis chaque message et répondrai/optimiserai dès que possible.",
     "reaction0": "J'aime",
     "reaction1": "Soutien",
     "reaction2": "Cool",
     "reaction3": "Quoi ?",
     "reaction4": "Confus",
-    "placeholder": "Laissez un message (pas de connexion requise, email optionnel pour réponse)"
+    "placeholder": "Laissez un message (pas de connexion requise, email optionnel pour réponse)",
+    "metaDescription": "Page de retours pour Tools By AI : signalez bugs, suggérez fonctionnalités, partagez cas d'usage. Basée sur Waline, publication anonyme."
+  },
+  "NotFound": {
+    "title": "Page introuvable",
+    "description": "La page que vous avez visitée n'existe pas ou a été déplacée.",
+    "goHome": "Retour à l'accueil"
   }
 }

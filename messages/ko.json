@@ -117,7 +117,7 @@
     "resultToSource": "결과 ➔ 원문",
     "resultToSourceTooltip": "결과 텍스트를 입력란에 덮어씁니다",
     "readOnlyMode": "읽기 전용 모드",
-    "readOnlyModeTooltip": "텍스트가 너무 길어 페이지 성능을 위해 자동으로 읽기 전용 모드로 전환되었습니다",
+    "readOnlyModeTooltip": "텍스트가 너무 길어 편집기가 일시적으로 읽기 전용이 되며 일부만 미리 보기로 표시됩니다. 전체 내용은 영향받지 않으며 처리와 내보내기는 전체 텍스트로 수행됩니다.",
     "clearInputTooltip": "입력 내용 및 업로드된 파일 지우기",
     "fileExported": "파일이 내보내졌습니다: {fileName}",
     "exportSuccess": "내보내기 성공: {fileName}",
@@ -143,7 +143,8 @@
     "langPresetIndian": "인도 아대륙",
     "selectedCount": "{count}개 선택됨",
     "recentLanguages": "최근 사용",
-    "langGroupAmericasOceania": "아메리카·오세아니아"
+    "langGroupAmericasOceania": "아메리카·오세아니아",
+    "relatedTools": "관련 도구"
   },
   "JSON": {
     "clientDescription": "개발자를 위한 JSON 번역 도구. JSONPath 정밀 매칭과 키 매핑을 지원하여 프로젝트 국제화를 빠르게 실현합니다.",
@@ -243,20 +244,40 @@
     "jsonTranslate": {
       "title": "i18n JSON 번역",
       "description": "효율적인 다국어 JSON 번역 도구",
-      "metaTitle": "JSON 번역 - i18n 다국어 일괄 번역, JSONPath 지원",
-      "metaDescription": "JSON 번역이 고민이신가요? JSONPath 매칭 및 키 매핑을 지원하는 AI 도구로 프로젝트 국제화를 쉽게 해결하세요. DeepSeek 지원, 완전 무료 오픈 소스!",
+      "metaTitle": "JSON 번역 도구 - i18n 다국어 일괄 번역, JSONPath 정밀 지정",
+      "metaDescription": "JSON i18n 번역기, DeepSeek/Claude/GPT 등 25+ AI 엔진, 전역·JSONPath·키·다중·병합 5가지 모드.",
       "faq": [
         {
-          "q": "이 JSON 번역 도구는 어떤 엔진과 파일 크기를 지원합니까?",
-          "a": "Google 무료, DeepSeek, DeepL, Azure, OpenAI, Qwen-MT 등 15개 이상의 엔진을 지원합니다. 크기 제한 없는 JSON 파일을 처리하며, 번역 캐시로 빌드 간 증분 업데이트를 지원합니다."
+          "q": "이 JSON 번역 도구는 어떤 번역 엔진과 파일 크기를 지원하나요?",
+          "a": "브라우저에서 실행되는 JSON 국제화 번역 도구로, 원본은 서버에 전송되지 않고 API 키는 로컬 localStorage에만 저장됩니다. 25+ 엔진 지원: Google 무료 버전(설정 불필요), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, 그리고 모든 OpenAI 호환 엔드포인트(Ollama / LM Studio / vLLM 셀프호스팅). 전체, 지정 노드(JSONPath), 지정 키 이름, 선택적 키, i18n 다국어 집계 5가지 번역 모드 제공. IndexedDB 캐시로 증분 번역 — 변경된 키만 다시 API 호출."
+        },
+        {
+          "q": "JSON 번역은 기계 번역과 AI 번역 중 무엇을 쓸까요? 어떻게 골라야 할까요?",
+          "a": "JSON 값의 길이로 결정: 짧으면 MT, 길면 AI 거대 언어 모델. 짧은 UI 텍스트(버튼, 메뉴 항목, 오류 메시지)는 기계 번역으로 충분 — Google 무료 버전은 비용 0(요청당 5000자 제한), DeepL과 Azure Translate는 유럽 언어에 적합. 긴 텍스트(제품 설명, 튜토리얼)에는 AI 거대 언어 모델: DeepSeek가 가성비 최우선, 대안으로 GPT-5-mini; Claude Sonnet은 용어 일관성이 가장 안정적이며, 「시스템 프롬프트」에 용어 보존 목록을 추가하면 브랜드명, SKU, API 용어를 보호할 수 있습니다. 엔진 설정은 [자막 번역](../subtitle-translator), [Markdown 번역](../md-translator)과 공유됩니다."
+        },
+        {
+          "q": "next-intl, i18next, vue-i18n, react-intl 같은 i18n 프레임워크의 JSON 형식을 지원하나요?",
+          "a": "모두 지원합니다. next-intl과 vue-i18n의 중첩 객체 구조, i18next의 평면 키 네임스페이스, react-intl의 ICU MessageFormat 자리표시자를 모두 정확히 처리합니다. `{name}`, `{count, plural, ...}`, `{0}` 같은 자리표시자는 번역 시 그대로 보존되며 변경되지 않습니다. 「키 이름 지정」 모드로 키를 건드리지 않고 값만 번역하거나, 「i18n 모드」로 원본 JSON에 여러 언어를 직접 집계(예: `{en: \"Settings\", zh: \"设置\"}` 구조)할 수 있습니다."
+        },
+        {
+          "q": "JSON을 한 번에 여러 언어로 번역할 수 있나요?",
+          "a": "다국어 모드를 활성화하면 여러 대상 언어를 선택하여 en.json, ja.json, ko.json 등을 일괄 생성할 수 있어 국제화 작업 시간을 크게 절약할 수 있습니다."
+        },
+        {
+          "q": "JSONPath로 특정 노드만 번역하려면? 예를 들어 상품 이름 필드만 번역하고 싶을 때.",
+          "a": "「노드 지정」 모드는 표준 JSONPath 표현식을 지원합니다: `$.products[*].name`은 모든 상품의 name 필드를 번역하고, `$..title`은 모든 title 필드를 재귀적으로 번역합니다. 여러 경로는 쉼표로 구분합니다. 「키 이름 지정」의 고급 매핑 모드와 결합하면 번역 결과를 새 필드(예: `name` → `name_zh`)에 저장하고 원본을 보존할 수 있습니다. 주의: 점(.)이 포함된 키 이름은 중첩 경로로 잘못 인식되므로 피하는 것이 좋습니다."
         },
         {
           "q": "번역 후 JSON 키와 중첩 구조가 깨지나요?",
           "a": "아닙니다. 도구는 값만 번역하며 키 이름, 중첩 구조, 배열 구조가 모두 보존됩니다. 번역된 파일은 React, Vue 등의 i18n 프레임워크에서 바로 사용할 수 있습니다."
         },
         {
-          "q": "JSON을 한 번에 여러 언어로 번역할 수 있나요?",
-          "a": "다국어 모드를 활성화하면 여러 대상 언어를 선택하여 en.json, ja.json, ko.json 등을 일괄 생성할 수 있어 국제화 작업 시간을 크게 절약할 수 있습니다."
+          "q": "i18n JSON이 아닌 Markdown이나 자막 파일을 번역해야 한다면?",
+          "a": "Markdown 문서(.md, .mdx)는 [Markdown 번역](../md-translator)을 사용하세요, 코드 블록, LaTeX 수식, Front Matter 메타데이터를 보존합니다. 자막 파일(SRT/ASS/VTT/LRC)은 [자막 번역](../subtitle-translator)을 사용하세요, 타임코드와 ASS 스타일 태그를 보존합니다. 세 가지 번역 도구는 동일한 엔진 설정과 번역 캐시를 공유하므로 도구 간 전환 시 재설정이 필요 없습니다."
+        },
+        {
+          "q": "JSON 내용이 서버에 업로드되나요? 대용량 파일도 개인정보가 안전한가요?",
+          "a": "완전히 클라이언트 측 처리: JSON 읽기, 파싱, 번역 요청이 모두 브라우저 내에서 완료되며 원본은 당사 서버를 거치지 않습니다. LLM 엔진 요청은 사용자의 브라우저에서 직접 설정된 API 엔드포인트(OpenAI, DeepSeek 등)로 전송되며 API Key는 로컬 localStorage에만 저장됩니다. 번역 캐시는 브라우저 IndexedDB를 사용하며 빌드 간 증분 업데이트를 지원합니다——변경된 키만 API를 재호출하여 비용을 절약합니다. 소스 코드는 GitHub(rockbenben/json-translate)에 공개되어 있어 감사하거나 자체 호스팅할 수 있습니다."
         }
       ],
       "howto": [
@@ -274,7 +295,7 @@
         }
       ],
       "features": [
-        "15개 이상의 번역 엔진 지원 (Google, DeepSeek, DeepL, Azure, OpenAI, Qwen-MT)",
+        "25개 이상의 번역 엔진 지원 (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
         "JSONPath 매칭을 통한 정확한 키 타겟팅",
         "다국어 일괄 생성 (en.json, ja.json, ko.json 등)",
         "번역 중 키 이름 변경 (키 매핑 모드)",
@@ -294,11 +315,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI | 무료 오픈소스 AI 번역 및 데이터 처리 도구",
-    "description": "효율적인 개발 도구를 원하시나요? 자막 번역, JSON 편집 등 20+ 무료 앱이 있습니다. DeepSeek AI 탑재, 안전한 로컬 데이터 처리. 지금 체험해보세요!",
+    "description": "ToolsByAI: 자막·Markdown·JSON i18n 번역 및 텍스트/JSON 일괄 처리 17개 무료 도구, 25+ AI 엔진.",
     "homeTitle": "ToolsByAI 도구 모음",
     "homeDescription": "20+ 무료 도구. 다국어 번역, 텍스트 처리, JSON 변환 등 개발자와 크리에이터의 업무 효율 향상.",
     "ogTitle": "ToolsByAI | 무료 오픈소스 AI 번역 및 데이터 처리 도구",
-    "ogDescription": "효율적인 개발 도구를 원하시나요? 자막 번역, JSON 편집 등 20+ 무료 앱이 있습니다. DeepSeek AI 탑재, 안전한 로컬 데이터 처리. 지금 체험해보세요!"
+    "ogDescription": "ToolsByAI: 자막·Markdown·JSON i18n 번역 및 텍스트/JSON 일괄 처리 17개 무료 도구, 25+ AI 엔진."
   },
   "languages": {
     "auto": "자동 감지",
@@ -432,13 +453,19 @@
   },
   "feedback": {
     "feedback1": "피드백 및 제안",
-    "feedback2": "사용 중 문제가 발생하거나 제안 및 아이디어가 있으면 언제든지 알려주세요! 귀하의 피드백은 향후 기능 개발 및 개선에 직접적인 영향을 미치며, 모두의 요구에 더 잘 맞는 도구를 만드는 데 도움이 됩니다.",
+    "feedback2": "사용 중 문제가 발생하거나 제안 및 아이디어가 있으면 언제든지 알려주세요!",
     "feedback3": "사용 시나리오나 발생한 문제, 또는 창의적인 아이디어를 자세히 설명해 주세요. 모든 피드백을 진지하게 읽고 가능한 한 빨리 조정 및 최적화하겠습니다.",
     "reaction0": "좋아요",
     "reaction1": "응원해요",
     "reaction2": "멋져요",
     "reaction3": "뭐죠?",
     "reaction4": "이해 안 됨",
-    "placeholder": "메시지를 남겨주세요. 로그인 불필요 (이메일 입력 시 답변 알림 수신 가능)"
+    "placeholder": "메시지를 남겨주세요. 로그인 불필요 (이메일 입력 시 답변 알림 수신 가능)",
+    "metaDescription": "Tools By AI 피드백 페이지: 버그 신고, 기능 요청, 사용 사례 공유. Waline 댓글 기반, 익명 작성 가능, 무료."
+  },
+  "NotFound": {
+    "title": "페이지를 찾을 수 없음",
+    "description": "방문한 페이지가 존재하지 않거나 이동되었습니다。",
+    "goHome": "홈으로"
   }
 }

@@ -117,7 +117,7 @@
     "resultToSource": "結果 ➔ 原文",
     "resultToSourceTooltip": "結果テキストを入力欄に上書き",
     "readOnlyMode": "読み取り専用モード",
-    "readOnlyModeTooltip": "テキストが長すぎるため、ページのパフォーマンスを確保するため自動的に読み取り専用モードに切り替わりました",
+    "readOnlyModeTooltip": "テキストが長すぎるため、エディターは一時的に読み取り専用となり、一部のみをプレビュー表示しています。完全な内容は影響を受けず、処理と書き出しは全文に対して行われます。",
     "clearInputTooltip": "入力内容とアップロードされたファイルをクリア",
     "fileExported": "ファイルをエクスポートしました：{fileName}",
     "exportSuccess": "エクスポート成功：{fileName}",
@@ -143,7 +143,8 @@
     "langPresetIndian": "インド亜大陸",
     "selectedCount": "{count} 言語選択中",
     "recentLanguages": "最近使用",
-    "langGroupAmericasOceania": "アメリカ・オセアニア"
+    "langGroupAmericasOceania": "アメリカ・オセアニア",
+    "relatedTools": "関連ツール"
   },
   "JSON": {
     "clientDescription": "開発者向けのJSON翻訳ツール。JSONPath完全一致とキー名マッピングをサポートし、プロジェクトの国際化を迅速に実現します。",
@@ -243,20 +244,40 @@
     "jsonTranslate": {
       "title": "i18n JSON翻訳",
       "description": "効率的な多言語JSON翻訳ツール",
-      "metaTitle": "JSON 翻訳ツール - i18n 多言語一括翻訳、JSONPath 対応",
-      "metaDescription": "JSON翻訳にお困りですか？JSONPath一致やキーマッピング対応のAIツールで、プロジェクトの国際化を簡単に。DeepSeek等に対応、完全無料のオープンソース！",
+      "metaTitle": "JSON 翻訳ツール - i18n 多言語一括翻訳、JSONPath 精密指定",
+      "metaDescription": "JSON i18n 翻訳、DeepSeek/Claude/GPT など 25+ エンジン、全体・JSONPath・キー・多言語・統合の 5 モード。",
       "faq": [
         {
-          "q": "この JSON 翻訳ツールはどのエンジンとファイルサイズをサポートしますか？",
-          "a": "Google 無料版、DeepSeek、DeepL、Azure、OpenAI、Qwen-MT を含む 15+ のエンジンに対応。任意サイズの JSON ファイルを処理でき、翻訳キャッシュにより次回ビルドの増分更新が可能です。"
+          "q": "JSON 翻訳ツールは、どの翻訳エンジンとファイルサイズに対応していますか？",
+          "a": "ブラウザ内で動作する JSON 国際化翻訳ツール。原文はサーバーに送信されず、API キーはローカル localStorage のみに保存。25+ のエンジンに対応：Google 無料版（設定不要）、DeepSeek、Claude、GPT、Gemini、DeepL、Azure、Qwen-MT、および任意の OpenAI 互換エンドポイント（Ollama / LM Studio / vLLM セルフホスト）。グローバル、指定ノード（JSONPath）、指定キー名、選択的キー、i18n 多言語集約の 5 種類のモード。IndexedDB キャッシュで増分翻訳——変更されたキーだけ再翻訳します。"
+        },
+        {
+          "q": "JSON 翻訳には機械翻訳と AI 翻訳のどちらを使う？選び方は？",
+          "a": "JSON 値の長さで選ぶ：短ければ MT、長ければ AI 大規模言語モデル。短い UI 文言（ボタン、メニュー項目、エラーメッセージ）は機械翻訳で十分——Google 無料版はゼロコスト（1 リクエスト 5000 文字制限）、DeepL と Azure Translate は欧州言語向け。長文（製品説明、チュートリアル）には AI 大規模言語モデル：DeepSeek がコストパフォーマンス最優先、代替に GPT-5-mini；Claude Sonnet は用語一貫性が最も安定し、「システムプロンプト」に用語保持リストを追加すればブランド名・SKU・API 用語を保護できます。"
+        },
+        {
+          "q": "next-intl、i18next、vue-i18n、react-intl などの i18n フレームワークの JSON 形式に対応していますか？",
+          "a": "すべて対応しています。next-intl と vue-i18n のネストオブジェクト構造、i18next のフラットキー名前空間、react-intl の ICU MessageFormat プレースホルダーをすべて正しく処理します。`{name}`、`{count, plural, ...}`、`{0}` などのプレースホルダーは翻訳時に保持され書き換えられません。「キー名指定」モードでキーを変更せず値だけを翻訳するか、「i18n モード」で元の JSON に直接複数言語を集約（例：`{en: \"Settings\", zh: \"设置\"}` 構造）するのがおすすめです。"
+        },
+        {
+          "q": "JSON を一度に複数の言語に翻訳できますか？",
+          "a": "多言語モードを有効にすると、複数の対象言語を選択して en.json、ja.json、ko.json などを一括生成でき、国際化作業の時間を大幅に節約できます。"
+        },
+        {
+          "q": "JSONPath で特定のノードだけを翻訳するには？例えば商品名のフィールドだけを翻訳したい場合。",
+          "a": "「ノード指定」モードは標準の JSONPath 式を受け付けます：`$.products[*].name` で全商品の name フィールドを翻訳、`$..title` で再帰的にすべての title フィールドを翻訳。複数のパスはカンマ区切りです。「キー名指定」の高度なマッピングモードと組み合わせれば、翻訳結果を新しいフィールド（例：`name` → `name_zh`）に書き込み原文を保持できます。注意：ドット（.）を含むキー名はネストパスと誤認されるため避けてください。"
         },
         {
           "q": "翻訳後に JSON のキー名やネスト構造は壊れますか？",
           "a": "壊れません。ツールは値のみを翻訳し、キー名・ネスト階層・配列構造はすべて保持されます。翻訳後のファイルは React や Vue などの i18n フレームワークでそのまま使用できます。"
         },
         {
-          "q": "JSON を一度に複数の言語に翻訳できますか？",
-          "a": "多言語モードを有効にすると、複数の対象言語を選択して en.json、ja.json、ko.json などを一括生成でき、国際化作業の時間を大幅に節約できます。"
+          "q": "翻訳対象が i18n JSON ではなく Markdown や字幕ファイルの場合は？",
+          "a": "Markdown ドキュメント（.md、.mdx）は [Markdown 翻訳](../md-translator) をご利用ください、コードブロック、LaTeX 数式、Front Matter メタデータを保持します。字幕ファイル（SRT/ASS/VTT/LRC）は [字幕翻訳](../subtitle-translator) をご利用ください、タイムコードと ASS スタイルタグを保持します。3 つの翻訳ツールは同じエンジン設定と翻訳キャッシュを共有しているため、ツール間の切り替え時に再設定は不要です。"
+        },
+        {
+          "q": "JSON の内容はサーバーにアップロードされますか？大きなファイルでもプライバシーは安全ですか？",
+          "a": "完全にクライアントサイドで処理：JSON の読み込み、解析、翻訳リクエストはすべてブラウザ内で完結し、原文は当社のサーバーを経由しません。LLM エンジンのリクエストはあなたのブラウザから直接、設定した API エンドポイント（OpenAI、DeepSeek など）に送られ、API Key はローカルの localStorage にのみ保存されます。翻訳キャッシュはブラウザの IndexedDB を使用し、ビルド間の増分更新に対応——変更されたキーのみが API を再呼び出しするため、コストを節約できます。ソースコードは GitHub（rockbenben/json-translate）でオープンソース公開されており、セルフホスティングや実装の監査が可能です。"
         }
       ],
       "howto": [
@@ -274,7 +295,7 @@
         }
       ],
       "features": [
-        "15+ 翻訳エンジン対応（Google、DeepSeek、DeepL、Azure、OpenAI、Qwen-MT）",
+        "25+ 翻訳エンジン対応（Google、DeepSeek、Claude、GPT、Gemini、DeepL、Azure、Qwen-MT）",
         "JSONPath マッチングによる精密なキー指定",
         "多言語一括生成（en.json、ja.json、ko.json など）",
         "翻訳時のキー名変更（キーマッピングモード）",
@@ -294,11 +315,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI | 無料で使えるAI翻訳＆データ処理ツール集",
-    "description": "効率的な開発ツールをお探しですか？ToolsByAIは字幕翻訳やJSON編集など20+の無料アプリを提供。DeepSeekなどのAI搭載、安全なローカル処理。今すぐ体験！",
+    "description": "ToolsByAI、17 個の無料ツール：字幕・Markdown・JSON i18n 翻訳、テキストや JSON 一括処理。25+ AI エンジン。",
     "homeTitle": "ToolsByAI ツールセット",
     "homeDescription": "20+ ツール。多言語翻訳、テキスト処理、JSONデータ変換など、開発者とクリエイターの効率向上を支援。",
     "ogTitle": "ToolsByAI | 無料で使えるAI翻訳＆データ処理ツール集",
-    "ogDescription": "効率的な開発ツールをお探しですか？ToolsByAIは字幕翻訳やJSON編集など20+の無料アプリを提供。DeepSeekなどのAI搭載、安全なローカル処理。今すぐ体験！"
+    "ogDescription": "ToolsByAI、17 個の無料ツール：字幕・Markdown・JSON i18n 翻訳、テキストや JSON 一括処理。25+ AI エンジン。"
   },
   "languages": {
     "auto": "自動検出",
@@ -432,13 +453,19 @@
   },
   "feedback": {
     "feedback1": "フィードバックと提案",
-    "feedback2": "使用中に問題が発生した場合、または提案やアイデアがある場合は、いつでもお知らせください！あなたのフィードバックは将来の機能開発と改善に直接影響し、みんなのニーズにより合ったツールを作るのに役立ちます。",
+    "feedback2": "使用中に問題が発生した場合、または提案やアイデアがある場合は、いつでもお知らせください！",
     "feedback3": "使用シーンや遭遇した問題、または創造的なアイデアを詳しく説明してください。すべてのフィードバックを真剣に読み、できるだけ早く調整と最適化を行います。",
     "reaction0": "いいね",
     "reaction1": "応援",
     "reaction2": "クール",
     "reaction3": "なにこれ",
     "reaction4": "不明",
-    "placeholder": "メッセージを残してください。ログインは不要です（メールアドレスを入力すると返信通知を受け取れます）"
+    "placeholder": "メッセージを残してください。ログインは不要です（メールアドレスを入力すると返信通知を受け取れます）",
+    "metaDescription": "Tools By AI のフィードバックページ：バグ報告、機能リクエスト、使用例を共有。Waline ベース、匿名投稿可。"
+  },
+  "NotFound": {
+    "title": "ページが見つかりません",
+    "description": "アクセスしたページは存在しないか移動されました。",
+    "goHome": "ホームへ戻る"
   }
 }
