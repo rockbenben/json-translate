@@ -42,7 +42,7 @@ export const preprocessJson = (input: string): JsonValue => {
   if (parsed !== null) return parsed;
 
   // 4) 全部失败，抛出错误
-  throw new Error("Unable to parse JSON 无法解析 JSON 数据。");
+  throw new Error("Unable to parse JSON. / 无法解析 JSON 数据。");
 };
 
 /**
@@ -53,5 +53,5 @@ export const stripJsonWrapper = (input: string): string => {
   if ((trimmed.startsWith("{") && trimmed.endsWith("}")) || (trimmed.startsWith("[") && trimmed.endsWith("]"))) {
     return trimmed.slice(1, -1).trim();
   }
-  throw new Error("JSON format error: 缺少有效的外层包裹结构，请检查格式");
+  throw new Error("JSON format error: missing a valid outer wrapper. / JSON 格式错误：缺少有效的外层包裹结构，请检查格式。");
 };
