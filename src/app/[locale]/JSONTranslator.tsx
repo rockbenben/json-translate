@@ -69,6 +69,10 @@ const JSONTranslator = () => {
     failedLines,
     failedLangs,
     setFailedLangs,
+    failedReason,
+    clearFailures,
+    markRunHadFailures,
+    hadRunFailures,
     isTranslating,
     setIsTranslating,
     handleLanguageChange,
@@ -302,7 +306,7 @@ const JSONTranslator = () => {
     // 如果没有有效的映射，抛出错误
     if (validMappings.length === 0) {
       console.warn("No valid key mappings found");
-      throw new Error("No valid key mappings found. Please check if the specified keys exist in the JSON.");
+      throw new Error(tJson("invalidPathKey"));
     }
 
     // 处理所有有效的映射
@@ -444,9 +448,9 @@ const JSONTranslator = () => {
   const runTranslation = async () => {
     setTranslatedText("");
     setTranslationResults({});
-    // Local runTranslation — reset lang-failure manually (hook's runTranslation
-    // isn't called from this path).
-    setFailedLangs([]);
+    // Local runTranslation (hook's isn't called here) — reset ALL failure state so
+    // counts don't accumulate across runs and the failure warning re-fires.
+    clearFailures();
 
     // Reset progress
     translatedCountRef.current = 0;
@@ -455,7 +459,7 @@ const JSONTranslator = () => {
     setProgressInfo({ current: 0, total: 0 });
 
     if (!sourceText.trim()) {
-      message.error(t("noSourceText"));
+      message.warning(t("noSourceText"));
       return;
     }
 
@@ -524,7 +528,7 @@ const JSONTranslator = () => {
           }
           await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
 
-          message.success(`${t("exportedFile")}: ${downloadFileName}`);
+          message.success(t("fileExported", { fileName: downloadFileName }));
         }
       } else {
         for (const currentTargetLang of targetLangs) {
@@ -563,17 +567,22 @@ const JSONTranslator = () => {
               const downloadFileName = generateFileName(fileName, currentTargetLang, "json");
               await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
 
-              message.success(`${langLabel} ${t("exportedFile")}: ${downloadFileName}`);
+              message.success(`${langLabel} ${t("fileExported", { fileName: downloadFileName })}`);
             }
           } catch (error: unknown) {
             console.error(`Error translating to ${currentTargetLang}:`, error);
             if (isCascadedAbort(error)) continue;
             // De-duped lang-failure aggregation. Shown in TranslateFailurePanel.
             setFailedLangs((prev) => (prev.includes(currentTargetLang) ? prev : [...prev, currentTargetLang]));
+            // Flip the run's failure flag so the success toast below is suppressed even
+            // when other langs produced results (otherwise green "完成" contradicts the panel).
+            markRunHadFailures();
             const friendly = isNetworkError(error) ? t("networkUnavailable") : isAbortError(error) ? t("translationTimeout") : null;
             const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
             const content = friendly ? `${friendly} (${langLabel})` : `${getErrorMessage(error)} ${langLabel} ${t("translationError")}`;
-            message.error(content, 60);
+            // Shared key: N failed languages roll into one toast instead of stacking
+            // N high — the TranslateFailurePanel below keeps the full per-lang list.
+            message.error({ content, key: "translate-lang-fail", duration: 10 });
           }
         }
       }
@@ -586,9 +595,12 @@ const JSONTranslator = () => {
         setTranslatedText(allResults[targetLanguage]);
       }
 
-      // Show success message
+      // Show success message — but only when the run had NO line- or lang-level failures.
+      // Line failures set the ref inside translateSingle; lang failures via markRunHadFailures
+      // above. Without this gate a partially/fully failed run shows green "完成" on top of the
+      // red error toasts + TranslateFailurePanel.
       setProgressPercent(100);
-      if (!directExport) {
+      if (!directExport && !hadRunFailures()) {
         message.success(t("textProcessed"));
       }
     } catch (error: unknown) {
@@ -596,11 +608,11 @@ const JSONTranslator = () => {
       if (isCascadedAbort(error)) {
         // Auth error already surfaced via the inner catch — silently exit.
       } else if (isNetworkError(error)) {
-        message.error(t("networkUnavailable"), 60);
+        message.error(t("networkUnavailable"), 10);
       } else if (isAbortError(error)) {
-        message.error(t("translationTimeout"), 60);
+        message.error(t("translationTimeout"), 10);
       } else {
-        message.error(`${getErrorMessage(error)} ${t("translationError")}`, 60);
+        message.error(`${getErrorMessage(error)} ${t("translationError")}`, 10);
       }
     } finally {
       setIsTranslating(false);
@@ -610,6 +622,7 @@ const JSONTranslator = () => {
   const exportAllFiles = async () => {
     if (multiLanguageMode && Object.keys(translationResults).length > 0) {
       const exportedFiles = [];
+      const failedLabels: string[] = [];
       const languageCodes = Object.keys(translationResults);
       for (const langCode of languageCodes) {
         try {
@@ -617,12 +630,18 @@ const JSONTranslator = () => {
           exportedFiles.push(fileName);
         } catch (error) {
           console.error(`${langCode} Export Failure:`, error);
+          failedLabels.push(sourceOptions.find((option) => option.value === langCode)?.label || langCode);
         }
       }
-      message.success(`${exportedFiles.length} ${t("exportedFile")}: ${exportedFiles.join(", ")}`, 10);
+      if (exportedFiles.length > 0) {
+        message.success(`${exportedFiles.length} ${t("exportedFile")}: ${exportedFiles.join(", ")}`, 10);
+      }
+      if (failedLabels.length > 0) {
+        message.warning(t("partialExportFailed", { items: failedLabels.join(", ") }), 10);
+      }
     } else {
       const fileName = await handleExportFile();
-      message.success(`${t("exportedFile")}: ${fileName}`);
+      message.success(t("fileExported", { fileName }));
     }
   };
 
@@ -946,7 +965,7 @@ const JSONTranslator = () => {
       </Row>
 
       {/* Partial-failure panel: auto-retried once, still-failed lines kept originals */}
-      <TranslateFailurePanel count={failedCount} lines={failedLines} failedLangs={failedLangs} disabled={isTranslating} onRetry={runTranslation} />
+      <TranslateFailurePanel count={failedCount} lines={failedLines} failedLangs={failedLangs} reason={failedReason} onClose={clearFailures} disabled={isTranslating} onRetry={runTranslation} />
 
       {/* Results Section */}
       {!directExport && (translatedText || (multiLanguageMode && Object.keys(translationResults).length > 0)) && (
@@ -964,7 +983,7 @@ const JSONTranslator = () => {
                   copyNodeLabel={tJson("copyNode")}
                   onExport={async () => {
                     const fileName = await handleExportFile();
-                    message.success(`${t("exportedFile")}: ${fileName}`);
+                    message.success(t("fileExported", { fileName }));
                   }}
                 />
               )}
