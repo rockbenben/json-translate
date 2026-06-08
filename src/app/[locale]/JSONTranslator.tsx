@@ -15,6 +15,7 @@ import { useTextStats } from "@/app/hooks/useTextStats";
 import { useExportFilename } from "@/app/hooks/useExportFilename";
 
 import { filterObjectPropertyMatches, preprocessJson, downloadFile, getErrorMessage, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, splitBySpaces, getFileTypePresetConfig } from "@/app/utils";
+import { isAuthError } from "@/app/hooks/translation";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
 import { useLanguageOptions } from "@/app/components/languages";
 import LanguageSelector from "@/app/components/LanguageSelector";
@@ -72,6 +73,7 @@ const JSONTranslator = () => {
     failedReason,
     clearFailures,
     markRunHadFailures,
+    recordLineFailure,
     hadRunFailures,
     isTranslating,
     setIsTranslating,
@@ -82,6 +84,8 @@ const JSONTranslator = () => {
     setRetryCount,
     requestTimeoutSec,
     setRequestTimeoutSec,
+    buildTranslationSystemPrompt,
+    applyGlossary,
   } = useTranslationContext();
 
   const [directExport, setDirectExport] = useState(false);
@@ -130,12 +134,13 @@ const JSONTranslator = () => {
   const handleI18nTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
     // 使用选择的源语言作为 i18n 源字段
     const sourceField = sourceLanguage === "auto" ? "en" : sourceLanguage;
+    const glossarySystemPrompt = buildTranslationSystemPrompt(currentTargetLang);
     const cacheSuffix = generateCacheSuffix({
       sourceLanguage,
       targetLanguage: currentTargetLang,
       translationMethod,
       config,
-      systemPrompt,
+      systemPrompt: glossarySystemPrompt,
       userPrompt,
     });
 
@@ -169,12 +174,18 @@ const JSONTranslator = () => {
                   targetLanguage: currentTargetLang,
                   sourceLanguage,
                   ...runtimeConfig,
+                  systemPrompt: glossarySystemPrompt,
                 });
                 // 添加翻译结果到同一个对象中的目标语言字段
-                record[currentTargetLang] = translatedText;
+                record[currentTargetLang] = applyGlossary(translatedText || "", currentTargetLang);
               } catch (error) {
-                aborted = true;
-                throw error;
+                // auth/级联中止 → 快停;其余 → 行级软失败计入失败面板并继续,
+                // 单节点瞬时失败不再丢弃整个语言已完成的翻译。
+                if (isAuthError(error) || isCascadedAbort(error)) {
+                  aborted = true;
+                  throw error;
+                }
+                recordLineFailure(sourceValue, getErrorMessage(error));
               }
             }
             updateProgress();
@@ -196,12 +207,13 @@ const JSONTranslator = () => {
     const stringNodes = allNodes.filter((node) => typeof node.value === "string");
     totalCountRef.current += stringNodes.length;
 
+    const glossarySystemPrompt = buildTranslationSystemPrompt(currentTargetLang);
     const cacheSuffix = generateCacheSuffix({
       sourceLanguage,
       targetLanguage: currentTargetLang,
       translationMethod,
       config,
-      systemPrompt,
+      systemPrompt: glossarySystemPrompt,
       userPrompt,
     });
     const tasks: Promise<void>[] = [];
@@ -219,11 +231,15 @@ const JSONTranslator = () => {
               targetLanguage: currentTargetLang,
               sourceLanguage,
               ...runtimeConfig,
+              systemPrompt: glossarySystemPrompt,
             });
-            node.parent[node.parentProperty] = translatedText || "";
+            node.parent[node.parentProperty] = applyGlossary(translatedText || "", currentTargetLang);
           } catch (error) {
-            aborted = true;
-            throw error;
+            if (isAuthError(error) || isCascadedAbort(error)) {
+              aborted = true;
+              throw error;
+            }
+            recordLineFailure(sourceText, getErrorMessage(error));
           }
           updateProgress();
         }),
@@ -235,7 +251,31 @@ const JSONTranslator = () => {
 
   // 处理指定节点的键值对翻译
   const handleNodeKeysTranslation = async (jsonObject: JsonValue, currentTargetLang: string, jsonPath: string) => {
-    const nodes = JSONPath({ path: jsonPath, json: jsonObject, resultType: "all" }) as JsonPathNode[];
+    // UI 的 multiValueHint/placeholder 承诺逗号分隔多路径("content,data.title")
+    // —— 原样整串喂给 JSONPath 会被解析成畸形 union:只命中最后一个路径,
+    // 其余静默丢弃且照常报成功。只按【顶层】逗号拆分:方括号内的逗号是
+    // JSONPath 合法的 bracket union($.book[0,1].title),拆了就只剩半截。
+    const splitTopLevelCommas = (s: string): string[] => {
+      const parts: string[] = [];
+      let cur = "";
+      let depth = 0;
+      for (const ch of s) {
+        if (ch === "[") depth++;
+        else if (ch === "]") depth = Math.max(0, depth - 1);
+        if ((ch === "," || ch === "，") && depth === 0) {
+          parts.push(cur);
+          cur = "";
+          continue;
+        }
+        cur += ch;
+      }
+      parts.push(cur);
+      return parts;
+    };
+    const paths = splitTopLevelCommas(jsonPath)
+      .map((p) => p.trim())
+      .filter(Boolean);
+    const nodes = paths.flatMap((p) => JSONPath({ path: p, json: jsonObject, resultType: "all" }) as JsonPathNode[]);
 
     if (nodes.length === 0) {
       throw new Error(`${tJson("invalidPathKey")}: ${jsonPath}`);
@@ -243,6 +283,18 @@ const JSONTranslator = () => {
 
     const tasks: Promise<void>[] = [];
     for (const node of nodes) {
+      // 路径解析到字符串叶节点(工具自带示例 $.store.book[*].title 即是)——
+      // 装箱借道 handleAllKeysTranslation 翻译后回写。旧逻辑静默跳过非对象
+      // 节点,整次运行零翻译却报成功。
+      if (typeof node.value === "string") {
+        const box: Record<string, JsonValue> = { v: node.value };
+        tasks.push(
+          handleAllKeysTranslation(box, currentTargetLang).then(() => {
+            (node.parent as Record<string, JsonValue>)[node.parentProperty] = box.v;
+          }),
+        );
+        continue;
+      }
       if (typeof node.value !== "object" || node.value == null) continue;
       // 调用 handleAllKeysTranslation 对节点的值进行翻译
       tasks.push(handleAllKeysTranslation(node.value as JsonValue, currentTargetLang));
@@ -294,13 +346,29 @@ const JSONTranslator = () => {
         console.warn(`Output key not found, skipping: ${outputKey}`);
         continue; // 跳过不存在的输出键，而不是抛出错误
       }
-      if (inputNodes.length !== outputNodes.length) {
-        console.warn(`Node count mismatch for ${inputKey}:${outputKey}, skipping`);
-        continue; // 跳过节点数量不匹配的映射，而不是抛出错误
+
+      // 结构化配对:input/output 节点必须是【同一父对象】的兄弟键。两个独立
+      // $..key 查询的遍历顺序互不对应,按数组下标配对在计数恰好相等时会把
+      // 译文写进错误的对象(静默错位)。父路径 = JSONPath path 去掉末段。
+      const parentPathOf = (p: string) => p.replace(/\[[^[\]]*\]$/, "");
+      const outputByParent = new Map(outputNodes.map((n) => [parentPathOf(n.path), n]));
+      const pairedInputs: JsonPathNode[] = [];
+      const pairedOutputs: JsonPathNode[] = [];
+      for (const inNode of inputNodes) {
+        const outNode = outputByParent.get(parentPathOf(inNode.path));
+        if (outNode) {
+          pairedInputs.push(inNode);
+          pairedOutputs.push(outNode);
+        } else {
+          console.warn(`No sibling ${outputKey} for ${inNode.path}, skipping that node`);
+        }
+      }
+      if (pairedInputs.length === 0) {
+        console.warn(`No structurally-paired nodes for ${inputKey}:${outputKey}, skipping`);
+        continue;
       }
 
-      // 如果所有检查都通过，添加到有效映射列表
-      validMappings.push({ id, inputKey, outputKey, inputNodes, outputNodes });
+      validMappings.push({ id, inputKey, outputKey, inputNodes: pairedInputs, outputNodes: pairedOutputs });
     }
 
     // 如果没有有效的映射，抛出错误
@@ -312,6 +380,7 @@ const JSONTranslator = () => {
     // 处理所有有效的映射
     const allPromises: Promise<void>[] = [];
     let aborted = false;
+    const glossarySystemPrompt = buildTranslationSystemPrompt(currentTargetLang);
     for (const { inputNodes, outputNodes } of validMappings) {
       totalCountRef.current += inputNodes.length;
       const cacheSuffix = generateCacheSuffix({
@@ -319,24 +388,28 @@ const JSONTranslator = () => {
         targetLanguage: currentTargetLang,
         translationMethod,
         config,
-        systemPrompt,
+        systemPrompt: glossarySystemPrompt,
         userPrompt,
       });
       const promises = inputNodes.map((node, index: number) => {
         return limit(async () => {
           if (aborted) return;
+          const sourceValue = typeof node.value === "string" ? node.value : JSON.stringify(node.value);
           try {
-            const sourceValue = typeof node.value === "string" ? node.value : JSON.stringify(node.value);
             const translatedText = await translateSingle(sourceValue, cacheSuffix, {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
               ...runtimeConfig,
+              systemPrompt: glossarySystemPrompt,
             });
-            outputNodes[index].parent[outputNodes[index].parentProperty] = translatedText || "";
+            outputNodes[index].parent[outputNodes[index].parentProperty] = applyGlossary(translatedText || "", currentTargetLang);
           } catch (error) {
-            aborted = true;
-            throw error;
+            if (isAuthError(error) || isCascadedAbort(error)) {
+              aborted = true;
+              throw error;
+            }
+            recordLineFailure(sourceValue, getErrorMessage(error));
           }
           updateProgress();
         });
@@ -382,25 +455,28 @@ const JSONTranslator = () => {
       // Get relevant keys (all keys if no start node, or keys from start index onwards)
       const relevantKeys = startIndex === -1 ? objectKeys : objectKeys.slice(startIndex);
 
-      // Find all nodes that need translation
+      // Find all nodes that need translation。仅收字符串值:非字符串会被
+      // String() 变成 "[object Object]"/"123" 送翻译,译回的垃圾字符串再覆盖
+      // 原结构 —— 静默数据损坏。
       const nodesToTranslate = relevantKeys
         .map((key) => ({
           key: key,
           value: rootRecord[key]?.[inputKey],
         }))
-        .filter((node) => node.value !== undefined);
+        .filter((node): node is { key: string; value: string } => typeof node.value === "string");
 
       if (nodesToTranslate.length === 0) {
         throw new Error(`${tJson("invalidPathKey")}: ${inputKey}`);
       }
 
       totalCountRef.current += nodesToTranslate.length;
+      const glossarySystemPrompt = buildTranslationSystemPrompt(currentTargetLang);
       const cacheSuffix = generateCacheSuffix({
         sourceLanguage,
         targetLanguage: currentTargetLang,
         translationMethod,
         config,
-        systemPrompt,
+        systemPrompt: glossarySystemPrompt,
         userPrompt,
       });
       // Translate all nodes
@@ -409,17 +485,21 @@ const JSONTranslator = () => {
         return limit(async () => {
           if (aborted) return;
           try {
-            const translatedText = await translateSingle(String(node.value), cacheSuffix, {
+            const translatedText = await translateSingle(node.value, cacheSuffix, {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
               ...runtimeConfig,
+              systemPrompt: glossarySystemPrompt,
             });
             // Update the value in the original object
-            rootRecord[node.key][outputKey] = translatedText;
+            rootRecord[node.key][outputKey] = applyGlossary(translatedText || "", currentTargetLang);
           } catch (error) {
-            aborted = true;
-            throw error;
+            if (isAuthError(error) || isCascadedAbort(error)) {
+              aborted = true;
+              throw error;
+            }
+            recordLineFailure(node.value, getErrorMessage(error));
           }
           updateProgress();
         });
@@ -498,9 +578,22 @@ const JSONTranslator = () => {
         // For i18nMode + multiLanguageMode, process all languages in the same JSON object
         const jsonObject = JSON.parse(JSON.stringify(originalJsonObject));
 
-        // Process each target language sequentially but add to the same object
+        // 逐语言隔离失败(与下方非 i18n 分支一致):此前一个语言抛错会把
+        // 已完成语言的全部翻译一起丢弃 —— 现在失败语言记入面板,完成的
+        // 语言照常落入合并结果。
         for (const currentTargetLang of targetLangs) {
-          await handleI18nTranslation(jsonObject, currentTargetLang);
+          try {
+            await handleI18nTranslation(jsonObject, currentTargetLang);
+          } catch (error: unknown) {
+            console.error(`Error translating to ${currentTargetLang}:`, error);
+            if (isCascadedAbort(error)) continue;
+            setFailedLangs((prev) => (prev.includes(currentTargetLang) ? prev : [...prev, currentTargetLang]));
+            markRunHadFailures();
+            const friendly = isNetworkError(error) ? t("networkUnavailable") : isAbortError(error) ? t("translationTimeout") : null;
+            const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
+            const content = friendly ? `${friendly} (${langLabel})` : `${getErrorMessage(error)} ${langLabel} ${t("translationError")}`;
+            message.error({ content, key: "translate-lang-fail", duration: 10 });
+          }
         }
 
         let resultText = JSON.stringify(jsonObject, null, 2);
