@@ -1,4 +1,34 @@
 {
+  "TranslationGlossary": {
+    "title": "Glosarium",
+    "defaultName": "Glosarium saya",
+    "colFrom": "Sumber",
+    "colTo": "Terjemahan",
+    "langHint": "Istilah disimpan terpisah per bahasa target",
+    "presetCreated": "Glosarium dibuat",
+    "presetRenamed": "Nama glosarium diubah",
+    "presetDeleted": "Glosarium dihapus",
+    "subtitle": "Tetapkan terjemahan tetap untuk nama / istilah, diterapkan per bahasa target",
+    "enable": "Aktifkan glosarium",
+    "presetSelect": "Pilih glosarium",
+    "presetEmptyHint": "Belum ada glosarium — klik + untuk membuat",
+    "presetNew": "Glosarium baru",
+    "presetRename": "Ganti nama",
+    "presetDelete": "Hapus",
+    "presetDeleteConfirm": "Hapus glosarium ini?",
+    "presetNamePlaceholder": "Nama glosarium (mis. nama serial)",
+    "edit": "Edit istilah",
+    "drawerTitle": "Edit glosarium",
+    "fromPlaceholder": "Istilah sumber (mis. Spike)",
+    "toPlaceholder": "Terjemahan (mis. Spike)",
+    "addTerm": "Tambah istilah",
+    "termCount": "{count, plural, other {{count} istilah}}",
+    "noTermsForLang": "Belum ada istilah untuk bahasa target ini",
+    "importTsv": "Impor TSV",
+    "exportTsv": "Ekspor TSV",
+    "importDone": "{count} istilah diimpor",
+    "nameRequired": "Nama glosarium wajib diisi"
+  },
   "common": {
     "fileProcessFailed": "Gagal memproses file — periksa encoding-nya atau coba file lain",
     "fileReadFailed": "Gagal membaca file",
@@ -113,6 +143,7 @@
     "apiStatusTesting": "Menguji",
     "apiStatusConnected": "✓ Terhubung",
     "apiStatusFailed": "Koneksi gagal",
+    "apiStatusTimeout": "Waktu koneksi habis",
     "testConnection": "Uji koneksi",
     "moreProviderSettings": "Pengaturan Provider lain",
     "format": "Format",
@@ -258,11 +289,11 @@
       "faq": [
         {
           "q": "Mesin terjemahan dan ukuran file apa yang didukung oleh penerjemah JSON ini?",
-          "a": "Penerjemah JSON i18n sisi browser: sumber tidak pernah meninggalkan mesin Anda, kunci API tetap di localStorage. 25+ mesin: Google free tier (tanpa konfigurasi), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, ditambah endpoint kompatibel OpenAI mana saja (Ollama / LM Studio / vLLM self-hosted). Lima mode: semua kunci, simpul-tertentu (JSONPath), kunci-tertentu, kunci-selektif, penggabungan multibahasa i18n. Cache IndexedDB untuk build inkremental — hanya kunci yang berubah memanggil API kembali."
+          "a": "Penerjemah JSON i18n sisi browser: sumber tidak pernah meninggalkan mesin Anda, kunci API tetap di localStorage. 25+ mesin: versi gratis Google (tanpa konfigurasi), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, ditambah endpoint kompatibel OpenAI mana saja (Ollama / LM Studio / vLLM self-hosted). Lima mode: semua kunci, simpul-tertentu (JSONPath), kunci-tertentu, kunci-selektif, penggabungan multibahasa i18n. Cache IndexedDB untuk build inkremental — hanya kunci yang berubah memanggil API kembali."
         },
         {
           "q": "Untuk menerjemahkan JSON, pakai mesin terjemahan atau AI/LLM? Bagaimana memilihnya?",
-          "a": "Pilih berdasarkan panjang nilai JSON: pendek → MT, panjang → AI/LLM. Untuk string UI pendek (label tombol, item menu, pesan kesalahan), mesin terjemahan cukup — Google free tier tidak berbiaya (batas 5000 karakter/panggilan), DeepL dan Azure Translate menangani bahasa Eropa dengan baik. Untuk teks lebih panjang (deskripsi produk, tutorial), gunakan AI/LLM: DeepSeek adalah pilihan terbaik untuk nilai, GPT-5-mini sebagai cadangan; Claude Sonnet menangani konsistensi terminologi paling andal — tambahkan glosarium di System Prompt untuk mengunci nama merek, SKU, dan istilah API.…"
+          "a": "Pilih berdasarkan panjang nilai JSON: pendek → mesin terjemahan, panjang → AI/LLM. Untuk string UI pendek (label tombol, item menu, pesan kesalahan), mesin terjemahan sudah cukup — Google versi gratis tanpa biaya (batas 5000 karakter per panggilan), DeepL dan Azure Translate cocok untuk bahasa Eropa. Untuk teks yang lebih panjang (deskripsi produk, tutorial), gunakan AI/LLM: DeepSeek pilihan utama untuk nilai terbaik, GPT-5-mini sebagai cadangan; Claude Sonnet paling andal dalam konsistensi terminologi — tambahkan glosarium di System Prompt untuk mengunci nama merek, SKU, dan istilah API. Konfigurasi mesin dapat dibagikan dengan [Penerjemah Subtitle](../subtitle-translator) dan [Penerjemah Markdown](../md-translator)."
         },
         {
           "q": "Apakah mendukung format JSON dari framework i18n seperti next-intl, i18next, vue-i18n, dan react-intl?",
@@ -522,7 +553,7 @@
   },
   "feedback": {
     "feedback1": "Umpan Balik & Saran",
-    "feedback2": "Jika Anda menemukan masalah atau memiliki saran, beri tahu saya!Umpan balik Anda memengaruhi pengembangan masa depan dan membantu kami membuat alat yang l…",
+    "feedback2": "Jika Anda menemukan masalah saat menggunakan alat ini, atau punya saran dan ide apa pun, jangan ragu untuk memberi tahu saya! Umpan balik Anda akan langsung memengaruhi pengembangan dan penyempurnaan fitur di masa depan, serta membantu kami bersama-sama membangun alat yang lebih sesuai dengan kebutuhan semua orang.",
     "feedback3": "Jelaskan kasus penggunaan, masalah, atau ide Anda. Saya membaca setiap pesan dan akan merespons/mengoptimalkan sesegera mungkin.",
     "reaction0": "Suka",
     "reaction1": "Dukung",

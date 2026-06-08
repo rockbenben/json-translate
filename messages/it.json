@@ -1,4 +1,34 @@
 {
+  "TranslationGlossary": {
+    "title": "Glossario",
+    "defaultName": "Il mio glossario",
+    "colFrom": "Origine",
+    "colTo": "Traduzione",
+    "langHint": "I termini sono salvati per lingua di destinazione",
+    "presetCreated": "Glossario creato",
+    "presetRenamed": "Glossario rinominato",
+    "presetDeleted": "Glossario eliminato",
+    "subtitle": "Imposta traduzioni fisse per nomi / termini tecnici, applicate per lingua di destinazione",
+    "enable": "Attiva glossario",
+    "presetSelect": "Seleziona un glossario",
+    "presetEmptyHint": "Nessun glossario — clicca + per crearne uno",
+    "presetNew": "Nuovo glossario",
+    "presetRename": "Rinomina",
+    "presetDelete": "Elimina",
+    "presetDeleteConfirm": "Eliminare questo glossario?",
+    "presetNamePlaceholder": "Nome del glossario (es. una serie TV)",
+    "edit": "Modifica termini",
+    "drawerTitle": "Modifica glossario",
+    "fromPlaceholder": "Termine sorgente (es. Spike)",
+    "toPlaceholder": "Traduzione (es. Spike)",
+    "addTerm": "Aggiungi termine",
+    "termCount": "{count, plural, one {# termine} other {# termini}}",
+    "noTermsForLang": "Nessun termine per questa lingua di destinazione",
+    "importTsv": "Importa TSV",
+    "exportTsv": "Esporta TSV",
+    "importDone": "{count} importati",
+    "nameRequired": "Nome del glossario obbligatorio"
+  },
   "common": {
     "fileProcessFailed": "Elaborazione del file non riuscita — controlla la codifica o prova un altro file",
     "fileReadFailed": "Lettura del file non riuscita",
@@ -113,6 +143,7 @@
     "apiStatusTesting": "Test in corso",
     "apiStatusConnected": "✓ Connesso",
     "apiStatusFailed": "Connessione fallita",
+    "apiStatusTimeout": "Connessione scaduta",
     "testConnection": "Testa connessione",
     "moreProviderSettings": "Altre impostazioni Provider",
     "format": "Formatta",
@@ -258,11 +289,11 @@
       "faq": [
         {
           "q": "Quali motori di traduzione e dimensioni dei file supporta questo traduttore JSON?",
-          "a": "Traduttore JSON i18n lato browser: la sorgente non lascia mai la tua macchina, la chiave API rimane in localStorage. 25+ motori: Google free tier (zero configurazione), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, più qualsiasi endpoint compatibile con OpenAI (Ollama / LM Studio / vLLM self-hosted). Cinque modalità: tutte le chiavi, nodo-specificato (JSONPath), chiave-specificata, chiave-selettiva, fusione multilingue i18n. Cache IndexedDB per build incrementali — solo le chiavi modificate richiamano l'API."
+          "a": "Traduttore JSON i18n lato browser: la sorgente non lascia mai la tua macchina, la chiave API rimane in localStorage. 25+ motori: versione gratuita di Google (zero configurazione), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, più qualsiasi endpoint compatibile con OpenAI (Ollama / LM Studio / vLLM self-hosted). Cinque modalità: tutte le chiavi, nodo-specificato (JSONPath), chiave-specificata, chiave-selettiva, fusione multilingue i18n. Cache IndexedDB per build incrementali — solo le chiavi modificate richiamano l'API."
         },
         {
           "q": "Per tradurre JSON, usare traduzione automatica o traduzione IA/LLM? Come scegliere?",
-          "a": "Scegli in base alla lunghezza del valore JSON: corto → MT, lungo → IA/LLM. Per stringhe UI corte (etichette pulsanti, voci menu, messaggi errore) la traduzione automatica basta — Google free tier non costa nulla (limite 5000 caratteri/chiamata), DeepL e Azure Translate gestiscono bene le lingue europee. Per testi più lunghi (descrizioni prodotti, tutorial) usa IA/LLM: DeepSeek è il miglior rapporto qualità-prezzo, GPT-5-mini come alternativa; Claude Sonnet gestisce la terminologia più affidabilmente — aggiungi un glossario nel System Prompt per bloccare nomi di marca, SKU…"
+          "a": "Scegli in base alla lunghezza del valore JSON: corto → MT, lungo → IA/LLM. Per stringhe UI corte (etichette pulsanti, voci menu, messaggi errore) la traduzione automatica basta — la versione gratuita di Google non costa nulla (limite di 5000 caratteri per chiamata), DeepL e Azure Translate gestiscono bene le lingue europee. Per testi più lunghi (descrizioni prodotti, tutorial) usa IA/LLM: DeepSeek è il miglior rapporto qualità-prezzo, GPT-5-mini come alternativa; Claude Sonnet gestisce la terminologia più affidabilmente — aggiungi un glossario nel System Prompt per bloccare nomi di marca, SKU e termini API. La configurazione del motore può essere condivisa con [Traduttore Sottotitoli](../subtitle-translator) e [Traduttore Markdown](../md-translator)."
         },
         {
           "q": "Supporta i formati JSON di next-intl, i18next, vue-i18n e react-intl?",

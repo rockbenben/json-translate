@@ -1,4 +1,34 @@
 {
+  "TranslationGlossary": {
+    "title": "Glossário",
+    "defaultName": "Meu glossário",
+    "colFrom": "Origem",
+    "colTo": "Tradução",
+    "langHint": "Os termos são salvos por idioma de destino",
+    "presetCreated": "Glossário criado",
+    "presetRenamed": "Glossário renomeado",
+    "presetDeleted": "Glossário excluído",
+    "subtitle": "Fixe traduções para nomes / jargões, aplicadas por idioma de destino",
+    "enable": "Ativar glossário",
+    "presetSelect": "Selecionar glossário",
+    "presetEmptyHint": "Nenhum glossário ainda — clique em + para criar",
+    "presetNew": "Novo glossário",
+    "presetRename": "Renomear",
+    "presetDelete": "Excluir",
+    "presetDeleteConfirm": "Excluir este glossário?",
+    "presetNamePlaceholder": "Nome do glossário (ex.: uma série)",
+    "edit": "Editar termos",
+    "drawerTitle": "Editar glossário",
+    "fromPlaceholder": "Termo de origem (ex.: Spike)",
+    "toPlaceholder": "Tradução (ex.: Spike)",
+    "addTerm": "Adicionar termo",
+    "termCount": "{count, plural, one {# termo} other {# termos}}",
+    "noTermsForLang": "Ainda não há termos para este idioma de destino",
+    "importTsv": "Importar TSV",
+    "exportTsv": "Exportar TSV",
+    "importDone": "{count} importados",
+    "nameRequired": "Nome do glossário obrigatório"
+  },
   "common": {
     "fileProcessFailed": "Falha ao processar o arquivo — verifique a codificação ou tente outro",
     "fileReadFailed": "Falha ao ler o arquivo",
@@ -113,6 +143,7 @@
     "apiStatusTesting": "Testando",
     "apiStatusConnected": "✓ Conectado",
     "apiStatusFailed": "Falha na conexão",
+    "apiStatusTimeout": "Tempo de conexão esgotado",
     "testConnection": "Testar conexão",
     "moreProviderSettings": "Mais configurações do Provider",
     "format": "Formatar",
@@ -262,7 +293,7 @@
         },
         {
           "q": "Para traduzir JSON, usar tradução automática ou tradução IA/LLM? Como escolher?",
-          "a": "Escolha pelo comprimento do valor JSON: curto → MT, longo → IA/LLM. Para strings curtas de UI (rótulos de botões, itens de menu, mensagens de erro), a tradução automática serve — Google versão gratuita custa zero (limite de 5000 caracteres/chamada), DeepL e Azure Translate manejam bem idiomas europeus. Para textos mais longos (descrições de produtos, tutoriais) use IA/LLM: DeepSeek é o melhor custo-benefício, GPT-5-mini como alternativa; Claude Sonnet gerencia a terminologia mais confiavelmente — adicione um glossário no Prompt de Sistema para travar nomes de marcas, SKUs…"
+          "a": "Escolha pelo comprimento do valor JSON: curto → MT, longo → IA/LLM. Para strings curtas de UI (rótulos de botões, itens de menu, mensagens de erro), a tradução automática serve — a versão gratuita do Google custa zero (limite de 5000 caracteres por chamada), DeepL e Azure Translate lidam bem com idiomas europeus. Para textos mais longos (descrições de produtos, tutoriais) use IA/LLM: DeepSeek é o melhor custo-benefício, GPT-5-mini como alternativa; Claude Sonnet gerencia a terminologia mais confiavelmente — adicione um glossário no Prompt de Sistema para travar nomes de marcas, SKUs e termos de API. As configurações do motor podem ser compartilhadas com [Tradutor de Legendas](../subtitle-translator) e [Tradutor Markdown](../md-translator)."
         },
         {
           "q": "Suporta os formatos JSON de next-intl, i18next, vue-i18n e react-intl?",

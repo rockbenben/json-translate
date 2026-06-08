@@ -1,4 +1,34 @@
 {
+  "TranslationGlossary": {
+    "title": "Glossary",
+    "defaultName": "My glossary",
+    "colFrom": "Source",
+    "colTo": "Translation",
+    "langHint": "Terms are saved separately per target language",
+    "presetCreated": "Glossary created",
+    "presetRenamed": "Glossary renamed",
+    "presetDeleted": "Glossary deleted",
+    "subtitle": "Pin fixed translations for names / jargon, applied per target language",
+    "enable": "Enable glossary",
+    "presetSelect": "Select a glossary",
+    "presetEmptyHint": "No glossary yet — click + to create",
+    "presetNew": "New glossary",
+    "presetRename": "Rename",
+    "presetDelete": "Delete",
+    "presetDeleteConfirm": "Delete this glossary?",
+    "presetNamePlaceholder": "Glossary name (e.g. a show)",
+    "edit": "Edit terms",
+    "drawerTitle": "Edit glossary",
+    "fromPlaceholder": "Source term (e.g. Spike)",
+    "toPlaceholder": "Translation (e.g. Spike)",
+    "addTerm": "Add term",
+    "termCount": "{count, plural, one {# term} other {# terms}}",
+    "noTermsForLang": "No terms for this target language yet",
+    "importTsv": "Import TSV",
+    "exportTsv": "Export TSV",
+    "importDone": "Imported {count}",
+    "nameRequired": "Glossary name required"
+  },
   "common": {
     "fileProcessFailed": "Failed to process the file — check its encoding or try another",
     "fileReadFailed": "Failed to read the file",
@@ -126,6 +156,7 @@
     "apiStatusTesting": "Testing",
     "apiStatusConnected": "✓ Connected",
     "apiStatusFailed": "Connection Failed",
+    "apiStatusTimeout": "Connection timed out",
     "testConnection": "Test Connection",
     "moreProviderSettings": "More Provider Settings",
     "gtxFreeAPIUnavailable": "GTX Free service is temporarily unreachable — could be a network restriction. Please try again later, or switch to a different translation service.",
@@ -262,7 +293,7 @@
         },
         {
           "q": "Should I use machine translation or AI/LLM for translating JSON? How do I choose?",
-          "a": "Pick by JSON value length: short → MT, long → AI/LLM. For short UI strings (button labels, menu items, error messages) machine translation works — Google free tier costs nothing (5000 chars/call limit), DeepL and Azure Translate handle European languages well. For longer text (product descriptions, tutorials) use AI/LLM: DeepSeek is the value pick, GPT-5-mini works as fallback; Claude Sonnet handles terminology most reliably — add a glossary in the System Prompt to lock brand names, SKUs, and API terms. Engine configs are shared with [Subtitle Translator](../subtitle-translator)…"
+          "a": "Pick by JSON value length: short → MT, long → AI/LLM. For short UI strings (button labels, menu items, error messages) machine translation works — Google free tier costs nothing (5000 chars/call limit), DeepL and Azure Translate handle European languages well. For longer text (product descriptions, tutorials) use AI/LLM: DeepSeek is the value pick, GPT-5-mini works as fallback; Claude Sonnet handles terminology most reliably — add a glossary in the System Prompt to lock brand names, SKUs, and API terms. Engine configs are shared with [Subtitle Translator](../subtitle-translator) and [Markdown Translator](../md-translator)."
         },
         {
           "q": "Does it support next-intl, i18next, vue-i18n, and react-intl JSON formats?",

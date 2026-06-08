@@ -1,4 +1,34 @@
 {
+  "TranslationGlossary": {
+    "title": "Glossar",
+    "defaultName": "Mein Glossar",
+    "colFrom": "Quelle",
+    "colTo": "Übersetzung",
+    "langHint": "Begriffe werden je Zielsprache gespeichert",
+    "presetCreated": "Glossar erstellt",
+    "presetRenamed": "Glossar umbenannt",
+    "presetDeleted": "Glossar gelöscht",
+    "subtitle": "Legt feste Übersetzungen für Namen / Fachbegriffe je Zielsprache fest",
+    "enable": "Glossar aktivieren",
+    "presetSelect": "Glossar auswählen",
+    "presetEmptyHint": "Kein Glossar vorhanden — auf + klicken zum Erstellen",
+    "presetNew": "Neues Glossar",
+    "presetRename": "Umbenennen",
+    "presetDelete": "Löschen",
+    "presetDeleteConfirm": "Dieses Glossar löschen?",
+    "presetNamePlaceholder": "Glossarname (z. B. eine Serie)",
+    "edit": "Begriffe bearbeiten",
+    "drawerTitle": "Glossar bearbeiten",
+    "fromPlaceholder": "Quellbegriff (z. B. Spike)",
+    "toPlaceholder": "Übersetzung (z. B. Spike)",
+    "addTerm": "Begriff hinzufügen",
+    "termCount": "{count, plural, one {# Begriff} other {# Begriffe}}",
+    "noTermsForLang": "Keine Begriffe für diese Zielsprache vorhanden",
+    "importTsv": "TSV importieren",
+    "exportTsv": "TSV exportieren",
+    "importDone": "{count} importiert",
+    "nameRequired": "Glossarname erforderlich"
+  },
   "common": {
     "fileProcessFailed": "Datei konnte nicht verarbeitet werden – prüfen Sie die Kodierung oder versuchen Sie eine andere",
     "fileReadFailed": "Datei konnte nicht gelesen werden",
@@ -126,6 +156,7 @@
     "apiStatusTesting": "Teste",
     "apiStatusConnected": "✓ Verbunden",
     "apiStatusFailed": "Verbindung fehlgeschlagen",
+    "apiStatusTimeout": "Zeitüberschreitung der Verbindung",
     "testConnection": "Verbindung testen",
     "moreProviderSettings": "Weitere Provider-Einstellungen",
     "gtxFreeAPIUnavailable": "Der GTX Free-Dienst ist vorübergehend nicht erreichbar — möglicherweise eine Netzwerkbeschränkung. Versuche es später erneut oder wechsle zu einem anderen Übersetzungsdienst.",
@@ -258,11 +289,11 @@
       "faq": [
         {
           "q": "Welche Übersetzungs-Engines und Dateigrößen unterstützt dieser JSON-Übersetzer?",
-          "a": "Browser-seitiger JSON-i18n-Übersetzer: Quelle verlässt nie Ihren Rechner, API-Key bleibt in localStorage. 25+ Engines: Google Free Tier (Zero-Config), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, plus jeder OpenAI-kompatible Endpunkt (Ollama / LM Studio / vLLM self-hosted). Fünf Modi: alle Keys, spezifizierter Knoten (JSONPath), spezifizierter Key, selektiver Key, i18n-Mehrsprachen-Merge. IndexedDB-Cache für inkrementelle Builds — nur geänderte Keys rufen die API erneut auf."
+          "a": "Browser-seitiger JSON-i18n-Übersetzer: Quelle verlässt nie Ihren Rechner, API-Key bleibt in localStorage. 25+ Engines: Googles Gratis-Version (Zero-Config), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, plus jeder OpenAI-kompatible Endpunkt (Ollama / LM Studio / vLLM self-hosted). Fünf Modi: alle Keys, spezifizierter Knoten (JSONPath), spezifizierter Key, selektiver Key, i18n-Mehrsprachen-Merge. IndexedDB-Cache für inkrementelle Builds — nur geänderte Keys rufen die API erneut auf."
         },
         {
           "q": "JSON-Übersetzung: Maschinelle Übersetzung oder KI/LLM verwenden? Wie wählt man?",
-          "a": "Wählen Sie nach JSON-Wertlänge: kurz → MT, lang → KI/LLM. Für kurze UI-Strings (Button-Beschriftungen, Menüpunkte, Fehlermeldungen) reicht maschinelle Übersetzung — Google Free Tier kostet nichts (5000-Zeichen-Limit/Anruf), DeepL und Azure Translate handhaben europäische Sprachen gut. Für längere Texte (Produktbeschreibungen, Tutorials) nutzen Sie KI/LLM: DeepSeek bietet das beste Preis-Leistungs-Verhältnis, GPT-5-mini als Alternative; Claude Sonnet handhabt Terminologie am zuverlässigsten — fügen Sie ein Glossar im System-Prompt hinzu, um Markennamen, SKUs und API-Begriffe…"
+          "a": "Wählen Sie nach JSON-Wertlänge: kurz → MT, lang → KI/LLM. Für kurze UI-Strings (Button-Beschriftungen, Menüpunkte, Fehlermeldungen) reicht maschinelle Übersetzung — die kostenlose Google-Version kostet nichts (Limit 5000 Zeichen pro Anfrage), DeepL und Azure Translate handhaben europäische Sprachen gut. Für längere Texte (Produktbeschreibungen, Tutorials) nutzen Sie KI/LLM: DeepSeek bietet das beste Preis-Leistungs-Verhältnis, GPT-5-mini als Alternative; Claude Sonnet handhabt Terminologie am zuverlässigsten — fügen Sie ein Glossar im System-Prompt hinzu, um Markennamen, SKUs und API-Begriffe zu schützen. Die Engine-Konfiguration kann mit [Untertitel-Übersetzer](../subtitle-translator) und [Markdown-Übersetzer](../md-translator) geteilt werden."
         },
         {
           "q": "Werden die JSON-Formate von next-intl, i18next, vue-i18n und react-intl unterstützt?",
@@ -522,7 +553,7 @@
   },
   "feedback": {
     "feedback1": "Feedback & Vorschläge",
-    "feedback2": "Wenn Sie Probleme haben oder Vorschläge, lassen Sie es mich wissen!Ihr Feedback beeinflusst die zukünftige Entwicklung und hilft uns, bessere Tools zu bau…",
+    "feedback2": "Wenn Sie bei der Nutzung auf Probleme stoßen oder Vorschläge und Ideen haben, lassen Sie es mich gerne jederzeit wissen! Ihr Feedback fließt direkt in die Entwicklung und Verbesserung künftiger Funktionen ein und hilft uns, gemeinsam Tools zu bauen, die den Bedürfnissen aller besser entsprechen.",
     "feedback3": "Bitte beschreiben Sie Ihren Anwendungsfall, das Problem oder Ihre Idee. Ich lese jede Nachricht und werde so schnell wie möglich antworten/optimieren.",
     "reaction0": "Gefällt mir",
     "reaction1": "Unterstützung",
