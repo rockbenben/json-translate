@@ -63,7 +63,7 @@ const JSONTranslator = () => {
     userPrompt,
     multiLanguageMode,
     setMultiLanguageMode,
-    translateSingle,
+    translateSingleWithGlossary,
     translatedText,
     setTranslatedText,
     failedCount,
@@ -84,8 +84,7 @@ const JSONTranslator = () => {
     setRetryCount,
     requestTimeoutSec,
     setRequestTimeoutSec,
-    buildTranslationSystemPrompt,
-    applyGlossary,
+    getGlossaryTerms,
   } = useTranslationContext();
 
   const [directExport, setDirectExport] = useState(false);
@@ -134,14 +133,14 @@ const JSONTranslator = () => {
   const handleI18nTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
     // 使用选择的源语言作为 i18n 源字段
     const sourceField = sourceLanguage === "auto" ? "en" : sourceLanguage;
-    const glossarySystemPrompt = buildTranslationSystemPrompt(currentTargetLang);
     const cacheSuffix = generateCacheSuffix({
       sourceLanguage,
       targetLanguage: currentTargetLang,
       translationMethod,
       config,
-      systemPrompt: glossarySystemPrompt,
+      systemPrompt,
       userPrompt,
+      glossaryTerms: getGlossaryTerms(currentTargetLang),
     });
 
     // 遍历所有可能包含 sourceField 字段的对象
@@ -169,15 +168,14 @@ const JSONTranslator = () => {
             // 在多语言模式下，我们只翻译当前目标语言字段不存在的情况
             if (record[currentTargetLang] == null) {
               try {
-                const translatedText = await translateSingle(sourceValue, cacheSuffix, {
+                // 添加翻译结果到同一个对象中的目标语言字段(术语注入 + 漏翻
+                // 兜底 + 错译重试都在 translateSingleWithGlossary 内)
+                record[currentTargetLang] = await translateSingleWithGlossary(sourceValue, cacheSuffix, {
                   translationMethod,
                   targetLanguage: currentTargetLang,
                   sourceLanguage,
                   ...runtimeConfig,
-                  systemPrompt: glossarySystemPrompt,
                 });
-                // 添加翻译结果到同一个对象中的目标语言字段
-                record[currentTargetLang] = applyGlossary(translatedText || "", currentTargetLang);
               } catch (error) {
                 // auth/级联中止 → 快停;其余 → 行级软失败计入失败面板并继续,
                 // 单节点瞬时失败不再丢弃整个语言已完成的翻译。
@@ -207,14 +205,14 @@ const JSONTranslator = () => {
     const stringNodes = allNodes.filter((node) => typeof node.value === "string");
     totalCountRef.current += stringNodes.length;
 
-    const glossarySystemPrompt = buildTranslationSystemPrompt(currentTargetLang);
     const cacheSuffix = generateCacheSuffix({
       sourceLanguage,
       targetLanguage: currentTargetLang,
       translationMethod,
       config,
-      systemPrompt: glossarySystemPrompt,
+      systemPrompt,
       userPrompt,
+      glossaryTerms: getGlossaryTerms(currentTargetLang),
     });
     const tasks: Promise<void>[] = [];
     let aborted = false;
@@ -226,14 +224,12 @@ const JSONTranslator = () => {
         limit(async () => {
           if (aborted) return;
           try {
-            const translatedText = await translateSingle(sourceText, cacheSuffix, {
+            node.parent[node.parentProperty] = await translateSingleWithGlossary(sourceText, cacheSuffix, {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
               ...runtimeConfig,
-              systemPrompt: glossarySystemPrompt,
             });
-            node.parent[node.parentProperty] = applyGlossary(translatedText || "", currentTargetLang);
           } catch (error) {
             if (isAuthError(error) || isCascadedAbort(error)) {
               aborted = true;
@@ -380,7 +376,6 @@ const JSONTranslator = () => {
     // 处理所有有效的映射
     const allPromises: Promise<void>[] = [];
     let aborted = false;
-    const glossarySystemPrompt = buildTranslationSystemPrompt(currentTargetLang);
     for (const { inputNodes, outputNodes } of validMappings) {
       totalCountRef.current += inputNodes.length;
       const cacheSuffix = generateCacheSuffix({
@@ -388,22 +383,21 @@ const JSONTranslator = () => {
         targetLanguage: currentTargetLang,
         translationMethod,
         config,
-        systemPrompt: glossarySystemPrompt,
+        systemPrompt,
         userPrompt,
+        glossaryTerms: getGlossaryTerms(currentTargetLang),
       });
       const promises = inputNodes.map((node, index: number) => {
         return limit(async () => {
           if (aborted) return;
           const sourceValue = typeof node.value === "string" ? node.value : JSON.stringify(node.value);
           try {
-            const translatedText = await translateSingle(sourceValue, cacheSuffix, {
+            outputNodes[index].parent[outputNodes[index].parentProperty] = await translateSingleWithGlossary(sourceValue, cacheSuffix, {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
               ...runtimeConfig,
-              systemPrompt: glossarySystemPrompt,
             });
-            outputNodes[index].parent[outputNodes[index].parentProperty] = applyGlossary(translatedText || "", currentTargetLang);
           } catch (error) {
             if (isAuthError(error) || isCascadedAbort(error)) {
               aborted = true;
@@ -470,14 +464,14 @@ const JSONTranslator = () => {
       }
 
       totalCountRef.current += nodesToTranslate.length;
-      const glossarySystemPrompt = buildTranslationSystemPrompt(currentTargetLang);
       const cacheSuffix = generateCacheSuffix({
         sourceLanguage,
         targetLanguage: currentTargetLang,
         translationMethod,
         config,
-        systemPrompt: glossarySystemPrompt,
+        systemPrompt,
         userPrompt,
+        glossaryTerms: getGlossaryTerms(currentTargetLang),
       });
       // Translate all nodes
       let aborted = false;
@@ -485,15 +479,13 @@ const JSONTranslator = () => {
         return limit(async () => {
           if (aborted) return;
           try {
-            const translatedText = await translateSingle(node.value, cacheSuffix, {
+            // Update the value in the original object
+            rootRecord[node.key][outputKey] = await translateSingleWithGlossary(node.value, cacheSuffix, {
               translationMethod,
               targetLanguage: currentTargetLang,
               sourceLanguage,
               ...runtimeConfig,
-              systemPrompt: glossarySystemPrompt,
             });
-            // Update the value in the original object
-            rootRecord[node.key][outputKey] = applyGlossary(translatedText || "", currentTargetLang);
           } catch (error) {
             if (isAuthError(error) || isCascadedAbort(error)) {
               aborted = true;
