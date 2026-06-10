@@ -47,6 +47,7 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
               placeholder={t("inputKey")}
               onChange={(e) => handleInputChange(index, "inputKey", e.target.value)}
               aria-label={`${t("inputKey")} ${index + 1}`}
+              spellCheck={false}
             />
           </Space.Compact>
           <ArrowRightOutlined style={{ opacity: 0.6 }} />
@@ -61,6 +62,7 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
               placeholder={t("outputKey")}
               onChange={(e) => handleInputChange(index, "outputKey", e.target.value)}
               aria-label={`${t("outputKey")} ${index + 1}`}
+              spellCheck={false}
             />
           </Space.Compact>
           <Tooltip title={t("deleteMapping")}>
