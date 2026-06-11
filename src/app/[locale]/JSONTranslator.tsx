@@ -14,7 +14,7 @@ import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useTextStats } from "@/app/hooks/useTextStats";
 import { useExportFilename } from "@/app/hooks/useExportFilename";
 
-import { filterObjectPropertyMatches, preprocessJson, downloadFile, getErrorMessage, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, splitBySpaces, getFileTypePresetConfig } from "@/app/utils";
+import { filterObjectPropertyMatches, preprocessJson, downloadFile, describeError, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, splitBySpaces, getFileTypePresetConfig } from "@/app/utils";
 import { isAuthError } from "@/app/hooks/translation";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
 import { useLanguageOptions } from "@/app/components/languages";
@@ -183,7 +183,7 @@ const JSONTranslator = () => {
                   aborted = true;
                   throw error;
                 }
-                recordLineFailure(sourceValue, getErrorMessage(error));
+                recordLineFailure(sourceValue, describeError(error, t));
               }
             }
             updateProgress();
@@ -235,7 +235,7 @@ const JSONTranslator = () => {
               aborted = true;
               throw error;
             }
-            recordLineFailure(sourceText, getErrorMessage(error));
+            recordLineFailure(sourceText, describeError(error, t));
           }
           updateProgress();
         }),
@@ -403,7 +403,7 @@ const JSONTranslator = () => {
               aborted = true;
               throw error;
             }
-            recordLineFailure(sourceValue, getErrorMessage(error));
+            recordLineFailure(sourceValue, describeError(error, t));
           }
           updateProgress();
         });
@@ -491,7 +491,7 @@ const JSONTranslator = () => {
               aborted = true;
               throw error;
             }
-            recordLineFailure(node.value, getErrorMessage(error));
+            recordLineFailure(node.value, describeError(error, t));
           }
           updateProgress();
         });
@@ -583,7 +583,7 @@ const JSONTranslator = () => {
             markRunHadFailures();
             const friendly = isNetworkError(error) ? t("networkUnavailable") : isAbortError(error) ? t("translationTimeout") : null;
             const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
-            const content = friendly ? `${friendly} (${langLabel})` : `${getErrorMessage(error)} ${langLabel} ${t("translationError")}`;
+            const content = friendly ? `${friendly} (${langLabel})` : `${describeError(error, t)} ${langLabel} ${t("translationError")}`;
             message.error({ content, key: "translate-lang-fail", duration: 10 });
           }
         }
@@ -664,7 +664,7 @@ const JSONTranslator = () => {
             markRunHadFailures();
             const friendly = isNetworkError(error) ? t("networkUnavailable") : isAbortError(error) ? t("translationTimeout") : null;
             const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
-            const content = friendly ? `${friendly} (${langLabel})` : `${getErrorMessage(error)} ${langLabel} ${t("translationError")}`;
+            const content = friendly ? `${friendly} (${langLabel})` : `${describeError(error, t)} ${langLabel} ${t("translationError")}`;
             // Shared key: N failed languages roll into one toast instead of stacking
             // N high — the TranslateFailurePanel below keeps the full per-lang list.
             message.error({ content, key: "translate-lang-fail", duration: 10 });
@@ -697,7 +697,7 @@ const JSONTranslator = () => {
       } else if (isAbortError(error)) {
         message.error(t("translationTimeout"), 10);
       } else {
-        message.error(`${getErrorMessage(error)} ${t("translationError")}`, 10);
+        message.error(`${describeError(error, t)} ${t("translationError")}`, 10);
       }
     } finally {
       setIsTranslating(false);
