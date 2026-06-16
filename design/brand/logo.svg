@@ -1,0 +1,24 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- JSON Translate — only string VALUES translate (green); keys and structure
+       (braces, indentation, colons) stay byte-identical. Middle value caught mid-swap. -->
+  <rect width="512" height="512" fill="#15171C"/>
+
+  <!-- enclosing braces -->
+  <path d="M150 138 q-34 0 -34 36 v40 q0 26 -26 26 q26 0 26 26 v40 q0 36 34 36"
+        stroke="#565D67" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M362 138 q34 0 34 36 v40 q0 26 26 26 q-26 0 -26 26 v40 q0 36 -34 36"
+        stroke="#565D67" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- row 1: "key": value -->
+  <rect x="178" y="182" width="66" height="22" rx="6" fill="#4A515B"/>
+  <rect x="258" y="182" width="120" height="22" rx="6" fill="#3FB950"/>
+
+  <!-- row 2: "key": value (mid-translation — left gray, right green) -->
+  <rect x="178" y="244" width="66" height="22" rx="6" fill="#4A515B"/>
+  <rect x="258" y="244" width="54" height="22" rx="6" fill="#4A515B"/>
+  <rect x="316" y="244" width="62" height="22" rx="6" fill="#3FB950"/>
+
+  <!-- row 3: "key": value -->
+  <rect x="178" y="306" width="66" height="22" rx="6" fill="#4A515B"/>
+  <rect x="258" y="306" width="96" height="22" rx="6" fill="#3FB950"/>
+</svg>

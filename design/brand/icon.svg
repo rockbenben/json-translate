@@ -1,0 +1,15 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- JSON Translate mark — values translate, structure holds. The curly braces stay
+       byte-identical; the string value between them glows in the translated accent. -->
+  <rect width="512" height="512" fill="#15171C"/>
+
+  <!-- left brace { -->
+  <path d="M198 152 q-42 0 -42 44 v28 q0 32 -32 32 q32 0 32 32 v28 q0 44 42 44"
+        stroke="#ECEAE3" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- right brace } -->
+  <path d="M314 152 q42 0 42 44 v28 q0 32 32 32 q-32 0 -32 32 v28 q0 44 -42 44"
+        stroke="#ECEAE3" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- translated string value -->
+  <rect x="202" y="238" width="108" height="36" rx="9" fill="#3FB950"/>
+</svg>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  :root {
+    --bg:#15171C; --panel:#1A1D23; --ink:#ECEAE3; --muted:#868D97;
+    --line:#2A2F38; --gutter:#565D67;
+    --green:#3FB950; --green-t:#7EE787; --key:#7AA2C9; --punc:#565D67;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:1200px; height:630px; }
+  body { background:var(--bg); font-family:'Schibsted Grotesk',system-ui,sans-serif; color:var(--ink);
+    display:flex; align-items:stretch; overflow:hidden; position:relative; }
+  body::before { content:""; position:absolute; inset:0;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px);
+    background-size:100% 78.75px; opacity:.35; pointer-events:none; }
+  .left { flex:1; padding:64px 56px 64px 80px; display:flex; flex-direction:column;
+    justify-content:center; gap:26px; position:relative; z-index:1; }
+  .eyebrow { font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:500;
+    letter-spacing:.32em; text-transform:uppercase; color:var(--muted);
+    display:flex; align-items:center; gap:14px; }
+  .eyebrow .br { color:var(--green); font-weight:700; letter-spacing:0; font-size:22px; }
+  .title { font-weight:800; font-size:108px; line-height:.9; letter-spacing:-.04em; }
+  .title .t { color:var(--green); }
+  .lede { font-size:35px; font-weight:500; line-height:1.2; color:var(--ink); max-width:18ch; }
+  .lede em { color:var(--green); font-style:normal; font-weight:700; }
+  .desc { font-family:'JetBrains Mono',monospace; font-size:17px; line-height:1.55;
+    color:var(--muted); max-width:44ch; }
+  .url { font-family:'JetBrains Mono',monospace; font-size:19px; font-weight:500;
+    color:var(--ink); display:flex; align-items:center; gap:12px; }
+  .url::before { content:""; width:26px; height:2px; background:var(--green); }
+
+  .panel { width:472px; flex:none; align-self:center; margin-right:72px;
+    background:var(--panel); border:1px solid var(--line); position:relative; z-index:1;
+    box-shadow:0 40px 80px -30px rgba(0,0,0,.7); }
+  .panel .bar { display:flex; align-items:center; gap:12px; padding:16px 20px;
+    border-bottom:1px solid var(--line); font-family:'JetBrains Mono',monospace;
+    font-size:15px; color:var(--muted); }
+  .panel .bar .dot { width:9px; height:9px; background:var(--gutter); }
+  .panel .bar b { color:var(--ink); font-weight:500; }
+  .panel .bar .arrow { color:var(--green); }
+  .code { padding:24px 26px; font-family:'JetBrains Mono',monospace; font-size:21px; line-height:1.85; }
+  .code .p { color:var(--punc); }
+  .code .k { color:var(--key); }
+  .code .v { color:var(--green-t); }
+  .code .i { padding-left:34px; }
+</style>
+</head>
+<body>
+  <div class="left">
+    <div class="eyebrow"><span class="br">{&nbsp;}</span> Tools&nbsp;By&nbsp;AI · JSON&nbsp;Localization</div>
+    <div class="title">JSON<br><span class="t">Translate</span></div>
+    <div class="lede">Translate the <em>values</em>. Keep the keys.</div>
+    <div class="desc">
+      5 targeting modes · 25+ engines (MT + LLM). Keys &amp;<br>
+      structure stay byte-identical · many languages, one pass.
+    </div>
+    <div class="url">tools.newzone.top</div>
+  </div>
+  <div class="panel">
+    <div class="bar"><span class="dot"></span><b>en.json</b><span class="arrow">→</span><b>es.json</b></div>
+    <div class="code">
+      <div><span class="p">{</span></div>
+      <div class="i"><span class="k">"welcome"</span><span class="p">:</span> <span class="v">"Bienvenido"</span><span class="p">,</span></div>
+      <div class="i"><span class="k">"save"</span><span class="p">:</span> <span class="v">"Guardar"</span><span class="p">,</span></div>
+      <div class="i"><span class="k">"cancel"</span><span class="p">:</span> <span class="v">"Cancelar"</span></div>
+      <div><span class="p">}</span></div>
+    </div>
+  </div>
+</body>
+</html>
