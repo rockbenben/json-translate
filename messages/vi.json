@@ -196,6 +196,8 @@
     "errorHint429": "Vượt quá giới hạn yêu cầu, vui lòng thử lại sau",
     "errorHint456": "Đã hết hạn mức dịch của kỳ này",
     "errorHint5xx": "Lỗi máy chủ, vui lòng thử lại sau",
+    "errorHintRelay": "Lỗi mạng (có thể do CORS) — hãy bật \"Chuyển tiếp API\" trong Cài đặt API",
+    "errorHintRelay403": "API trả về 403 Forbidden — hãy bật \"Chuyển tiếp API\" trong Cài đặt API",
     "rateLimitCooldown": "Đạt giới hạn yêu cầu — tạm dừng một lát rồi tự động thử lại"
   },
   "JSON": {
@@ -211,6 +213,8 @@
     "i18nModeExtra": "Chế độ i18n sử dụng ngôn ngữ nguồn làm cơ sở (tự động mặc định en) và gộp tất cả các bản dịch đích vào cùng một đối tượng.",
     "invalidJson": "Định dạng JSON không hợp lệ, kiểm tra cú pháp",
     "invalidPathKey": "Đường dẫn hoặc khóa không hợp lệ",
+    "nonStringMatch": "Các nút khớp không phải là chuỗi; không có gì được sửa đổi",
+    "bigIntPrecision": "Phát hiện số nguyên vượt phạm vi an toàn; kết quả có thể mất độ chính xác",
     "invalidOutputKey": "Khóa đầu ra không hợp lệ",
     "invalidInputKey": "Khóa đầu vào không hợp lệ",
     "inputKey": "Khóa đầu vào",
@@ -271,6 +275,7 @@
     "delayTime": "Độ trễ",
     "useRelay": "Chuyển tiếp API",
     "useRelayTooltip": "Bật chuyển tiếp API khi gặp lỗi CORS hoặc 403",
+    "useRelayOverridden": "Đã đặt URL tùy chỉnh — yêu cầu sẽ đi thẳng tới đó và công tắc này không có hiệu lực; xóa URL để bật lại",
     "reasoningEffort": "Mức độ suy luận",
     "reasoningEffortExtra": "Off tắt chế độ suy nghĩ (mặc định); bật lên thường chính xác hơn nhưng chậm hơn và tiêu tốn nhiều token hơn. Các mô hình tùy chỉnh còn có Auto = theo mặc định tích hợp của mô hình (chỉ dùng khi Off gây lỗi API).",
     "presetSelect": "Chọn cài đặt sẵn",
@@ -298,7 +303,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Dịch giả Phụ đề",
-      "description": "Dịch hàng loạt SRT, ASS, VTT, LRC. 120+ ngôn ngữ."
+      "description": "Dịch hàng loạt SRT, ASS, VTT, SBV, LRC. 120+ ngôn ngữ."
     },
     "jsonTranslate": {
       "title": "Dịch giả JSON i18n",
@@ -332,7 +337,7 @@
         },
         {
           "q": "Nếu cần dịch Markdown hoặc file phụ đề thay vì JSON i18n thì sao?",
-          "a": "Với tài liệu Markdown (.md, .mdx), dùng [Dịch Markdown](../md-translator) — giữ nguyên khối mã, công thức LaTeX và metadata Front Matter. Với file phụ đề (SRT/ASS/VTT/LRC), dùng [Dịch Phụ Đề](../subtitle-translator) — giữ timecode và thẻ kiểu ASS. Cả ba công cụ chia sẻ cùng cấu hình engine và bộ nhớ đệm bản dịch, nên chuyển đổi giữa chúng không cần thiết lập lại."
+          "a": "Với tài liệu Markdown (.md, .mdx), dùng [Dịch Markdown](../md-translator) — giữ nguyên khối mã, công thức LaTeX và metadata Front Matter. Với file phụ đề (SRT/ASS/VTT/SBV/LRC), dùng [Dịch Phụ Đề](../subtitle-translator) — giữ timecode và thẻ kiểu ASS. Cả ba công cụ chia sẻ cùng cấu hình engine và bộ nhớ đệm bản dịch, nên chuyển đổi giữa chúng không cần thiết lập lại."
         },
         {
           "q": "Nội dung JSON có được gửi lên server của bạn không? File lớn có đảm bảo riêng tư?",
@@ -421,6 +426,10 @@
     "dataParserImgPrompt": {
       "title": "Trình tạo dữ liệu IMGPrompt",
       "description": "Tạo dữ liệu JSON IMGPrompt hàng loạt"
+    },
+    "textDiff": {
+      "title": "Text Diff",
+      "description": "So sánh hai văn bản hoặc tệp song song và xác định điểm khác biệt đầu tiên."
     }
   },
   "navigation": {

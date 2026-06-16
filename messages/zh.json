@@ -196,6 +196,8 @@
     "errorHint429": "请求过于频繁，请稍后重试",
     "errorHint456": "本期翻译配额已用尽",
     "errorHint5xx": "服务器错误，请稍后重试",
+    "errorHintRelay": "网络错误（可能是 CORS 限制），请在 API 设置中开启「中转 API」",
+    "errorHintRelay403": "接口返回 403 禁止访问，请在 API 设置中开启「中转 API」",
     "rateLimitCooldown": "请求过于频繁，已自动暂停片刻后重试"
   },
   "JSON": {
@@ -211,6 +213,8 @@
     "i18nModeExtra": "i18n 模式以源语言为基准（auto 默认为 en），并将所有目标语言的翻译结果合并至同一对象。",
     "invalidJson": "JSON 格式错误，请检查语法",
     "invalidPathKey": "路径或键名无效",
+    "nonStringMatch": "匹配到的节点均非字符串，未做修改",
+    "bigIntPrecision": "检测到超过安全范围的长整数，输出可能丢失精度",
     "invalidOutputKey": "输出键名无效",
     "invalidInputKey": "输入键名无效",
     "inputKey": "输入键名",
@@ -271,6 +275,7 @@
     "delayTime": "延迟时间",
     "useRelay": "中转 API",
     "useRelayTooltip": "如遇到 CORS 或 403 错误，请开启中转 API",
+    "useRelayOverridden": "已填写自定义 URL，请求将直达该地址，此开关暂不生效；清空 URL 后恢复",
     "reasoningEffort": "推理强度",
     "reasoningEffortExtra": "Off 关闭思考（默认）；开启后通常更准确，但更慢、更耗 token。自定义模型还有 Auto = 跟随模型自带默认，仅当 Off 导致接口报错时改用。",
     "presetSelect": "选择预设",
@@ -298,7 +303,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "字幕翻译器",
-      "description": "批量翻译 SRT、ASS、VTT、LRC 字幕，支持 120+ 语言"
+      "description": "批量翻译 SRT、ASS、VTT、SBV、LRC 字幕，支持 120+ 语言"
     },
     "jsonTranslate": {
       "title": "JSON 多语言翻译",
@@ -332,7 +337,7 @@
         },
         {
           "q": "翻译的不是 i18n JSON，是 Markdown 或字幕文件怎么办？",
-          "a": "Markdown 文档（.md、.mdx）请用 [Markdown 翻译](../md-translator)，会保留代码块、LaTeX 公式和 Front Matter 元数据；字幕文件（SRT/ASS/VTT/LRC）请用 [字幕翻译器](../subtitle-translator)，保留时间轴和 ASS 样式标签。三个翻译工具共享同一套引擎配置和翻译缓存，跨工具切换无需重新设置。"
+          "a": "Markdown 文档（.md、.mdx）请用 [Markdown 翻译](../md-translator)，会保留代码块、LaTeX 公式和 Front Matter 元数据；字幕文件（SRT/ASS/VTT/SBV/LRC）请用 [字幕翻译器](../subtitle-translator)，保留时间轴和 ASS 样式标签。三个翻译工具共享同一套引擎配置和翻译缓存，跨工具切换无需重新设置。"
         },
         {
           "q": "JSON 内容会上传到服务器吗？大文件会不会泄露隐私？",
@@ -381,6 +386,10 @@
     "textToolbox": {
       "title": "多功能文本处理",
       "description": "集成正则匹配、排序、过滤等功能，进行文本批量处理"
+    },
+    "textDiff": {
+      "title": "文本对照",
+      "description": "在线对比两段文本或文件，双栏高亮差异并精确定位首处不同，支持 CSV/INI"
     },
     "dataBatch": {
       "title": "数据批处理",

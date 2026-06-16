@@ -196,6 +196,8 @@
     "errorHint429": "請求過於頻繁，請稍後重試",
     "errorHint456": "本期翻譯配額已用盡",
     "errorHint5xx": "伺服器錯誤，請稍後重試",
+    "errorHintRelay": "網路錯誤（可能是 CORS 限制），請在 API 設定中開啟「中轉 API」",
+    "errorHintRelay403": "介面回傳 403 禁止存取，請在 API 設定中開啟「中轉 API」",
     "rateLimitCooldown": "請求過於頻繁，已自動暫停片刻後重試"
   },
   "JSON": {
@@ -211,6 +213,8 @@
     "i18nModeExtra": "i18n 模式以源語言為基準（auto 預設為 en），並將所有目標語言的翻譯結果合併至同一對象。",
     "invalidJson": "JSON 格式錯誤，請檢查語法",
     "invalidPathKey": "路徑或鍵名無效",
+    "nonStringMatch": "匹配到的節點均非字串，未做修改",
+    "bigIntPrecision": "偵測到超過安全範圍的長整數，輸出可能遺失精度",
     "invalidOutputKey": "輸出鍵名無效",
     "invalidInputKey": "輸入鍵名無效",
     "inputKey": "輸入鍵名",
@@ -271,6 +275,7 @@
     "delayTime": "延遲時間",
     "useRelay": "中轉 API",
     "useRelayTooltip": "如遇到 CORS 或 403 錯誤，請開啟中轉 API",
+    "useRelayOverridden": "已填寫自訂 URL，請求將直達該位址，此開關暫不生效；清空 URL 後恢復",
     "reasoningEffort": "推理強度",
     "reasoningEffortExtra": "Off 關閉思考（預設）；開啟後通常更準確，但更慢、更耗 token。自訂模型還有 Auto = 跟隨模型自帶預設，僅當 Off 導致介面報錯時改用。",
     "presetSelect": "選擇預設",
@@ -298,7 +303,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "字幕翻譯器",
-      "description": "批次翻譯 SRT、ASS、VTT、LRC 字幕，支援 120+ 語言"
+      "description": "批次翻譯 SRT、ASS、VTT、SBV、LRC 字幕，支援 120+ 語言"
     },
     "jsonTranslate": {
       "title": "JSON 多語言翻譯",
@@ -332,7 +337,7 @@
         },
         {
           "q": "翻譯的不是 i18n JSON，是 Markdown 或字幕檔案怎麼辦？",
-          "a": "Markdown 檔案（.md、.mdx）請用 [Markdown 翻譯](../md-translator)，會保留程式碼區塊、LaTeX 公式和 Front Matter 元資料；字幕檔案（SRT/ASS/VTT/LRC）請用 [字幕翻譯](../subtitle-translator)，保留時間軸和 ASS 樣式標籤。"
+          "a": "Markdown 檔案（.md、.mdx）請用 [Markdown 翻譯](../md-translator)，會保留程式碼區塊、LaTeX 公式和 Front Matter 元資料；字幕檔案（SRT/ASS/VTT/SBV/LRC）請用 [字幕翻譯](../subtitle-translator)，保留時間軸和 ASS 樣式標籤。"
         },
         {
           "q": "JSON 內容會上傳到伺服器嗎？大檔案會不會洩漏隱私？",
@@ -421,6 +426,10 @@
     "dataParserImgPrompt": {
       "title": "IMGPrompt 資料產生",
       "description": "批次產生 IMGPrompt JSON 資料"
+    },
+    "textDiff": {
+      "title": "文字比對",
+      "description": "並排比較兩段文字或檔案，標示首處差異的確切位置。"
     }
   },
   "navigation": {

@@ -196,6 +196,8 @@
     "errorHint429": "Limite di richieste superato, riprova più tardi",
     "errorHint456": "Quota di traduzione esaurita per questo periodo",
     "errorHint5xx": "Errore del server, riprova più tardi",
+    "errorHintRelay": "Errore di rete (probabilmente CORS): attiva \"Relay API\" nelle impostazioni API",
+    "errorHintRelay403": "L'API ha restituito 403 Forbidden: attiva \"Relay API\" nelle impostazioni API",
     "rateLimitCooldown": "Limite di richieste raggiunto — breve pausa, nuovo tentativo automatico"
   },
   "JSON": {
@@ -211,6 +213,8 @@
     "i18nModeExtra": "La modalità i18n usa la lingua sorgente come base (auto predefinita en) e unisce tutte le traduzioni di destinazione nello stesso oggetto.",
     "invalidJson": "Formato JSON non valido, verifica sintassi",
     "invalidPathKey": "Percorso o chiave non valida",
+    "nonStringMatch": "I nodi corrispondenti non sono stringhe; nessuna modifica effettuata",
+    "bigIntPrecision": "Rilevati interi oltre l'intervallo sicuro; l'output potrebbe perdere precisione",
     "invalidOutputKey": "Chiave di output non valida",
     "invalidInputKey": "Chiave di input non valida",
     "inputKey": "Chiave Input",
@@ -271,6 +275,7 @@
     "delayTime": "Ritardo",
     "useRelay": "Relay API",
     "useRelayTooltip": "Attiva il relay API in caso di errori CORS o 403",
+    "useRelayOverridden": "È impostato un URL personalizzato: le richieste vanno direttamente a esso e questo interruttore non ha effetto; svuota l'URL per riattivarlo",
     "reasoningEffort": "Sforzo di ragionamento",
     "reasoningEffortExtra": "Off disattiva il pensiero (predefinito); attivarlo è di solito più accurato, ma più lento e consuma più token. I modelli personalizzati offrono anche Auto = seguire l'impostazione predefinita del modello (usalo solo se Off causa un errore API).",
     "presetSelect": "Seleziona preset",
@@ -298,7 +303,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Traduttore Sottotitoli",
-      "description": "Traduzione in batch SRT, ASS, VTT, LRC. 120+ lingue."
+      "description": "Traduzione in batch SRT, ASS, VTT, SBV, LRC. 120+ lingue."
     },
     "jsonTranslate": {
       "title": "Traduttore JSON i18n",
@@ -332,7 +337,7 @@
         },
         {
           "q": "E se devo tradurre file Markdown o sottotitoli invece di JSON i18n?",
-          "a": "Per documenti Markdown (.md, .mdx), usa [Traduttore Markdown](../md-translator) — preserva blocchi di codice, formule LaTeX e metadati Front Matter. Per file di sottotitoli (SRT/ASS/VTT/LRC), usa [Traduttore Sottotitoli](../subtitle-translator) — preserva i timecode e i tag di stile ASS. I tre strumenti di traduzione condividono le stesse configurazioni dei motori e la stessa cache di traduzione, quindi passare da uno all'altro non richiede nuova configurazione."
+          "a": "Per documenti Markdown (.md, .mdx), usa [Traduttore Markdown](../md-translator) — preserva blocchi di codice, formule LaTeX e metadati Front Matter. Per file di sottotitoli (SRT/ASS/VTT/SBV/LRC), usa [Traduttore Sottotitoli](../subtitle-translator) — preserva i timecode e i tag di stile ASS. I tre strumenti di traduzione condividono le stesse configurazioni dei motori e la stessa cache di traduzione, quindi passare da uno all'altro non richiede nuova configurazione."
         },
         {
           "q": "I contenuti JSON vengono caricati sul vostro server? La privacy è sicura per file di grandi dimensioni?",
@@ -421,6 +426,10 @@
     "dataParserImgPrompt": {
       "title": "Generatore Dati IMGPrompt",
       "description": "Genera dati JSON IMGPrompt in batch"
+    },
+    "textDiff": {
+      "title": "Text Diff",
+      "description": "Confronta due testi o file affiancati e individua la prima differenza."
     }
   },
   "navigation": {

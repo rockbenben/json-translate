@@ -196,6 +196,8 @@
     "errorHint429": "Rate limit exceeded, please retry later",
     "errorHint456": "Translation quota exhausted for this billing period",
     "errorHint5xx": "Server error, please retry later",
+    "errorHintRelay": "Network error (possibly CORS) — enable \"API Relay\" in API Settings",
+    "errorHintRelay403": "The API returned 403 Forbidden — enable \"API Relay\" in API Settings",
     "rateLimitCooldown": "Rate limited — pausing briefly, will retry automatically"
   },
   "JSON": {
@@ -211,6 +213,8 @@
     "i18nModeExtra": "i18n mode uses source language as base (auto defaults to en) and merges all target language translations into the same object.",
     "invalidJson": "Invalid JSON format",
     "invalidPathKey": "Invalid path or key",
+    "nonStringMatch": "Matched nodes are not string values; nothing was modified",
+    "bigIntPrecision": "Integers beyond the safe range detected; the output may lose precision",
     "invalidOutputKey": "Invalid output key",
     "invalidInputKey": "Invalid input key",
     "inputKey": "Input Key",
@@ -271,6 +275,7 @@
     "delayTime": "Delay Time",
     "useRelay": "API Relay",
     "useRelayTooltip": "Enable API relay if you encounter CORS or 403 errors",
+    "useRelayOverridden": "A custom URL is set — requests go directly to it and this switch has no effect; clear the URL to re-enable",
     "reasoningEffort": "Reasoning Effort",
     "reasoningEffortExtra": "Off disables thinking (default); enabling is usually more accurate but slower and uses more tokens. Custom models also offer Auto = follow the model's built-in default (use only if Off triggers an API error).",
     "presetSelect": "Select Preset",
@@ -298,7 +303,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Subtitle Translator",
-      "description": "Batch translate SRT, ASS, VTT, LRC subtitles. 120+ languages."
+      "description": "Batch translate SRT, ASS, VTT, SBV, LRC subtitles. 120+ languages."
     },
     "jsonTranslate": {
       "title": "JSON Multi-Language Translator",
@@ -332,7 +337,7 @@
         },
         {
           "q": "What if I need to translate Markdown or subtitle files instead of i18n JSON?",
-          "a": "For Markdown documents (.md, .mdx), use [Markdown Translator](../md-translator) — preserves code blocks, LaTeX formulas, and Front Matter metadata. For subtitle files (SRT/ASS/VTT/LRC), use [Subtitle Translator](../subtitle-translator) — preserves timecodes and ASS style tags. All three translation tools share the same engine configurations and translation cache, so switching between them requires no re-setup."
+          "a": "For Markdown documents (.md, .mdx), use [Markdown Translator](../md-translator) — preserves code blocks, LaTeX formulas, and Front Matter metadata. For subtitle files (SRT/ASS/VTT/SBV/LRC), use [Subtitle Translator](../subtitle-translator) — preserves timecodes and ASS style tags. All three translation tools share the same engine configurations and translation cache, so switching between them requires no re-setup."
         },
         {
           "q": "Are JSON contents uploaded to your server? Is privacy safe for large files?",
@@ -421,6 +426,10 @@
     "dataParserImgPrompt": {
       "title": "IMGPrompt Data Gen",
       "description": "Batch generate IMGPrompt JSON data"
+    },
+    "textDiff": {
+      "title": "Text Diff",
+      "description": "Compare two texts or files side by side and pinpoint the first difference."
     }
   },
   "navigation": {

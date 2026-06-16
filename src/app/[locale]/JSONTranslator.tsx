@@ -14,7 +14,7 @@ import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useTextStats } from "@/app/hooks/useTextStats";
 import { useExportFilename } from "@/app/hooks/useExportFilename";
 
-import { filterObjectPropertyMatches, preprocessJson, downloadFile, describeError, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, splitBySpaces, getFileTypePresetConfig } from "@/app/utils";
+import { pairingAncestors, filterObjectPropertyMatches, preprocessJson, hasPrecisionLossRisk, downloadFile, describeError, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, splitBySpaces, getFileTypePresetConfig, splitTopLevelCommas } from "@/app/utils";
 import { isAuthError } from "@/app/hooks/translation";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
 import { useLanguageOptions } from "@/app/components/languages";
@@ -75,6 +75,7 @@ const JSONTranslator = () => {
     markRunHadFailures,
     recordLineFailure,
     hadRunFailures,
+    isDisposed,
     isTranslating,
     setIsTranslating,
     handleLanguageChange,
@@ -249,25 +250,8 @@ const JSONTranslator = () => {
   const handleNodeKeysTranslation = async (jsonObject: JsonValue, currentTargetLang: string, jsonPath: string) => {
     // UI 的 multiValueHint/placeholder 承诺逗号分隔多路径("content,data.title")
     // —— 原样整串喂给 JSONPath 会被解析成畸形 union:只命中最后一个路径,
-    // 其余静默丢弃且照常报成功。只按【顶层】逗号拆分:方括号内的逗号是
-    // JSONPath 合法的 bracket union($.book[0,1].title),拆了就只剩半截。
-    const splitTopLevelCommas = (s: string): string[] => {
-      const parts: string[] = [];
-      let cur = "";
-      let depth = 0;
-      for (const ch of s) {
-        if (ch === "[") depth++;
-        else if (ch === "]") depth = Math.max(0, depth - 1);
-        if ((ch === "," || ch === "，") && depth === 0) {
-          parts.push(cur);
-          cur = "";
-          continue;
-        }
-        cur += ch;
-      }
-      parts.push(cur);
-      return parts;
-    };
+    // 其余静默丢弃且照常报成功。splitTopLevelCommas(@/app/utils)只按顶层
+    // 逗号拆,方括号内的 bracket union 逗号保持原样。
     const paths = splitTopLevelCommas(jsonPath)
       .map((p) => p.trim())
       .filter(Boolean);
@@ -343,15 +327,34 @@ const JSONTranslator = () => {
         continue; // 跳过不存在的输出键，而不是抛出错误
       }
 
-      // 结构化配对:input/output 节点必须是【同一父对象】的兄弟键。两个独立
+      // 结构化配对:input/output 节点必须是【同一父记录】的兄弟键。两个独立
       // $..key 查询的遍历顺序互不对应,按数组下标配对在计数恰好相等时会把
-      // 译文写进错误的对象(静默错位)。父路径 = JSONPath path 去掉末段。
-      const parentPathOf = (p: string) => p.replace(/\[[^[\]]*\]$/, "");
-      const outputByParent = new Map(outputNodes.map((n) => [parentPathOf(n.path), n]));
+      // 译文写进错误的对象(静默错位)。祖先路径剥【两 key 公共前缀后的
+      // 差异后缀段】(pairingAncestors):只剥一段会让点分 key
+      // ("en.title"→"ar.title")永不配对(整轮抛 invalidPathKey),按 key
+      // 全段剥又会把 "items[*].en" 的通配段(记录身份)剥掉导致跨记录错配。
+      const ancestor = pairingAncestors(inputKey, outputKey);
+      const outputByParent = new Map(outputNodes.map((n) => [ancestor.output(n.path), n]));
+      // 祖先坍缩(跨数组映射如 items[*].en → records[*].ar:公共前缀为空,
+      // 记录身份段全被剥掉,所有 output 节点挤进同一个 Map 键):继续跑会让
+      // N 条译文并发竞写同一槽位、其余记录永远收不到翻译 —— 整条映射跳过。
+      if (outputByParent.size !== outputNodes.length) {
+        console.warn(`Ambiguous pairing (ancestor collision) for ${inputKey}:${outputKey}, skipping`);
+        // 整条映射被跳过却不上报 = 零翻译还弹绿色"完成"(transformer 同款守卫
+        // 走的是 nodeCountMismatch warning)。翻失败 ref 压掉成功 toast,
+        // shared key 防多语言循环叠 N 层。
+        markRunHadFailures();
+        message.warning({ content: tJson("nodeCountMismatch"), key: "keymapping-ambiguous", duration: 10 });
+        continue;
+      }
       const pairedInputs: JsonPathNode[] = [];
       const pairedOutputs: JsonPathNode[] = [];
       for (const inNode of inputNodes) {
-        const outNode = outputByParent.get(parentPathOf(inNode.path));
+        // 与 allKeys/selectiveKey/nodeEdit 同约定:只翻字符串值。数字/null/
+        // 对象值 JSON.stringify 后送翻、再把返回的【字符串】原样覆写,会把
+        // 123 变 "123"、对象值压扁成 JSON 文本 —— 类型与结构永久损坏。
+        if (typeof inNode.value !== "string") continue;
+        const outNode = outputByParent.get(ancestor.input(inNode.path));
         if (outNode) {
           pairedInputs.push(inNode);
           pairedOutputs.push(outNode);
@@ -361,6 +364,15 @@ const JSONTranslator = () => {
       }
       if (pairedInputs.length === 0) {
         console.warn(`No structurally-paired nodes for ${inputKey}:${outputKey}, skipping`);
+        continue;
+      }
+      // 输入侧身份段被剥光时多个输入也会配到同一 output(pairedOutputs 出现
+      // 重复节点)—— 并发译文竞写同一槽位,同样按歧义跳过。
+      if (new Set(pairedOutputs).size !== pairedOutputs.length) {
+        console.warn(`Ambiguous pairing (multiple inputs share one output) for ${inputKey}:${outputKey}, skipping`);
+        // 同上:静默跳过会让部分映射零翻译还报成功。
+        markRunHadFailures();
+        message.warning({ content: tJson("nodeCountMismatch"), key: "keymapping-ambiguous", duration: 10 });
         continue;
       }
 
@@ -430,6 +442,11 @@ const JSONTranslator = () => {
       .replace(/，/g, ",")
       .split(",")
       .filter((k) => k.trim() !== "");
+    // 字段串只含逗号/空白(",")时 keys 为空,下方循环零次执行:零工作却报
+    // 绿色成功 —— 与空字段同样按错误处理(兄弟模式 keyMapping/nodeKeys 均如此)。
+    if (keys.length === 0) {
+      throw new Error(`${t("enter")} ${tJson("fieldToTranslate")}`);
+    }
     const mappings = keys.map((key) => ({ inputKey: key.trim(), outputKey: key.trim() }));
 
     for (const { inputKey, outputKey } of mappings) {
@@ -517,12 +534,18 @@ const JSONTranslator = () => {
     }
   };
 
-  const runTranslation = async () => {
+  // 作废上一轮翻译产物:Clear All 与换/删上传文件时调用,使单语/多语言译文结果、
+  // 失败面板回到"未翻译"初始态。与 runTranslation 开头的复位保持同一清单。
+  const clearResults = () => {
     setTranslatedText("");
     setTranslationResults({});
-    // Local runTranslation (hook's isn't called here) — reset ALL failure state so
-    // counts don't accumulate across runs and the failure warning re-fires.
     clearFailures();
+  };
+
+  const runTranslation = async () => {
+    // 复用 clearResults() 复位产物(译文 / 多语言结果 / 失败面板)——与 Clear All、
+    // 换删文件同一份清单,不再各写一遍(本地 runTranslation 不走 hook 的复位)。
+    clearResults();
 
     // Reset progress
     translatedCountRef.current = 0;
@@ -556,6 +579,9 @@ const JSONTranslator = () => {
         message.error(tJson("invalidJson"));
         return;
       }
+      // 下一行就会用 parse 结果覆写源文本 —— 超长整数(雪花 ID)在这一步已被
+      // 静默改值,翻译产物全部继承损坏值。保不了真,至少转为知情。
+      if (hasPrecisionLossRisk(sourceText)) message.warning(tJson("bigIntPrecision"));
 
       setSourceText(JSON.stringify(originalJsonObject, null, 2));
 
@@ -600,17 +626,17 @@ const JSONTranslator = () => {
 
         // Store the combined result for all languages
         setTranslatedText(resultText);
-        setTranslationResults({ combined: resultText });
+        // 写进 allResults 而非直接 setTranslationResults:本分支结束后下方还有
+        // 无条件的 setTranslationResults(allResults) —— 直接 set 会被空对象立刻
+        // 覆盖(state 批处理取末次写),Export All 按钮永远不出现。
+        allResults.combined = resultText;
 
         // Handle direct export if enabled
         if (directExport) {
-          const fileName = multipleFiles[0]?.name || `translated_i18n.json`;
-          let downloadFileName;
-          if (fileName.endsWith(".txt")) {
-            downloadFileName = fileName.replace(/\.txt$/, `.json`);
-          } else {
-            downloadFileName = `${fileName}`;
-          }
+          // generateFileName 与其它导出路径一致,尊重用户在高级设置里配置的
+          // 导出文件名模板(此前这条路径手拼文件名,模板被无声忽略)。
+          const fileName = multipleFiles[0]?.name || `translated.json`;
+          const downloadFileName = generateFileName(fileName, "i18n", "json");
           await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
 
           message.success(t("fileExported", { fileName: downloadFileName }));
@@ -685,7 +711,9 @@ const JSONTranslator = () => {
       // above. Without this gate a partially/fully failed run shows green "完成" on top of the
       // red error toasts + TranslateFailurePanel.
       setProgressPercent(100);
-      if (!directExport && !hadRunFailures()) {
+      // isDisposed:中途导航离开时各 lang 按级联静默 continue,失败 ref 没翻 ——
+      // 不挡会在用户切去的页面上弹绿色"完成"假成功。
+      if (!directExport && !hadRunFailures() && !isDisposed()) {
         message.success(t("textProcessed"));
       }
     } catch (error: unknown) {
@@ -780,6 +808,7 @@ const JSONTranslator = () => {
                   disabled={isTranslating}
                   onClick={() => {
                     resetUpload();
+                    clearResults();
                     message.success(t("resetUploadSuccess"));
                   }}
                   icon={<ClearOutlined />}
@@ -790,11 +819,17 @@ const JSONTranslator = () => {
             }
             style={cardStyle}>
             <Dragger
-              customRequest={({ file }) => handleFileUpload(file as File)}
+              customRequest={({ file }) => {
+                clearResults();
+                handleFileUpload(file as File);
+              }}
               accept={uploadFileTypes.accept}
               showUploadList
               beforeUpload={resetUpload}
-              onRemove={handleUploadRemove}
+              onRemove={(file) => {
+                clearResults();
+                return handleUploadRemove(file);
+              }}
               onChange={handleUploadChange}
               fileList={fileList}>
               <p className="ant-upload-drag-icon">

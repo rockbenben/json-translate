@@ -196,6 +196,8 @@
     "errorHint429": "リクエストが多すぎます。しばらくしてから再試行してください",
     "errorHint456": "今期の翻訳クォータを使い切りました",
     "errorHint5xx": "サーバーエラーです。しばらくしてから再試行してください",
+    "errorHintRelay": "ネットワークエラー（CORS 制限の可能性があります）。API 設定で「API 中継」を有効にしてください",
+    "errorHintRelay403": "API が 403 Forbidden を返しました。API 設定で「API 中継」を有効にしてください",
     "rateLimitCooldown": "レート制限に達したため少し待機し、自動的に再試行します"
   },
   "JSON": {
@@ -211,6 +213,8 @@
     "i18nModeExtra": "i18nモードは翻訳元言語を基準（autoはデフォルトでen）とし、すべての翻訳先言語の翻訳結果を同一オブジェクトに統合します。",
     "invalidJson": "JSON形式エラー、構文を確認してください",
     "invalidPathKey": "パスまたはキー名が無効です",
+    "nonStringMatch": "一致したノードは文字列ではないため、変更されませんでした",
+    "bigIntPrecision": "安全な範囲を超える整数が検出されました。出力で精度が失われる可能性があります",
     "invalidOutputKey": "出力キー名が無効です",
     "invalidInputKey": "入力キー名が無効です",
     "inputKey": "入力キー名",
@@ -271,6 +275,7 @@
     "delayTime": "遅延時間",
     "useRelay": "API 中継",
     "useRelayTooltip": "CORS や 403 エラーが発生した場合は API 中継を有効にしてください",
+    "useRelayOverridden": "カスタム URL が設定されているため、リクエストはその URL に直接送信され、このスイッチは無効です。URL を消去すると再び有効になります",
     "reasoningEffort": "推論強度",
     "reasoningEffortExtra": "Off で思考モードを無効化（既定）。有効にすると通常は精度が向上しますが、応答が遅くなりトークン消費が増えます。カスタムモデルには Auto もあり、モデル本来の既定に従います（Off で API エラーになる場合のみ使用）。",
     "presetSelect": "プリセットを選択",
@@ -298,7 +303,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "字幕翻訳機",
-      "description": "SRT、ASS、VTT、LRC字幕を一括翻訳、120以上の言語に対応"
+      "description": "SRT、ASS、VTT、SBV、LRC字幕を一括翻訳、120以上の言語に対応"
     },
     "jsonTranslate": {
       "title": "i18n JSON翻訳",
@@ -332,7 +337,7 @@
         },
         {
           "q": "翻訳対象が i18n JSON ではなく Markdown や字幕ファイルの場合は？",
-          "a": "Markdown ドキュメント（.md、.mdx）は [Markdown 翻訳](../md-translator) をご利用ください、コードブロック、LaTeX 数式、Front Matter メタデータを保持します。字幕ファイル（SRT/ASS/VTT/LRC）は [字幕翻訳](../subtitle-translator) をご利用ください、タイムコードと ASS スタイルタグを保持します。3 つの翻訳ツールは同じエンジン設定と翻訳キャッシュを共有しているため、ツール間の切り替え時に再設定は不要です。"
+          "a": "Markdown ドキュメント（.md、.mdx）は [Markdown 翻訳](../md-translator) をご利用ください、コードブロック、LaTeX 数式、Front Matter メタデータを保持します。字幕ファイル（SRT/ASS/VTT/SBV/LRC）は [字幕翻訳](../subtitle-translator) をご利用ください、タイムコードと ASS スタイルタグを保持します。3 つの翻訳ツールは同じエンジン設定と翻訳キャッシュを共有しているため、ツール間の切り替え時に再設定は不要です。"
         },
         {
           "q": "JSON の内容はサーバーにアップロードされますか？大きなファイルでもプライバシーは安全ですか？",
@@ -421,6 +426,10 @@
     "dataParserImgPrompt": {
       "title": "IMGPromptデータ生成",
       "description": "IMGPrompt JSONデータを一括生成"
+    },
+    "textDiff": {
+      "title": "テキスト差分",
+      "description": "2つのテキストまたはファイルを並べて比較し、最初の差異を特定します。"
     }
   },
   "navigation": {

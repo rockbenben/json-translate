@@ -196,6 +196,8 @@
     "errorHint429": "Batas permintaan terlampaui, silakan coba lagi nanti",
     "errorHint456": "Kuota terjemahan periode ini telah habis",
     "errorHint5xx": "Kesalahan server, silakan coba lagi nanti",
+    "errorHintRelay": "Kesalahan jaringan (kemungkinan CORS) — aktifkan \"Relay API\" di Pengaturan API",
+    "errorHintRelay403": "API mengembalikan 403 Forbidden — aktifkan \"Relay API\" di Pengaturan API",
     "rateLimitCooldown": "Batas permintaan tercapai — jeda sejenak, akan dicoba ulang otomatis"
   },
   "JSON": {
@@ -211,6 +213,8 @@
     "i18nModeExtra": "Mode i18n menggunakan bahasa sumber sebagai dasar (otomatis default en) dan menggabungkan semua terjemahan target ke dalam objek yang sama.",
     "invalidJson": "Format JSON tidak valid, periksa sintaks",
     "invalidPathKey": "Jalur atau kunci tidak valid",
+    "nonStringMatch": "Node yang cocok bukan string; tidak ada yang diubah",
+    "bigIntPrecision": "Terdeteksi bilangan bulat di luar rentang aman; keluaran dapat kehilangan presisi",
     "invalidOutputKey": "Kunci output tidak valid",
     "invalidInputKey": "Kunci input tidak valid",
     "inputKey": "Kunci Input",
@@ -271,6 +275,7 @@
     "delayTime": "Penundaan",
     "useRelay": "Relay API",
     "useRelayTooltip": "Aktifkan relay API jika terjadi kesalahan CORS atau 403",
+    "useRelayOverridden": "URL kustom telah diisi — permintaan langsung menuju URL tersebut dan sakelar ini tidak berlaku; kosongkan URL untuk mengaktifkannya kembali",
     "reasoningEffort": "Intensitas penalaran",
     "reasoningEffortExtra": "Off menonaktifkan pemikiran (default); mengaktifkannya biasanya lebih akurat tetapi lebih lambat dan menggunakan lebih banyak token. Model kustom juga punya Auto = mengikuti default bawaan model (gunakan hanya jika Off menyebabkan error API).",
     "presetSelect": "Pilih Preset",
@@ -298,7 +303,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Penerjemah Subtitle",
-      "description": "Terjemahan batch SRT, ASS, VTT, LRC. 120+ bahasa."
+      "description": "Terjemahan batch SRT, ASS, VTT, SBV, LRC. 120+ bahasa."
     },
     "jsonTranslate": {
       "title": "Penerjemah JSON i18n",
@@ -332,7 +337,7 @@
         },
         {
           "q": "Bagaimana jika perlu menerjemahkan Markdown atau file subtitle alih-alih JSON i18n?",
-          "a": "Untuk dokumen Markdown (.md, .mdx), gunakan [Penerjemah Markdown](../md-translator) — mempertahankan blok kode, rumus LaTeX, dan metadata Front Matter. Untuk file subtitle (SRT/ASS/VTT/LRC), gunakan [Penerjemah Subtitle](../subtitle-translator) — mempertahankan timecode dan tag style ASS. Ketiga alat terjemahan berbagi konfigurasi mesin dan cache terjemahan yang sama, jadi berpindah antar alat tidak memerlukan setup ulang."
+          "a": "Untuk dokumen Markdown (.md, .mdx), gunakan [Penerjemah Markdown](../md-translator) — mempertahankan blok kode, rumus LaTeX, dan metadata Front Matter. Untuk file subtitle (SRT/ASS/VTT/SBV/LRC), gunakan [Penerjemah Subtitle](../subtitle-translator) — mempertahankan timecode dan tag style ASS. Ketiga alat terjemahan berbagi konfigurasi mesin dan cache terjemahan yang sama, jadi berpindah antar alat tidak memerlukan setup ulang."
         },
         {
           "q": "Apakah konten JSON diunggah ke server? Apakah privasi aman untuk file besar?",
@@ -421,6 +426,10 @@
     "dataParserImgPrompt": {
       "title": "Generator Data IMGPrompt",
       "description": "Hasilkan data JSON IMGPrompt secara batch"
+    },
+    "textDiff": {
+      "title": "Text Diff",
+      "description": "Bandingkan dua teks atau file berdampingan dan temukan perbedaan pertama."
     }
   },
   "navigation": {

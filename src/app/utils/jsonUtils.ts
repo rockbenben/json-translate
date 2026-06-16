@@ -46,6 +46,23 @@ export const preprocessJson = (input: string): JsonValue => {
 };
 
 /**
+ * 粗扫原文中超出 Number 安全范围的整数字面量。JSON5/JSON.parse 把所有数字解析成
+ * IEEE double —— 雪花 ID(Discord/Twitter 的 int64)这类 >2^53 的整数被静默改值
+ * (12345678901234567890 → …4567000),且损坏发生在用户没碰的字段上、re-stringify
+ * 后无任何提示。解析层无法保真(lossless 化是结构性改动),调用方据此弹 warning,
+ * 把静默损坏转为知情。字符串字面量先剥掉(JSON5 允许单引号),避免把字符串里的
+ * 数字串误报;小数/十六进制/指数形式被前后 [\w.] 锚排除。
+ */
+export const hasPrecisionLossRisk = (input: string): boolean => {
+  const stripped = String(input).replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g, '""');
+  const runs = stripped.match(/(?<![\w.])\d{16,}(?![\w.])/g);
+  // 整数无法逐字回环 ⇒ 在 double 里丢了精度(16 位但 ≤2^53 的精确值、以及 2^53 以上
+  // 恰好可表示的整数如 1e16 都【不】报)。先剥前导零再比——否则 "0000…"(全零/前导零
+  // 串)Number 后塌成小值,逐字比会把真值其实很小的串误报成丢精度。
+  return runs?.some((run) => String(Number(run)) !== (run.replace(/^0+/, "") || "0")) ?? false;
+};
+
+/**
  * 去除 JSON 字符串的最外层包裹（{} 或 []），返回内部内容。
  */
 export const stripJsonWrapper = (input: string): string => {

@@ -196,6 +196,8 @@
     "errorHint429": "Anfragelimit überschritten, bitte später erneut versuchen",
     "errorHint456": "Übersetzungskontingent für diesen Zeitraum aufgebraucht",
     "errorHint5xx": "Serverfehler, bitte später erneut versuchen",
+    "errorHintRelay": "Netzwerkfehler (möglicherweise CORS) — aktivieren Sie „API-Relay“ in den API-Einstellungen",
+    "errorHintRelay403": "Die API hat 403 Forbidden zurückgegeben — aktivieren Sie „API-Relay“ in den API-Einstellungen",
     "rateLimitCooldown": "Anfragelimit erreicht — kurze Pause, automatischer neuer Versuch"
   },
   "JSON": {
@@ -211,6 +213,8 @@
     "i18nModeExtra": "Der i18n-Modus verwendet die Quellsprache als Basis (auto ist standardmäßig en) und führt alle Zielsprachenübersetzungen in dasselbe Objekt zusammen.",
     "invalidJson": "Ungültiges JSON-Format, bitte Syntax prüfen",
     "invalidPathKey": "Ungültiger Pfad oder Schlüsselname",
+    "nonStringMatch": "Die gefundenen Knoten sind keine Zeichenketten; nichts wurde geändert",
+    "bigIntPrecision": "Ganzzahlen außerhalb des sicheren Bereichs erkannt; die Ausgabe kann an Präzision verlieren",
     "invalidOutputKey": "Ungültiger Ausgabeschlüssel",
     "invalidInputKey": "Ungültiger Eingabeschlüssel",
     "inputKey": "Eingabeschlüssel",
@@ -271,6 +275,7 @@
     "delayTime": "Verzögerungszeit",
     "useRelay": "API-Relay",
     "useRelayTooltip": "Aktivieren Sie API-Relay bei CORS- oder 403-Fehlern",
+    "useRelayOverridden": "Eine benutzerdefinierte URL ist gesetzt — Anfragen gehen direkt dorthin, dieser Schalter hat keine Wirkung; URL leeren, um ihn wieder zu aktivieren",
     "reasoningEffort": "Reasoning-Aufwand",
     "reasoningEffortExtra": "Off deaktiviert das Denken (Standard); aktiviert ist es meist genauer, aber langsamer und verbraucht mehr Tokens. Benutzerdefinierte Modelle bieten zudem Auto = der modelleigenen Voreinstellung folgen (nur verwenden, wenn Off einen API-Fehler verursacht).",
     "presetSelect": "Voreinstellung wählen",
@@ -298,7 +303,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Untertitel-Übersetzer",
-      "description": "Batch-Übersetzung für SRT, ASS, VTT, LRC. 120+ Sprachen."
+      "description": "Batch-Übersetzung für SRT, ASS, VTT, SBV, LRC. 120+ Sprachen."
     },
     "jsonTranslate": {
       "title": "i18n JSON-Übersetzer",
@@ -332,7 +337,7 @@
         },
         {
           "q": "Was, wenn ich Markdown- oder Untertitel-Dateien statt i18n-JSON übersetzen muss?",
-          "a": "Für Markdown-Dokumente (.md, .mdx) nutzen Sie [Markdown-Übersetzer](../md-translator) — bewahrt Codeblöcke, LaTeX-Formeln und Front-Matter-Metadaten. Für Untertiteldateien (SRT/ASS/VTT/LRC) nutzen Sie [Untertitel-Übersetzer](../subtitle-translator) — bewahrt Timecodes und ASS-Style-Tags. Alle drei Übersetzungstools teilen sich dieselben Engine-Konfigurationen und denselben Übersetzungs-Cache, sodass beim Wechsel keine neue Einrichtung nötig ist."
+          "a": "Für Markdown-Dokumente (.md, .mdx) nutzen Sie [Markdown-Übersetzer](../md-translator) — bewahrt Codeblöcke, LaTeX-Formeln und Front-Matter-Metadaten. Für Untertiteldateien (SRT/ASS/VTT/SBV/LRC) nutzen Sie [Untertitel-Übersetzer](../subtitle-translator) — bewahrt Timecodes und ASS-Style-Tags. Alle drei Übersetzungstools teilen sich dieselben Engine-Konfigurationen und denselben Übersetzungs-Cache, sodass beim Wechsel keine neue Einrichtung nötig ist."
         },
         {
           "q": "Werden JSON-Inhalte auf Ihren Server hochgeladen? Ist der Datenschutz bei großen Dateien sicher?",
@@ -421,6 +426,10 @@
     "dataParserImgPrompt": {
       "title": "IMGPrompt Datengenerator",
       "description": "IMGPrompt JSON-Daten im Batch generieren"
+    },
+    "textDiff": {
+      "title": "Text Diff",
+      "description": "Vergleichen Sie zwei Texte oder Dateien nebeneinander und finden Sie den ersten Unterschied."
     }
   },
   "navigation": {

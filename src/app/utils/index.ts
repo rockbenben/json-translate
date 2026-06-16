@@ -7,3 +7,4 @@ export * from "./localeUtils";
 export * from "./localStorageUtils";
 export * from "./regex";
 export * from "./textUtils";
+export * from "./weiboUtils";

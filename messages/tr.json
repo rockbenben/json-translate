@@ -196,6 +196,8 @@
     "errorHint429": "İstek sınırı aşıldı, lütfen daha sonra tekrar deneyin",
     "errorHint456": "Bu dönemin çeviri kotası tükendi",
     "errorHint5xx": "Sunucu hatası, lütfen daha sonra tekrar deneyin",
+    "errorHintRelay": "Ağ hatası (muhtemelen CORS) — API Ayarlarında \"API Aktarıcı\"yı açın",
+    "errorHintRelay403": "API 403 Forbidden döndürdü — API Ayarlarında \"API Aktarıcı\"yı açın",
     "rateLimitCooldown": "İstek sınırına ulaşıldı — kısa bir duraklamadan sonra otomatik olarak yeniden denenecek"
   },
   "JSON": {
@@ -211,6 +213,8 @@
     "i18nModeExtra": "i18n modu kaynak dili temel alır (otomatik varsayılan en) ve tüm hedef çevirileri aynı nesnede birleştirir.",
     "invalidJson": "Geçersiz JSON formatı, sözdizimini kontrol edin",
     "invalidPathKey": "Geçersiz yol veya anahtar",
+    "nonStringMatch": "Eşleşen düğümler dize değil; hiçbir şey değiştirilmedi",
+    "bigIntPrecision": "Güvenli aralığın ötesinde tamsayılar algılandı; çıktıda hassasiyet kaybolabilir",
     "invalidOutputKey": "Geçersiz çıkış anahtarı",
     "invalidInputKey": "Geçersiz giriş anahtarı",
     "inputKey": "Giriş Anahtarı",
@@ -271,6 +275,7 @@
     "delayTime": "Gecikme",
     "useRelay": "API Aktarıcı",
     "useRelayTooltip": "CORS veya 403 hatalarında API aktarıcıyı etkinleştirin",
+    "useRelayOverridden": "Özel bir URL ayarlı — istekler doğrudan oraya gider ve bu anahtar etkisizdir; yeniden etkinleştirmek için URL'yi temizleyin",
     "reasoningEffort": "Akıl yürütme yoğunluğu",
     "reasoningEffortExtra": "Off düşünmeyi devre dışı bırakır (varsayılan); açmak genellikle daha doğrudur ama daha yavaştır ve daha fazla token tüketir. Özel modellerde ayrıca Auto vardır = modelin yerleşik varsayılanını izler (yalnızca Off bir API hatasına yol açarsa kullanın).",
     "presetSelect": "Ön Ayar Seç",
@@ -298,7 +303,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Altyazı Çevirici",
-      "description": "Toplu SRT, ASS, VTT, LRC çevirisi. 120+ dil."
+      "description": "Toplu SRT, ASS, VTT, SBV, LRC çevirisi. 120+ dil."
     },
     "jsonTranslate": {
       "title": "i18n JSON Çevirici",
@@ -332,7 +337,7 @@
         },
         {
           "q": "i18n JSON yerine Markdown veya altyazı dosyası çevirmem gerekirse ne yapmalıyım?",
-          "a": "Markdown belgeleri (.md, .mdx) için [Markdown Çevirici](../md-translator) kullanın — kod bloklarını, LaTeX formüllerini ve Front Matter meta verilerini korur. Altyazı dosyaları (SRT/ASS/VTT/LRC) için [Altyazı Çevirici](../subtitle-translator) kullanın — zaman kodlarını ve ASS stil etiketlerini korur. Üç çeviri aracı da aynı motor yapılandırmasını ve çeviri önbelleğini paylaşır, bu yüzden aralarında geçiş yaparken yeniden ayarlama yapmanız gerekmez."
+          "a": "Markdown belgeleri (.md, .mdx) için [Markdown Çevirici](../md-translator) kullanın — kod bloklarını, LaTeX formüllerini ve Front Matter meta verilerini korur. Altyazı dosyaları (SRT/ASS/VTT/SBV/LRC) için [Altyazı Çevirici](../subtitle-translator) kullanın — zaman kodlarını ve ASS stil etiketlerini korur. Üç çeviri aracı da aynı motor yapılandırmasını ve çeviri önbelleğini paylaşır, bu yüzden aralarında geçiş yaparken yeniden ayarlama yapmanız gerekmez."
         },
         {
           "q": "JSON içerikleri sunucunuza yükleniyor mu? Büyük dosyalar için gizlilik güvenli mi?",
@@ -421,6 +426,10 @@
     "dataParserImgPrompt": {
       "title": "IMGPrompt Veri Oluşturucu",
       "description": "Toplu IMGPrompt JSON verileri oluştur"
+    },
+    "textDiff": {
+      "title": "Text Diff",
+      "description": "İki metni veya dosyayı yan yana karşılaştırın ve ilk farkı bulun."
     }
   },
   "navigation": {
