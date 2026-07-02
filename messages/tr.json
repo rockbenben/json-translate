@@ -89,6 +89,7 @@
     "exportedFile": "Dışa Aktarıldı",
     "extractedText": "Çıkarılan Metin",
     "translating": "Çevriliyor...",
+    "translateDone": "Çeviri tamamlandı",
     "multiTranslating": "Çevriliyor, toplam dil:",
     "model": "Model",
     "sameLanguageTarget": "Kaynak ve hedef diller aynı; hedef otomatik olarak şuna ayarlandı:",
@@ -132,7 +133,7 @@
     "requestTimeoutSec": "Zaman Aşımı",
     "requestTimeoutSecTooltip": "İstek başına maksimum bekleme süresi (saniye). LLM düşünmesi daha uzun sürer; 180 saniye veya daha fazlası önerilir.",
     "customExportFilename": "Dışa Aktarma Dosya Adı Kalıbı",
-    "customExportFilenameTooltip": "'{'name'}' = orijinal dosya adı, '{'lang'}' = dil, '{'ext'}' = uzantı, '{'date'}' = tarih, '{'time'}' = saat",
+    "customExportFilenameTooltip": "'{'name'}' = orijinal dosya adı, '{'lang'}' = dil, '{'ext'}' = uzantı, '{'date'}' = tarih, '{'time'}' = saat; çok dilli modda ad çakışmalarını önlemek için '{'lang'}' otomatik eklenir",
     "partialFailureTitle": "{count} satır çevrilemedi",
     "partialFailureDesc": "Başarısız satırlar yer tutucu olarak orijinal metni korudu, dosya kullanılabilir kalır. Bu tür hatalar genellikle ağ dalgalanmaları veya çeviri hizmetinin geçici kararsızlığından kaynaklanır — ücretsiz hizmetler ve kendi barındırılan sunucular özellikle bu duruma eğilimlidir ve sizin yapılandırmanızla ilgili bir sorun değildir. Devam etmek için Yeniden Dene'ye tıklayın (başarılı satırlar önbellekten gelir, yeniden çevrilmez); hata devam ederse, daha sonra tekrar deneyin veya başka bir çeviri hizmetine geçin. Veya manuel olarak işlemek için Başarısız satırları gör'e tıklayın.",
     "retryFailedLines": "Yeniden dene",
@@ -170,6 +171,7 @@
     "translategemmaUnavailable": "TranslateGemma hizmetine geçici olarak ulaşılamıyor, yerel sunucunuzun (LM Studio / llama.cpp / Ollama) çalıştığından ve URL'nin doğru olduğundan emin olun.",
     "networkUnavailable": "Çeviri hizmetine geçici olarak ulaşılamıyor — ağ sorunu veya hizmette geçici bir aksaklık olabilir. Lütfen daha sonra tekrar deneyin veya başka bir çeviri hizmetine geçin.",
     "translationTimeout": "Çeviri isteği zaman aşımına uğradı — yavaş bir ağ veya hizmet yanıt vermekte gecikiyor olabilir. Lütfen daha sonra tekrar deneyin veya başka bir çeviri hizmetine geçin.",
+    "translationTimeoutLocal": "Yerel model çevirisi zaman aşımına uğradı. Yerel bir LLM tekrar döngüsünde takılabilir — Gelişmiş Ayarlar'da max_tokens (çıktı sınırı) değerini düşürün ve seçili kaynak dilin gerçek metinle eşleştiğinden emin olun.",
     "langGroupCommon": "Yaygın",
     "langGroupEurope": "Avrupa",
     "langGroupMiddleEast": "Orta Doğu",
@@ -289,6 +291,8 @@
     "presetUpdated": "Mevcut ön ayara kaydedildi",
     "presetDeleteConfirm": "Bu ön ayarı silmek istiyor musunuz?",
     "presetEmptyHint": "Henüz ön ayar yok — düzenleyin ve Kaydet'e tıklayın",
+    "presetDefault": "Varsayılan istem",
+    "presetDefaultReadonly": "Varsayılan istem yerleşiktir — değiştirilemez veya silinemez. Özelleştirmek için \"Yeni ön ayar olarak kaydet\"i kullanın.",
     "qwenMtDomains": "Etki Alanı İpuçları (yalnızca İngilizce)",
     "sendSystemPrompt": "system istemini gönder",
     "sendSystemPromptExtra": "Yalnızca chat template system rolünü reddettiğinde kapatın — tipik hata \"Conversations must start with a user prompt\" (örn. Gemma ailesi).",
@@ -342,20 +346,6 @@
         {
           "q": "JSON içerikleri sunucunuza yükleniyor mu? Büyük dosyalar için gizlilik güvenli mi?",
           "a": "Tamamen istemci tarafında: JSON okuma, ayrıştırma ve çeviri istekleri tarayıcınızda gerçekleşir — orijinal içerik sunucularımıza hiçbir zaman ulaşmaz. LLM motor istekleri doğrudan tarayıcınızdan yapılandırdığınız API uç noktasına (OpenAI, DeepSeek vb.) gider ve API Key'ler yalnızca yerel localStorage'da saklanır. Çeviri önbelleği tarayıcı IndexedDB'sini kullanır ve derlemeler arası artımlı güncellemeleri destekler — yalnızca değişen anahtarlar yeni API çağrıları tetikler, böylece maliyet düşer. Kaynak kod GitHub'da (rockbenben/json-translate)."
-        }
-      ],
-      "howto": [
-        {
-          "name": "JSON yapıştır veya yükle",
-          "text": "Giriş alanına tıklayıp JSON yapıştırın veya .json dosyasını sürükleyip bırakın."
-        },
-        {
-          "name": "Hedef dil(ler)i seç",
-          "text": "Bir veya daha fazla hedef dil seçin. Toplu çeviri için çok dilli modu etkinleştirin."
-        },
-        {
-          "name": "Çevir ve dışa aktar",
-          "text": "Çevir'e tıklayın. Çevrilen JSON dosyalarını indirin veya sonuçları kopyalayın."
         }
       ],
       "features": [
@@ -439,7 +429,11 @@
     "textParser": "Metin Araçları",
     "jsonParser": "JSON Araçları",
     "dataParser": "Veri Araçları",
-    "otherTools": "Diğer Araçlar"
+    "otherTools": "Diğer Araçlar",
+    "externalTools": {
+      "legendtalk": "AI Düşünürler Yuvarlak Masası",
+      "imgprompt": "AI Görsel İstemleri"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI - Geliştiriciler İçin Yapay Zeka ve Veri Araçları",

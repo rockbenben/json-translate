@@ -89,6 +89,7 @@
     "exportedFile": "Diekspor",
     "extractedText": "Teks Diekstrak",
     "translating": "Menerjemahkan...",
+    "translateDone": "Terjemahan selesai",
     "multiTranslating": "Menerjemahkan, total bahasa:",
     "model": "Model",
     "sameLanguageTarget": "Bahasa sumber dan target sama; target otomatis disesuaikan ke",
@@ -132,7 +133,7 @@
     "requestTimeoutSec": "Batas Waktu",
     "requestTimeoutSecTooltip": "Waktu tunggu maksimum per permintaan (detik). Pemikiran LLM membutuhkan waktu lebih lama; direkomendasikan 180 detik atau lebih.",
     "customExportFilename": "Pola Nama File Ekspor",
-    "customExportFilenameTooltip": "'{'name'}' = nama file asli, '{'lang'}' = bahasa, '{'ext'}' = ekstensi, '{'date'}' = tanggal, '{'time'}' = waktu",
+    "customExportFilenameTooltip": "'{'name'}' = nama file asli, '{'lang'}' = bahasa, '{'ext'}' = ekstensi, '{'date'}' = tanggal, '{'time'}' = waktu; dalam mode multibahasa, '{'lang'}' ditambahkan otomatis untuk mencegah bentrokan nama",
     "partialFailureTitle": "{count} baris gagal diterjemahkan",
     "partialFailureDesc": "Baris yang gagal mempertahankan teks asli sebagai placeholder, file tetap dapat digunakan. Kegagalan semacam ini biasanya disebabkan oleh fluktuasi jaringan atau ketidakstabilan sementara layanan terjemahan — layanan gratis dan server yang di-host sendiri sangat rentan, dan ini bukan masalah konfigurasi Anda. Klik Coba lagi untuk melanjutkan (baris yang berhasil berasal dari cache, tanpa penerjemahan ulang); jika tetap gagal, coba lagi nanti atau beralih ke layanan terjemahan lain. Atau klik Lihat baris yang gagal untuk menanganinya secara manual.",
     "retryFailedLines": "Coba lagi",
@@ -170,6 +171,7 @@
     "translategemmaUnavailable": "Layanan TranslateGemma sementara tidak dapat dijangkau, pastikan server lokal Anda (LM Studio / llama.cpp / Ollama) sedang berjalan dan URL sudah benar.",
     "networkUnavailable": "Layanan terjemahan sementara tidak dapat dijangkau — bisa jadi masalah jaringan atau gangguan sementara pada layanan. Silakan coba lagi nanti atau beralih ke layanan terjemahan lain.",
     "translationTimeout": "Permintaan terjemahan habis waktu — bisa jadi jaringan lambat atau layanan terlalu lama merespons. Silakan coba lagi nanti atau beralih ke layanan terjemahan lain.",
+    "translationTimeoutLocal": "Penerjemahan model lokal kehabisan waktu. LLM lokal bisa macet dalam perulangan berulang — turunkan max_tokens (batas keluaran) di Pengaturan Lanjutan, dan pastikan bahasa sumber yang dipilih sesuai dengan teks sebenarnya.",
     "langGroupCommon": "Umum",
     "langGroupEurope": "Eropa",
     "langGroupMiddleEast": "Timur Tengah",
@@ -289,6 +291,8 @@
     "presetUpdated": "Disimpan ke preset saat ini",
     "presetDeleteConfirm": "Hapus preset ini?",
     "presetEmptyHint": "Belum ada preset — edit lalu klik Simpan",
+    "presetDefault": "Prompt bawaan",
+    "presetDefaultReadonly": "Prompt bawaan adalah item bawaan — tidak dapat diubah atau dihapus. Gunakan \"Simpan sebagai preset baru\" untuk menyesuaikan.",
     "qwenMtDomains": "Prompt Domain (hanya bahasa Inggris)",
     "sendSystemPrompt": "Kirim prompt system",
     "sendSystemPromptExtra": "Matikan hanya ketika chat template menolak peran system — kesalahan tipikal \"Conversations must start with a user prompt\" (mis. keluarga Gemma).",
@@ -342,20 +346,6 @@
         {
           "q": "Apakah konten JSON diunggah ke server? Apakah privasi aman untuk file besar?",
           "a": "Sepenuhnya sisi klien: pembacaan JSON, parsing, dan permintaan terjemahan semua terjadi di browser Anda — konten asli tidak pernah menyentuh server kami. Permintaan mesin LLM langsung dari browser Anda ke endpoint API yang Anda konfigurasi (OpenAI, DeepSeek, dll.), dan API Key hanya disimpan di localStorage browser lokal. Cache terjemahan menggunakan IndexedDB browser dan mendukung pembaruan inkremental antar build — hanya kunci yang berubah memicu panggilan API baru, menghemat biaya. Kode sumber tersedia open-source di GitHub (rockbenben/json-translate)."
-        }
-      ],
-      "howto": [
-        {
-          "name": "Tempel atau unggah JSON",
-          "text": "Klik area input dan tempel JSON, atau unggah file .json dengan drag-and-drop."
-        },
-        {
-          "name": "Pilih bahasa target",
-          "text": "Pilih satu atau beberapa bahasa. Aktifkan mode multibahasa untuk terjemahan batch."
-        },
-        {
-          "name": "Terjemahkan dan ekspor",
-          "text": "Klik Terjemahkan. Unduh file JSON terjemahan atau salin hasil."
         }
       ],
       "features": [
@@ -439,7 +429,11 @@
     "textParser": "Alat Teks",
     "jsonParser": "Alat JSON",
     "dataParser": "Alat Data",
-    "otherTools": "Alat Lainnya"
+    "otherTools": "Alat Lainnya",
+    "externalTools": {
+      "legendtalk": "Meja Bundar Pemikir AI",
+      "imgprompt": "Prompt Gambar AI"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI - Peralatan Data & Terjemahan AI untuk Developer",

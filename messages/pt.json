@@ -89,6 +89,7 @@
     "exportedFile": "Exportado",
     "extractedText": "Texto Extraído",
     "translating": "Traduzindo...",
+    "translateDone": "Tradução concluída",
     "multiTranslating": "Traduzindo, total de idiomas:",
     "model": "Modelo",
     "sameLanguageTarget": "Idiomas de origem e destino iguais; destino ajustado automaticamente para",
@@ -132,7 +133,7 @@
     "requestTimeoutSec": "Tempo limite",
     "requestTimeoutSecTooltip": "Espera máxima por solicitação (segundos). O raciocínio do LLM leva mais tempo; recomenda-se 180 s ou mais.",
     "customExportFilename": "Padrão de nome de arquivo",
-    "customExportFilenameTooltip": "'{'name'}' = nome original, '{'lang'}' = idioma, '{'ext'}' = extensão, '{'date'}' = data, '{'time'}' = hora",
+    "customExportFilenameTooltip": "'{'name'}' = nome original, '{'lang'}' = idioma, '{'ext'}' = extensão, '{'date'}' = data, '{'time'}' = hora; no modo multilíngue, '{'lang'}' é adicionado automaticamente para evitar conflitos de nome",
     "partialFailureTitle": "{count} linha(s) falharam",
     "partialFailureDesc": "As linhas que falharam mantiveram o texto original como espaço reservado, o arquivo continua utilizável. Essas falhas geralmente são oscilações de rede ou instabilidade temporária do serviço de tradução — serviços gratuitos e servidores auto-hospedados são especialmente propensos, e não é um problema de configuração sua. Clique em Tentar novamente para continuar (as linhas bem-sucedidas vêm do cache, sem retradução); se continuar falhando, tente novamente mais tarde ou troque para outro serviço de tradução. Ou clique em Ver linhas que falharam para tratá-las manualmente.",
     "retryFailedLines": "Tentar novamente",
@@ -170,6 +171,7 @@
     "translategemmaUnavailable": "O serviço TranslateGemma está temporariamente inacessível, verifique se o seu servidor local (LM Studio / llama.cpp / Ollama) está em execução e o URL está correto.",
     "networkUnavailable": "O serviço de tradução está temporariamente inacessível — pode ser um problema de rede ou o serviço está com algum problema momentâneo. Tente novamente mais tarde ou troque para outro serviço de tradução.",
     "translationTimeout": "A solicitação de tradução expirou — pode ser uma rede lenta ou o serviço está demorando muito para responder. Tente novamente mais tarde ou troque para outro serviço de tradução.",
+    "translationTimeoutLocal": "O tempo da tradução com o modelo local esgotou. Um LLM local pode travar em um loop de repetição — reduza max_tokens (o limite de saída) nas Configurações avançadas e verifique se o idioma de origem selecionado corresponde ao texto real.",
     "langGroupCommon": "Comuns",
     "langGroupEurope": "Europa",
     "langGroupMiddleEast": "Médio Oriente",
@@ -289,6 +291,8 @@
     "presetUpdated": "Salvo na predefinição atual",
     "presetDeleteConfirm": "Excluir esta predefinição?",
     "presetEmptyHint": "Sem predefinições — edite e clique em Salvar",
+    "presetDefault": "Prompt padrão",
+    "presetDefaultReadonly": "O prompt padrão é integrado — não pode ser modificado nem excluído. Use \"Salvar como nova predefinição\" para personalizar.",
     "qwenMtDomains": "Prompts de Domínio (apenas em inglês)",
     "sendSystemPrompt": "Enviar prompt system",
     "sendSystemPromptExtra": "Desligue apenas quando o chat template rejeitar o papel system — erro típico \"Conversations must start with a user prompt\" (ex. família Gemma).",
@@ -342,20 +346,6 @@
         {
           "q": "O conteúdo JSON é enviado para o seu servidor? A privacidade está garantida para arquivos grandes?",
           "a": "Totalmente no navegador: leitura, análise e requisições de tradução do JSON acontecem no seu navegador — o conteúdo original nunca passa pelos nossos servidores. As requisições aos motores LLM vão diretamente do seu navegador para o endpoint de API configurado (OpenAI, DeepSeek, etc.), e as API Keys ficam armazenadas apenas no localStorage local. O cache de tradução usa IndexedDB do navegador e suporta atualizações incrementais entre builds — apenas as chaves alteradas geram novas chamadas de API, economizando custo. O código-fonte é aberto no GitHub (rockbenben/json-translate)."
-        }
-      ],
-      "howto": [
-        {
-          "name": "Colar ou carregar JSON",
-          "text": "Clique na área de entrada e cole seu JSON ou carregue um arquivo .json arrastando e soltando."
-        },
-        {
-          "name": "Selecionar idiomas de destino",
-          "text": "Escolha um ou mais idiomas. Ative o modo multilíngue para tradução em lote."
-        },
-        {
-          "name": "Traduzir e exportar",
-          "text": "Clique em Traduzir. Baixe os arquivos JSON traduzidos ou copie os resultados."
         }
       ],
       "features": [
@@ -439,7 +429,11 @@
     "textParser": "Ferramentas Texto",
     "jsonParser": "Ferramentas JSON",
     "dataParser": "Ferramentas Dados",
-    "otherTools": "Outras Ferramentas"
+    "otherTools": "Outras Ferramentas",
+    "externalTools": {
+      "legendtalk": "Mesa-redonda de pensadores de IA",
+      "imgprompt": "Prompts de imagem de IA"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI - Ferramentas de IA e Dados para Desenvolvedores",

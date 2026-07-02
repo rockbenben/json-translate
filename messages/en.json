@@ -91,6 +91,7 @@
     "batchDownloaded": "Processing complete, file downloaded automatically",
     "extractedText": "Extracted Text",
     "translating": "Translating",
+    "translateDone": "Translation complete",
     "multiTranslating": "Translating, total target languages:",
     "model": "Model",
     "sameLanguageTarget": "Source and target languages are the same; automatically adjusted target to",
@@ -145,7 +146,7 @@
     "requestTimeoutSec": "Timeout",
     "requestTimeoutSecTooltip": "Maximum wait per request (seconds). LLM thinking takes longer; 180s or more recommended.",
     "customExportFilename": "Export Filename Pattern",
-    "customExportFilenameTooltip": "'{'name'}' = original filename, '{'lang'}' = language, '{'ext'}' = extension, '{'date'}' = date, '{'time'}' = time",
+    "customExportFilenameTooltip": "'{'name'}' = original filename, '{'lang'}' = language, '{'ext'}' = extension, '{'date'}' = date, '{'time'}' = time; in multi-language mode '{'lang'}' is added automatically to avoid name clashes",
     "partialFailureTitle": "{count} line(s) failed",
     "partialFailureDesc": "Failed lines kept the original text as a placeholder, so the file stays usable. These failures are usually network blips or temporary upstream hiccups — free services and self-hosted servers are especially prone to this, and it's not a problem with your setup. Click Retry to continue (successful lines come from cache, no re-translation); if it still fails, try again later or switch to a different translation service. Or click View failed lines to handle them manually.",
     "retryFailedLines": "Retry",
@@ -170,6 +171,7 @@
     "translategemmaUnavailable": "TranslateGemma service is temporarily unreachable, please make sure your local server (LM Studio / llama.cpp / Ollama) is running and the URL is correct.",
     "networkUnavailable": "Translation service is temporarily unreachable — could be a network issue or the service is having a hiccup. Please try again later, or switch to a different translation service.",
     "translationTimeout": "Translation request timed out — could be a slow network or the service is taking too long to respond. Please try again later, or switch to a different translation service.",
+    "translationTimeoutLocal": "Local model translation timed out. A local LLM can get stuck in a repeat loop — lower max_tokens (the output cap) in Advanced Settings, and make sure the selected source language matches the actual text.",
     "langGroupCommon": "Common",
     "langGroupEurope": "Europe",
     "langGroupMiddleEast": "Middle East",
@@ -289,6 +291,8 @@
     "presetUpdated": "Saved to current preset",
     "presetDeleteConfirm": "Delete this preset?",
     "presetEmptyHint": "No presets yet — edit and click Save",
+    "presetDefault": "Default prompt",
+    "presetDefaultReadonly": "The default prompt is built-in — it can't be modified or deleted. Use \"Save as new preset\" to customize.",
     "qwenMtDomains": "Domain Prompts (English only)",
     "sendSystemPrompt": "Send system prompt",
     "sendSystemPromptExtra": "Turn off only when the chat template rejects the system role — typical error \"Conversations must start with a user prompt\" (e.g. Gemma family).",
@@ -342,20 +346,6 @@
         {
           "q": "Are JSON contents uploaded to your server? Is privacy safe for large files?",
           "a": "Fully client-side: JSON reading, parsing, and translation requests all happen in your browser — original content never touches our servers. LLM engine requests go directly from your browser to your configured API endpoint (OpenAI, DeepSeek, etc.), and API keys are stored only in local browser storage. Translation cache uses browser IndexedDB and supports incremental updates across builds — only changed keys trigger new API calls, saving cost. Source code is open on GitHub (rockbenben/json-translate) for self-hosting or auditing."
-        }
-      ],
-      "howto": [
-        {
-          "name": "Paste or upload JSON",
-          "text": "Click the input area and paste your JSON content, or upload a .json file via drag-and-drop."
-        },
-        {
-          "name": "Select target language(s)",
-          "text": "Choose one or more target languages from the dropdown. Enable Multi-Language Mode for batch translation."
-        },
-        {
-          "name": "Translate and export",
-          "text": "Click Translate. Once complete, download the translated JSON files or copy individual results."
         }
       ],
       "features": [
@@ -439,7 +429,11 @@
     "textParser": "Text Tools",
     "jsonParser": "JSON Tools",
     "dataParser": "Data Tools",
-    "otherTools": "Other Tools"
+    "otherTools": "Other Tools",
+    "externalTools": {
+      "legendtalk": "AI Thinkers Roundtable",
+      "imgprompt": "AI Image Prompts"
+    }
   },
   "Metadata": {
     "title": "ToolsByAI | Free Open Source AI Translation & Data Tools",
