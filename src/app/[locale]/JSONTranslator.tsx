@@ -75,6 +75,9 @@ const JSONTranslator = () => {
     markRunHadFailures,
     recordLineFailure,
     hadRunFailures,
+    runRetry,
+    isScopedRetry,
+    getActiveTargetLangs,
     isDisposed,
     isTranslating,
     setIsTranslating,
@@ -131,6 +134,14 @@ const JSONTranslator = () => {
     }
   };
 
+  // removeChars must clean ONLY translated TEXT — never keys or JSON structure.
+  // The old code applied it to the whole JSON.stringify output, so a removeChars
+  // containing a structural char (`"`, `,`, `:`, `{`…) or a character that also
+  // appears in keys destroyed the document — invalid/renamed-key JSON shipped
+  // under a green success toast. Scoping it to each translation result matches
+  // the MD (applyRemoveChars) and Subtitle (pre-restore line cleaning) tools.
+  const applyRemoveChars = (text: string): string => (removeChars.trim() ? splitBySpaces(removeChars).reduce((s, c) => s.replaceAll(c, ""), text) : text);
+
   const handleI18nTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
     // 使用选择的源语言作为 i18n 源字段
     const sourceField = sourceLanguage === "auto" ? "en" : sourceLanguage;
@@ -171,12 +182,14 @@ const JSONTranslator = () => {
               try {
                 // 添加翻译结果到同一个对象中的目标语言字段(术语注入 + 漏翻
                 // 兜底 + 错译重试都在 translateSingleWithGlossary 内)
-                record[currentTargetLang] = await translateSingleWithGlossary(sourceValue, cacheSuffix, {
-                  translationMethod,
-                  targetLanguage: currentTargetLang,
-                  sourceLanguage,
-                  ...runtimeConfig,
-                });
+                record[currentTargetLang] = applyRemoveChars(
+                  await translateSingleWithGlossary(sourceValue, cacheSuffix, {
+                    translationMethod,
+                    targetLanguage: currentTargetLang,
+                    sourceLanguage,
+                    ...runtimeConfig,
+                  })
+                );
               } catch (error) {
                 // auth/级联中止 → 快停;其余 → 行级软失败计入失败面板并继续,
                 // 单节点瞬时失败不再丢弃整个语言已完成的翻译。
@@ -184,7 +197,7 @@ const JSONTranslator = () => {
                   aborted = true;
                   throw error;
                 }
-                recordLineFailure(sourceValue, describeError(error, t));
+                recordLineFailure(sourceValue, describeError(error, t), { lang: currentTargetLang });
               }
             }
             updateProgress();
@@ -225,18 +238,20 @@ const JSONTranslator = () => {
         limit(async () => {
           if (aborted) return;
           try {
-            node.parent[node.parentProperty] = await translateSingleWithGlossary(sourceText, cacheSuffix, {
-              translationMethod,
-              targetLanguage: currentTargetLang,
-              sourceLanguage,
-              ...runtimeConfig,
-            });
+            node.parent[node.parentProperty] = applyRemoveChars(
+              await translateSingleWithGlossary(sourceText, cacheSuffix, {
+                translationMethod,
+                targetLanguage: currentTargetLang,
+                sourceLanguage,
+                ...runtimeConfig,
+              })
+            );
           } catch (error) {
             if (isAuthError(error) || isCascadedAbort(error)) {
               aborted = true;
               throw error;
             }
-            recordLineFailure(sourceText, describeError(error, t));
+            recordLineFailure(sourceText, describeError(error, t), { lang: currentTargetLang });
           }
           updateProgress();
         }),
@@ -404,18 +419,20 @@ const JSONTranslator = () => {
           if (aborted) return;
           const sourceValue = typeof node.value === "string" ? node.value : JSON.stringify(node.value);
           try {
-            outputNodes[index].parent[outputNodes[index].parentProperty] = await translateSingleWithGlossary(sourceValue, cacheSuffix, {
-              translationMethod,
-              targetLanguage: currentTargetLang,
-              sourceLanguage,
-              ...runtimeConfig,
-            });
+            outputNodes[index].parent[outputNodes[index].parentProperty] = applyRemoveChars(
+              await translateSingleWithGlossary(sourceValue, cacheSuffix, {
+                translationMethod,
+                targetLanguage: currentTargetLang,
+                sourceLanguage,
+                ...runtimeConfig,
+              })
+            );
           } catch (error) {
             if (isAuthError(error) || isCascadedAbort(error)) {
               aborted = true;
               throw error;
             }
-            recordLineFailure(sourceValue, describeError(error, t));
+            recordLineFailure(sourceValue, describeError(error, t), { lang: currentTargetLang });
           }
           updateProgress();
         });
@@ -497,18 +514,20 @@ const JSONTranslator = () => {
           if (aborted) return;
           try {
             // Update the value in the original object
-            rootRecord[node.key][outputKey] = await translateSingleWithGlossary(node.value, cacheSuffix, {
-              translationMethod,
-              targetLanguage: currentTargetLang,
-              sourceLanguage,
-              ...runtimeConfig,
-            });
+            rootRecord[node.key][outputKey] = applyRemoveChars(
+              await translateSingleWithGlossary(node.value, cacheSuffix, {
+                translationMethod,
+                targetLanguage: currentTargetLang,
+                sourceLanguage,
+                ...runtimeConfig,
+              })
+            );
           } catch (error) {
             if (isAuthError(error) || isCascadedAbort(error)) {
               aborted = true;
               throw error;
             }
-            recordLineFailure(node.value, describeError(error, t));
+            recordLineFailure(node.value, describeError(error, t), { lang: currentTargetLang });
           }
           updateProgress();
         });
@@ -523,12 +542,12 @@ const JSONTranslator = () => {
 
     if (currentTargetLang && multiLanguageMode) {
       const content = translationResults[currentTargetLang];
-      const downloadFileName = generateFileName(fileName, currentTargetLang, "json");
+      const downloadFileName = generateFileName(fileName, currentTargetLang, "json", multiLanguageMode);
       await downloadFile(content, downloadFileName, "application/json;charset=utf-8");
       return downloadFileName;
     } else {
       // Export single language result - use generateFileName with targetLanguage
-      const downloadFileName = generateFileName(fileName, targetLanguage, "json");
+      const downloadFileName = generateFileName(fileName, targetLanguage, "json", multiLanguageMode);
       await downloadFile(translatedText, downloadFileName, "application/json;charset=utf-8");
       return downloadFileName;
     }
@@ -543,9 +562,12 @@ const JSONTranslator = () => {
   };
 
   const runTranslation = async () => {
-    // 复用 clearResults() 复位产物(译文 / 多语言结果 / 失败面板)——与 Clear All、
-    // 换删文件同一份清单,不再各写一遍(本地 runTranslation 不走 hook 的复位)。
-    clearResults();
+    // 常规跑:复用 clearResults() 复位产物(译文 / 多语言结果 / 失败面板)——与
+    // Clear All、换删文件同一份清单(本地 runTranslation 不走 hook 的复位)。
+    // scoped 重试:只清失败面板 —— 成功语言的结果/预览要保留,本轮 allResults
+    // 在末尾 merge 进 translationResults,Export All 才不丢已成功的语言。
+    if (isScopedRetry()) clearFailures();
+    else clearResults();
 
     // Reset progress
     translatedCountRef.current = 0;
@@ -585,7 +607,12 @@ const JSONTranslator = () => {
 
       setSourceText(JSON.stringify(originalJsonObject, null, 2));
 
-      const targetLangs = multiLanguageMode ? targetLanguages : [targetLanguage];
+      // 失败面板重试(runRetry)下只跑还需要处理的语言:本轮 allResults 在末尾
+      // merge 进 translationResults,成功语言的 Export-All 条目/已下载文件都保
+      // 留,directExport 也不再重复下载。i18nMode + 多语言除外 —— 它把所有语言
+      // 写进【同一份】combined 产物,scoped 重跑会产出缺语言的 combined,所以
+      // 直接取全量 targetLanguages,靠缓存让重跑便宜。
+      const targetLangs = translateMode === "i18nMode" && multiLanguageMode ? targetLanguages : getActiveTargetLangs();
 
       if (multiLanguageMode && targetLangs.length === 0) {
         message.error(t("noTargetLanguage"));
@@ -614,15 +641,9 @@ const JSONTranslator = () => {
           }
         }
 
-        let resultText = JSON.stringify(jsonObject, null, 2);
-
-        // Remove specified characters from the final JSON text (after all formatting is done)
-        if (removeChars.trim()) {
-          const charsToRemove = splitBySpaces(removeChars);
-          charsToRemove.forEach((char) => {
-            resultText = resultText.replaceAll(char, "");
-          });
-        }
+        // removeChars is applied per-translation (applyRemoveChars at each
+        // write-back), NOT to this serialized string — see applyRemoveChars.
+        const resultText = JSON.stringify(jsonObject, null, 2);
 
         // Store the combined result for all languages
         setTranslatedText(resultText);
@@ -636,7 +657,9 @@ const JSONTranslator = () => {
           // generateFileName 与其它导出路径一致,尊重用户在高级设置里配置的
           // 导出文件名模板(此前这条路径手拼文件名,模板被无声忽略)。
           const fileName = multipleFiles[0]?.name || `translated.json`;
-          const downloadFileName = generateFileName(fileName, "i18n", "json");
+          // i18n mode merges ALL languages into ONE file → no collision, so no
+          // lang disambiguation (would produce a stray "_i18n" suffix).
+          const downloadFileName = generateFileName(fileName, "i18n", "json", false);
           await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
 
           message.success(t("fileExported", { fileName: downloadFileName }));
@@ -658,15 +681,9 @@ const JSONTranslator = () => {
               await handleI18nTranslation(jsonObject, currentTargetLang);
             }
 
-            let resultText = JSON.stringify(jsonObject, null, 2);
-
-            // Remove specified characters from the final JSON text (after all formatting is done)
-            if (removeChars.trim()) {
-              const charsToRemove = splitBySpaces(removeChars);
-              charsToRemove.forEach((char) => {
-                resultText = resultText.replaceAll(char, "");
-              });
-            }
+            // removeChars is applied per-translation (applyRemoveChars at each
+            // write-back), NOT to this serialized string — see applyRemoveChars.
+            const resultText = JSON.stringify(jsonObject, null, 2);
 
             // Store result for this language
             allResults[currentTargetLang] = resultText;
@@ -675,7 +692,7 @@ const JSONTranslator = () => {
             if (directExport) {
               const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
               const fileName = multipleFiles[0]?.name || `translated.json`;
-              const downloadFileName = generateFileName(fileName, currentTargetLang, "json");
+              const downloadFileName = generateFileName(fileName, currentTargetLang, "json", multiLanguageMode);
               await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
 
               message.success(`${langLabel} ${t("fileExported", { fileName: downloadFileName })}`);
@@ -698,8 +715,11 @@ const JSONTranslator = () => {
         }
       }
 
-      // Update state with all translation results
-      setTranslationResults(allResults);
+      // Update state with all translation results. Merge, don't replace: a scoped
+      // retry only rebuilds the failed langs — successful langs' entries must
+      // survive for Export All / per-lang cards. Fresh runs went through
+      // clearResults above (prev = {}), so merge degenerates to replace there.
+      setTranslationResults((prev) => ({ ...prev, ...allResults }));
 
       // Keep backward compatibility for single language mode
       if (!multiLanguageMode && allResults[targetLanguage]) {
@@ -1085,7 +1105,7 @@ const JSONTranslator = () => {
       </Row>
 
       {/* Partial-failure panel: auto-retried once, still-failed lines kept originals */}
-      <TranslateFailurePanel count={failedCount} lines={failedLines} failedLangs={failedLangs} reason={failedReason} onClose={clearFailures} disabled={isTranslating} onRetry={runTranslation} />
+      <TranslateFailurePanel count={failedCount} lines={failedLines} failedLangs={failedLangs} reason={failedReason} onClose={clearFailures} disabled={isTranslating} onRetry={() => runRetry(runTranslation)} />
 
       {/* Results Section */}
       {!directExport && (translatedText || (multiLanguageMode && Object.keys(translationResults).length > 0)) && (
@@ -1111,8 +1131,12 @@ const JSONTranslator = () => {
       )}
 
       <TranslationProgressModal
-        open={isTranslating}
+        isTranslating={isTranslating}
         percent={progressPercent}
+        onDismiss={() => {
+          setProgressPercent(0);
+          setProgressInfo({ current: 0, total: 0 });
+        }}
         multiLanguageMode={multiLanguageMode}
         targetLanguageCount={targetLanguages.length}
         currentCount={progressInfo.current}
