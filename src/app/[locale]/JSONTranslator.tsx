@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState, useRef } from "react";
 import { Row, Col, Button, Typography, Tooltip, Form, Input, Select, App, Card, Space, Spin, Flex, Upload, Divider, Switch, Collapse, theme } from "antd";
-import { InboxOutlined, ExportOutlined, ImportOutlined, SettingOutlined, GlobalOutlined, ClearOutlined, SaveOutlined, FileTextOutlined, ControlOutlined } from "@ant-design/icons";
+import { SettingOutlined, InboxOutlined, ExportOutlined, ImportOutlined, GlobalOutlined, ClearOutlined, SaveOutlined, FileTextOutlined, ControlOutlined } from "@ant-design/icons";
 import { JSONPath } from "jsonpath-plus";
 import { useTranslations } from "next-intl";
 import pLimit from "p-limit";
@@ -756,7 +756,11 @@ const JSONTranslator = () => {
     if (multiLanguageMode && Object.keys(translationResults).length > 0) {
       const exportedFiles = [];
       const failedLabels: string[] = [];
-      const languageCodes = Object.keys(translationResults);
+      // Mirror the per-lang cards (which filter by targetLanguages): a scoped retry
+      // keeps prior successful langs in translationResults via merge, so a lang the
+      // user deselected between runs must not resurface as an exported file. Keep
+      // "combined" — i18nMode's single merged artifact, not a lang code.
+      const languageCodes = Object.keys(translationResults).filter((c) => c === "combined" || targetLanguages.includes(c));
       for (const langCode of languageCodes) {
         try {
           const fileName = await handleExportFile(langCode);
@@ -891,11 +895,7 @@ const JSONTranslator = () => {
         {/* Right Column: Settings and Configuration */}
         <Col xs={24} lg={10} xl={9}>
           <Card
-            title={
-              <Space>
-                <SettingOutlined /> {t("configuration")}
-              </Space>
-            }
+            title={<Space><SettingOutlined /> {t("configuration")}</Space>}
             style={cardStyle}
             extra={
               <Space>
