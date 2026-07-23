@@ -1,6 +1,6 @@
 <h1 align="center">⚡️ JSON Translate</h1>
-<p align="center"><a href="./README.md">English</a> | 中文</p>
 <p align="center"><em>精准翻译 JSON — 只改值、不破坏结构、轻松完成 i18n</em></p>
+<p align="center"><a href="./README.md">English</a> · <b>简体中文</b></p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
@@ -96,14 +96,6 @@ LLM 模式可在每一批请求里携带前后文，提升段落级连贯性和�
 - **并发行数**：同时翻译的最大行数（默认 20）。过高可能触发速率限制。
 - **上下文行数**：每批携带的上下文行数（默认 50）。值越大连贯性越好，但 token 消耗也越多。
 
-## 技术栈
-
-- **框架**：[Next.js 16](https://nextjs.org/)（App Router）+ React 19 with React Compiler
-- **UI**：[Ant Design 6](https://ant.design/) + [Tailwind CSS 4](https://tailwindcss.com/)
-- **i18n**：[next-intl](https://next-intl-docs.vercel.app/)
-- **缓存**：[idb](https://github.com/jakearchibald/idb)（IndexedDB）
-- **JSONPath**：[jsonpath-plus](https://github.com/JSONPath-Plus/JSONPath)
-
 ## 快速开始
 
 ### 环境要求
@@ -143,7 +135,3 @@ yarn build
 2. 本地执行 `yarn` 与 `yarn dev`
 3. 适当补充测试 / 文档
 4. 提交 PR 并清晰描述变更
-
-## 许可协议
-
-MIT © 2025 [rockbenben](https://github.com/rockbenben)。详见 [LICENSE](./LICENSE)。

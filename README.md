@@ -1,6 +1,6 @@
 <h1 align="center">⚡️ JSON Translate</h1>
-<p align="center">English | <a href="./README-zh.md">中文</a></p>
 <p align="center"><em>Precise JSON translation — values only, structure intact, i18n made simple</em></p>
+<p align="center"><b>English</b> · <a href="./README.zh.md">简体中文</a></p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
@@ -96,14 +96,6 @@ LLM modes can send surrounding lines as context for each batch, improving paragr
 - **Concurrent Lines**: max lines translated in parallel (default 20). Too high triggers rate limits.
 - **Context Lines**: lines included per batch as context (default 50). Higher = better coherence but more tokens.
 
-## Tech Stack
-
-- **Framework**: [Next.js 16](https://nextjs.org/) (App Router) + React 19 with the React Compiler
-- **UI**: [Ant Design 6](https://ant.design/) + [Tailwind CSS 4](https://tailwindcss.com/)
-- **i18n**: [next-intl](https://next-intl-docs.vercel.app/)
-- **Caching**: [idb](https://github.com/jakearchibald/idb) (IndexedDB)
-- **JSONPath**: [jsonpath-plus](https://github.com/JSONPath-Plus/JSONPath)
-
 ## Getting Started
 
 ### Requirements
@@ -143,7 +135,3 @@ Contributions are welcome! Feel free to open issues and pull requests.
 2. Run `yarn` and `yarn dev` locally
 3. Add tests/docs when applicable
 4. Submit a PR with a clear description
-
-## License
-
-MIT © 2025 [rockbenben](https://github.com/rockbenben). See [LICENSE](./LICENSE).
