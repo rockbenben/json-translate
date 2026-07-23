@@ -35,6 +35,7 @@
     "nameRequired": "Nome del glossario obbligatorio"
   },
   "common": {
+    "supportEscapeChars": "Supporta caratteri escape: \\n (nuova riga), \\r (ritorno), \\t (tab), \\s (spazio), \\\\ (barra rovesciata)",
     "skipToContent": "Vai al contenuto principale",
     "fileProcessFailed": "Elaborazione del file non riuscita — controlla la codifica o prova un altro file",
     "fileReadFailed": "Lettura del file non riuscita",
@@ -83,6 +84,7 @@
     "extractText": "Estrai Testo",
     "translationResult": "Risultato",
     "copy": "Copia",
+    "expand": "altro",
     "remove": "Rimuovi",
     "exportFile": "Esporta",
     "exportAllFile": "Esporta Tutto",
@@ -211,7 +213,7 @@
     "allKeys": "Traduzione Globale (Tutte le chiavi)",
     "nodeKeys": "Chiavi sotto nodo specifico",
     "keyMapping": "Specifica Chiavi (Supporto multiplo)",
-    "selectiveKey": "Traduzione Selettiva (Struttura piatta)",
+    "selectiveKey": "Un campo in tutte le voci",
     "i18nMode": "Modalità i18n (Unisci lingue)",
     "i18nModeExtra": "La modalità i18n usa la lingua sorgente come base (auto predefinita en) e unisce tutte le traduzioni di destinazione nello stesso oggetto.",
     "invalidJson": "Formato JSON non valido, verifica sintassi",
@@ -222,6 +224,8 @@
     "invalidInputKey": "Chiave di input non valida",
     "inputKey": "Chiave Input",
     "outputKey": "Chiave Output",
+    "inputKeyExample": "es. en.prompt",
+    "outputKeyExample": "es. ar.prompt",
     "deleteMapping": "Elimina Mappatura",
     "addMapping": "Aggiungi Mappatura",
     "inputOutputKeyMissing": "Le chiavi di input e output non possono essere vuote",
@@ -229,9 +233,9 @@
     "multiValueHint": "Separa più valori con virgole",
     "startKey": "Chiave Iniziale",
     "invalidStartKey": "Chiave iniziale non valida",
-    "StartKeyExtra": "(Opzionale) Specifica posizione iniziale, lascia vuoto per iniziare dall'inizio",
+    "StartKeyExtra": "Facoltativo. Inizia da questa voce; lascia vuoto per partire dalla prima",
     "fieldToTranslate": "Campo da Tradurre",
-    "fieldToTranslateExtra": "Specifica nome del campo da tradurre (unico)",
+    "fieldToTranslateExtra": "Traduce questo campo dentro ogni voce; separa più campi con virgole. Se manca uno dei campi indicati, l'intera esecuzione fallisce. Il JSON deve avere due livelli: voce → oggetto",
     "nodeToTranslate": "Nodo da Tradurre",
     "nodeToTranslateExtra": "Con nome nodo, solo figli di primo livello corrispondono",
     "keyMappingTooltip": "Cambia Modalità: Chiave Originale (A→A) vs Mappatura (A→B)",
@@ -265,6 +269,7 @@
     "userPromptExtra": "Prompt traduzione personalizzato, lasciare vuoto per predefinito. Variáveis:",
     "for": "per",
     "textToTranslate": "testo da tradurre",
+    "fullText": "testo completo",
     "chunkSize": "Dimensione Frammento",
     "chunkSizeExtra": "Testo multilinea (Sottotitoli, Markdown) sarà diviso per questa dimensione",
     "batchSize": "Righe simultanee",
@@ -276,6 +281,7 @@
     "contextWindow": "Righe di contesto",
     "contextWindowExtra": "Righe per batch. Più alto = meno richieste e più velocità, ma può superare il limite di token del modello",
     "delayTime": "Ritardo",
+    "delayTimeExtra": "Tempo di attesa tra due richieste consecutive. Aumentalo se incontri spesso il rate limit",
     "useRelay": "Relay API",
     "useRelayTooltip": "Attiva il relay API in caso di errori CORS o 403",
     "useRelayOverridden": "È impostato un URL personalizzato: le richieste vanno direttamente a esso e questo interruttore non ha effetto; svuota l'URL per riattivarlo",
@@ -284,7 +290,7 @@
     "presetSelect": "Seleziona preset",
     "presetSave": "Salva come nuovo preset",
     "presetDelete": "Elimina preset corrente",
-    "presetNamePlaceholder": "Inserisci il nome del preset",
+    "presetNamePlaceholder": "Nome del preset (es. Sottotitoli / Documentazione tecnica)",
     "presetSaved": "Salvato come nuovo preset",
     "presetDeleted": "Preset corrente eliminato",
     "presetNameRequired": "Inserisci un nome per il preset",
@@ -364,7 +370,7 @@
     },
     "textSplitter": {
       "title": "Divisore Testo",
-      "description": "Divisione intelligente testo lungo per IA e social media"
+      "description": "Dividi testi lunghi per separatore, lunghezza o frase — e riuniscili"
     },
     "chineseConversion": {
       "title": "Conversor Semp/Trad",
@@ -381,6 +387,10 @@
     "dataBatch": {
       "title": "Elaboratore di Testo",
       "description": "Elaborazione batch di dati Excel — deduplicazione, estrazione colonne, fusione, regole concatenate"
+    },
+    "textJoiner": {
+      "title": "Unificatore di Testo",
+      "description": "Unisci più colonne di testo riga per riga con modelli per generare in batch CSV, SQL e JSON"
     },
     "jsonValueExtractor": {
       "title": "Estrattore Valore JSON",
@@ -585,6 +595,11 @@
     "reaction4": "Confuso",
     "placeholder": "Lascia un messaggio (nessun login richiesto, email opzionale per risposta)",
     "metaDescription": "Pagina feedback per Tools By AI: segnala bug, suggerisci funzionalità, condividi casi d'uso. Basata su Waline, anonimo consentito."
+  },
+  "AppError": {
+    "title": "Errore di caricamento della pagina",
+    "description": "Impossibile caricare la pagina: può accadere subito dopo un aggiornamento del sito. Ricarica la pagina.",
+    "reload": "Ricarica"
   },
   "NotFound": {
     "title": "Pagina non trovata",

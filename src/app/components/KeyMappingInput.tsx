@@ -36,6 +36,8 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
     <Flex vertical gap="small">
       {keyMappings.map((mapping, index) => (
         <Flex key={mapping.id} align="center" gap="small" wrap>
+          {/* addon 命名字段、placeholder 举例：两者原本都填 t("inputKey")，
+              屏幕上并排出现两遍同一句「输入键名」。 */}
           <Space.Compact className="flex-1" style={{ minWidth: 140 }}>
             <Space.Addon>
               <Typography.Text type="secondary" className="!text-xs">
@@ -44,7 +46,7 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
             </Space.Addon>
             <Input
               value={mapping.inputKey}
-              placeholder={t("inputKey")}
+              placeholder={t("inputKeyExample")}
               onChange={(e) => handleInputChange(index, "inputKey", e.target.value)}
               aria-label={`${t("inputKey")} ${index + 1}`}
               spellCheck={false}
@@ -59,7 +61,7 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
             </Space.Addon>
             <Input
               value={mapping.outputKey}
-              placeholder={t("outputKey")}
+              placeholder={t("outputKeyExample")}
               onChange={(e) => handleInputChange(index, "outputKey", e.target.value)}
               aria-label={`${t("outputKey")} ${index + 1}`}
               spellCheck={false}

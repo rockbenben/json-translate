@@ -35,6 +35,7 @@
     "nameRequired": "請填寫術語表名稱"
   },
   "common": {
+    "supportEscapeChars": "支援轉義字元：\\n (換行)、\\r (回車)、\\t (製表符)、\\s (空格)、\\\\ (反斜槓)",
     "skipToContent": "跳至主要內容",
     "fileProcessFailed": "檔案處理失敗，請檢查檔案編碼或換一個檔案",
     "fileReadFailed": "讀取檔案失敗",
@@ -83,6 +84,7 @@
     "extractText": "提取純文字",
     "translationResult": "翻譯結果",
     "copy": "複製",
+    "expand": "展開",
     "remove": "刪除",
     "format": "格式化",
     "formatTooltip": "格式化：移除空行及首尾空格",
@@ -211,7 +213,7 @@
     "allKeys": "全局翻譯（所有鍵值對）",
     "nodeKeys": "指定節點下的鍵值對",
     "keyMapping": "指定鍵名（支援多個）",
-    "selectiveKey": "選擇性翻譯（扁平結構）",
+    "selectiveKey": "逐條翻譯指定欄位",
     "i18nMode": "i18n 模式（多語言合併）",
     "i18nModeExtra": "i18n 模式以源語言為基準（auto 預設為 en），並將所有目標語言的翻譯結果合併至同一對象。",
     "invalidJson": "JSON 格式錯誤，請檢查語法",
@@ -222,6 +224,8 @@
     "invalidInputKey": "輸入鍵名無效",
     "inputKey": "輸入鍵名",
     "outputKey": "輸出鍵名",
+    "inputKeyExample": "例如：en.prompt",
+    "outputKeyExample": "例如：ar.prompt",
     "deleteMapping": "刪除映射",
     "addMapping": "加入映射",
     "inputOutputKeyMissing": "輸入和輸出鍵名不能為空",
@@ -229,9 +233,9 @@
     "multiValueHint": "多個值請用英文逗號分隔",
     "startKey": "起始鍵名",
     "invalidStartKey": "起始鍵名無效",
-    "StartKeyExtra": "（可選）指定翻譯起始位置，留空則從頭開始",
+    "StartKeyExtra": "（可選）從這個項目開始翻譯，留空則從第一條開始",
     "fieldToTranslate": "待翻譯欄位",
-    "fieldToTranslateExtra": "指定待翻譯的欄位名稱（僅支援單個）",
+    "fieldToTranslateExtra": "取每個項目裡的這個欄位翻譯，多個欄位用逗號分隔；列出的欄位只要有一個不存在就會整體報錯。要求 JSON 是「項目 → 物件」兩層結構",
     "nodeToTranslate": "待翻譯節點",
     "nodeToTranslateExtra": "使用節點名稱時，僅匹配一級子節點",
     "keyMappingTooltip": "切換翻譯模式：原鍵模式使用相同鍵名（A→A），映射模式可轉換鍵名（A→B）",
@@ -265,6 +269,7 @@
     "userPromptExtra": "自訂翻譯提示詞，留空使用預設。變量說明",
     "for": "為",
     "textToTranslate": "待翻譯文字",
+    "fullText": "全文",
     "chunkSize": "分塊大小",
     "chunkSizeExtra": "多行文字（字幕、Markdown 等）將按此大小分塊翻譯",
     "batchSize": "並發行數",
@@ -276,6 +281,7 @@
     "contextWindow": "上下文行數",
     "contextWindowExtra": "每批包含的行數。值越大請求越少、加速越明顯，但可能超 token 上限",
     "delayTime": "延遲時間",
+    "delayTimeExtra": "兩次請求之間的等待時間。頻繁被限流時調大它降速",
     "useRelay": "中轉 API",
     "useRelayTooltip": "如遇到 CORS 或 403 錯誤，請開啟中轉 API",
     "useRelayOverridden": "已填寫自訂 URL，請求將直達該位址，此開關暫不生效；清空 URL 後恢復",
@@ -284,7 +290,7 @@
     "presetSelect": "選擇預設",
     "presetSave": "另存為新預設",
     "presetDelete": "刪除當前預設",
-    "presetNamePlaceholder": "輸入預設名稱",
+    "presetNamePlaceholder": "預設名稱（如：影視字幕 / 技術文件）",
     "presetSaved": "已另存為新預設",
     "presetDeleted": "已刪除當前預設",
     "presetNameRequired": "請輸入預設名稱",
@@ -364,7 +370,7 @@
     },
     "textSplitter": {
       "title": "文字分割",
-      "description": "智慧分割長文字，適用於 AI 輸入和社交媒體"
+      "description": "按符號、字數或整句拆分長文字，適配 AI 投餵與分段發布"
     },
     "chineseConversion": {
       "title": "簡繁轉換",
@@ -381,6 +387,10 @@
     "dataBatch": {
       "title": "資料批處理",
       "description": "Excel 表格批次去重、欄位提取、文字合併，多規則按序執行"
+    },
+    "textJoiner": {
+      "title": "文字拼接",
+      "description": "多欄文字逐行按範本合併，批次生成 CSV、SQL、JSON"
     },
     "jsonValueExtractor": {
       "title": "JSON 欄位值提取",
@@ -585,6 +595,11 @@
     "reaction4": "看不懂",
     "placeholder": "請留言，無需登錄（填寫郵箱可獲回復提醒）",
     "metaDescription": "意見回饋頁：回報使用問題、提交功能建議、參與工具改進。基於 Waline 評論系統，匿名也可發言。"
+  },
+  "AppError": {
+    "title": "頁面載入出錯",
+    "description": "頁面載入失敗,可能是網站剛更新到新版本,請重新載入。",
+    "reload": "重新載入"
   },
   "NotFound": {
     "title": "頁面未找到",

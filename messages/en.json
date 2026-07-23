@@ -35,6 +35,7 @@
     "nameRequired": "Glossary name required"
   },
   "common": {
+    "supportEscapeChars": "Supports escape chars: \\n (newline), \\r (return), \\t (tab), \\s (space), \\\\ (backslash)",
     "skipToContent": "Skip to main content",
     "fileProcessFailed": "Failed to process the file — check its encoding or try another",
     "fileReadFailed": "Failed to read the file",
@@ -83,6 +84,7 @@
     "extractText": "Extract Text",
     "translationResult": "Translation Result",
     "copy": "Copy",
+    "expand": "more",
     "remove": "Remove",
     "exportFile": "Export",
     "exportAllFile": "Export All",
@@ -211,7 +213,7 @@
     "allKeys": "Global Translation (All Keys)",
     "nodeKeys": "Keys under Specific Node",
     "keyMapping": "Specify Keys (Multi-support)",
-    "selectiveKey": "Selective Translation (Flat Structure)",
+    "selectiveKey": "One field across all entries",
     "i18nMode": "i18n Mode (Merge Languages)",
     "i18nModeExtra": "i18n mode uses source language as base (auto defaults to en) and merges all target language translations into the same object.",
     "invalidJson": "Invalid JSON format",
@@ -222,6 +224,8 @@
     "invalidInputKey": "Invalid input key",
     "inputKey": "Input Key",
     "outputKey": "Output Key",
+    "inputKeyExample": "e.g. en.prompt",
+    "outputKeyExample": "e.g. ar.prompt",
     "deleteMapping": "Delete Mapping",
     "addMapping": "Add Mapping",
     "inputOutputKeyMissing": "Input and output keys cannot be empty",
@@ -229,9 +233,9 @@
     "multiValueHint": "Separate multiple values with commas",
     "startKey": "Start Key",
     "invalidStartKey": "Invalid start key",
-    "StartKeyExtra": "(Optional) Specify start position, leave empty to start from beginning",
+    "StartKeyExtra": "Optional. Start from this entry; leave blank to start from the first",
     "fieldToTranslate": "Field to Translate",
-    "fieldToTranslateExtra": "Specify field name to translate (single only)",
+    "fieldToTranslateExtra": "Translates this field inside each entry; separate multiple fields with commas. If any listed field is missing, the whole run fails. The JSON must be two levels: entry → object",
     "nodeToTranslate": "Node to Translate",
     "nodeToTranslateExtra": "When using node name, matches only first-level children",
     "keyMappingTooltip": "Toggle Mode: Original Key (A→A) vs Mapping (A→B)",
@@ -265,6 +269,7 @@
     "userPromptExtra": "Custom translation prompt, leave empty for default. Variables:",
     "for": "for",
     "textToTranslate": "text to translate",
+    "fullText": "full text",
     "chunkSize": "Chunk Size",
     "chunkSizeExtra": "Multi-line text (Subtitles, Markdown) will be split by this size",
     "batchSize": "Concurrent Lines",
@@ -276,6 +281,7 @@
     "contextWindow": "Context Lines",
     "contextWindowExtra": "Lines per batch. Higher means fewer requests and more speed, but may exceed the model's token limit",
     "delayTime": "Delay Time",
+    "delayTimeExtra": "Wait time between consecutive requests. Increase it when you keep hitting rate limits",
     "useRelay": "API Relay",
     "useRelayTooltip": "Enable API relay if you encounter CORS or 403 errors",
     "useRelayOverridden": "A custom URL is set — requests go directly to it and this switch has no effect; clear the URL to re-enable",
@@ -284,7 +290,7 @@
     "presetSelect": "Select Preset",
     "presetSave": "Save as new preset",
     "presetDelete": "Delete current preset",
-    "presetNamePlaceholder": "Enter preset name",
+    "presetNamePlaceholder": "Preset name (e.g. Subtitles / Technical docs)",
     "presetSaved": "Saved as new preset",
     "presetDeleted": "Current preset deleted",
     "presetNameRequired": "Please enter a preset name",
@@ -314,7 +320,7 @@
       "title": "JSON Multi-Language Translator",
       "description": "Efficient multi-language JSON translation tool",
       "metaTitle": "JSON Translator | i18n Batch Translation with JSONPath",
-      "metaDescription": "JSON i18n translator with 25+ AI engines (DeepSeek, Claude, GPT, DeepL). Modes: global, JSONPath, key match, multi-target, aggregation.",
+      "metaDescription": "JSON i18n translator, 25+ AI engines (DeepSeek, Claude, GPT, DeepL). Modes: global, JSONPath, key, multi-target, aggregation.",
       "faq": [
         {
           "q": "Which translation engines and file sizes does this JSON translator support?",
@@ -364,7 +370,7 @@
     },
     "textSplitter": {
       "title": "Text Splitter",
-      "description": "Smart long text splitter for AI and social media"
+      "description": "Split long text by delimiter, length, or sentence — and merge it back"
     },
     "chineseConversion": {
       "title": "Chinese Conversion",
@@ -381,6 +387,10 @@
     "dataBatch": {
       "title": "Batch Data Processor",
       "description": "Excel batch data processing — dedup, column extraction, text merge, custom rules chained in sequence"
+    },
+    "textJoiner": {
+      "title": "Text Joiner",
+      "description": "Merge multiple text columns line by line with templates to batch-generate CSV, SQL, and JSON"
     },
     "jsonValueExtractor": {
       "title": "JSON Field Value Extractor",
@@ -585,6 +595,11 @@
     "reaction4": "Confused",
     "placeholder": "Leave a message (no login required, email optional for reply)",
     "metaDescription": "Feedback for Tools By AI: report bugs, suggest features, share use-case ideas. Built on Waline, anonymous posting allowed, free."
+  },
+  "AppError": {
+    "title": "Page failed to load",
+    "description": "The page could not be loaded — this can happen right after a site update. Please reload.",
+    "reload": "Reload"
   },
   "NotFound": {
     "title": "Page Not Found",

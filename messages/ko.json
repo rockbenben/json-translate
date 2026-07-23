@@ -35,6 +35,7 @@
     "nameRequired": "용어집 이름을 입력하세요"
   },
   "common": {
+    "supportEscapeChars": "이스케이프 문자 지원: \\n (줄바꿈), \\r (복귀), \\t (탭), \\s (공백), \\\\ (백슬래시)",
     "skipToContent": "본문으로 건너뛰기",
     "fileProcessFailed": "파일 처리에 실패했습니다. 인코딩을 확인하거나 다른 파일을 사용해 보세요",
     "fileReadFailed": "파일을 읽지 못했습니다",
@@ -83,6 +84,7 @@
     "extractText": "텍스트 추출",
     "translationResult": "번역 결과",
     "copy": "복사",
+    "expand": "더 보기",
     "remove": "제거",
     "exportFile": "내보내기",
     "exportAllFile": "모두 내보내기",
@@ -211,7 +213,7 @@
     "allKeys": "전체 번역 (모든 키-값)",
     "nodeKeys": "지정 노드 하위 키-값",
     "keyMapping": "지정 키 이름 (다중 지원)",
-    "selectiveKey": "선택적 번역 (플랫 구조)",
+    "selectiveKey": "각 항목의 지정 필드 번역",
     "i18nMode": "i18n 모드 (다국어 병합)",
     "i18nModeExtra": "i18n 모드는 원본 언어를 기준(auto는 기본값 en)으로 하며, 모든 목표 언어의 번역 결과를 동일한 객체에 병합합니다.",
     "invalidJson": "JSON 형식 오류, 문법을 확인하세요",
@@ -222,6 +224,8 @@
     "invalidInputKey": "입력 키 이름이 유효하지 않습니다",
     "inputKey": "입력 키 이름",
     "outputKey": "출력 키 이름",
+    "inputKeyExample": "예: en.prompt",
+    "outputKeyExample": "예: ar.prompt",
     "deleteMapping": "매핑 삭제",
     "addMapping": "매핑 추가",
     "inputOutputKeyMissing": "입력 및 출력 키 이름은 비워둘 수 없습니다",
@@ -229,9 +233,9 @@
     "multiValueHint": "여러 값은 쉼표로 구분하세요",
     "startKey": "시작 키 이름",
     "invalidStartKey": "시작 키 이름이 유효하지 않습니다",
-    "StartKeyExtra": "(선택 사항) 번역 시작 위치 지정, 비워두면 처음부터 시작",
+    "StartKeyExtra": "선택 사항. 이 항목부터 번역합니다. 비우면 처음부터",
     "fieldToTranslate": "번역할 필드",
-    "fieldToTranslateExtra": "번역 대기 중인 필드 이름 지정 (단일만 지원)",
+    "fieldToTranslateExtra": "각 항목 안의 이 필드를 번역합니다. 여러 필드는 쉼표로 구분하세요. 나열한 필드 중 하나라도 없으면 전체가 실패합니다. JSON이 「항목 → 객체」 2단 구조여야 합니다",
     "nodeToTranslate": "번역할 노드",
     "nodeToTranslateExtra": "노드 이름 사용 시 1단계 자식 노드만 매칭",
     "keyMappingTooltip": "번역 모드 전환: 원본 키 모드는 동일한 키 이름 사용(A→A), 매핑 모드는 키 이름 변환 가능(A→B)",
@@ -265,6 +269,7 @@
     "userPromptExtra": "사용자 정의 번역 프롬프트, 비워두면 기본값 사용. 변수 설명",
     "for": "대상:",
     "textToTranslate": "번역할 텍스트",
+    "fullText": "전체 텍스트",
     "chunkSize": "청크 크기",
     "chunkSizeExtra": "여러 줄 텍스트(자막, Markdown 등)는 이 크기로 분할되어 번역됩니다",
     "batchSize": "동시 번역 행수",
@@ -276,6 +281,7 @@
     "contextWindow": "컨텍스트 행수",
     "contextWindowExtra": "배치당 행 수. 높을수록 요청이 적어지고 속도가 빨라지지만 모델의 토큰 한도를 초과할 수 있음",
     "delayTime": "지연 시간",
+    "delayTimeExtra": "요청과 요청 사이의 대기 시간. 속도 제한에 자주 걸리면 값을 키워 속도를 낮추세요",
     "useRelay": "API 중계",
     "useRelayTooltip": "CORS 또는 403 오류가 발생하면 API 중계를 활성화하세요",
     "useRelayOverridden": "사용자 지정 URL이 설정되어 요청이 해당 주소로 직접 전송되며 이 스위치는 적용되지 않습니다. URL을 지우면 다시 활성화됩니다",
@@ -284,7 +290,7 @@
     "presetSelect": "프리셋 선택",
     "presetSave": "새 프리셋으로 저장",
     "presetDelete": "현재 프리셋 삭제",
-    "presetNamePlaceholder": "프리셋 이름 입력",
+    "presetNamePlaceholder": "프리셋 이름 (예: 영상 자막 / 기술 문서)",
     "presetSaved": "새 프리셋으로 저장됨",
     "presetDeleted": "현재 프리셋이 삭제됨",
     "presetNameRequired": "프리셋 이름을 입력하세요",
@@ -364,7 +370,7 @@
     },
     "textSplitter": {
       "title": "텍스트 분할",
-      "description": "장문 스마트 분할, AI 입력 및 SNS에 최적"
+      "description": "긴 텍스트를 구분자·글자 수·문장 단위로 분할하고 다시 병합"
     },
     "chineseConversion": {
       "title": "간체·번체 변환",
@@ -381,6 +387,10 @@
     "dataBatch": {
       "title": "텍스트 처리 도구",
       "description": "Excel 표 데이터 일괄 중복 제거·열 추출·텍스트 병합, 다중 규칙 순차 실행"
+    },
+    "textJoiner": {
+      "title": "텍스트 결합기",
+      "description": "여러 텍스트 열을 템플릿으로 줄 단위 결합해 CSV, SQL, JSON을 일괄 생성"
     },
     "jsonValueExtractor": {
       "title": "JSON 값 추출",
@@ -585,6 +595,11 @@
     "reaction4": "이해 안 됨",
     "placeholder": "메시지를 남겨주세요. 로그인 불필요 (이메일 입력 시 답변 알림 수신 가능)",
     "metaDescription": "Tools By AI 피드백 페이지: 버그 신고, 기능 요청, 사용 사례 공유. Waline 댓글 기반, 익명 작성 가능, 무료."
+  },
+  "AppError": {
+    "title": "페이지 로드 오류",
+    "description": "페이지를 불러오지 못했습니다. 사이트 업데이트 직후에 발생할 수 있으니 새로고침해 주세요.",
+    "reload": "새로고침"
   },
   "NotFound": {
     "title": "페이지를 찾을 수 없음",

@@ -35,6 +35,7 @@
     "nameRequired": "El nombre del glosario es obligatorio"
   },
   "common": {
+    "supportEscapeChars": "Soporta caracteres escape: \\n (nueva línea), \\r (retorno), \\t (tab), \\s (espacio), \\\\ (barra invertida)",
     "skipToContent": "Saltar al contenido principal",
     "fileProcessFailed": "No se pudo procesar el archivo: comprueba su codificación o prueba con otro",
     "fileReadFailed": "No se pudo leer el archivo",
@@ -83,6 +84,7 @@
     "extractText": "Extraer Texto",
     "translationResult": "Resultado",
     "copy": "Copiar",
+    "expand": "más",
     "remove": "Eliminar",
     "exportFile": "Exportar",
     "exportAllFile": "Exportar Todo",
@@ -211,7 +213,7 @@
     "allKeys": "Traducción Global (Todas las claves)",
     "nodeKeys": "Claves bajo nodo específico",
     "keyMapping": "Especificar Claves (Soporte múltiple)",
-    "selectiveKey": "Traducción Selectiva (Estructura plana)",
+    "selectiveKey": "Un campo en todas las entradas",
     "i18nMode": "Modo i18n (Fusionar idiomas)",
     "i18nModeExtra": "El modo i18n usa el idioma origen como base (auto por defecto en) y fusiona todas las traducciones destino en el mismo objeto.",
     "invalidJson": "Formato JSON inválido, verifica sintaxis",
@@ -222,6 +224,8 @@
     "invalidInputKey": "Clave de entrada inválida",
     "inputKey": "Clave Entrada",
     "outputKey": "Clave Salida",
+    "inputKeyExample": "p. ej. en.prompt",
+    "outputKeyExample": "p. ej. ar.prompt",
     "deleteMapping": "Borrar Mapeo",
     "addMapping": "Añadir Mapeo",
     "inputOutputKeyMissing": "Claves de entrada y salida no pueden estar vacías",
@@ -229,9 +233,9 @@
     "multiValueHint": "Separa múltiples valores con comas",
     "startKey": "Clave Inicio",
     "invalidStartKey": "Clave inicio inválida",
-    "StartKeyExtra": "(Opcional) Especifica posición de inicio, deja vacío para empezar desde el principio",
+    "StartKeyExtra": "Opcional. Empieza desde esta entrada; déjalo vacío para empezar por la primera",
     "fieldToTranslate": "Campo a Traducir",
-    "fieldToTranslateExtra": "Especifica nombre del campo a traducir (único)",
+    "fieldToTranslateExtra": "Traduce este campo dentro de cada entrada; separa varios campos con comas. Si falta alguno de los campos indicados, falla toda la ejecución. El JSON debe tener dos niveles: entrada → objeto",
     "nodeToTranslate": "Nodo a Traducir",
     "nodeToTranslateExtra": "Con nombre de nodo, solo coinciden hijos de primer nivel",
     "keyMappingTooltip": "Alternar Modo: Clave Original (A→A) vs Mapeo (A→B)",
@@ -265,6 +269,7 @@
     "userPromptExtra": "Prompt traducción personalizado, dejar vacío para defecto. Variables:",
     "for": "para",
     "textToTranslate": "texto a traducir",
+    "fullText": "texto completo",
     "chunkSize": "Tamaño Fragmento",
     "chunkSizeExtra": "Texto multilínea (Subtítulos, Markdown) se dividirá por este tamaño",
     "batchSize": "Líneas simultáneas",
@@ -276,6 +281,7 @@
     "contextWindow": "Líneas de contexto",
     "contextWindowExtra": "Líneas por lote. Mayor = menos solicitudes y más velocidad, pero puede exceder el límite de tokens del modelo",
     "delayTime": "Retraso",
+    "delayTimeExtra": "Tiempo de espera entre peticiones consecutivas. Auméntalo si te limitan la tasa con frecuencia",
     "useRelay": "Relé API",
     "useRelayTooltip": "Habilita el relé API si encuentras errores CORS o 403",
     "useRelayOverridden": "Hay una URL personalizada: las solicitudes van directamente a ella y este interruptor no tiene efecto; borre la URL para reactivarlo",
@@ -284,7 +290,7 @@
     "presetSelect": "Seleccionar preset",
     "presetSave": "Guardar como nuevo preset",
     "presetDelete": "Eliminar preset actual",
-    "presetNamePlaceholder": "Ingrese nombre del preset",
+    "presetNamePlaceholder": "Nombre del preajuste (p. ej. Subtítulos / Documentación técnica)",
     "presetSaved": "Guardado como nuevo preset",
     "presetDeleted": "Preset actual eliminado",
     "presetNameRequired": "Por favor ingrese un nombre",
@@ -364,7 +370,7 @@
     },
     "textSplitter": {
       "title": "Divisor de Texto",
-      "description": "División inteligente de texto largo para IA y redes sociales"
+      "description": "Divide textos largos por separador, longitud o frase — y vuelve a unirlos"
     },
     "chineseConversion": {
       "title": "Conversión chino",
@@ -381,6 +387,10 @@
     "dataBatch": {
       "title": "Procesador de texto",
       "description": "Procesamiento por lotes de datos Excel — deduplicación, extracción por columnas, fusión, reglas encadenadas"
+    },
+    "textJoiner": {
+      "title": "Unificador de Texto",
+      "description": "Combina varias columnas de texto línea por línea con plantillas para generar en lote CSV, SQL y JSON"
     },
     "jsonValueExtractor": {
       "title": "Extractor Valor JSON",
@@ -438,11 +448,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI | Herramientas de Traducción y Dev con IA",
-    "description": "ToolsByAI: 17 herramientas open source gratis para traducción de subtítulos, Markdown, JSON i18n y procesamiento por lotes. 25+ motores IA.",
+    "description": "ToolsByAI: 17 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador.",
     "homeTitle": "Suite ToolsByAI",
     "homeDescription": "20+ herramientas para traducción, texto, JSON y conversión de datos. Impulsa la eficiencia de desarrolladores y creadores.",
     "ogTitle": "ToolsByAI | Herramientas de Traducción y Dev con IA",
-    "ogDescription": "ToolsByAI: 17 herramientas open source gratis para traducción de subtítulos, Markdown, JSON i18n y procesamiento por lotes. 25+ motores IA."
+    "ogDescription": "ToolsByAI: 17 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador."
   },
   "languages": {
     "auto": "Detección Auto",
@@ -585,6 +595,11 @@
     "reaction4": "Confuso",
     "placeholder": "Deja un mensaje (no requiere login, email opcional para respuesta)",
     "metaDescription": "Página de feedback para Tools By AI: reporta errores, sugiere funciones, comparte casos de uso. Basada en Waline, publicación anónima."
+  },
+  "AppError": {
+    "title": "Error al cargar la página",
+    "description": "No se pudo cargar la página; puede ocurrir justo después de una actualización del sitio. Vuelve a cargarla.",
+    "reload": "Recargar"
   },
   "NotFound": {
     "title": "Página no encontrada",
