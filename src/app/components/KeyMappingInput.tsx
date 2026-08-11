@@ -68,7 +68,9 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
             />
           </Space.Compact>
           <Tooltip title={t("deleteMapping")}>
-            <Button onClick={() => deleteMapping(mapping.id)} disabled={!canDelete} type="default" icon={<MinusCircleOutlined />} aria-label={t("deleteMapping")} />
+            {/* true | undefined 而非裸布尔:antd 是「自己的 disabled ?? context」,有 ≥2 行
+                映射时裸 false 会把外层(JSON 模式表单的运行中锁)整个顶掉。 */}
+            <Button onClick={() => deleteMapping(mapping.id)} disabled={!canDelete ? true : undefined} type="default" icon={<MinusCircleOutlined />} aria-label={t("deleteMapping")} />
           </Tooltip>
         </Flex>
       ))}

@@ -1,28 +1,25 @@
 "use client";
 
-import React, { useMemo, useState, useRef } from "react";
-import { Row, Col, Button, Typography, Tooltip, Form, Input, Select, App, Card, Space, Spin, Flex, Upload, Divider, Switch, Collapse, theme } from "antd";
+import React, { useState } from "react";
+import { ConfigProvider, Row, Col, Button, Typography, Tooltip, Form, Input, Select, App, Card, Space, Spin, Flex, Upload, Divider, Switch, Collapse, theme } from "antd";
 import { SettingOutlined, InboxOutlined, ExportOutlined, ImportOutlined, GlobalOutlined, ClearOutlined, SaveOutlined, FileTextOutlined, ControlOutlined } from "@ant-design/icons";
 import { JSONPath } from "jsonpath-plus";
 import { useTranslations } from "next-intl";
-import pLimit from "p-limit";
 import type { JsonPathNode, JsonValue, KeyMapping, ValidMapping } from "@/app/types";
-import { generateCacheSuffix } from "@/app/lib/translation";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 import useFileUpload from "@/app/hooks/useFileUpload";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useTextStats } from "@/app/hooks/useTextStats";
 import { useExportFilename } from "@/app/hooks/useExportFilename";
 
-import { pairingAncestors, filterObjectPropertyMatches, preprocessJson, hasPrecisionLossRisk, downloadFile, describeError, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, splitBySpaces, getFileTypePresetConfig, splitTopLevelCommas } from "@/app/utils";
-import { isAuthError } from "@/app/hooks/translation";
+import { pairingAncestors, filterObjectPropertyMatches, preprocessJson, hasPrecisionLossRisk, downloadFile, describeError, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, applyRemoveCharsToLines, getFileTypePresetConfig, splitTopLevelCommas } from "@/app/utils";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
 import { useLanguageOptions } from "@/app/components/languages";
 import LanguageSelector from "@/app/components/LanguageSelector";
 import ApiStatusBlock from "@/app/components/ApiStatusBlock";
 import { useTranslationContext } from "@/app/components/TranslationContext";
 import ResultCard from "@/app/components/ResultCard";
-import TranslationProgressModal from "@/app/components/TranslationProgressModal";
+import TranslationProgressStrip from "@/app/components/TranslationProgressStrip";
 import AdvancedTranslationSettings from "@/app/components/AdvancedTranslationSettings";
 import TranslateFailurePanel from "@/app/components/TranslateFailurePanel";
 
@@ -50,7 +47,6 @@ const JSONTranslator = () => {
     exportSettings,
     importSettings,
     translationMethod,
-    getSelectedConfig,
     sourceLanguage,
     targetLanguage,
     targetLanguages,
@@ -59,11 +55,9 @@ const JSONTranslator = () => {
     setUseCache,
     removeChars,
     setRemoveChars,
-    systemPrompt,
-    userPrompt,
     multiLanguageMode,
     setMultiLanguageMode,
-    translateSingleWithGlossary,
+    translateBatch,
     translatedText,
     setTranslatedText,
     failedCount,
@@ -73,7 +67,7 @@ const JSONTranslator = () => {
     failedReason,
     clearFailures,
     markRunHadFailures,
-    recordLineFailure,
+    runHadFailures,
     hadRunFailures,
     runRetry,
     isScopedRetry,
@@ -84,21 +78,20 @@ const JSONTranslator = () => {
     handleLanguageChange,
     handleSwapLanguages,
     validate,
+    requestCancel,
+    isCancelRequested,
+    progressPercent,
+    setProgressPercent,
+    progressInfo,
+    resetProgress,
     retryCount,
     setRetryCount,
     requestTimeoutSec,
     setRequestTimeoutSec,
-    getGlossaryTerms,
   } = useTranslationContext();
 
   const [directExport, setDirectExport] = useState(false);
   const [translationResults, setTranslationResults] = useState<Record<string, string>>({}); // Store results by language
-
-  // Progress tracking
-  const translatedCountRef = useRef(0);
-  const totalCountRef = useRef(0);
-  const [progressPercent, setProgressPercent] = useState(0);
-  const [progressInfo, setProgressInfo] = useState<{ current: number; total: number }>({ current: 0, total: 0 });
 
   const [translateMode, setTranslateMode] = useLocalStorage<TranslateMode>("json-translate-mode", "allKeys"); // 翻译模式状态：'allKeys', 'nodeKeys', 'keyMapping', "selectiveKey", 'i18nMode'
   const [nodeKeysPath, setNodeKeysPath] = useLocalStorage("json-translate-nodeKeysPath", ""); // 局部节点路径（nodeKeys mode）
@@ -115,49 +108,58 @@ const JSONTranslator = () => {
   const sourceStats = useTextStats(sourceText);
   const resultStats = useTextStats(translatedText);
 
-  const config = getSelectedConfig();
-  const concurrency = Math.max(Number(config?.batchSize) || 10, 1);
-  const limit = useMemo(() => pLimit(concurrency), [concurrency]);
-  const runtimeConfig = {
-    systemPrompt: systemPrompt,
-    userPrompt: userPrompt,
-    useCache: useCache,
-    ...config,
-  };
-
-  // Progress tracking helper
-  const updateProgress = () => {
-    translatedCountRef.current++;
-    if (totalCountRef.current > 0) {
-      setProgressPercent((translatedCountRef.current / totalCountRef.current) * 100);
-      setProgressInfo({ current: translatedCountRef.current, total: totalCountRef.current });
-    }
-  };
-
   // removeChars must clean ONLY translated TEXT — never keys or JSON structure.
   // The old code applied it to the whole JSON.stringify output, so a removeChars
   // containing a structural char (`"`, `,`, `:`, `{`…) or a character that also
   // appears in keys destroyed the document — invalid/renamed-key JSON shipped
   // under a green success toast. Scoping it to each translation result matches
   // the MD (applyRemoveChars) and Subtitle (pre-restore line cleaning) tools.
-  const applyRemoveChars = (text: string): string => (removeChars.trim() ? splitBySpaces(removeChars).reduce((s, c) => s.replaceAll(c, ""), text) : text);
+  // 实现与字幕工具/CLI 共用同一份(textUtils.applyRemoveCharsToLines)。
+  const applyRemoveChars = (text: string): string => applyRemoveCharsToLines([text], removeChars)[0];
 
-  const handleI18nTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
+  // ─── 收集 → 一次引擎调用 → 回写 ────────────────────────────────────────────
+  // 五个模式 = 五个【收集器】,不是五个翻译循环。模式差异全是格式知识(遍历哪些
+  // 节点、写回哪个字段),编排(并发/节流/重试/429 冷却/缓存/进度/失败面板)只有
+  // 引擎一份 —— 与 CLI 的 json handler 同构(收集 values+setters → ctx.translate
+  // → 逐槽位回写)。这里曾经是四个手写 pLimit 循环,delayTime 漂移(字幕/MD 每行
+  // 间隔 200ms、JSON 满速打)就是那个结构的必然产物,别把循环加回来。
+  type CollectedNode = { value: string; write: (v: string) => void };
+
+  // 收集完成后的执行半段,五个模式共用。
+  const translateCollected = async (nodes: CollectedNode[], currentTargetLang: string, langIndex: number, langCount: number) => {
+    if (nodes.length === 0) return;
+    const softFilled = new Set<number>();
+    // documentType=undefined + independent=true:JSON 值必须逐值往返,两条批
+    // 处理路径都要压住。与 CLI json handler 逐位一致(cliFormat.ts 的
+    // ctx.translate(values, undefined, …, { independent: true }),它的类型里
+    // 压根没有第三种 documentType)。
+    // ⚠ 别给这里传 documentType —— 上下文批会把 20 个值拼进一个 marker 请求,
+    // 回显守卫会把「合法译成自身」的值判成回显而清空,一次编号错位丢一整批。
+    const lines = await translateBatch(
+      nodes.map((n) => n.value),
+      translationMethod,
+      currentTargetLang,
+      langIndex,
+      langCount,
+      undefined,
+      { collectSoftFilled: softFilled },
+      true,
+    );
+    // 软填槽位【不写回】:引擎对失败行回填原文,但本工具的输出字段 ≠ 输入字段
+    // (i18n 写 record[lang]、keyMapping 写 outputKey)——把原文写进目标字段,
+    // i18n 的增量语义就失效了(字段已存在 → 重跑永远跳过失败节点)。跳过写回
+    // 与旧行为逐位一致:失败节点保持原状,失败面板由引擎经 translateBatch 记录。
+    // removeChars 只打真译出的值(软填的是原文,再删字符会产出既非原文也非译文
+    // 的东西)。
+    lines.forEach((v, i) => {
+      if (!softFilled.has(i)) nodes[i].write(applyRemoveChars(v));
+    });
+  };
+
+  const collectI18n = (jsonObject: JsonValue, currentTargetLang: string): CollectedNode[] => {
     // 使用选择的源语言作为 i18n 源字段
     const sourceField = sourceLanguage === "auto" ? "en" : sourceLanguage;
-    const cacheSuffix = generateCacheSuffix({
-      sourceLanguage,
-      targetLanguage: currentTargetLang,
-      translationMethod,
-      config,
-      systemPrompt,
-      userPrompt,
-      glossaryTerms: getGlossaryTerms(currentTargetLang),
-    });
-
-    // 遍历所有可能包含 sourceField 字段的对象
-    const promises: Promise<void>[] = [];
-    let aborted = false;
+    const nodes: CollectedNode[] = [];
 
     const processObject = (obj: JsonValue) => {
       if (typeof obj !== "object" || obj === null) return;
@@ -170,39 +172,11 @@ const JSONTranslator = () => {
 
       const record = obj as Record<string, JsonValue>;
 
-      // 检查当前对象是否有 sourceField 字段
+      // 只收目标语言字段不存在的节点 —— 收集时判断与旧版任务内判断等价:
+      // 语言循环是串行的,收集发生在上一语言全部写回之后。
       const sourceValue = record[sourceField];
-      if (typeof sourceValue === "string") {
-        totalCountRef.current++;
-        promises.push(
-          limit(async () => {
-            if (aborted) return;
-            // 在多语言模式下，我们只翻译当前目标语言字段不存在的情况
-            if (record[currentTargetLang] == null) {
-              try {
-                // 添加翻译结果到同一个对象中的目标语言字段(术语注入 + 漏翻
-                // 兜底 + 错译重试都在 translateSingleWithGlossary 内)
-                record[currentTargetLang] = applyRemoveChars(
-                  await translateSingleWithGlossary(sourceValue, cacheSuffix, {
-                    translationMethod,
-                    targetLanguage: currentTargetLang,
-                    sourceLanguage,
-                    ...runtimeConfig,
-                  })
-                );
-              } catch (error) {
-                // auth/级联中止 → 快停;其余 → 行级软失败计入失败面板并继续,
-                // 单节点瞬时失败不再丢弃整个语言已完成的翻译。
-                if (isAuthError(error) || isCascadedAbort(error)) {
-                  aborted = true;
-                  throw error;
-                }
-                recordLineFailure(sourceValue, describeError(error, t), { lang: currentTargetLang });
-              }
-            }
-            updateProgress();
-          }),
-        );
+      if (typeof sourceValue === "string" && record[currentTargetLang] == null) {
+        nodes.push({ value: sourceValue, write: (v) => (record[currentTargetLang] = v) });
       }
 
       // 递归处理子对象
@@ -210,59 +184,32 @@ const JSONTranslator = () => {
     };
 
     processObject(jsonObject);
-    await Promise.all(promises);
+    return nodes;
   };
 
-  // 处理全局键值翻译
-  const handleAllKeysTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
+  // 树内的字符串叶子(经父节点回写)。不含【根节点本身】—— JSONPath `$..*`
+  // 只枚举后代,根不在其中,见 collectAllKeys。
+  const collectStringLeaves = (jsonObject: JsonValue): CollectedNode[] => {
     const allNodes = JSONPath({ path: "$..*", json: jsonObject, resultType: "all" }) as JsonPathNode[];
-    const stringNodes = allNodes.filter((node) => typeof node.value === "string");
-    totalCountRef.current += stringNodes.length;
-
-    const cacheSuffix = generateCacheSuffix({
-      sourceLanguage,
-      targetLanguage: currentTargetLang,
-      translationMethod,
-      config,
-      systemPrompt,
-      userPrompt,
-      glossaryTerms: getGlossaryTerms(currentTargetLang),
-    });
-    const tasks: Promise<void>[] = [];
-    let aborted = false;
-
-    for (const node of stringNodes) {
-      const sourceText = node.value as string;
-
-      tasks.push(
-        limit(async () => {
-          if (aborted) return;
-          try {
-            node.parent[node.parentProperty] = applyRemoveChars(
-              await translateSingleWithGlossary(sourceText, cacheSuffix, {
-                translationMethod,
-                targetLanguage: currentTargetLang,
-                sourceLanguage,
-                ...runtimeConfig,
-              })
-            );
-          } catch (error) {
-            if (isAuthError(error) || isCascadedAbort(error)) {
-              aborted = true;
-              throw error;
-            }
-            recordLineFailure(sourceText, describeError(error, t), { lang: currentTargetLang });
-          }
-          updateProgress();
-        }),
-      );
-    }
-
-    await Promise.all(tasks);
+    return allNodes.filter((node) => typeof node.value === "string").map((node) => ({ value: node.value as string, write: (v) => (node.parent[node.parentProperty] = v) }));
   };
 
-  // 处理指定节点的键值对翻译
-  const handleNodeKeysTranslation = async (jsonObject: JsonValue, currentTargetLang: string, jsonPath: string) => {
+  // 全局键值翻译:收下所有字符串叶子。
+  // 取 holder 而不是裸值,只为一件事:根节点【本身】就是字符串叶子时
+  // (`"Hello world"` 是合法 JSON,preprocessJson 照收),它没有父节点可回写。
+  // 不单独收的话 `$..*` 一个节点都拿不到 → 整轮零翻译、原样写回、打绿色成功,
+  // 与真正的成功【无法区分】。CLI 的 collectStrings 早就单独收了这一条
+  // (cliFormat.ts:「根节点本身就是字符串叶子…单独收一下」),两边保持一致。
+  const collectAllKeys = (holder: { v: JsonValue }): CollectedNode[] => {
+    if (typeof holder.v === "string") {
+      const rootText = holder.v;
+      return [{ value: rootText, write: (t) => (holder.v = t) }];
+    }
+    return collectStringLeaves(holder.v);
+  };
+
+  // 指定节点的键值对翻译:路径圈定范围,范围内同 allKeys
+  const collectNodeKeys = (jsonObject: JsonValue, jsonPath: string): CollectedNode[] => {
     // UI 的 multiValueHint/placeholder 承诺逗号分隔多路径("content,data.title")
     // —— 原样整串喂给 JSONPath 会被解析成畸形 union:只命中最后一个路径,
     // 其余静默丢弃且照常报成功。splitTopLevelCommas(@/app/utils)只按顶层
@@ -270,36 +217,30 @@ const JSONTranslator = () => {
     const paths = splitTopLevelCommas(jsonPath)
       .map((p) => p.trim())
       .filter(Boolean);
-    const nodes = paths.flatMap((p) => JSONPath({ path: p, json: jsonObject, resultType: "all" }) as JsonPathNode[]);
+    const pathNodes = paths.flatMap((p) => JSONPath({ path: p, json: jsonObject, resultType: "all" }) as JsonPathNode[]);
 
-    if (nodes.length === 0) {
+    if (pathNodes.length === 0) {
       throw new Error(`${tJson("invalidPathKey")}: ${jsonPath}`);
     }
 
-    const tasks: Promise<void>[] = [];
-    for (const node of nodes) {
+    const nodes: CollectedNode[] = [];
+    for (const node of pathNodes) {
       // 路径解析到字符串叶节点(工具自带示例 $.store.book[*].title 即是)——
-      // 装箱借道 handleAllKeysTranslation 翻译后回写。旧逻辑静默跳过非对象
-      // 节点,整次运行零翻译却报成功。
+      // 直接收叶子。旧逻辑静默跳过非对象节点,整次运行零翻译却报成功;更早
+      // 的版本靠装箱借道 allKeys,收集器形态下 setter 天然指向叶子,箱子不用装。
       if (typeof node.value === "string") {
-        const box: Record<string, JsonValue> = { v: node.value };
-        tasks.push(
-          handleAllKeysTranslation(box, currentTargetLang).then(() => {
-            (node.parent as Record<string, JsonValue>)[node.parentProperty] = box.v;
-          }),
-        );
+        nodes.push({ value: node.value, write: (v) => ((node.parent as Record<string, JsonValue>)[node.parentProperty] = v) });
         continue;
       }
       if (typeof node.value !== "object" || node.value == null) continue;
-      // 调用 handleAllKeysTranslation 对节点的值进行翻译
-      tasks.push(handleAllKeysTranslation(node.value as JsonValue, currentTargetLang));
+      // 子树的根不会是字符串(上面那个分支已经把字符串叶子收走),用树内版本。
+      nodes.push(...collectStringLeaves(node.value as JsonValue));
     }
-
-    await Promise.all(tasks);
+    return nodes;
   };
 
-  // 处理指定键名的映射翻译
-  const handleKeyMappingTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
+  // 指定键名的映射翻译:配对校验后,inputKey 的值 → outputKey 的槽位
+  const collectKeyMapping = (jsonObject: JsonValue): CollectedNode[] => {
     const mappings: KeyMapping[] = showSimpleInput
       ? simpleInputKey
           .replace(/，/g, ",")
@@ -400,51 +341,20 @@ const JSONTranslator = () => {
       throw new Error(tJson("invalidPathKey"));
     }
 
-    // 处理所有有效的映射
-    const allPromises: Promise<void>[] = [];
-    let aborted = false;
+    // 收集所有有效映射:pairedInputs 已在上面过滤为纯字符串值(见"只翻字符串值"),
+    // 与 pairedOutputs 按下标一一对应。
+    const nodes: CollectedNode[] = [];
     for (const { inputNodes, outputNodes } of validMappings) {
-      totalCountRef.current += inputNodes.length;
-      const cacheSuffix = generateCacheSuffix({
-        sourceLanguage,
-        targetLanguage: currentTargetLang,
-        translationMethod,
-        config,
-        systemPrompt,
-        userPrompt,
-        glossaryTerms: getGlossaryTerms(currentTargetLang),
+      inputNodes.forEach((node, index) => {
+        const out = outputNodes[index];
+        nodes.push({ value: node.value as string, write: (v) => (out.parent[out.parentProperty] = v) });
       });
-      const promises = inputNodes.map((node, index: number) => {
-        return limit(async () => {
-          if (aborted) return;
-          const sourceValue = typeof node.value === "string" ? node.value : JSON.stringify(node.value);
-          try {
-            outputNodes[index].parent[outputNodes[index].parentProperty] = applyRemoveChars(
-              await translateSingleWithGlossary(sourceValue, cacheSuffix, {
-                translationMethod,
-                targetLanguage: currentTargetLang,
-                sourceLanguage,
-                ...runtimeConfig,
-              })
-            );
-          } catch (error) {
-            if (isAuthError(error) || isCascadedAbort(error)) {
-              aborted = true;
-              throw error;
-            }
-            recordLineFailure(sourceValue, describeError(error, t), { lang: currentTargetLang });
-          }
-          updateProgress();
-        });
-      });
-      allPromises.push(...promises);
     }
-
-    await Promise.all(allPromises);
+    return nodes;
   };
 
   // 扁平 json，单一键名，可选择起始翻译节点
-  const handleSelectiveKeyTranslation = async (jsonObject: JsonValue, currentTargetLang: string) => {
+  const collectSelectiveKey = (jsonObject: JsonValue): CollectedNode[] => {
     if (selectiveField.trim() === "") {
       throw new Error(`${t("enter")} ${tJson("fieldToTranslate")}`);
     }
@@ -466,6 +376,7 @@ const JSONTranslator = () => {
     }
     const mappings = keys.map((key) => ({ inputKey: key.trim(), outputKey: key.trim() }));
 
+    const nodes: CollectedNode[] = [];
     for (const { inputKey, outputKey } of mappings) {
       if (!inputKey || !outputKey) {
         throw new Error(tJson("inputOutputKeyMissing"));
@@ -497,44 +408,13 @@ const JSONTranslator = () => {
         throw new Error(`${tJson("invalidPathKey")}: ${inputKey}`);
       }
 
-      totalCountRef.current += nodesToTranslate.length;
-      const cacheSuffix = generateCacheSuffix({
-        sourceLanguage,
-        targetLanguage: currentTargetLang,
-        translationMethod,
-        config,
-        systemPrompt,
-        userPrompt,
-        glossaryTerms: getGlossaryTerms(currentTargetLang),
-      });
-      // Translate all nodes
-      let aborted = false;
-      const promises = nodesToTranslate.map(async (node) => {
-        return limit(async () => {
-          if (aborted) return;
-          try {
-            // Update the value in the original object
-            rootRecord[node.key][outputKey] = applyRemoveChars(
-              await translateSingleWithGlossary(node.value, cacheSuffix, {
-                translationMethod,
-                targetLanguage: currentTargetLang,
-                sourceLanguage,
-                ...runtimeConfig,
-              })
-            );
-          } catch (error) {
-            if (isAuthError(error) || isCascadedAbort(error)) {
-              aborted = true;
-              throw error;
-            }
-            recordLineFailure(node.value, describeError(error, t), { lang: currentTargetLang });
-          }
-          updateProgress();
-        });
-      });
-
-      await Promise.all(promises);
+      // 多个 inputKey 的节点并进同一次引擎调用(旧版逐 key 串行分段 ——
+      // 同一批请求,人为多了段间空档,没有语义差别)。
+      for (const node of nodesToTranslate) {
+        nodes.push({ value: node.value, write: (v) => (rootRecord[node.key][outputKey] = v) });
+      }
     }
+    return nodes;
   };
 
   const handleExportFile = async (currentTargetLang: string | null = null) => {
@@ -569,11 +449,8 @@ const JSONTranslator = () => {
     if (isScopedRetry()) clearFailures();
     else clearResults();
 
-    // Reset progress
-    translatedCountRef.current = 0;
-    totalCountRef.current = 0;
-    setProgressPercent(0);
-    setProgressInfo({ current: 0, total: 0 });
+    // Reset progress(hook 的进度状态 —— 引擎经 translateBatch 驱动它)
+    resetProgress();
 
     if (!sourceText.trim()) {
       message.warning(t("noSourceText"));
@@ -583,9 +460,6 @@ const JSONTranslator = () => {
     // validate 不再自管 isTranslating, 这里统一用 try/finally 兜底,
     // progress modal 在 test ping → JSON 预处理 → 翻译循环之间保持连续可见。
     setIsTranslating(true);
-    // Show non-zero progress immediately so users see the modal is alive while
-    // the first LLM request is in-flight (DeepSeek etc. can take 10-30s per item).
-    setProgressPercent(0.5);
 
     // For storing results from all languages
     const allResults: Record<string, string> = {};
@@ -619,6 +493,13 @@ const JSONTranslator = () => {
         return;
       }
 
+      // 这里【不】手动推非零进度。引擎在真正开跑时自己会推(runTranslateLines
+      // 的 `ctx.onProgress?.(0.5, …)`),而本地先推一脚会让末尾 `p > 0 ? 100 : p`
+      // 的守卫永远为真 —— 那句守卫的全部意义就是"零请求的运行别钉 100%":
+      // 坏 nodeKeysPath 让每个语言都在收集器里抛错、一个请求没发,照样钉成
+      // 100% 的琥珀色 INCOMPLETE,声称有行保留了原文而失败面板是空的。
+      // (上一轮把这一脚往下挪了几行,但它仍在语言循环之上,守卫照样恒真。)
+      // 字幕/Markdown 走 hook 的 runTranslation,那边本来就没有这一脚。
       if (translateMode === "i18nMode" && multiLanguageMode) {
         // For i18nMode + multiLanguageMode, process all languages in the same JSON object
         const jsonObject = JSON.parse(JSON.stringify(originalJsonObject));
@@ -626,9 +507,12 @@ const JSONTranslator = () => {
         // 逐语言隔离失败(与下方非 i18n 分支一致):此前一个语言抛错会把
         // 已完成语言的全部翻译一起丢弃 —— 现在失败语言记入面板,完成的
         // 语言照常落入合并结果。
-        for (const currentTargetLang of targetLangs) {
+        for (const [langIndex, currentTargetLang] of targetLangs.entries()) {
+          // 取消刹车:在飞请求已被 abort 掐断(translateBatch 的 controller),
+          // 这里挡住的是【下一个语言】重新开跑。
+          if (isCancelRequested()) break;
           try {
-            await handleI18nTranslation(jsonObject, currentTargetLang);
+            await translateCollected(collectI18n(jsonObject, currentTargetLang), currentTargetLang, langIndex, targetLangs.length);
           } catch (error: unknown) {
             console.error(`Error translating to ${currentTargetLang}:`, error);
             if (isCascadedAbort(error)) continue;
@@ -665,25 +549,26 @@ const JSONTranslator = () => {
           message.success(t("fileExported", { fileName: downloadFileName }));
         }
       } else {
-        for (const currentTargetLang of targetLangs) {
+        for (const [langIndex, currentTargetLang] of targetLangs.entries()) {
+          // 取消刹车:在飞请求已被 abort 掐断(translateBatch 的 controller),
+          // 这里挡住的是【下一个语言】重新开跑。
+          if (isCancelRequested()) break;
           try {
-            const jsonObject = JSON.parse(JSON.stringify(originalJsonObject));
+            // holder 而非裸值:根节点本身是字符串时没有父节点可回写(见 collectAllKeys)。
+            const root: { v: JsonValue } = { v: JSON.parse(JSON.stringify(originalJsonObject)) };
 
-            if (translateMode === "allKeys") {
-              await handleAllKeysTranslation(jsonObject, currentTargetLang);
-            } else if (translateMode === "nodeKeys") {
-              await handleNodeKeysTranslation(jsonObject, currentTargetLang, nodeKeysPath);
-            } else if (translateMode === "keyMapping") {
-              await handleKeyMappingTranslation(jsonObject, currentTargetLang);
-            } else if (translateMode === "selectiveKey") {
-              await handleSelectiveKeyTranslation(jsonObject, currentTargetLang);
-            } else if (translateMode === "i18nMode") {
-              await handleI18nTranslation(jsonObject, currentTargetLang);
-            }
+            // 收集器只做遍历与回写定位;编排全在 translateCollected → translateBatch。
+            let nodes: CollectedNode[];
+            if (translateMode === "allKeys") nodes = collectAllKeys(root);
+            else if (translateMode === "nodeKeys") nodes = collectNodeKeys(root.v, nodeKeysPath);
+            else if (translateMode === "keyMapping") nodes = collectKeyMapping(root.v);
+            else if (translateMode === "selectiveKey") nodes = collectSelectiveKey(root.v);
+            else nodes = collectI18n(root.v, currentTargetLang);
+            await translateCollected(nodes, currentTargetLang, langIndex, targetLangs.length);
 
             // removeChars is applied per-translation (applyRemoveChars at each
             // write-back), NOT to this serialized string — see applyRemoveChars.
-            const resultText = JSON.stringify(jsonObject, null, 2);
+            const resultText = JSON.stringify(root.v, null, 2);
 
             // Store result for this language
             allResults[currentTargetLang] = resultText;
@@ -730,10 +615,17 @@ const JSONTranslator = () => {
       // Line failures set the ref inside translateSingle; lang failures via markRunHadFailures
       // above. Without this gate a partially/fully failed run shows green "完成" on top of the
       // red error toasts + TranslateFailurePanel.
-      setProgressPercent(100);
-      // isDisposed:中途导航离开时各 lang 按级联静默 continue,失败 ref 没翻 ——
-      // 不挡会在用户切去的页面上弹绿色"完成"假成功。
-      if (!directExport && !hadRunFailures() && !isDisposed()) {
+      // 取消的 run 不钉 100%:内联进度条的 DONE 态派生自 percent >= 100 &&
+      // !isTranslating,钉上去等于替一次主动喊停亮绿灯。停在 100 以下,
+      // isTranslating 一落条带整个消失。
+      // `p > 0 ? 100 : p` 与 runTranslation 的单文件钉【同一条规则】:批量里
+      // 每个文件都在发请求前就失败时(格式不支持 / 解码失败),makeUpdateProgress
+      // 从未跑过、percent 恒为 0,无条件钉会显示 100% 的琥珀色「INCOMPLETE」——
+      // 声称有行保留了原文,而失败面板是空的。进度动过才钉。
+      if (!isCancelRequested()) setProgressPercent((p) => (p > 0 ? 100 : p));
+      // isDisposed / isCancelRequested:中途导航离开或取消时各 lang 按级联静默
+      // continue,失败 ref 没翻 —— 不挡会弹绿色"完成"假成功。
+      if (!directExport && !hadRunFailures() && !isDisposed() && !isCancelRequested()) {
         message.success(t("textProcessed"));
       }
     } catch (error: unknown) {
@@ -843,6 +735,7 @@ const JSONTranslator = () => {
             }
             style={cardStyle}>
             <Dragger
+              disabled={isTranslating}
               customRequest={({ file }) => {
                 clearResults();
                 handleFileUpload(file as File);
@@ -867,6 +760,7 @@ const JSONTranslator = () => {
 
             <>
               <SourceArea
+                locked={isTranslating}
                 sourceText={sourceText}
                 setSourceText={setSourceText}
                 stats={sourceStats}
@@ -889,6 +783,20 @@ const JSONTranslator = () => {
                 </Button>
               )}
             </Flex>
+
+            <TranslationProgressStrip
+              isTranslating={isTranslating}
+              percent={progressPercent}
+              onCancel={requestCancel}
+              resumable={useCache}
+              onDismiss={resetProgress}
+              multiLanguageMode={multiLanguageMode}
+              targetLanguageCount={targetLanguages.length}
+              failed={failedCount > 0 || failedLangs.length > 0 || runHadFailures}
+              lineFailures={failedCount > 0}
+              currentCount={progressInfo.current}
+              totalCount={progressInfo.total}
+            />
           </Card>
         </Col>
 
@@ -938,6 +846,7 @@ const JSONTranslator = () => {
                 handleSwapLanguages={handleSwapLanguages}
                 setTargetLanguages={setTargetLanguages}
                 setMultiLanguageMode={setMultiLanguageMode}
+                disabled={isTranslating}
               />
             </Form>
 
@@ -958,6 +867,10 @@ const JSONTranslator = () => {
                     </Space>
                   ),
                   children: (
+                    // 一点锁全:模式 Select 与各模式的专属输入(nodeKeysPath /
+                    // KeyMappingInput / selectiveField…)都消费 DisabledContext。
+                    // 运行中的循环按点击时的闭包分发,中途换模式只会"看起来生效"。
+                    <ConfigProvider componentDisabled={isTranslating}>
                     <Form layout="vertical" className="w-full">
                       <Form.Item className="!mb-1">
                         <Select
@@ -1066,6 +979,7 @@ const JSONTranslator = () => {
                         </div>
                       )}
                     </Form>
+                    </ConfigProvider>
                   ),
                 },
                 {
@@ -1078,6 +992,7 @@ const JSONTranslator = () => {
                   ),
                   children: (
                     <AdvancedTranslationSettings
+                      disabled={isTranslating}
                       customFileName={customFileName}
                       setCustomFileName={setCustomFileName}
                       removeChars={removeChars}
@@ -1105,7 +1020,7 @@ const JSONTranslator = () => {
       </Row>
 
       {/* Partial-failure panel: auto-retried once, still-failed lines kept originals */}
-      <TranslateFailurePanel count={failedCount} lines={failedLines} failedLangs={failedLangs} reason={failedReason} onClose={clearFailures} disabled={isTranslating} onRetry={() => runRetry(runTranslation)} />
+      <TranslateFailurePanel count={failedCount} lines={failedLines} failedLangs={failedLangs} reason={failedReason} disabled={isTranslating} onRetry={() => runRetry(runTranslation)} />
 
       {/* Results Section */}
       {!directExport && (translatedText || (multiLanguageMode && Object.keys(translationResults).length > 0)) && (
@@ -1130,18 +1045,6 @@ const JSONTranslator = () => {
         </div>
       )}
 
-      <TranslationProgressModal
-        isTranslating={isTranslating}
-        percent={progressPercent}
-        onDismiss={() => {
-          setProgressPercent(0);
-          setProgressInfo({ current: 0, total: 0 });
-        }}
-        multiLanguageMode={multiLanguageMode}
-        targetLanguageCount={targetLanguages.length}
-        currentCount={progressInfo.current}
-        totalCount={progressInfo.total}
-      />
 
       <MultiLanguageSettingsModal
         open={multiLangModalOpen}
