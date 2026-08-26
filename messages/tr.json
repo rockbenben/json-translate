@@ -152,7 +152,7 @@
     "copyAllFailed": "Tümünü kopyala",
     "closeFailedLinesModal": "Kapat",
     "failedLanguagesTitle": "{count} hedef dil başarısız oldu",
-    "failedLanguagesDesc": "Bu diller için tüm yığınlar başarısız oldu — genellikle yerel LLM aksaklıkları, API hız sınırları veya modelin belirli bir dili reddetmesi nedeniyle. Kodları kopyalayın ve yalnızca onlar için yeniden çalıştırın (Dil Kodları ile Hızlı Giriş alanına yapıştırın); diğerleri önbellekten atlanacak.",
+    "failedLanguagesDesc": "Bu diller için tüm yığınlar başarısız oldu — genellikle yerel LLM aksaklıkları, API hız sınırları veya modelin belirli bir dili reddetmesi nedeniyle. Kodları kopyalayın ve yalnızca onlar için yeniden çalıştırın ('Çok Dilli Ayarlar' bölümüne yapıştırın); diğerleri önbellekten atlanacak.",
     "copyAllFailedLanguages": "Dil kodlarını kopyala",
     "apiStatusFreeApi": "Free API",
     "apiStatusNeedsConfig": "Yapılandırma gerekli",
@@ -328,7 +328,7 @@
     },
     "jsonTranslate": {
       "title": "i18n JSON Çevirici",
-      "description": "Verimli çok dilli JSON çeviri aracı",
+      "description": "Toplu i18n dil dosyası çevirisi, JSONPath eşleştirme ve anahtar eşleme ile",
       "metaTitle": "JSON Çevirici | JSONPath ile i18n Toplu Çeviri",
       "metaDescription": "JSON i18n çevirmeni, 25+ AI motoru: DeepSeek, Claude, GPT, DeepL. Modlar: global, JSONPath, anahtar, çoklu hedef. next-intl.",
       "faq": [

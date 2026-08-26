@@ -165,7 +165,7 @@
     "copyAllFailed": "Copiar todo",
     "closeFailedLinesModal": "Cerrar",
     "failedLanguagesTitle": "{count} idioma(s) de destino fallaron",
-    "failedLanguagesDesc": "Todos los lotes de estos idiomas fallaron — generalmente por fallos de LLM local, límites de tasa de API o rechazo del modelo a un idioma específico. Copie los códigos y vuelva a ejecutar solo con ellos (pegue en Entrada rápida por códigos de idioma); los demás usarán caché y se omitirán.",
+    "failedLanguagesDesc": "Todos los lotes de estos idiomas fallaron — generalmente por fallos de LLM local, límites de tasa de API o rechazo del modelo a un idioma específico. Copie los códigos y vuelva a ejecutar solo con ellos (pegue en 'Configuración multilingüe'); los demás usarán caché y se omitirán.",
     "copyAllFailedLanguages": "Copiar códigos de idioma",
     "apiStatusFreeApi": "Free API",
     "apiStatusNeedsConfig": "Requiere config.",
@@ -328,7 +328,7 @@
     },
     "jsonTranslate": {
       "title": "Traductor JSON i18n",
-      "description": "Herramienta eficiente de traducción JSON multilingüe",
+      "description": "Traducción por lote de archivos de idioma i18n, con coincidencia JSONPath y mapeo de claves",
       "metaTitle": "Traductor JSON | i18n traducción por lotes con JSONPath",
       "metaDescription": "Traductor JSON i18n con 25+ motores IA: DeepSeek, Claude, GPT, DeepL. Modos: global, JSONPath, clave, multi-idioma, agregación.",
       "faq": [

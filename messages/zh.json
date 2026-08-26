@@ -158,7 +158,7 @@
     "copyAllFailed": "复制全部",
     "closeFailedLinesModal": "关闭",
     "failedLanguagesTitle": "翻译失败 {count} 种语言",
-    "failedLanguagesDesc": "这几种语言的所有批次都翻挂了——常见于本地 LLM 抽风、API 限流或模型拒译特定语种。可点「复制语言代码」拿到清单,下次只对它们重跑(在「快速输入语言代码」里粘贴即可),其它语言走缓存不重翻。",
+    "failedLanguagesDesc": "这几种语言的所有批次都翻挂了——常见于本地 LLM 抽风、API 限流或模型拒译特定语种。可点「复制语言代码」拿到清单，下次只对它们重跑（在「多语言设置」里粘贴即可），其它语言走缓存不重翻。",
     "copyAllFailedLanguages": "复制语言代码",
     "apiStatusFreeApi": "Free API",
     "apiStatusNeedsConfig": "需配置",
@@ -283,7 +283,7 @@
     "contextBatchSize": "上下文并发数",
     "contextBatchSizeExtra": "上下文模式的并发批次数。先调「上下文行数」加速更稳，本项易限流",
     "maxTokens": "最大输出 tokens",
-    "maxTokensExtra": "限制模型单次响应的 token 数。0 = 不限制(用厂商默认)。本地模型(Ollama/llama.cpp)建议设 2048-4096,避免死循环占用太久。触顶会显式失败(不会写半截译文),正常翻译被截则调大此值。",
+    "maxTokensExtra": "限制模型单次响应的 token 数。0 = 不限制（用厂商默认）。本地模型（Ollama/llama.cpp）建议设 2048-4096，避免死循环占用太久。触顶会显式失败（不会写半截译文），正常翻译被截则调大此值。",
     "contextWindow": "上下文行数",
     "contextWindowExtra": "每批包含的行数。值越大请求越少、加速越明显，但可能超 token 上限",
     "delayTime": "延迟时间",
@@ -310,7 +310,7 @@
     "presetEmptyHint": "暂无预设，编辑后点保存",
     "presetDefault": "默认提示词",
     "presetDefaultReadonly": "默认提示词为内置项，不可修改或删除；如需自定义请「另存为新预设」",
-    "qwenMtDomains": "领域提示词 (仅支持英文)",
+    "qwenMtDomains": "领域提示词（仅支持英文）",
     "sendSystemPrompt": "发送 system 提示词",
     "sendSystemPromptExtra": "仅当 chat template 拒绝 system 角色时关闭，典型报错 \"Conversations must start with a user prompt\"（如 Gemma 系列）",
     "selectService": "选择翻译服务",
@@ -328,7 +328,7 @@
     },
     "jsonTranslate": {
       "title": "JSON 多语言翻译",
-      "description": "高效的多语言 JSON 翻译工具",
+      "description": "批量翻译 i18n 语言包，支持 JSONPath 匹配和键名映射",
       "metaTitle": "JSON 翻译工具 - i18n 多语言批量翻译，JSONPath 精准定位",
       "metaDescription": "JSON i18n 翻译工具，DeepSeek/Claude/GPT 等 25+ 引擎，五种模式：全局、JSONPath、按键名、多语言一次生成、合并模式。",
       "faq": [
@@ -562,7 +562,7 @@
     "my": "缅甸语",
     "km": "高棉语",
     "ms": "马来语",
-    "fil": "菲律宾语(塔加拉语)",
+    "fil": "菲律宾语（塔加拉语）",
     "jv": "爪哇语",
     "su": "巽他语",
     "ace": "亚齐语",
@@ -609,7 +609,7 @@
   },
   "AppError": {
     "title": "页面加载出错",
-    "description": "页面加载失败,可能是网站刚更新到新版本,请重新加载。",
+    "description": "页面加载失败，可能是网站刚更新到新版本，请重新加载。",
     "reload": "重新加载"
   },
   "NotFound": {
