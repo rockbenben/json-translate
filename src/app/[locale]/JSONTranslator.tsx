@@ -25,6 +25,8 @@ import TranslateFailurePanel from "@/app/components/TranslateFailurePanel";
 
 import MultiLanguageSettingsModal from "@/app/components/MultiLanguageSettingsModal";
 import SourceArea from "@/app/components/SourceArea";
+import { useLockExportFolder } from "@/app/components/ExportFolder";
+import { describeExport } from "@/app/hooks/useFileExport";
 
 const { Dragger } = Upload;
 const { Text } = Typography;
@@ -90,6 +92,10 @@ const JSONTranslator = () => {
     setRequestTimeoutSec,
   } = useTranslationContext();
 
+  // 运行中锁住页面级「导出目录」入口:写入是每个文件现读句柄,跑到一半改目录
+  // 会把同一批产物劈进两个文件夹。控件在 ToolPage 里,prop 传不上去,故用环境锁。
+  useLockExportFolder(isTranslating);
+
   const [directExport, setDirectExport] = useState(false);
   const [translationResults, setTranslationResults] = useState<Record<string, string>>({}); // Store results by language
 
@@ -124,6 +130,7 @@ const JSONTranslator = () => {
   // → 逐槽位回写)。这里曾经是四个手写 pLimit 循环,delayTime 漂移(字幕/MD 每行
   // 间隔 200ms、JSON 满速打)就是那个结构的必然产物,别把循环加回来。
   type CollectedNode = { value: string; write: (v: string) => void };
+
 
   // 收集完成后的执行半段,五个模式共用。
   const translateCollected = async (nodes: CollectedNode[], currentTargetLang: string, langIndex: number, langCount: number) => {
@@ -423,13 +430,13 @@ const JSONTranslator = () => {
     if (currentTargetLang && multiLanguageMode) {
       const content = translationResults[currentTargetLang];
       const downloadFileName = generateFileName(fileName, currentTargetLang, "json", multiLanguageMode);
-      await downloadFile(content, downloadFileName, "application/json;charset=utf-8");
-      return downloadFileName;
+      // 回传【实际写入名】:导出目录下同名会让路成 `x (1).json`,聚合 toast 报的
+      // 就是这个返回值,复述请求名会让用户去找不存在的文件
+      return (await downloadFile(content, downloadFileName, "application/json;charset=utf-8")).fileName;
     } else {
       // Export single language result - use generateFileName with targetLanguage
       const downloadFileName = generateFileName(fileName, targetLanguage, "json", multiLanguageMode);
-      await downloadFile(translatedText, downloadFileName, "application/json;charset=utf-8");
-      return downloadFileName;
+      return (await downloadFile(translatedText, downloadFileName, "application/json;charset=utf-8")).fileName;
     }
   };
 
@@ -544,9 +551,9 @@ const JSONTranslator = () => {
           // i18n mode merges ALL languages into ONE file → no collision, so no
           // lang disambiguation (would produce a stray "_i18n" suffix).
           const downloadFileName = generateFileName(fileName, "i18n", "json", false);
-          await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
+          const written = await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
 
-          message.success(t("fileExported", { fileName: downloadFileName }));
+          message.success(describeExport(t, written));
         }
       } else {
         for (const [langIndex, currentTargetLang] of targetLangs.entries()) {
@@ -578,9 +585,9 @@ const JSONTranslator = () => {
               const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
               const fileName = multipleFiles[0]?.name || `translated.json`;
               const downloadFileName = generateFileName(fileName, currentTargetLang, "json", multiLanguageMode);
-              await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
+              const written = await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
 
-              message.success(`${langLabel} ${t("fileExported", { fileName: downloadFileName })}`);
+              message.success(`${langLabel} ${describeExport(t, written)}`);
             }
           } catch (error: unknown) {
             console.error(`Error translating to ${currentTargetLang}:`, error);
