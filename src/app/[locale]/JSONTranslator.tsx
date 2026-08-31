@@ -96,7 +96,9 @@ const JSONTranslator = () => {
   // 会把同一批产物劈进两个文件夹。控件在 ToolPage 里,prop 传不上去,故用环境锁。
   useLockExportFolder(isTranslating);
 
-  const [directExport, setDirectExport] = useState(false);
+  // 落盘 —— 与 chinese-conversion-directExport 对齐;本文件其余 9 个设置本来就全部落盘,
+  // 只漏了这一个。
+  const [directExport, setDirectExport] = useLocalStorage("json-translate-directExport", false);
   const [translationResults, setTranslationResults] = useState<Record<string, string>>({}); // Store results by language
 
   const [translateMode, setTranslateMode] = useLocalStorage<TranslateMode>("json-translate-mode", "allKeys"); // 翻译模式状态：'allKeys', 'nodeKeys', 'keyMapping', "selectiveKey", 'i18nMode'
