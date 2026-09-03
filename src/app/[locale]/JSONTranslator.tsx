@@ -1,34 +1,35 @@
 "use client";
 
 import React, { useState } from "react";
-import { ConfigProvider, Row, Col, Button, Typography, Tooltip, Form, Input, Select, App, Card, Space, Spin, Flex, Upload, Divider, Switch, Collapse, theme } from "antd";
-import { SettingOutlined, InboxOutlined, ExportOutlined, ImportOutlined, GlobalOutlined, ClearOutlined, SaveOutlined, FileTextOutlined, ControlOutlined } from "@ant-design/icons";
+import { ConfigProvider, Row, Col, Button, Typography, Tooltip, Form, Input, Select, App, Card, Space, Spin, Flex, Divider, Switch, Collapse, theme } from "antd";
+import { SettingOutlined, ExportOutlined, ImportOutlined, GlobalOutlined, SaveOutlined, FileTextOutlined, ControlOutlined } from "@ant-design/icons";
 import { JSONPath } from "jsonpath-plus";
 import { useTranslations } from "next-intl";
 import type { JsonPathNode, JsonValue, KeyMapping, ValidMapping } from "@/app/types";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
+import { useParseJson } from "@/app/hooks/useParseJson";
 import useFileUpload from "@/app/hooks/useFileUpload";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useTextStats } from "@/app/hooks/useTextStats";
 import { useExportFilename } from "@/app/hooks/useExportFilename";
 
-import { pairingAncestors, filterObjectPropertyMatches, preprocessJson, hasPrecisionLossRisk, downloadFile, describeError, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, applyRemoveCharsToLines, getFileTypePresetConfig, splitTopLevelCommas } from "@/app/utils";
+import { pairingAncestors, filterObjectPropertyMatches, downloadFile, describeError, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, applyRemoveCharsToLines, getFileTypePresetConfig, splitTopLevelCommas } from "@/app/utils";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
 import { useLanguageOptions } from "@/app/components/languages";
 import LanguageSelector from "@/app/components/LanguageSelector";
 import ApiStatusBlock from "@/app/components/ApiStatusBlock";
 import { useTranslationContext } from "@/app/components/TranslationContext";
 import ResultCard from "@/app/components/ResultCard";
+import Section from "@/app/components/styled/Section";
 import TranslationProgressStrip from "@/app/components/TranslationProgressStrip";
 import AdvancedTranslationSettings from "@/app/components/AdvancedTranslationSettings";
 import TranslateFailurePanel from "@/app/components/TranslateFailurePanel";
 
 import MultiLanguageSettingsModal from "@/app/components/MultiLanguageSettingsModal";
-import SourceArea from "@/app/components/SourceArea";
+import UploadSourceCard from "@/app/components/UploadSourceCard";
 import { useLockExportFolder } from "@/app/components/ExportFolder";
 import { describeExport } from "@/app/hooks/useFileExport";
 
-const { Dragger } = Upload;
 const { Text } = Typography;
 
 const uploadFileTypes = getFileTypePresetConfig("jsonText");
@@ -37,14 +38,15 @@ type TranslateMode = "allKeys" | "nodeKeys" | "keyMapping" | "selectiveKey" | "i
 
 const JSONTranslator = () => {
   const tJson = useTranslations("JSON");
+  const parseJson = useParseJson();
   const t = useTranslations("common");
   const { sourceOptions } = useLanguageOptions();
   const { copyToClipboard } = useCopyToClipboard();
 
   const { message } = App.useApp();
   const { token } = theme.useToken();
-  const cardStyle: React.CSSProperties = { boxShadow: token.boxShadowTertiary };
-  const { isFileProcessing, fileList, multipleFiles, sourceText, setSourceText, handleFileUpload, handleUploadRemove, handleUploadChange, resetUpload } = useFileUpload();
+  const upload = useFileUpload();
+  const { isFileProcessing, multipleFiles, sourceText, setSourceText } = upload;
   const {
     exportSettings,
     importSettings,
@@ -65,31 +67,27 @@ const JSONTranslator = () => {
     failedCount,
     failedLines,
     failedLangs,
-    setFailedLangs,
     failedReason,
     clearFailures,
     markRunHadFailures,
     runHadFailures,
-    hadRunFailures,
     runRetry,
     isScopedRetry,
     getActiveTargetLangs,
-    isDisposed,
     isTranslating,
-    setIsTranslating,
     handleLanguageChange,
     handleSwapLanguages,
-    validate,
     requestCancel,
     isCancelRequested,
     progressPercent,
-    setProgressPercent,
     progressInfo,
     resetProgress,
     retryCount,
     setRetryCount,
     requestTimeoutSec,
     setRequestTimeoutSec,
+    runTranslation,
+    reportLangFailure,
   } = useTranslationContext();
 
   // 运行中锁住页面级「导出目录」入口:写入是每个文件现读句柄,跑到一半改目录
@@ -132,7 +130,6 @@ const JSONTranslator = () => {
   // → 逐槽位回写)。这里曾经是四个手写 pLimit 循环,delayTime 漂移(字幕/MD 每行
   // 间隔 200ms、JSON 满速打)就是那个结构的必然产物,别把循环加回来。
   type CollectedNode = { value: string; write: (v: string) => void };
-
 
   // 收集完成后的执行半段,五个模式共用。
   const translateCollected = async (nodes: CollectedNode[], currentTargetLang: string, langIndex: number, langCount: number) => {
@@ -450,43 +447,19 @@ const JSONTranslator = () => {
     clearFailures();
   };
 
-  const runTranslation = async () => {
-    // 常规跑:复用 clearResults() 复位产物(译文 / 多语言结果 / 失败面板)——与
-    // Clear All、换删文件同一份清单(本地 runTranslation 不走 hook 的复位)。
-    // scoped 重试:只清失败面板 —— 成功语言的结果/预览要保留,本轮 allResults
-    // 在末尾 merge 进 translationResults,Export All 才不丢已成功的语言。
-    if (isScopedRetry()) clearFailures();
-    else clearResults();
-
-    // Reset progress(hook 的进度状态 —— 引擎经 translateBatch 驱动它)
-    resetProgress();
-
-    if (!sourceText.trim()) {
-      message.warning(t("noSourceText"));
-      return;
-    }
-
-    // validate 不再自管 isTranslating, 这里统一用 try/finally 兜底,
-    // progress modal 在 test ping → JSON 预处理 → 翻译循环之间保持连续可见。
-    setIsTranslating(true);
+  // 五个模式都是收集器 + 同一条 translateBatch;复位 / 校验 / 进度钉 / 术语表快照全在 hook 的
+  // runTranslation 里(与字幕、Markdown 同一套)。这里只多复位一件本页私有的东西:
+  // 常规跑清多语言结果;scoped 重试保留成功语言的结果 —— 本轮 allResults 在末尾 merge 进
+  // translationResults,Export All 才不丢已成功的语言。
+  const performJson = async () => {
+    if (!isScopedRetry()) setTranslationResults({});
 
     // For storing results from all languages
     const allResults: Record<string, string> = {};
 
     try {
-      const isValid = await validate();
-      if (!isValid) return;
-
-      let originalJsonObject: JsonValue;
-      try {
-        originalJsonObject = preprocessJson(sourceText);
-      } catch {
-        message.error(tJson("invalidJson"));
-        return;
-      }
-      // 下一行就会用 parse 结果覆写源文本 —— 超长整数(雪花 ID)在这一步已被
-      // 静默改值,翻译产物全部继承损坏值。保不了真,至少转为知情。
-      if (hasPrecisionLossRisk(sourceText)) message.warning(tJson("bigIntPrecision"));
+      const originalJsonObject = parseJson(sourceText);
+      if (originalJsonObject === null) return;
 
       setSourceText(JSON.stringify(originalJsonObject, null, 2));
 
@@ -523,14 +496,7 @@ const JSONTranslator = () => {
           try {
             await translateCollected(collectI18n(jsonObject, currentTargetLang), currentTargetLang, langIndex, targetLangs.length);
           } catch (error: unknown) {
-            console.error(`Error translating to ${currentTargetLang}:`, error);
-            if (isCascadedAbort(error)) continue;
-            setFailedLangs((prev) => (prev.includes(currentTargetLang) ? prev : [...prev, currentTargetLang]));
-            markRunHadFailures();
-            const friendly = isNetworkError(error) ? t("networkUnavailable") : isAbortError(error) ? t("translationTimeout") : null;
-            const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
-            const content = friendly ? `${friendly} (${langLabel})` : `${describeError(error, t)} ${langLabel} ${t("translationError")}`;
-            message.error({ content, key: "translate-lang-fail", duration: 10 });
+            reportLangFailure(error, currentTargetLang);
           }
         }
 
@@ -592,19 +558,7 @@ const JSONTranslator = () => {
               message.success(`${langLabel} ${describeExport(t, written)}`);
             }
           } catch (error: unknown) {
-            console.error(`Error translating to ${currentTargetLang}:`, error);
-            if (isCascadedAbort(error)) continue;
-            // De-duped lang-failure aggregation. Shown in TranslateFailurePanel.
-            setFailedLangs((prev) => (prev.includes(currentTargetLang) ? prev : [...prev, currentTargetLang]));
-            // Flip the run's failure flag so the success toast below is suppressed even
-            // when other langs produced results (otherwise green "完成" contradicts the panel).
-            markRunHadFailures();
-            const friendly = isNetworkError(error) ? t("networkUnavailable") : isAbortError(error) ? t("translationTimeout") : null;
-            const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
-            const content = friendly ? `${friendly} (${langLabel})` : `${describeError(error, t)} ${langLabel} ${t("translationError")}`;
-            // Shared key: N failed languages roll into one toast instead of stacking
-            // N high — the TranslateFailurePanel below keeps the full per-lang list.
-            message.error({ content, key: "translate-lang-fail", duration: 10 });
+            reportLangFailure(error, currentTargetLang);
           }
         }
       }
@@ -620,23 +574,6 @@ const JSONTranslator = () => {
         setTranslatedText(allResults[targetLanguage]);
       }
 
-      // Show success message — but only when the run had NO line- or lang-level failures.
-      // Line failures set the ref inside translateSingle; lang failures via markRunHadFailures
-      // above. Without this gate a partially/fully failed run shows green "完成" on top of the
-      // red error toasts + TranslateFailurePanel.
-      // 取消的 run 不钉 100%:内联进度条的 DONE 态派生自 percent >= 100 &&
-      // !isTranslating,钉上去等于替一次主动喊停亮绿灯。停在 100 以下,
-      // isTranslating 一落条带整个消失。
-      // `p > 0 ? 100 : p` 与 runTranslation 的单文件钉【同一条规则】:批量里
-      // 每个文件都在发请求前就失败时(格式不支持 / 解码失败),makeUpdateProgress
-      // 从未跑过、percent 恒为 0,无条件钉会显示 100% 的琥珀色「INCOMPLETE」——
-      // 声称有行保留了原文,而失败面板是空的。进度动过才钉。
-      if (!isCancelRequested()) setProgressPercent((p) => (p > 0 ? 100 : p));
-      // isDisposed / isCancelRequested:中途导航离开或取消时各 lang 按级联静默
-      // continue,失败 ref 没翻 —— 不挡会弹绿色"完成"假成功。
-      if (!directExport && !hadRunFailures() && !isDisposed() && !isCancelRequested()) {
-        message.success(t("textProcessed"));
-      }
     } catch (error: unknown) {
       console.error("Translation process error:", error);
       if (isCascadedAbort(error)) {
@@ -648,9 +585,13 @@ const JSONTranslator = () => {
       } else {
         message.error(`${describeError(error, t)} ${t("translationError")}`, 10);
       }
-    } finally {
-      setIsTranslating(false);
     }
+  };
+
+  // runTranslation 返回 true 才弹成功:取消 / 离开 / 任何行或语言失败都不弹,免得跟失败面板对冲。
+  const handleTranslate = async () => {
+    const ok = await runTranslation(performJson, sourceText);
+    if (ok && !directExport) message.success(t("textProcessed"));
   };
 
   const exportAllFiles = async () => {
@@ -719,70 +660,12 @@ const JSONTranslator = () => {
       <Row gutter={[24, 24]}>
         {/* Left Column: Source Area */}
         <Col xs={24} lg={14} xl={15}>
-          <Card
-            title={
-              <Space>
-                <InboxOutlined /> {t("sourceArea")}
-              </Space>
-            }
-            extra={
-              <Tooltip title={t("resetUploadTooltip")}>
-                <Button
-                  type="text"
-                  danger
-                  disabled={isTranslating}
-                  onClick={() => {
-                    resetUpload();
-                    clearResults();
-                    message.success(t("resetUploadSuccess"));
-                  }}
-                  icon={<ClearOutlined />}
-                  aria-label={t("clearAll")}>
-                  {t("clearAll")}
-                </Button>
-              </Tooltip>
-            }
-            style={cardStyle}>
-            <Dragger
-              disabled={isTranslating}
-              customRequest={({ file }) => {
-                clearResults();
-                handleFileUpload(file as File);
-              }}
-              accept={uploadFileTypes.accept}
-              showUploadList
-              beforeUpload={resetUpload}
-              onRemove={(file) => {
-                clearResults();
-                return handleUploadRemove(file);
-              }}
-              onChange={handleUploadChange}
-              fileList={fileList}>
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">{t("dragAndDropText")}</p>
-              <p className="ant-upload-hint">
-                {t("supportedFormats")} {uploadFileTypes.label}
-              </p>
-            </Dragger>
-
-            <>
-              <SourceArea
-                locked={isTranslating}
-                sourceText={sourceText}
-                setSourceText={setSourceText}
-                stats={sourceStats}
-                placeholder={t("pasteUploadContent")}
-                ariaLabel={t("sourceArea")}
-                className="mt-1"
-              />
-            </>
+          <UploadSourceCard upload={upload} stats={sourceStats} fileTypes={uploadFileTypes} locked={isTranslating} onClear={clearResults} onSourceChange={clearResults}>
 
             <Divider />
 
             <Flex gap="small" wrap className="mt-auto pt-4">
-              <Button type="primary" size="large" onClick={runTranslation} loading={isTranslating} icon={<GlobalOutlined spin={isTranslating} />} className="flex-1">
+              <Button type="primary" size="large" onClick={handleTranslate} loading={isTranslating} icon={<GlobalOutlined spin={isTranslating} />} className="flex-1">
                 {multiLanguageMode ? `${t("translate")} | ${t("totalLanguages")}${targetLanguages.length || 0}` : t("translate")}
               </Button>
 
@@ -806,14 +689,13 @@ const JSONTranslator = () => {
               currentCount={progressInfo.current}
               totalCount={progressInfo.total}
             />
-          </Card>
+          </UploadSourceCard>
         </Col>
 
         {/* Right Column: Settings and Configuration */}
         <Col xs={24} lg={10} xl={9}>
           <Card
             title={<Space><SettingOutlined /> {t("configuration")}</Space>}
-            style={cardStyle}
             extra={
               <Space>
                 <Tooltip title={t("exportSettingTooltip")}>
@@ -898,14 +780,7 @@ const JSONTranslator = () => {
 
                       {/* Mode-specific configurations */}
                       {translateMode === "keyMapping" && (
-                        <div
-                          style={{
-                            padding: token.paddingSM,
-                            background: "transparent",
-                            border: `1px solid ${token.colorBorderSecondary}`,
-                            borderRadius: token.borderRadiusLG,
-                            marginBottom: token.marginMD,
-                          }}>
+                        <Section style={{ marginBottom: token.marginMD }}>
                           <Flex justify="space-between" align="center" className="!mb-2">
                             <Text type="secondary">{tJson("keyMapping")}</Text>
                             <Tooltip title={tJson("keyMappingTooltip")} placement="top">
@@ -932,36 +807,22 @@ const JSONTranslator = () => {
                           ) : (
                             <KeyMappingInput keyMappings={keyMappings} setKeyMappings={setKeyMappings} />
                           )}
-                        </div>
+                        </Section>
                       )}
 
                       {translateMode === "selectiveKey" && (
-                        <div
-                          style={{
-                            padding: token.paddingSM,
-                            background: "transparent",
-                            border: `1px solid ${token.colorBorderSecondary}`,
-                            borderRadius: token.borderRadiusLG,
-                            marginBottom: token.marginMD,
-                          }}>
+                        <Section style={{ marginBottom: token.marginMD }}>
                           <Form.Item label={tJson("startKey")} extra={tJson("StartKeyExtra")} className="!mb-1">
                             <Input value={selectiveStartKey} onChange={(e) => setSelectiveStartKey(e.target.value)} placeholder={`${t("example")}: fetchError`} aria-label={tJson("startKey")} />
                           </Form.Item>
                           <Form.Item label={tJson("fieldToTranslate")} extra={tJson("fieldToTranslateExtra")} className="!mb-0">
                             <Input value={selectiveField} onChange={(e) => setSelectiveField(e.target.value)} placeholder={`${t("example")}: message`} aria-label={tJson("fieldToTranslate")} />
                           </Form.Item>
-                        </div>
+                        </Section>
                       )}
 
                       {translateMode === "nodeKeys" && (
-                        <div
-                          style={{
-                            padding: token.paddingSM,
-                            background: "transparent",
-                            border: `1px solid ${token.colorBorderSecondary}`,
-                            borderRadius: token.borderRadiusLG,
-                            marginBottom: token.marginMD,
-                          }}>
+                        <Section style={{ marginBottom: token.marginMD }}>
                           <Form.Item label={tJson("nodeToTranslate")} extra={`${tJson("nodeToTranslateExtra")} ${tJson("multiValueHint")}`} className="!mb-0">
                             <Input
                               value={nodeKeysPath}
@@ -970,22 +831,15 @@ const JSONTranslator = () => {
                               aria-label={tJson("nodeToTranslate")}
                             />
                           </Form.Item>
-                        </div>
+                        </Section>
                       )}
 
                       {translateMode === "i18nMode" && (
-                        <div
-                          style={{
-                            padding: token.paddingSM,
-                            background: "transparent",
-                            border: `1px solid ${token.colorBorderSecondary}`,
-                            borderRadius: token.borderRadiusLG,
-                            marginBottom: token.marginMD,
-                          }}>
+                        <Section style={{ marginBottom: token.marginMD }}>
                           <Text type="secondary" style={{ fontSize: token.fontSizeSM }}>
                             {tJson("i18nModeExtra")}
                           </Text>
-                        </div>
+                        </Section>
                       )}
                     </Form>
                     </ConfigProvider>
@@ -1029,7 +883,7 @@ const JSONTranslator = () => {
       </Row>
 
       {/* Partial-failure panel: auto-retried once, still-failed lines kept originals */}
-      <TranslateFailurePanel count={failedCount} lines={failedLines} failedLangs={failedLangs} reason={failedReason} disabled={isTranslating} onRetry={() => runRetry(runTranslation)} />
+      <TranslateFailurePanel count={failedCount} lines={failedLines} failedLangs={failedLangs} reason={failedReason} disabled={isTranslating} onRetry={() => runRetry(handleTranslate)} />
 
       {/* Results Section */}
       {!directExport && (translatedText || (multiLanguageMode && Object.keys(translationResults).length > 0)) && (
@@ -1039,9 +893,8 @@ const JSONTranslator = () => {
             : translatedText && (
                 <ResultCard
                   title={t("translationResult")}
-                  content={resultStats.displayText}
-                  charCount={resultStats.charCount}
-                  lineCount={resultStats.lineCount}
+                  content={translatedText}
+                  stats={resultStats}
                   onCopy={() => copyToClipboard(translatedText)}
                   onCopyNode={() => copyToClipboard(stripJsonWrapper(translatedText))}
                   copyNodeLabel={tJson("copyNode")}
@@ -1053,7 +906,6 @@ const JSONTranslator = () => {
               )}
         </div>
       )}
-
 
       <MultiLanguageSettingsModal
         open={multiLangModalOpen}
