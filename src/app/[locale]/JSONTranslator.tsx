@@ -440,8 +440,10 @@ const JSONTranslator = () => {
   };
 
   // 作废上一轮翻译产物:Clear All 与换/删上传文件时调用,使单语/多语言译文结果、
-  // 失败面板回到"未翻译"初始态。与 runTranslation 开头的复位保持同一清单。
+  // 失败面板回到"未翻译"初始态。与 runTranslation 开头的复位保持同一清单 ——
+  // resetProgress 也在那份清单里:完成后常驻的 TranslationProgressStrip 只认自己的 ✕。
   const clearResults = () => {
+    resetProgress();
     setTranslatedText("");
     setTranslationResults({});
     clearFailures();
