@@ -177,7 +177,7 @@ Exit codes: `0` everything translated · `1` finished but some values soft-faile
 
 ## Run It Yourself
 
-Node.js >= 20.9.0 and Yarn (or npm / pnpm).
+Node.js >= 24 and Yarn (or npm / pnpm).
 
 ```bash
 git clone https://github.com/rockbenben/json-translate.git
