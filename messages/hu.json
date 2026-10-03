@@ -20,8 +20,8 @@
     "presetNamePlaceholder": "Szójegyzék neve (pl. egy műsor)",
     "edit": "Kifejezések szerkesztése",
     "drawerTitle": "Szójegyzék szerkesztése",
-    "sourcePlaceholder": "Forrás kifejezés (pl. 斯派克)",
-    "targetPlaceholder": "Fordítás (pl. Spike)",
+    "sourcePlaceholder": "Forrás kifejezés (pl. Spike)",
+    "targetPlaceholder": "Fordítás (pl. 斯派克)",
     "addTerm": "Kifejezés hozzáadása",
     "searchPlaceholder": "Kifejezések keresése",
     "duplicateHint": "Azonos forráskifejezések találhatók — forráskifejezésenként csak egy bejegyzés lesz érvényes",
@@ -37,7 +37,7 @@
   "common": {
     "exportFolder": "Exportálási mappa",
     "exportFolderDefault": "Az exportálások az alapértelmezett letöltési mappába kerülnek.",
-    "exportFolderBlocked": "A böngésző nem fogadja el magát az Asztalt, a Dokumentumokat, a Letöltéseket vagy a felhasználói mappát — válassz egy alappalát vagy bármilyen más mappát.",
+    "exportFolderBlocked": "A böngésző nem fogadja el magát az Asztalt, a Dokumentumokat, a Letöltéseket vagy a felhasználói mappát — válassz egy almappát vagy bármilyen más mappát.",
     "exportFolderCurrent": "Az exportálások ide kerülnek: {dir}",
     "exportFolderReset": "Vissza a letöltési mappához",
     "exportFolderFailed": "Nem sikerült beállítani az exportálási mappát.",
@@ -68,7 +68,7 @@
     "translationCancelled": "A fordítás megszakítva",
     "translationStopped": "Leállítva",
     "resumeFromCache": "A kész sorok gyorsítótárban vannak — fordítsd újra a folytatáshoz",
-    "cancelKeepsProgress": "A megszakítás megőrzi a már lefordítottrészt",
+    "cancelKeepsProgress": "A megszakítás megőrzi a már lefordított részt",
     "dismiss": "Elvetés",
     "translationAPI": "Fordítási API",
     "enter": "Bevitel",
@@ -165,7 +165,7 @@
     "customExportFilename": "Exportálandó fájlnév mintája",
     "customExportFilenameTooltip": "'{'name'}' = eredeti fájlnév, '{'lang'}' = nyelv, '{'ext'}' = kiterjesztés, '{'date'}' = dátum, '{'time'}' = idő; többnyelvű módban a '{'lang'}' automatikusan hozzáadódik a névütközések elkerülése érdekében",
     "partialFailureTitle": "{count} sor sikertelen",
-    "partialFailureDesc": "Ezek a sorok megtartották az eredeti szövegüket, így a fájl szerkezete sértetlen marad. Az újrapróbálkozás csak ezeket küldi újra; a többi a gyorsítótárbóljön.",
+    "partialFailureDesc": "Ezek a sorok megtartották az eredeti szövegüket, így a fájl szerkezete sértetlen marad. Az újrapróbálkozás csak ezeket küldi újra; a többi a gyorsítótárból jön.",
     "partialFailureWhy": "Gyakori az ingyenes és saját üzemeltetésű végpontoknál — általában nem jelent problémát a beállításaidban.",
     "retryFailedLines": "Hibás sorok újrapóbálása",
     "viewFailedLines": "Hibás sorok megtekintése",
@@ -217,7 +217,22 @@
     "errorHintRelay403": "Az API 403-as tiltott hibát adott vissza — engedélyezd az \"API-továbbítást (relay)\" a \"További szolgáltatói beállítások\" alatt",
     "errorHintCors": "Nem érhető el ez a végpont — ellenőrizd a címet, és győződj meg arról, hogy a szolgáltatás engedélyezi a cross-origin (CORS) kéréseket. A saját üzemeltetésű átjáróknak és a helyi modelleknek ezt saját maguknak kell engedélyezniük, vagy használnod kell a saját API-továbbítódat",
     "errorHintGeminiKey": "A Gemini nem érhető el: először ellenőrizd a hálózatot (egyes hálózatok nem érik el közvetlenül a Google szolgáltatásait). Ha a hálózat rendben van, a Google 2026. június 19. óta elutasítja a korlátozás nélküli API-kulcsokat — generálj újra kulcsot az AI Studio-ban (alapértelmezetten korlátozott), vagy adj hozzá Gemini API korlátozást a régi kulcshoz a Google Cloud Console-ban",
-    "rateLimitCooldown": "Sebességhatár elérve — rövid szünet, automatikus újrapróbálkozás következik"
+    "rateLimitCooldown": "Sebességhatár elérve — rövid szünet, automatikus újrapróbálkozás következik",
+    "faqHeading": "Gyakori kérdések",
+    "homeIndexEyebrow": "Mutató",
+    "homeCategoryEyebrow": "{n} kategória",
+    "openNavigation": "Navigáció megnyitása",
+    "goHome": "Ugrás a kezdőlapra",
+    "primaryNav": "Fő navigáció",
+    "toggleTheme": "Téma váltása",
+    "communityLinks": "Közösségi linkek",
+    "viewOnGitHub": "Megtekintés a GitHubon",
+    "toolCategories": "Eszközkategóriák",
+    "searchLanguage": "Nyelv keresése",
+    "selectLanguage": "Nyelv kiválasztása",
+    "noMatchFound": "Nincs találat",
+    "backToTop": "Vissza a tetejére",
+    "exportOptions": "Exportálási beállítások"
   },
   "JSON": {
     "nodeCountMismatch": "A bemeneti és kimeneti csomópontok száma részben nem egyezik; csak a párosítható részek lettek feldolgozva",
@@ -316,7 +331,7 @@
     "presetUpdate": "Mentés a jelenlegi előbeállításba",
     "presetUpdated": "Mentve a jelenlegi előbeállításba",
     "presetDeleteConfirm": "Törlöd ezt az előbeállítást?",
-    "presetEmptyHint": "Még nincsenek előbeállítások — szerkesszed, majd kattints a Mentés új előbeállításként gombra",
+    "presetEmptyHint": "Még nincsenek előbeállítások — szerkess, majd kattints a Mentés új előbeállításként gombra",
     "presetDefault": "Alapértelmezett utasítás",
     "presetDefaultReadonly": "Az alapértelmezett utasítás beépített — nem módosítható és nem törölhető. A testreszabáshoz használd a \"Mentés új előbeállításként\" lehetőséget.",
     "qwenMtDomains": "Tartományi utasítások (csak angolul)",
@@ -342,15 +357,15 @@
       "title": "JSON többnyelvű fordító",
       "description": "i18n nyelvi fájlok kötegelt fordítása JSONPath egyezéssel és kulcsleképezéssel",
       "metaTitle": "JSON-fordító | i18n kötegelt fordítás JSONPath-tal",
-      "metaDescription": "JSON i18n fordító, 25+ AI motor (DeepSeek, Claude, GPT, DeepL). Módok: globális, JSONPath, kulcs, többcélnyelvi, összesítés.",
+      "metaDescription": "JSON i18n fordító, 30+ AI motor (DeepSeek, Claude, GPT, DeepL). Módok: globális, JSONPath, kulcs, többcélnyelvi, összesítés.",
       "faq": [
         {
           "q": "Mely fordítómotorokat és mekkora fájlméreteket támogat ez a JSON-fordító?",
-          "a": "Böngészőben futó JSON i18n fordító: a forrás soha nem hagyja el a gépedet, az API-kulcs a localStorage-ban marad. 25+ motort támogat: Google ingyenes szint (nulla konfiguráció), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, valamint bármely OpenAI-kompatibilis végpont (saját üzemeltetésű Ollama / LM Studio / vLLM). Öt fordítási mód: minden kulcs, megadott csomópont (JSONPath), megadott kulcs, kiválasztott kulcs és i18n többnyelvű összefűzés. Az IndexedDB gyorsítótár növekményes buildet tesz lehetővé — csak a megváltozott kulcsok hívják újra az API-t."
+          "a": "Böngészőben futó JSON i18n fordító: a forrás soha nem hagyja el a gépedet, az API-kulcs a localStorage-ban marad. 30+ motort támogat: Google ingyenes szint (nulla konfiguráció), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, valamint bármely OpenAI-kompatibilis végpont (saját üzemeltetésű Ollama / LM Studio / vLLM). Öt fordítási mód: minden kulcs, megadott csomópont (JSONPath), megadott kulcs, kiválasztott kulcs és i18n többnyelvű összefűzés. Az IndexedDB gyorsítótár növekményes buildet tesz lehetővé — csak a megváltozott kulcsok hívják újra az API-t."
         },
         {
           "q": "Gépi fordítást vagy AI/LLM-et használjak JSON fordításhoz? Hogyan válasszak?",
-          "a": "A JSON-érték hossza alapján válassz: rövid → MT, hosszú → AI/LLM. Rövid felületi szövegeknél (gombfeliratok, menüpontok, hibaüzenetek) a gépi fordítás megfelel — a Google ingyenes szintje semmibe sem kerül (5000 karakteres hívásonkénti korlát), a DeepL és az Azure Translate jól kezeli az európai nyelveket. Hosszabb szövegeknél (termékleírások, útmutatók) használj AI/LLM-et: a DeepSeek a legjobb ár-érték arányú, a GPT-5-mini tartalék megoldás; a terminológiát a Claude Sonnet kezeli a legmegbízhatóbban — adj meg szójegyzéket a rendszerutasításban a márkanevek, cikkszámok és API-kifejezések rögzítéséhez. A motorkonfiguráció közös a [Feliratfordítóval](../subtitle-translator) és a [Markdown fordítóval](../md-translator)."
+          "a": "A JSON-érték hossza alapján válassz: rövid → MT, hosszú → AI/LLM. Rövid felületi szövegeknél (gombfeliratok, menüpontok, hibaüzenetek) a gépi fordítás megfelel — a Google ingyenes szintje semmibe sem kerül (5000 karakteres hívásonkénti korlát), a DeepL és az Azure Translate jól kezeli az európai nyelveket. Hosszabb szövegeknél (termékleírások, útmutatók) használj AI/LLM-et: a DeepSeek a legjobb ár-érték arányú, a GPT-5.4 Mini tartalék megoldás; a terminológiát a Claude Sonnet kezeli a legmegbízhatóbban — adj meg szójegyzéket a rendszerutasításban a márkanevek, cikkszámok és API-kifejezések rögzítéséhez. A motorkonfiguráció közös a [Feliratfordítóval](../subtitle-translator) és a [Markdown fordítóval](../md-translator)."
         },
         {
           "q": "Támogatja a next-intl, i18next, vue-i18n és react-intl JSON formátumokat?",
@@ -358,7 +373,7 @@
         },
         {
           "q": "Hogyan fordíthatok JSON-t egyszerre több nyelvre?",
-          "a": "Kapcsold be a többnyelvű módot, válassz ki több célnyelvet, és egyetlen művelettel kötegeltem generálhatod az en.json, ja.json, ko.json stb. fájlokat — jelentős időt spórolva a lokalizáláson."
+          "a": "Kapcsold be a többnyelvű módot, válassz ki több célnyelvet, és egyetlen művelettel kötegelten generálhatod az en.json, ja.json, ko.json stb. fájlokat — jelentős időt spórolva a lokalizáláson."
         },
         {
           "q": "Hogyan használjam a JSONPath-ot, hogy csak adott csomópontokat fordítsak? Például csak a terméknév mezőket.",
@@ -378,7 +393,7 @@
         }
       ],
       "features": [
-        "25+ fordítómotor támogatása (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
+        "30+ fordítómotor támogatása (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
         "JSONPath-egyeztetés a kulcsok pontos célzásához",
         "Többnyelvű kötegelt generálás (en.json, ja.json, ko.json stb.)",
         "Kulcsleképezés mód az átnevezéshez fordítás közben",
@@ -466,17 +481,17 @@
     "externalTools": {
       "legendtalk": "AI gondolkodók kerekasztala",
       "imgprompt": "AI képpromptok",
-      "lives": "Ezer élet",
-      "learndata": "LearnData nyílt forráskódú jegyzetek"
+      "learndata": "LearnData nyílt forráskódú jegyzetek",
+      "hub365": "365 Nyílt forráskód"
     }
   },
   "Metadata": {
     "title": "ToolsByAI | Ingyenes nyílt forráskódú AI fordító és adateszközök",
-    "description": "ToolsByAI: 19 ingyenes nyílt forráskódú eszköz feliratok, Markdown, JSON i18n fordításhoz, valamint szöveg- és JSON-kötegelt feldolgozáshoz. 25+ AI motor.",
+    "description": "ToolsByAI: 19 ingyenes nyílt forráskódú eszköz feliratok, Markdown, JSON i18n fordításhoz, valamint szöveg- és JSON-kötegelt feldolgozáshoz. 30+ AI motor.",
     "homeTitle": "ToolsByAI eszközkészlet",
     "homeDescription": "19 eszköz fordításhoz, szöveghez, JSON-hoz és adatkonverzióhoz. Növeld a fejlesztők és alkotók hatékonyságát.",
     "ogTitle": "ToolsByAI | Ingyenes nyílt forráskódú AI fordító és adateszközök",
-    "ogDescription": "ToolsByAI: 19 ingyenes nyílt forráskódú eszköz feliratok, Markdown, JSON i18n fordításhoz, valamint szöveg- és JSON-kötegelt feldolgozáshoz. 25+ AI motor."
+    "ogDescription": "ToolsByAI: 19 ingyenes nyílt forráskódú eszköz feliratok, Markdown, JSON i18n fordításhoz, valamint szöveg- és JSON-kötegelt feldolgozáshoz. 30+ AI motor."
   },
   "languages": {
     "auto": "Automatikus felismerés",

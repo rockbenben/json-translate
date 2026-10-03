@@ -28,7 +28,7 @@
     "termCount": "{count, plural, other {{count} 개의 용어}}",
     "noTermsForLang": "이 대상 언어에 아직 용어가 없습니다",
     "importTsv": "TSV 가져오기",
-    "tsvHint": "TSV 형식: 한 줄에 「원어 ⇥ 번역」(탭 구분) — 스프레드시트에서 바로 붙여넣을 수 있습니다. 선택적 3번째 열에 대상 언어 코드(zh, ja 등)를 넣으면 한 파일로 여러 언어를 가져올 수 있습니다",
+    "tsvHint": "TSV 형식: 한 줄에 '원어 ⇥ 번역'(탭 구분) — 스프레드시트에서 바로 붙여넣을 수 있습니다. 선택적 3번째 열에 대상 언어 코드(zh, ja 등)를 넣으면 한 파일로 여러 언어를 가져올 수 있습니다",
     "exportTsv": "TSV 내보내기",
     "exportAllTsv": "모든 언어 내보내기",
     "importDone": "{count}개 가져왔습니다",
@@ -55,7 +55,7 @@
     "configuration": "설정",
     "operation": "작업",
     "optional": "선택사항",
-    "pleaseWait": "잠시만 기다려 주세요...",
+    "pleaseWait": "잠시만 기다려 주세요…",
     "pasteUploadContent": "또는 여기에 텍스트 입력/붙여넣기",
     "example": "예시",
     "sourceLanguage": "원본 언어",
@@ -112,7 +112,7 @@
     "sameLanguageTarget": "원본 언어와 목표 언어가 같습니다. 자동으로 목표 언어를 조정했습니다:",
     "sameLanguageSource": "원본 언어와 목표 언어가 같습니다. 자동으로 원본 언어를 조정했습니다:",
     "enterApiKey": "API 키를 입력하거나 무료 API로 전환하세요.",
-    "enterApiUrl": "\"더 많은 Provider 설정\"에서 API URL을 구성하세요.",
+    "enterApiUrl": "\"더 많은 프로바이더 설정\"에서 API URL을 구성하세요.",
     "serviceUnavailable": "{service}에 일시적으로 연결할 수 없습니다. 네트워크와 서비스 주소를 확인한 뒤 잠시 후 다시 시도하거나 다른 번역 서비스를 선택하세요.",
     "serviceUnavailableSwitched": "{service}에 일시적으로 연결할 수 없어 {fallback}(으)로 자동 전환했습니다. 계속 사용하려면 확인 후 설정에서 되돌리세요.",
     "noFileUploaded": "처리할 파일을 먼저 업로드하세요.",
@@ -127,7 +127,7 @@
     "startProcess": "처리 시작",
     "result": "처리 결과",
     "exportSettingTooltip": "파일로 설정 내보내기",
-    "importSettingTooltip": "파일에서 구성 가져오기",
+    "importSettingTooltip": "파일에서 설정 가져오기",
     "exportSettingSuccess": "설정을 내보냈습니다",
     "exportSettingError": "내보내기 실패, 다시 시도하세요",
     "dictLoadFailed": "변환 사전을 불러오지 못했습니다. 네트워크를 확인하거나 페이지를 새로고침하세요",
@@ -170,7 +170,7 @@
     "apiStatusFailed": "연결 실패",
     "apiStatusTimeout": "연결 시간 초과",
     "testConnection": "연결 테스트",
-    "moreProviderSettings": "더 많은 Provider 설정",
+    "moreProviderSettings": "더 많은 프로바이더 설정",
     "format": "포맷",
     "formatTooltip": "포맷: 빈 줄 및 앞뒤 공백 제거",
     "resultToSource": "결과 ➔ 원문",
@@ -186,7 +186,7 @@
     "generateJson": "JSON 생성",
     "networkUnavailable": "번역 서비스에 일시적으로 연결할 수 없습니다. 네트워크 문제이거나 서비스 측의 일시적인 문제일 수 있습니다. 잠시 후 다시 시도하거나 다른 번역 서비스로 전환하세요.",
     "translationTimeout": "번역 요청이 시간 초과되었습니다. 네트워크가 느리거나 서비스 응답이 느릴 수 있습니다. 잠시 후 다시 시도하거나 다른 번역 서비스로 전환하세요.",
-    "translationTimeoutLocal": "로컬 모델 번역이 시간 초과되었습니다. 흔한 원인: 동시 실행 수가 로컬 서버의 병렬 슬롯보다 많아 요청이 서버에서 대기하다 시간 초과되거나, 모델이 반복 출력 루프에 빠진 경우(대개 원본 언어 선택 오류)입니다. 이 서비스의 \"호출 매개변수 → 동시 번역 행수\"을 낮추거나 \"고급 설정 → 시간 초과\"을 늘리고, 선택한 원본 언어가 실제 텍스트와 일치하는지 확인하세요.",
+    "translationTimeoutLocal": "로컬 모델 번역이 시간 초과되었습니다. 흔한 원인: 동시 실행 수가 로컬 서버의 병렬 슬롯보다 많아 요청이 서버에서 대기하다 시간 초과되거나, 모델이 반복 출력 루프에 빠진 경우(대개 원본 언어 선택 오류)입니다. 이 서비스의 \"호출 매개변수 → 동시 번역 행수\"를 낮추거나 \"고급 설정 → 시간 초과\"를 늘리고, 선택한 원본 언어가 실제 텍스트와 일치하는지 확인하세요.",
     "langGroupCommon": "자주 사용",
     "langGroupEurope": "유럽",
     "langGroupMiddleEast": "중동",
@@ -213,11 +213,26 @@
     "errorHint429": "요청 한도를 초과했습니다. 나중에 다시 시도하세요",
     "errorHint456": "이번 기간의 번역 할당량을 모두 사용했습니다",
     "errorHint5xx": "서버 오류입니다. 나중에 다시 시도하세요",
-    "errorHintRelay": "네트워크 오류(CORS 제한일 수 있음). \"더 많은 Provider 설정\"에서 \"API 중계\"를 켜세요",
-    "errorHintRelay403": "API가 403 Forbidden을 반환했습니다. \"더 많은 Provider 설정\"에서 \"API 중계\"를 켜세요",
+    "errorHintRelay": "네트워크 오류(CORS 제한일 수 있음). \"더 많은 프로바이더 설정\"에서 \"API 중계\"를 켜세요",
+    "errorHintRelay403": "API가 403 Forbidden을 반환했습니다. \"더 많은 프로바이더 설정\"에서 \"API 중계\"를 켜세요",
     "errorHintCors": "이 주소에 연결할 수 없습니다. 주소가 올바른지, 서비스가 교차 출처 요청(CORS)을 허용하는지 확인하세요. 자체 구축 게이트웨이와 로컬 모델은 직접 켜야 하며, 본인의 API 중계를 사용할 수도 있습니다",
     "errorHintGeminiKey": "Gemini에 연결할 수 없습니다. 먼저 네트워크를 확인하세요(일부 네트워크에서는 Google 서비스에 직접 연결할 수 없습니다). 네트워크가 정상이라면 2026년 6월 19일부터 Google이 무제한 API 키를 거부하고 있습니다. AI Studio에서 키를 다시 생성하거나(기본적으로 제한됨) Google Cloud 콘솔에서 기존 키에 Gemini API 제한을 추가하세요",
-    "rateLimitCooldown": "요청 한도 도달 — 잠시 멈춘 뒤 자동으로 재시도합니다"
+    "rateLimitCooldown": "요청 한도 도달 — 잠시 멈춘 뒤 자동으로 재시도합니다",
+    "faqHeading": "자주 묻는 질문",
+    "homeIndexEyebrow": "색인",
+    "homeCategoryEyebrow": "분류 {n}개",
+    "openNavigation": "내비게이션 열기",
+    "goHome": "홈으로 이동",
+    "primaryNav": "주요 내비게이션",
+    "toggleTheme": "테마 전환",
+    "communityLinks": "커뮤니티 링크",
+    "viewOnGitHub": "GitHub에서 보기",
+    "toolCategories": "도구 분류",
+    "searchLanguage": "언어 검색",
+    "selectLanguage": "언어 선택",
+    "noMatchFound": "일치하는 항목 없음",
+    "backToTop": "맨 위로 이동",
+    "exportOptions": "내보내기 옵션"
   },
   "JSON": {
     "nodeCountMismatch": "일부 입력 및 출력 노드 수가 일치하지 않아 대응 가능한 부분만 처리했습니다",
@@ -249,7 +264,7 @@
     "invalidStartKey": "시작 키 이름이 유효하지 않습니다",
     "StartKeyExtra": "선택 사항. 이 항목부터 번역합니다. 비우면 처음부터",
     "fieldToTranslate": "번역할 필드",
-    "fieldToTranslateExtra": "각 항목 안의 이 필드를 번역합니다. 여러 필드는 쉼표로 구분하세요. 나열한 필드 중 하나라도 없으면 전체가 실패합니다. JSON이 「항목 → 객체」 2단 구조여야 합니다",
+    "fieldToTranslateExtra": "각 항목 안의 이 필드를 번역합니다. 여러 필드는 쉼표로 구분하세요. 나열한 필드 중 하나라도 없으면 전체가 실패합니다. JSON이 '항목 → 객체' 2단 구조여야 합니다",
     "nodeToTranslate": "번역할 노드",
     "nodeToTranslateExtra": "노드 이름 사용 시 1단계 자식 노드만 매칭",
     "keyMappingTooltip": "번역 모드 전환: 원본 키 모드는 동일한 키 이름 사용(A→A), 매핑 모드는 키 이름 변환 가능(A→B)",
@@ -290,7 +305,7 @@
     "batchSize": "동시 번역 행수",
     "batchSizeExtra": "비컨텍스트 모드의 동시 요청 수. 너무 높으면 API 속도 제한이 발생합니다",
     "contextBatchSize": "문맥 모드 동시성",
-    "contextBatchSizeExtra": "컨텍스트 모드의 동시 배치 수. 먼저 「컨텍스트 행 수」를 조정하세요 —— 속도 면에서 안전. 이 값을 늘리면 속도 제한 위험",
+    "contextBatchSizeExtra": "컨텍스트 모드의 동시 배치 수. 먼저 '컨텍스트 행 수'를 조정하세요 —— 속도 면에서 안전. 이 값을 늘리면 속도 제한 위험",
     "maxTokens": "최대 토큰 수",
     "maxTokensExtra": "모델 단일 응답 토큰 수 제한. 0 = 무제한 (벤더 기본값). 로컬 모델 (Ollama/llama.cpp)은 2048-4096 권장, 반복 루프 방지. 상한 도달 시 명시적으로 실패 (반쪽 번역이 캐시되지 않음); 정상 번역이 잘리면 이 값을 늘리세요.",
     "contextWindow": "컨텍스트 행수",
@@ -342,19 +357,19 @@
       "title": "i18n JSON 번역",
       "description": "i18n 언어 파일 일괄 번역, JSONPath 매칭 및 키 이름 매핑 지원",
       "metaTitle": "JSON 번역 도구 - i18n 다국어 일괄 번역, JSONPath 정밀 지정",
-      "metaDescription": "JSON i18n 번역기, DeepSeek/Claude/GPT 등 25+ AI 엔진, 전역·JSONPath·키·다중·병합 5가지 모드.",
+      "metaDescription": "JSON i18n 번역기, DeepSeek/Claude/GPT 등 30+ AI 엔진, 전역·JSONPath·키·다중·병합 5가지 모드.",
       "faq": [
         {
           "q": "이 JSON 번역 도구는 어떤 번역 엔진과 파일 크기를 지원하나요?",
-          "a": "브라우저에서 실행되는 JSON 국제화 번역 도구로, 원본은 서버에 전송되지 않고 API 키는 로컬 localStorage에만 저장됩니다. 25+ 엔진 지원: Google 무료 버전(설정 불필요), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, 그리고 모든 OpenAI 호환 엔드포인트(Ollama / LM Studio / vLLM 셀프호스팅). 전체, 지정 노드(JSONPath), 지정 키 이름, 선택적 키, i18n 다국어 집계 5가지 번역 모드 제공. IndexedDB 캐시로 증분 번역 — 변경된 키만 다시 API 호출."
+          "a": "브라우저에서 실행되는 JSON 국제화 번역 도구로, 원본은 서버에 전송되지 않고 API 키는 로컬 localStorage에만 저장됩니다. 30+ 엔진 지원: Google 무료 버전(설정 불필요), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, 그리고 모든 OpenAI 호환 엔드포인트(Ollama / LM Studio / vLLM 셀프호스팅). 전체, 지정 노드(JSONPath), 지정 키 이름, 선택적 키, i18n 다국어 집계 5가지 번역 모드 제공. IndexedDB 캐시로 증분 번역 — 변경된 키만 다시 API 호출."
         },
         {
           "q": "JSON 번역은 기계 번역과 AI 번역 중 무엇을 쓸까요? 어떻게 골라야 할까요?",
-          "a": "JSON 값의 길이로 결정: 짧으면 MT, 길면 AI 거대 언어 모델. 짧은 UI 텍스트(버튼, 메뉴 항목, 오류 메시지)는 기계 번역으로 충분 — Google 무료 버전은 비용 0(요청당 5000자 제한), DeepL과 Azure Translate는 유럽 언어에 적합. 긴 텍스트(제품 설명, 튜토리얼)에는 AI 거대 언어 모델: DeepSeek가 가성비 최우선, 대안으로 GPT-5-mini; Claude Sonnet은 용어 일관성이 가장 안정적이며, 「시스템 프롬프트」에 용어 보존 목록을 추가하면 브랜드명, SKU, API 용어를 보호할 수 있습니다. 엔진 설정은 [자막 번역](../subtitle-translator), [Markdown 번역](../md-translator)과 공유됩니다."
+          "a": "JSON 값의 길이로 결정: 짧으면 MT, 길면 AI 거대 언어 모델. 짧은 UI 텍스트(버튼, 메뉴 항목, 오류 메시지)는 기계 번역으로 충분 — Google 무료 버전은 비용 0(요청당 5000자 제한), DeepL과 Azure Translate는 유럽 언어에 적합. 긴 텍스트(제품 설명, 튜토리얼)에는 AI 거대 언어 모델: DeepSeek가 가성비 최우선, 대안으로 GPT-5.4 Mini; Claude Sonnet은 용어 일관성이 가장 안정적이며, '시스템 프롬프트'에 용어 보존 목록을 추가하면 브랜드명, SKU, API 용어를 보호할 수 있습니다. 엔진 설정은 [자막 번역](../subtitle-translator), [Markdown 번역](../md-translator)과 공유됩니다."
         },
         {
           "q": "next-intl, i18next, vue-i18n, react-intl 같은 i18n 프레임워크의 JSON 형식을 지원하나요?",
-          "a": "모두 지원합니다. next-intl과 vue-i18n의 중첩 객체 구조, i18next의 평면 키 네임스페이스, react-intl의 ICU MessageFormat 자리표시자를 모두 정확히 처리합니다. `{name}`, `{count, plural, ...}`, `{0}` 같은 자리표시자는 번역 시 그대로 보존되며 변경되지 않습니다. 「키 이름 지정」 모드로 키를 건드리지 않고 값만 번역하거나, 「i18n 모드」로 원본 JSON에 여러 언어를 직접 집계(예: `{en: \"Settings\", zh: \"设置\"}` 구조)할 수 있습니다."
+          "a": "모두 지원합니다. next-intl과 vue-i18n의 중첩 객체 구조, i18next의 평면 키 네임스페이스, react-intl의 ICU MessageFormat 자리표시자를 모두 정확히 처리합니다. `{name}`, `{count, plural, ...}`, `{0}` 같은 자리표시자는 번역 시 그대로 보존되며 변경되지 않습니다. '키 이름 지정' 모드로 키를 건드리지 않고 값만 번역하거나, 'i18n 모드'로 원본 JSON에 여러 언어를 직접 집계(예: `{en: \"Settings\", zh: \"设置\"}` 구조)할 수 있습니다."
         },
         {
           "q": "JSON을 한 번에 여러 언어로 번역할 수 있나요?",
@@ -362,7 +377,7 @@
         },
         {
           "q": "JSONPath로 특정 노드만 번역하려면? 예를 들어 상품 이름 필드만 번역하고 싶을 때.",
-          "a": "「노드 지정」 모드는 표준 JSONPath 표현식을 지원합니다: `$.products[*].name`은 모든 상품의 name 필드를 번역하고, `$..title`은 모든 title 필드를 재귀적으로 번역합니다. 여러 경로는 쉼표로 구분합니다. 「키 이름 지정」의 고급 매핑 모드와 결합하면 번역 결과를 새 필드(예: `name` → `name_zh`)에 저장하고 원본을 보존할 수 있습니다. 주의: 점(.)이 포함된 키 이름은 중첩 경로로 잘못 인식되므로 피하는 것이 좋습니다."
+          "a": "'노드 지정' 모드는 표준 JSONPath 표현식을 지원합니다: `$.products[*].name`은 모든 상품의 name 필드를 번역하고, `$..title`은 모든 title 필드를 재귀적으로 번역합니다. 여러 경로는 쉼표로 구분합니다. '키 이름 지정'의 고급 매핑 모드와 결합하면 번역 결과를 새 필드(예: `name` → `name_zh`)에 저장하고 원본을 보존할 수 있습니다. 주의: 점(.)이 포함된 키 이름은 중첩 경로로 잘못 인식되므로 피하는 것이 좋습니다."
         },
         {
           "q": "번역 후 JSON 키와 중첩 구조가 깨지나요?",
@@ -407,7 +422,7 @@
       "description": "정규식 매칭·정렬·필터링 등을 통합한 텍스트 일괄 처리 도구"
     },
     "dataBatch": {
-      "title": "텍스트 처리 도구",
+      "title": "데이터 일괄 처리",
       "description": "Excel 표 데이터 일괄 중복 제거·열 추출·텍스트 병합, 다중 규칙 순차 실행"
     },
     "textJoiner": {
@@ -466,17 +481,17 @@
     "externalTools": {
       "legendtalk": "AI 사상가 라운드테이블",
       "imgprompt": "AI 이미지 프롬프트",
-      "lives": "천세서 인생 시뮬레이션",
-      "learndata": "LearnData 오픈소스 노트"
+      "learndata": "LearnData 오픈소스 노트",
+      "hub365": "365 오픈소스"
     }
   },
   "Metadata": {
     "title": "ToolsByAI | 무료 오픈소스 AI 번역 및 데이터 처리 도구",
-    "description": "ToolsByAI: 자막·Markdown·JSON i18n 번역 및 텍스트/JSON 일괄 처리 19개 무료 도구, 25+ AI 엔진.",
+    "description": "ToolsByAI: 자막·Markdown·JSON i18n 번역 및 텍스트/JSON 일괄 처리 19개 무료 도구, 30+ AI 엔진.",
     "homeTitle": "ToolsByAI 도구 모음",
     "homeDescription": "19 무료 도구. 다국어 번역, 텍스트 처리, JSON 변환 등 개발자와 크리에이터의 업무 효율 향상.",
     "ogTitle": "ToolsByAI | 무료 오픈소스 AI 번역 및 데이터 처리 도구",
-    "ogDescription": "ToolsByAI: 자막·Markdown·JSON i18n 번역 및 텍스트/JSON 일괄 처리 19개 무료 도구, 25+ AI 엔진."
+    "ogDescription": "ToolsByAI: 자막·Markdown·JSON i18n 번역 및 텍스트/JSON 일괄 처리 19개 무료 도구, 30+ AI 엔진."
   },
   "languages": {
     "auto": "자동 감지",
@@ -611,7 +626,7 @@
   },
   "feedback": {
     "feedback1": "피드백 및 제안",
-    "feedback2": "사용 중 문제가 발생하거나 제안 및 아이디어가 있으면 언제든지 알려주세요!",
+    "feedback2": "사용 중 문제가 발생하거나 제안 및 아이디어가 있으면 언제든지 알려주세요! 고객님의 피드백은 향후 기능 개발과 개선에 직접 반영되어 모두의 요구에 더 잘 맞는 도구를 함께 만들어 갑니다.",
     "feedback3": "사용 시나리오나 발생한 문제, 또는 창의적인 아이디어를 자세히 설명해 주세요. 모든 피드백을 진지하게 읽고 가능한 한 빨리 조정 및 최적화하겠습니다.",
     "reaction0": "좋아요",
     "reaction1": "응원해요",
@@ -628,7 +643,7 @@
   },
   "NotFound": {
     "title": "페이지를 찾을 수 없음",
-    "description": "방문한 페이지가 존재하지 않거나 이동되었습니다。",
+    "description": "방문한 페이지가 존재하지 않거나 이동되었습니다.",
     "goHome": "홈으로"
   }
 }

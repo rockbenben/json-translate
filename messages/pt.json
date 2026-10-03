@@ -112,9 +112,9 @@
     "sameLanguageTarget": "Idiomas de origem e destino iguais; destino ajustado automaticamente para",
     "sameLanguageSource": "Idiomas de origem e destino iguais; origem ajustada automaticamente para",
     "enterApiKey": "Insira a chave API ou mude para API Gratuita.",
-    "enterApiUrl": "Por favor, configure a URL da API em \"Mais configurações do Provider\".",
+    "enterApiUrl": "Por favor, configure a URL da API em \"Mais configurações do provedor\".",
     "serviceUnavailable": "{service} está temporariamente inacessível — verifique a rede e o endereço do serviço, tente novamente mais tarde ou mude para outro serviço de tradução.",
-    "serviceUnavailableSwitched": "{service} está temporariamente inacessível — mudámos automaticamente para {fallback}. Verifique-o e volte a selecioná-lo nas definições se quiser continuar a usá-lo.",
+    "serviceUnavailableSwitched": "{service} está temporariamente inacessível — mudamos automaticamente para {fallback}. Verifique o serviço original e, se estiver tudo certo, selecione-o novamente em Configurações.",
     "noFileUploaded": "Por favor, envie um arquivo primeiro.",
     "translationExported": "Tradução concluída, arquivos exportados",
     "noSourceText": "Por favor, insira ou cole o texto.",
@@ -162,7 +162,7 @@
     "failedLanguagesTitle": "Falha em {count} idioma(s) de destino",
     "failedLanguagesDesc": "Todos os lotes para estes idiomas falharam — geralmente devido a problemas LLM locais, limites de taxa de API ou recusa do modelo a um idioma específico. Copie os códigos e execute novamente apenas com eles (cole em 'Configurações multilíngue'); os outros usarão o cache e serão ignorados.",
     "copyAllFailedLanguages": "Copiar códigos de idioma",
-    "apiStatusFreeApi": "Free API",
+    "apiStatusFreeApi": "API Gratuita",
     "apiStatusNeedsConfig": "Requer config.",
     "apiStatusConfigured": "Configurado",
     "apiStatusTesting": "Testando",
@@ -170,7 +170,7 @@
     "apiStatusFailed": "Falha na conexão",
     "apiStatusTimeout": "Tempo de conexão esgotado",
     "testConnection": "Testar conexão",
-    "moreProviderSettings": "Mais configurações do Provider",
+    "moreProviderSettings": "Mais configurações do provedor",
     "format": "Formatar",
     "formatTooltip": "Formatar: remover linhas vazias e espaços no início/fim",
     "resultToSource": "Resultado ➔ Original",
@@ -185,7 +185,7 @@
     "replaceText": "Substituir texto",
     "generateJson": "Gerar JSON",
     "networkUnavailable": "O serviço de tradução está temporariamente inacessível — pode ser um problema de rede ou o serviço está com algum problema momentâneo. Tente novamente mais tarde ou troque para outro serviço de tradução.",
-    "translationTimeout": "A solicitação de tradução expirou — pode ser uma rede lenta ou o serviço está demorando muito para responder. Tente novamente mais tarde ou troque para outro serviço de tradução.",
+    "translationTimeout": "A requisição de tradução expirou — pode ser uma rede lenta ou o serviço está demorando muito para responder. Tente novamente mais tarde ou troque para outro serviço de tradução.",
     "translationTimeoutLocal": "Tempo esgotado na tradução com o modelo local. Causas comuns: a concorrência excede os slots paralelos do seu servidor local e os pedidos ficam em fila até expirar; ou o modelo entra num ciclo de repetição (normalmente idioma de origem errado). Reduza «Parâmetros de chamada → Linhas simultâneas» neste serviço ou aumente «Configurações Avançadas → Tempo limite», e confirme que o idioma de origem corresponde ao texto.",
     "langGroupCommon": "Comuns",
     "langGroupEurope": "Europa",
@@ -198,7 +198,7 @@
     "langPresetEurope": "Europeias principais",
     "langPresetEastAsian": "Ásia Oriental",
     "langPresetIndian": "Subcontinente Indiano",
-    "selectedCount": "{count} selecionadas",
+    "selectedCount": "{count} selecionados",
     "recentLanguages": "Recentes",
     "langGroupAmericasOceania": "Américas e Oceânia",
     "relatedTools": "Ferramentas relacionadas",
@@ -213,11 +213,26 @@
     "errorHint429": "Limite de requisições excedido, tente novamente mais tarde",
     "errorHint456": "Cota de tradução esgotada neste período",
     "errorHint5xx": "Erro do servidor, tente novamente mais tarde",
-    "errorHintRelay": "Erro de rede (possivelmente CORS) — ative o \"Relay da API\" em \"Mais configurações do Provider\"",
-    "errorHintRelay403": "A API retornou 403 Forbidden — ative o \"Relay da API\" em \"Mais configurações do Provider\"",
+    "errorHintRelay": "Erro de rede (possivelmente CORS) — ative o \"Relay da API\" em \"Mais configurações do provedor\"",
+    "errorHintRelay403": "A API retornou 403 Forbidden — ative o \"Relay da API\" em \"Mais configurações do provedor\"",
     "errorHintCors": "Não foi possível acessar este endereço — verifique o endereço e se o serviço permite requisições de origem cruzada (CORS). Gateways auto-hospedados e modelos locais precisam habilitar isso, ou use o seu próprio Relay da API",
     "errorHintGeminiKey": "Não foi possível conectar ao Gemini: verifique primeiro sua rede (algumas redes não alcançam diretamente os serviços do Google). Se a rede estiver bem, desde 19/06/2026 o Google rejeita chaves de API sem restrições — gere novamente sua chave no AI Studio (restrita por padrão) ou adicione uma restrição de Gemini API à chave antiga no Console do Google Cloud",
-    "rateLimitCooldown": "Limite de requisições atingido — pausando brevemente, repetiremos automaticamente"
+    "rateLimitCooldown": "Limite de requisições atingido — pausando brevemente, repetiremos automaticamente",
+    "faqHeading": "Perguntas frequentes",
+    "homeIndexEyebrow": "Índice",
+    "homeCategoryEyebrow": "{n} categorias",
+    "openNavigation": "Abrir navegação",
+    "goHome": "Ir para a página inicial",
+    "primaryNav": "Navegação principal",
+    "toggleTheme": "Alternar tema",
+    "communityLinks": "Links da comunidade",
+    "viewOnGitHub": "Ver no GitHub",
+    "toolCategories": "Categorias de ferramentas",
+    "searchLanguage": "Pesquisar idioma",
+    "selectLanguage": "Selecionar idioma",
+    "noMatchFound": "Nenhum resultado",
+    "backToTop": "Voltar ao topo",
+    "exportOptions": "Opções de exportação"
   },
   "JSON": {
     "nodeCountMismatch": "A contagem de alguns nós de entrada e saída não corresponde; apenas os pares correspondentes foram processados",
@@ -229,7 +244,7 @@
     "keyMapping": "Especificar Chaves (Suporte múltiplo)",
     "selectiveKey": "Um campo em todas as entradas",
     "i18nMode": "Modo i18n (Mesclar idiomas)",
-    "i18nModeExtra": "O modo i18n usa o idioma de origem como base (auto por padrão en) e mescla todas as traduções de destino no mesmo objeto.",
+    "i18nModeExtra": "O modo i18n usa o idioma de origem como base (auto; padrão: en) e mescla todas as traduções de destino no mesmo objeto.",
     "invalidJson": "Formato JSON inválido, verifique a sintaxe",
     "invalidPathKey": "Caminho ou chave inválida",
     "nonStringMatch": "Os nós correspondentes não são strings; nada foi modificado",
@@ -278,9 +293,9 @@
     "urlAutoCompleted": "URL completada automaticamente",
     "modelExtra": "Nome modelo LLM, ver documentação API",
     "temperatureExtra": "Temperatura (0-2): Mais alto = mais aleatório, mais baixo = mais determinístico. Recomendado: 0.2-0.8",
-    "systemPrompt": "Prompt Sistema",
+    "systemPrompt": "Prompt do sistema",
     "systemPromptExtra": "Prompt sistema para tradução LLM, deixar vazio para padrão",
-    "userPrompt": "Prompt Usuário",
+    "userPrompt": "Prompt do usuário",
     "userPromptExtra": "Prompt tradução personalizado, deixar vazio para padrão. Variáveis:",
     "for": "para",
     "textToTranslate": "texto a traduzir",
@@ -342,15 +357,15 @@
       "title": "Tradutor JSON i18n",
       "description": "Tradução em lote de arquivos de idioma i18n, com correspondência JSONPath e mapeamento de chaves",
       "metaTitle": "Tradutor JSON | Tradução i18n em Lote com JSONPath",
-      "metaDescription": "Tradutor JSON i18n com 25+ motores IA: DeepSeek, Claude, GPT, DeepL. Modos: global, JSONPath, chave, multi-alvo, agregação.",
+      "metaDescription": "Tradutor JSON i18n com 30+ motores IA: DeepSeek, Claude, GPT, DeepL. Modos: global, JSONPath, chave, multi-alvo, agregação.",
       "faq": [
         {
           "q": "Quais motores de tradução e tamanhos de arquivo este tradutor JSON suporta?",
-          "a": "Tradutor JSON i18n do lado do navegador: a fonte nunca sai da sua máquina, a chave API permanece em localStorage. 25+ motores: Google versão gratuita (zero configuração), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, mais qualquer endpoint compatível com OpenAI (Ollama / LM Studio / vLLM auto-hospedado). Cinco modos: todas as chaves, nó-especificado (JSONPath), chave-especificada, chave-seletiva, fusão multilíngue i18n. Cache IndexedDB para builds incrementais — apenas chaves alteradas chamam a API novamente."
+          "a": "Tradutor JSON i18n do lado do navegador: a fonte nunca sai da sua máquina, a chave API permanece em localStorage. 30+ motores: Google versão gratuita (zero configuração), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, mais qualquer endpoint compatível com OpenAI (Ollama / LM Studio / vLLM auto-hospedado). Cinco modos: todas as chaves, nó-especificado (JSONPath), chave-especificada, chave-seletiva, fusão multilíngue i18n. Cache IndexedDB para builds incrementais — apenas chaves alteradas chamam a API novamente."
         },
         {
           "q": "Para traduzir JSON, usar tradução automática ou tradução IA/LLM? Como escolher?",
-          "a": "Escolha pelo comprimento do valor JSON: curto → MT, longo → IA/LLM. Para strings curtas de UI (rótulos de botões, itens de menu, mensagens de erro), a tradução automática serve — a versão gratuita do Google custa zero (limite de 5000 caracteres por chamada), DeepL e Azure Translate lidam bem com idiomas europeus. Para textos mais longos (descrições de produtos, tutoriais) use IA/LLM: DeepSeek é o melhor custo-benefício, GPT-5-mini como alternativa; Claude Sonnet gerencia a terminologia mais confiavelmente — adicione um glossário no Prompt de Sistema para travar nomes de marcas, SKUs e termos de API. As configurações do motor podem ser compartilhadas com [Tradutor de Legendas](../subtitle-translator) e [Tradutor Markdown](../md-translator)."
+          "a": "Escolha pelo comprimento do valor JSON: curto → MT, longo → IA/LLM. Para strings curtas de UI (rótulos de botões, itens de menu, mensagens de erro), a tradução automática serve — a versão gratuita do Google custa zero (limite de 5000 caracteres por chamada), DeepL e Azure Translate lidam bem com idiomas europeus. Para textos mais longos (descrições de produtos, tutoriais) use IA/LLM: DeepSeek é o melhor custo-benefício, GPT-5.4 Mini como alternativa; Claude Sonnet gerencia a terminologia mais confiavelmente — adicione um glossário no Prompt de Sistema para fixar nomes de marcas, SKUs e termos de API. As configurações do motor podem ser compartilhadas com [Tradutor de Legendas](../subtitle-translator) e [Tradutor Markdown](../md-translator)."
         },
         {
           "q": "Suporta os formatos JSON de next-intl, i18next, vue-i18n e react-intl?",
@@ -378,7 +393,7 @@
         }
       ],
       "features": [
-        "Compatível com 25+ motores de tradução (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
+        "Compatível com 30+ motores de tradução (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
         "Correspondência precisa com JSONPath",
         "Geração multilíngue em lote (en.json, ja.json, ko.json)",
         "Renomeação de chaves durante tradução",
@@ -407,7 +422,7 @@
       "description": "Integra correspondência por regex, ordenação, filtragem e outras funcionalidades para processamento em lote"
     },
     "dataBatch": {
-      "title": "Processador de Texto",
+      "title": "Processador de dados em lote",
       "description": "Processamento em lote de dados Excel — deduplicação, extração de colunas, fusão, regras encadeadas"
     },
     "textJoiner": {
@@ -458,25 +473,25 @@
   "navigation": {
     "home": "Início",
     "all": "Todos",
-    "translate": "Ferramentas Tradução",
-    "textParser": "Ferramentas Texto",
+    "translate": "Ferramentas de Tradução",
+    "textParser": "Ferramentas de Texto",
     "jsonParser": "Ferramentas JSON",
-    "dataParser": "Ferramentas Dados",
+    "dataParser": "Ferramentas de Dados",
     "otherTools": "Mais ferramentas",
     "externalTools": {
       "legendtalk": "Mesa-redonda de pensadores de IA",
       "imgprompt": "Prompts de imagem de IA",
-      "lives": "Thousand Lives",
-      "learndata": "LearnData Notas de Código Aberto"
+      "learndata": "LearnData Notas de Código Aberto",
+      "hub365": "365 Código Aberto"
     }
   },
   "Metadata": {
     "title": "ToolsByAI - Ferramentas de IA e Dados para Desenvolvedores",
-    "description": "ToolsByAI: 19 ferramentas open source grátis para tradução de legendas, Markdown, JSON i18n e processamento em lote. 25+ motores IA.",
+    "description": "ToolsByAI: 19 ferramentas open source grátis para tradução de legendas, Markdown, JSON i18n e processamento em lote. 30+ motores IA.",
     "homeTitle": "Suíte ToolsByAI",
     "homeDescription": "19 ferramentas para tradução, texto, JSON e conversão de dados. Impulsione a eficiência de desenvolvedores e criadores.",
-    "ogTitle": "ToolsByAI - Ferramentas Dev IA Gratuitas e Open Source",
-    "ogDescription": "ToolsByAI: 19 ferramentas open source grátis para tradução de legendas, Markdown, JSON i18n e processamento em lote. 25+ motores IA."
+    "ogTitle": "ToolsByAI - Ferramentas de IA e Dados para Desenvolvedores",
+    "ogDescription": "ToolsByAI: 19 ferramentas open source grátis para tradução de legendas, Markdown, JSON i18n e processamento em lote. 30+ motores IA."
   },
   "languages": {
     "auto": "Detecção Auto",

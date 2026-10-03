@@ -217,14 +217,29 @@
     "errorHintRelay403": "API trả về 403 Forbidden — hãy bật \"Chuyển tiếp API\" trong \"Thêm cài đặt Provider\"",
     "errorHintCors": "Không thể kết nối tới địa chỉ này — hãy kiểm tra địa chỉ và xem dịch vụ có cho phép yêu cầu khác nguồn (CORS) hay không. Cổng tự dựng và mô hình cục bộ phải tự bật, hoặc dùng Chuyển tiếp API của riêng bạn",
     "errorHintGeminiKey": "Không thể kết nối Gemini: hãy kiểm tra mạng trước (một số mạng không thể truy cập trực tiếp dịch vụ Google). Nếu mạng bình thường, từ 19/06/2026 Google từ chối các API key không giới hạn — hãy tạo lại key trong AI Studio (mặc định đã giới hạn) hoặc thêm giới hạn Gemini API cho key cũ trong Google Cloud Console",
-    "rateLimitCooldown": "Đạt giới hạn yêu cầu — tạm dừng một lát rồi tự động thử lại"
+    "rateLimitCooldown": "Đạt giới hạn yêu cầu — tạm dừng một lát rồi tự động thử lại",
+    "faqHeading": "Câu hỏi thường gặp",
+    "homeIndexEyebrow": "Mục lục",
+    "homeCategoryEyebrow": "{n} danh mục",
+    "openNavigation": "Mở điều hướng",
+    "goHome": "Về trang chủ",
+    "primaryNav": "Điều hướng chính",
+    "toggleTheme": "Đổi giao diện",
+    "communityLinks": "Liên kết cộng đồng",
+    "viewOnGitHub": "Xem trên GitHub",
+    "toolCategories": "Danh mục công cụ",
+    "searchLanguage": "Tìm ngôn ngữ",
+    "selectLanguage": "Chọn ngôn ngữ",
+    "noMatchFound": "Không có kết quả",
+    "backToTop": "Lên đầu trang",
+    "exportOptions": "Tùy chọn xuất"
   },
   "JSON": {
     "nodeCountMismatch": "Số lượng một số nút đầu vào và đầu ra không khớp; chỉ các cặp khớp được xử lý",
     "clientDescription": "Công cụ dịch JSON cho nhà phát triển. Hỗ trợ khớp JSONPath và ánh xạ khóa để quốc tế hóa nhanh chóng.",
     "jsonPaths": "Đường dẫn JSON",
     "copyNode": "Sao chép nút",
-    "allKeys": "Dịch toàn cầu (Tất cả các khóa)",
+    "allKeys": "Dịch toàn cục (Tất cả các khóa)",
     "nodeKeys": "Khóa dưới nút cụ thể",
     "keyMapping": "Chỉ định khóa (Hỗ trợ nhiều)",
     "selectiveKey": "Một trường trên mọi mục",
@@ -247,7 +262,7 @@
     "multiValueHint": "Phân tách nhiều giá trị bằng dấu phẩy",
     "startKey": "Khóa bắt đầu",
     "invalidStartKey": "Khóa bắt đầu không hợp lệ",
-    "StartKeyExtra": "Tuỳ chọn. Bắt đầu từ mục này; để trống thì bắt đầu từ mục đầu",
+    "StartKeyExtra": "Tùy chọn. Bắt đầu từ mục này; để trống thì bắt đầu từ mục đầu",
     "fieldToTranslate": "Trường cần dịch",
     "fieldToTranslateExtra": "Dịch trường này bên trong mỗi mục; nhiều trường thì phân tách bằng dấu phẩy. Nếu thiếu bất kỳ trường nào đã liệt kê thì toàn bộ sẽ lỗi. JSON phải có hai cấp: mục → đối tượng",
     "nodeToTranslate": "Nút cần dịch",
@@ -290,7 +305,7 @@
     "batchSize": "Số dòng đồng thời",
     "batchSizeExtra": "Yêu cầu đồng thời trong chế độ không ngữ cảnh. Quá cao sẽ kích hoạt giới hạn API",
     "contextBatchSize": "Đồng thời Chế độ Ngữ cảnh",
-    "contextBatchSizeExtra": "Lô đồng thời trong chế độ ngữ cảnh. Điều chỉnh «dòng ngữ cảnh» trước —— an toàn hơn cho tốc độ. Tăng cái này có rủi ro giới hạn",
+    "contextBatchSizeExtra": "Lô đồng thời trong chế độ ngữ cảnh. Điều chỉnh «dòng ngữ cảnh» trước — cách tăng tốc an toàn hơn. Tăng giá trị này dễ chạm giới hạn",
     "maxTokens": "Số Token Tối Đa",
     "maxTokensExtra": "Giới hạn token đầu ra của model. 0 = không giới hạn (mặc định nhà cung cấp). Đặt 2048-4096 cho model nội bộ (Ollama/llama.cpp) khi gặp vòng lặp lặp lại. Chạm giới hạn sẽ báo lỗi rõ ràng (không có nửa bản dịch trong cache); nếu bản dịch dài hợp lệ bị cắt, hãy tăng giá trị này.",
     "contextWindow": "Số dòng ngữ cảnh",
@@ -309,7 +324,7 @@
     "presetSelect": "Chọn cài đặt sẵn",
     "presetSave": "Lưu như cài đặt sẵn mới",
     "presetDelete": "Xóa cài đặt sẵn hiện tại",
-    "presetNamePlaceholder": "Tên cấu hình (ví dụ: Phụ đề / Tài liệu kỹ thuật)",
+    "presetNamePlaceholder": "Tên cài đặt sẵn (ví dụ: Phụ đề / Tài liệu kỹ thuật)",
     "presetSaved": "Đã lưu như cài đặt sẵn mới",
     "presetDeleted": "Đã xóa cài đặt sẵn hiện tại",
     "presetNameRequired": "Vui lòng nhập tên cài đặt sẵn",
@@ -335,22 +350,22 @@
   },
   "tools": {
     "subtitleTranslator": {
-      "title": "Dịch giả Phụ đề",
+      "title": "Trình Dịch Phụ Đề",
       "description": "Dịch hàng loạt SRT, ASS, VTT, SBV, LRC. 120+ ngôn ngữ."
     },
     "jsonTranslate": {
-      "title": "Dịch giả JSON i18n",
+      "title": "Trình Dịch JSON i18n",
       "description": "Dịch tệp ngôn ngữ i18n hàng loạt, với đối sánh JSONPath và ánh xạ khóa",
       "metaTitle": "Dịch JSON | Dịch i18n hàng loạt với JSONPath",
-      "metaDescription": "Trình dịch JSON i18n 25+ engine: DeepSeek, Claude, GPT, DeepL. Chế độ: global, JSONPath, khóa, đa đích, gộp. next-intl, i18next.",
+      "metaDescription": "Trình dịch JSON i18n 30+ engine: DeepSeek, Claude, GPT, DeepL. Chế độ: global, JSONPath, khóa, đa đích, gộp. next-intl, i18next.",
       "faq": [
         {
           "q": "Trình dịch JSON này hỗ trợ những engine dịch và kích thước tệp nào?",
-          "a": "Trình dịch JSON i18n phía trình duyệt: nguồn không bao giờ rời máy bạn, API key vẫn ở localStorage. 25+ engine: Google bản miễn phí (không cần cấu hình), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, cùng mọi endpoint tương thích OpenAI (Ollama / LM Studio / vLLM tự host). Năm chế độ: tất cả khóa, nút-chỉ định (JSONPath), khóa-chỉ định, khóa-chọn lọc, hợp nhất đa ngôn ngữ i18n. Bộ nhớ đệm IndexedDB cho build tăng dần — chỉ khóa thay đổi mới gọi lại API."
+          "a": "Trình dịch JSON i18n phía trình duyệt: nguồn không bao giờ rời máy bạn, API key vẫn ở localStorage. 30+ engine: Google bản miễn phí (không cần cấu hình), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, cùng mọi endpoint tương thích OpenAI (Ollama / LM Studio / vLLM tự host). Năm chế độ: tất cả khóa, theo nút chỉ định (JSONPath), theo khóa chỉ định, chọn lọc khóa, hợp nhất đa ngôn ngữ i18n. Bộ nhớ đệm IndexedDB cho build tăng dần — chỉ khóa thay đổi mới gọi lại API."
         },
         {
           "q": "Để dịch JSON, dùng dịch máy hay AI/LLM? Chọn thế nào?",
-          "a": "Chọn theo độ dài giá trị JSON: ngắn → MT, dài → AI/LLM. Cho chuỗi UI ngắn (nhãn nút, mục menu, thông báo lỗi), dịch máy là đủ — Google bản miễn phí không tốn chi phí (giới hạn 5000 ký tự/lần gọi), DeepL và Azure Translate xử lý tốt các ngôn ngữ châu Âu. Cho văn bản dài hơn (mô tả sản phẩm, hướng dẫn), dùng AI/LLM: DeepSeek là lựa chọn giá trị tốt nhất, GPT-5-mini làm phương án dự phòng; Claude Sonnet xử lý nhất quán thuật ngữ ổn định nhất — thêm bảng thuật ngữ vào System Prompt để khóa tên thương hiệu, SKU và thuật ngữ API."
+          "a": "Chọn theo độ dài giá trị JSON: ngắn → MT, dài → AI/LLM. Cho chuỗi UI ngắn (nhãn nút, mục menu, thông báo lỗi), dịch máy là đủ — Google bản miễn phí không tốn chi phí (giới hạn 5000 ký tự/lần gọi), DeepL và Azure Translate xử lý tốt các ngôn ngữ châu Âu. Cho văn bản dài hơn (mô tả sản phẩm, hướng dẫn), dùng AI/LLM: DeepSeek là lựa chọn giá trị tốt nhất, GPT-5.4 Mini làm phương án dự phòng; Claude Sonnet xử lý nhất quán thuật ngữ ổn định nhất — thêm bảng thuật ngữ vào System Prompt để khóa tên thương hiệu, SKU và thuật ngữ API."
         },
         {
           "q": "Có hỗ trợ định dạng JSON của next-intl, i18next, vue-i18n và react-intl không?",
@@ -378,7 +393,7 @@
         }
       ],
       "features": [
-        "Hỗ trợ 25+ engine dịch (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
+        "Hỗ trợ 30+ engine dịch (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
         "Khớp JSONPath chính xác",
         "Tạo hàng loạt đa ngôn ngữ",
         "Đổi tên khóa khi dịch",
@@ -387,7 +402,7 @@
       ]
     },
     "mdTranslator": {
-      "title": "Dịch giả Markdown",
+      "title": "Trình Dịch Markdown",
       "description": "Dịch Markdown hàng loạt, giữ định dạng và mã"
     },
     "textSplitter": {
@@ -407,7 +422,7 @@
       "description": "Tích hợp regex, sắp xếp, lọc và nhiều tính năng xử lý văn bản hàng loạt"
     },
     "dataBatch": {
-      "title": "Xử lý văn bản",
+      "title": "Xử lý dữ liệu hàng loạt",
       "description": "Xử lý dữ liệu Excel hàng loạt — loại bỏ trùng, trích xuất cột, hợp nhất văn bản, quy tắc nối tiếp"
     },
     "textJoiner": {
@@ -439,7 +454,7 @@
       "description": "Sắp xếp và nhóm mảng, quy tắc tùy chỉnh"
     },
     "jsonMatchUpdate": {
-      "title": "Cập nhật JSON Match",
+      "title": "Khớp & Cập Nhật JSON",
       "description": "Cập nhật hàng loạt dựa trên khớp trường"
     },
     "dataParserFlare": {
@@ -451,7 +466,7 @@
       "description": "Tạo dữ liệu JSON IMGPrompt hàng loạt"
     },
     "textDiff": {
-      "title": "Text Diff",
+      "title": "So Sánh Văn Bản",
       "description": "So sánh hai văn bản hoặc tệp song song và xác định điểm khác biệt đầu tiên."
     }
   },
@@ -466,17 +481,17 @@
     "externalTools": {
       "legendtalk": "Bàn tròn nhà tư tưởng AI",
       "imgprompt": "Câu lệnh tạo ảnh AI",
-      "lives": "Thousand Lives",
-      "learndata": "LearnData Ghi chú nguồn mở"
+      "learndata": "LearnData Ghi chú nguồn mở",
+      "hub365": "365 Nguồn mở"
     }
   },
   "Metadata": {
     "title": "ToolsByAI - Bộ Công Cụ Dịch Thuật & Dữ Liệu AI Online",
-    "description": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 25+ engine AI.",
+    "description": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 30+ engine AI.",
     "homeTitle": "Bộ ToolsByAI",
     "homeDescription": "19 công cụ cho dịch, văn bản, JSON và chuyển đổi dữ liệu. Tăng cường hiệu quả cho nhà phát triển và người sáng tạo.",
-    "ogTitle": "ToolsByAI - Công Cụ Dev AI Miễn Phí & Mã Nguồn Mở",
-    "ogDescription": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 25+ engine AI."
+    "ogTitle": "ToolsByAI - Bộ Công Cụ Dịch Thuật & Dữ Liệu AI Online",
+    "ogDescription": "ToolsByAI: 19 công cụ mã nguồn mở miễn phí cho dịch phụ đề, Markdown, JSON i18n và xử lý văn bản/JSON. 30+ engine AI."
   },
   "languages": {
     "auto": "Tự động phát hiện",
