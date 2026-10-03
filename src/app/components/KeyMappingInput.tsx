@@ -74,7 +74,7 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
           </Tooltip>
         </Flex>
       ))}
-      <Button type="dashed" block onClick={addMapping} icon={<PlusOutlined />}>
+      <Button type="dashed" block onClick={addMapping} icon={<PlusOutlined aria-hidden />}>
         {t("addMapping")}
       </Button>
     </Flex>

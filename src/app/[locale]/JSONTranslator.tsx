@@ -127,8 +127,8 @@ const JSONTranslator = () => {
   // 五个模式 = 五个【收集器】,不是五个翻译循环。模式差异全是格式知识(遍历哪些
   // 节点、写回哪个字段),编排(并发/节流/重试/429 冷却/缓存/进度/失败面板)只有
   // 引擎一份 —— 与 CLI 的 json handler 同构(收集 values+setters → ctx.translate
-  // → 逐槽位回写)。这里曾经是四个手写 pLimit 循环,delayTime 漂移(字幕/MD 每行
-  // 间隔 200ms、JSON 满速打)就是那个结构的必然产物,别把循环加回来。
+  // → 逐槽位回写）。⚠ 别在本文件加手写翻译循环：各写各的循环，节流参数(delayTime)
+  // 必然在路径之间漂移 —— 同一个 provider，字幕/MD 有间隔而 JSON 满速打。
   type CollectedNode = { value: string; write: (v: string) => void };
 
   // 收集完成后的执行半段,五个模式共用。
@@ -482,7 +482,7 @@ const JSONTranslator = () => {
       // 的守卫永远为真 —— 那句守卫的全部意义就是"零请求的运行别钉 100%":
       // 坏 nodeKeysPath 让每个语言都在收集器里抛错、一个请求没发,照样钉成
       // 100% 的琥珀色 INCOMPLETE,声称有行保留了原文而失败面板是空的。
-      // (上一轮把这一脚往下挪了几行,但它仍在语言循环之上,守卫照样恒真。)
+      // ⚠ 这一脚必须在语言循环【之外】：放在循环之内它恒真，而恒真就是 bug。
       // 字幕/Markdown 走 hook 的 runTranslation,那边本来就没有这一脚。
       if (translateMode === "i18nMode" && multiLanguageMode) {
         // For i18nMode + multiLanguageMode, process all languages in the same JSON object
@@ -667,12 +667,12 @@ const JSONTranslator = () => {
             <Divider />
 
             <Flex gap="small" wrap className="mt-auto pt-4">
-              <Button type="primary" size="large" onClick={handleTranslate} loading={isTranslating} icon={<GlobalOutlined spin={isTranslating} />} className="flex-1">
+              <Button type="primary" size="large" onClick={handleTranslate} loading={isTranslating} icon={<GlobalOutlined spin={isTranslating} aria-hidden />} className="flex-1">
                 {multiLanguageMode ? `${t("translate")} | ${t("totalLanguages")}${targetLanguages.length || 0}` : t("translate")}
               </Button>
 
               {multiLanguageMode && Object.keys(translationResults).length > 0 && (
-                <Button icon={<ExportOutlined />} onClick={exportAllFiles} size="large">
+                <Button icon={<ExportOutlined aria-hidden />} onClick={exportAllFiles} size="large">
                   {t("exportAllFile")}
                 </Button>
               )}
@@ -755,7 +755,7 @@ const JSONTranslator = () => {
                   key: "jsonmode",
                   label: (
                     <Space>
-                      <FileTextOutlined />
+                      <FileTextOutlined aria-hidden />
                       <Text strong>{t("translationMode")}</Text>
                     </Space>
                   ),
@@ -851,7 +851,7 @@ const JSONTranslator = () => {
                   key: "advanced",
                   label: (
                     <Space>
-                      <ControlOutlined />
+                      <ControlOutlined aria-hidden />
                       <Text strong>{t("advancedSettings")}</Text>
                     </Space>
                   ),
