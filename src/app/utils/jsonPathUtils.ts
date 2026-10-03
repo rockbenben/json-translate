@@ -68,9 +68,9 @@ const stripTrailingSegments = (path: string, count: number): string => {
  * keyMapping 的 input/output 同记录配对)。
  *
  * 剥多少段?只剥两个 key【公共前缀之后】的差异后缀段:
- *   - 只剥一段(最初实现)会让 "en.prompt"→"ar.prompt" 得到 $[0]['en'] vs
+ *   - 只剥一段会让 "en.prompt"→"ar.prompt" 得到 $[0]['en'] vs
  *     $[0]['ar'],永不相等 → 配对数 0,transformer 预设整体空转;
- *   - 按 key 全段数剥(上一版修复)会把 "items[*].en"→"items[*].ar" 的
+ *   - 按 key 全段数剥会把 "items[*].en"→"items[*].ar" 的
  *     通配段也剥掉 —— [*] 匹配出的下标【就是记录身份】,全剥后所有记录
  *     坍缩到 $,Map 只剩最后一个节点,静默跨记录错配。
  * 公共前缀(含通配段)保留、差异后缀剥除,两类输入都正确。
