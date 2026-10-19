@@ -246,6 +246,8 @@
     "i18nMode": "i18n 模式（多語言合併）",
     "i18nModeExtra": "i18n 模式以源語言為基準（auto 預設為 en），並將所有目標語言的翻譯結果合併至同一對象。",
     "invalidJson": "JSON 格式錯誤，請檢查語法",
+    "nothingToProcess": "JSON 頂層是 null —— 格式合法，但沒有可處理的物件或陣列。",
+    "notAnArray": "這個工具需要 JSON 陣列，頂層不是陣列。",
     "invalidPathKey": "路徑或鍵名無效",
     "nonStringMatch": "匹配到的節點均非字串，未做修改",
     "bigIntPrecision": "偵測到超過安全範圍的長整數，輸出可能遺失精度",
@@ -258,6 +260,7 @@
     "deleteMapping": "刪除映射",
     "addMapping": "加入映射",
     "inputOutputKeyMissing": "輸入和輸出鍵名不能為空",
+    "fieldNameMissing": "來源資料與目標資料的比對欄位名稱、更新欄位名稱都不能為空。",
     "keyToTranslate": "待翻譯鍵名",
     "multiValueHint": "多個值請用英文逗號分隔",
     "startKey": "起始鍵名",
@@ -315,6 +318,7 @@
     "useRelay": "中轉 API",
     "useRelayTooltip": "如遇到 CORS 或 403 錯誤，請開啟中轉 API。開啟後請求先經中轉再到服務商 —— 它只轉發不留存。",
     "useRelayCustomUrl": "已填自訂介面位址：公共中轉只轉發它已宣告的位址，因此該位址不會送往公共中轉，請求直連過去。若要經中轉，請打開開關並在下方填寫自建中轉位址。",
+    "useRelayLocalOnly": "本地或內網位址只有本機能存取，中轉無法到達 —— 開關對目前位址無效，請求始終直連。",
     "relayBase": "中轉位址",
     "relayBaseExtra": "留空即用內建中轉。該位址對所有開啟了中轉的服務生效，需自行部署與本站相同的中轉 Worker。",
     "relayBaseInvalid": "位址無效：需要以 http:// 或 https:// 開頭的完整位址，不能帶查詢字串或 #片段，也不能是 /api 端點（只填中轉的網域/前綴即可）。未修正前翻譯會失敗；留空則使用內建中轉。",
@@ -468,6 +472,10 @@
     "textDiff": {
       "title": "文字比對",
       "description": "並排比較兩段文字或檔案，標示首處差異的確切位置。"
+    },
+    "braceExpander": {
+      "title": "格式批次生成",
+      "description": "一行範本批次展開成完整清單，語法照抄 bash 大括號展開"
     }
   },
   "navigation": {
@@ -487,11 +495,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI | 免費開源的 AI 翻譯與資料處理工具集",
-    "description": "ToolsByAI 集合 19 款免費工具：字幕、Markdown、JSON i18n 翻譯，文字/JSON 批次處理。30+ AI 引擎，全前端處理。",
+    "description": "ToolsByAI 集合 20 款免費工具：字幕、Markdown、JSON i18n 翻譯，文字/JSON 批次處理。30+ AI 引擎，全前端處理。",
     "homeTitle": "ToolsByAI 工具集",
-    "homeDescription": "19 款實用工具，涵蓋多語言翻譯、文字處理、JSON 編輯和資料轉換，助力開發者和創作者提升效率。",
+    "homeDescription": "20 款實用工具，涵蓋多語言翻譯、文字處理、JSON 編輯和資料轉換，助力開發者和創作者提升效率。",
     "ogTitle": "ToolsByAI | 免費開源的 AI 翻譯與資料處理工具集",
-    "ogDescription": "ToolsByAI 集合 19 款免費工具：字幕、Markdown、JSON i18n 翻譯，文字/JSON 批次處理。30+ AI 引擎，全前端處理。"
+    "ogDescription": "ToolsByAI 集合 20 款免費工具：字幕、Markdown、JSON i18n 翻譯，文字/JSON 批次處理。30+ AI 引擎，全前端處理。"
   },
   "languages": {
     "auto": "自動偵測",

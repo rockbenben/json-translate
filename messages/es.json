@@ -246,6 +246,8 @@
     "i18nMode": "Modo i18n (Fusionar idiomas)",
     "i18nModeExtra": "El modo i18n usa el idioma origen como base («auto» usa «en» por defecto) y fusiona todas las traducciones destino en el mismo objeto.",
     "invalidJson": "Formato JSON inválido, verifica sintaxis",
+    "nothingToProcess": "El JSON de nivel superior es null: es JSON válido, pero no hay ningún objeto ni array con el que trabajar.",
+    "notAnArray": "Esta herramienta necesita un array JSON; el nivel superior no es un array.",
     "invalidPathKey": "Ruta o clave inválida",
     "nonStringMatch": "Los nodos coincidentes no son cadenas de texto; no se modificó nada",
     "bigIntPrecision": "Se detectaron enteros fuera del rango seguro; la salida puede perder precisión",
@@ -258,6 +260,7 @@
     "deleteMapping": "Borrar Mapeo",
     "addMapping": "Añadir Mapeo",
     "inputOutputKeyMissing": "Claves de entrada y salida no pueden estar vacías",
+    "fieldNameMissing": "Los nombres de los campos de coincidencia y de actualización no pueden estar vacíos.",
     "keyToTranslate": "Clave a Traducir",
     "multiValueHint": "Separa múltiples valores con comas",
     "startKey": "Clave Inicio",
@@ -315,6 +318,7 @@
     "useRelay": "Relé API",
     "useRelayTooltip": "Activa el relé de API si encuentras errores de CORS o 403. Las peticiones pasarán por el relé de camino al proveedor; solo reenvía, no almacena nada.",
     "useRelayCustomUrl": "Endpoint personalizado en uso: el relé público integrado solo reenvía direcciones que él declara, por lo que esta dirección nunca se envía allí — las solicitudes van directas. Para pasar por un relé, active el interruptor e introduzca abajo la dirección de su propio relé.",
+    "useRelayLocalOnly": "Dirección local o de red privada: solo este equipo puede alcanzarla, un relé no puede llegar — el interruptor no tiene efecto en este endpoint.",
     "relayBase": "Dirección del relé",
     "relayBaseExtra": "Déjalo vacío para usar el relé integrado. Esta dirección se aplica a todos los servicios con el relé activado y requiere tu propio despliegue del mismo Worker de relé.",
     "relayBaseInvalid": "Dirección no válida: se requiere una URL completa que empiece por http:// o https://, sin cadena de consulta ni #fragmento, y que no sea un endpoint /api (introduzca solo el host o el prefijo de ruta del relé). La traducción fallará hasta que se corrija; deje el campo vacío para usar el relé integrado.",
@@ -468,6 +472,10 @@
     "textDiff": {
       "title": "Text Diff",
       "description": "Compare dos textos o archivos en paralelo y localice la primera diferencia."
+    },
+    "braceExpander": {
+      "title": "Expansor de llaves",
+      "description": "Expande una plantilla en una lista completa, sintaxis de bash"
     }
   },
   "navigation": {
@@ -487,11 +495,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI | Herramientas de Traducción y Dev con IA",
-    "description": "ToolsByAI: 19 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador.",
+    "description": "ToolsByAI: 20 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador.",
     "homeTitle": "Suite ToolsByAI",
-    "homeDescription": "19 herramientas para traducción, texto, JSON y conversión de datos. Impulsa la eficiencia de desarrolladores y creadores.",
+    "homeDescription": "20 herramientas para traducción, texto, JSON y conversión de datos. Impulsa la eficiencia de desarrolladores y creadores.",
     "ogTitle": "ToolsByAI | Herramientas de Traducción y Dev con IA",
-    "ogDescription": "ToolsByAI: 19 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador."
+    "ogDescription": "ToolsByAI: 20 herramientas open source para traducir subtítulos, Markdown y JSON i18n. Sin instalación, en el navegador."
   },
   "languages": {
     "auto": "Detección automática",

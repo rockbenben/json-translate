@@ -246,6 +246,8 @@
     "i18nMode": "Modalità i18n (Unisci lingue)",
     "i18nModeExtra": "La modalità i18n usa la lingua sorgente come base (auto predefinita en) e unisce tutte le traduzioni di destinazione nello stesso oggetto.",
     "invalidJson": "Formato JSON non valido, verifica sintassi",
+    "nothingToProcess": "Il JSON di primo livello è null: è JSON valido, ma non c'è alcun oggetto o array su cui lavorare.",
+    "notAnArray": "Questo strumento richiede un array JSON; il livello superiore non è un array.",
     "invalidPathKey": "Percorso o chiave non valida",
     "nonStringMatch": "I nodi corrispondenti non sono stringhe; nessuna modifica effettuata",
     "bigIntPrecision": "Rilevati interi oltre l'intervallo sicuro; l'output potrebbe perdere precisione",
@@ -258,6 +260,7 @@
     "deleteMapping": "Elimina Mappatura",
     "addMapping": "Aggiungi Mappatura",
     "inputOutputKeyMissing": "Le chiavi di input e output non possono essere vuote",
+    "fieldNameMissing": "I nomi dei campi di corrispondenza e di aggiornamento non possono essere vuoti.",
     "keyToTranslate": "Chiave da Tradurre",
     "multiValueHint": "Separa più valori con virgole",
     "startKey": "Chiave Iniziale",
@@ -315,6 +318,7 @@
     "useRelay": "Relay API",
     "useRelayTooltip": "Attiva il relay API se incontri errori CORS o 403. Le richieste passeranno dal relay verso il provider; inoltra soltanto, senza memorizzare nulla.",
     "useRelayCustomUrl": "Endpoint personalizzato in uso: il relay pubblico integrato inoltra solo gli indirizzi che dichiara, quindi questo indirizzo non gli viene mai inviato — le richieste vanno dirette. Per passare da un relay, attiva l'interruttore e inserisci sotto l'indirizzo del tuo relay.",
+    "useRelayLocalOnly": "Indirizzo locale o di rete privata: solo questa macchina lo raggiunge, un relay non può arrivarci — l'interruttore non ha effetto su questo endpoint.",
     "relayBase": "Indirizzo del relay",
     "relayBaseExtra": "Lascia vuoto per usare il relay integrato. Questo indirizzo vale per tutti i servizi con relay attivo e richiede un tuo deploy dello stesso Worker di relay.",
     "relayBaseInvalid": "Indirizzo non valido: serve un URL completo che inizi con http:// o https://, senza query string né #frammento, e che non sia un endpoint /api (inserisci solo l'host o il prefisso di percorso del relay). La traduzione fallirà finché non viene corretto; lascia il campo vuoto per usare il relay integrato.",
@@ -468,6 +472,10 @@
     "textDiff": {
       "title": "Text Diff",
       "description": "Confronta due testi o file affiancati e individua la prima differenza."
+    },
+    "braceExpander": {
+      "title": "Espansore di graffe",
+      "description": "Espandi un modello in un elenco completo, sintassi bash"
     }
   },
   "navigation": {
@@ -487,11 +495,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI - Utility Sviluppatori & Traduzione IA Online",
-    "description": "ToolsByAI: 19 strumenti open source gratuiti per traduzione sottotitoli, Markdown, JSON i18n e elaborazione batch. 30+ motori IA.",
+    "description": "ToolsByAI: 20 strumenti open source gratuiti per traduzione sottotitoli, Markdown, JSON i18n e elaborazione batch. 30+ motori IA.",
     "homeTitle": "Suite ToolsByAI",
-    "homeDescription": "19 strumenti per traduzione, testo, JSON e conversione dati. Potenzia l'efficienza di sviluppatori e creatori.",
+    "homeDescription": "20 strumenti per traduzione, testo, JSON e conversione dati. Potenzia l'efficienza di sviluppatori e creatori.",
     "ogTitle": "ToolsByAI - Utility Sviluppatori & Traduzione IA Online",
-    "ogDescription": "ToolsByAI: 19 strumenti open source gratuiti per traduzione sottotitoli, Markdown, JSON i18n e elaborazione batch. 30+ motori IA."
+    "ogDescription": "ToolsByAI: 20 strumenti open source gratuiti per traduzione sottotitoli, Markdown, JSON i18n e elaborazione batch. 30+ motori IA."
   },
   "languages": {
     "auto": "Rilevamento Auto",

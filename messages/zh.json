@@ -246,6 +246,8 @@
     "i18nMode": "i18n 模式（多语言合并）",
     "i18nModeExtra": "i18n 模式以源语言为基准（auto 默认为 en），并将所有目标语言的翻译结果合并至同一对象。",
     "invalidJson": "JSON 格式错误，请检查语法",
+    "nothingToProcess": "JSON 顶层是 null —— 格式合法，但没有可处理的对象或数组。",
+    "notAnArray": "这个工具需要 JSON 数组，顶层不是数组。",
     "invalidPathKey": "路径或键名无效",
     "nonStringMatch": "匹配到的节点均非字符串，未做修改",
     "bigIntPrecision": "检测到超过安全范围的长整数，输出可能丢失精度",
@@ -258,6 +260,7 @@
     "deleteMapping": "删除映射",
     "addMapping": "添加映射",
     "inputOutputKeyMissing": "输入和输出键名不能为空",
+    "fieldNameMissing": "源数据与目标数据的匹配字段名、更新字段名都不能为空。",
     "keyToTranslate": "待翻译键名",
     "multiValueHint": "多个值请用英文逗号分隔",
     "startKey": "起始键名",
@@ -315,6 +318,7 @@
     "useRelay": "中转 API",
     "useRelayTooltip": "如遇到 CORS 或 403 错误，请开启中转 API。开启后请求先经中转再到服务商 —— 它只转发不留存。",
     "useRelayCustomUrl": "已填自定义接口地址：公共中转只转发它已声明的地址，因此该地址不会发往公共中转，请求直连过去。若要经中转，请打开开关并在下方填写自建中转地址。",
+    "useRelayLocalOnly": "本地或内网地址只有本机能访问，中转无法到达 —— 开关对当前地址无效，请求始终直连。",
     "relayBase": "中转地址",
     "relayBaseExtra": "留空即用内置中转。该地址对所有开启了中转的服务生效，需自行部署与本站相同的中转 Worker。",
     "relayBaseInvalid": "地址无效：需要以 http:// 或 https:// 开头的完整地址，不能带查询串或 #片段，也不能是 /api 端点（只填中转的域名/前缀即可）。未修正前翻译会失败；留空则使用内置中转。",
@@ -468,6 +472,10 @@
     "dataParserImgPrompt": {
       "title": "IMGPrompt 数据生成",
       "description": "批量生成 IMGPrompt JSON 数据"
+    },
+    "braceExpander": {
+      "title": "格式批量生成",
+      "description": "一行模板批量展开成完整清单，语法照抄 bash 花括号展开"
     }
   },
   "navigation": {
@@ -487,11 +495,11 @@
   },
   "Metadata": {
     "title": "ToolsByAI | 免费开源的 AI 翻译与数据处理工具集",
-    "description": "ToolsByAI 集合 19 款免费工具：字幕、Markdown、JSON i18n 翻译，文本/JSON 批处理。30+ AI 引擎，全前端处理。",
+    "description": "ToolsByAI 集合 20 款免费工具：字幕、Markdown、JSON i18n 翻译，文本/JSON 批处理。30+ AI 引擎，全前端处理。",
     "homeTitle": "ToolsByAI 工具集",
-    "homeDescription": "19 款实用工具，涵盖多语言翻译、文本处理、JSON 编辑和数据转换，助力开发者和创作者提升效率。",
+    "homeDescription": "20 款实用工具，涵盖多语言翻译、文本处理、JSON 编辑和数据转换，助力开发者和创作者提升效率。",
     "ogTitle": "ToolsByAI | 免费开源的 AI 翻译与数据处理工具集",
-    "ogDescription": "ToolsByAI 集合 19 款免费工具：字幕、Markdown、JSON i18n 翻译，文本/JSON 批处理。30+ AI 引擎，全前端处理。"
+    "ogDescription": "ToolsByAI 集合 20 款免费工具：字幕、Markdown、JSON i18n 翻译，文本/JSON 批处理。30+ AI 引擎，全前端处理。"
   },
   "languages": {
     "auto": "自动检测",
