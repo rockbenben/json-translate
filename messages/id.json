@@ -245,13 +245,14 @@
     "selectiveKey": "Satu bidang di semua entri",
     "i18nMode": "Mode i18n (Gabungkan bahasa)",
     "i18nModeExtra": "Mode i18n menggunakan bahasa sumber sebagai dasar (otomatis default en) dan menggabungkan semua terjemahan target ke dalam objek yang sama.",
+    "i18nSourceFieldMissing": "Mode i18n tidak menemukan kolom bahasa sumber “{field}”. Periksa bahasa sumber atau struktur JSON.",
     "invalidJson": "Format JSON tidak valid, periksa sintaks",
     "nothingToProcess": "JSON tingkat atas adalah null — JSON-nya valid, tapi tidak ada objek atau larik untuk diproses.",
     "notAnArray": "Alat ini memerlukan larik JSON; tingkat teratas bukan larik.",
     "invalidPathKey": "Jalur atau kunci tidak valid",
     "nonStringMatch": "Node yang cocok bukan string; tidak ada yang diubah",
     "bigIntPrecision": "Terdeteksi bilangan bulat di luar rentang aman; keluaran dapat kehilangan presisi",
-    "invalidOutputKey": "Kunci output tidak valid",
+    "invalidOutputKey": "Kunci output tidak valid (bidang target harus sudah ada)",
     "invalidInputKey": "Kunci input tidak valid",
     "inputKey": "Kunci Input",
     "outputKey": "Kunci Output",
@@ -355,7 +356,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Penerjemah Subtitle",
-      "description": "Terjemahan batch SRT, ASS, VTT, SBV, LRC. 120+ bahasa."
+      "description": "Terjemahan batch SRT, ASS, SSA, VTT, SBV, LRC. 120+ bahasa."
     },
     "jsonTranslate": {
       "title": "Penerjemah JSON i18n",
@@ -393,7 +394,7 @@
         },
         {
           "q": "Apakah konten JSON diunggah ke server? Apakah privasi aman untuk file besar?",
-          "a": "Sepenuhnya sisi klien: pembacaan JSON, parsing, dan permintaan terjemahan semua terjadi di browser Anda — konten asli tidak pernah menyentuh server kami. Permintaan mesin LLM langsung dari browser Anda ke endpoint API yang Anda konfigurasi (OpenAI, DeepSeek, dll.), dan API Key hanya disimpan di localStorage browser lokal. Cache terjemahan menggunakan IndexedDB browser dan mendukung pembaruan inkremental antar build — hanya kunci yang berubah memicu panggilan API baru, menghemat biaya. Kode sumber tersedia open-source di GitHub (rockbenben/json-translate)."
+          "a": "Sepenuhnya sisi klien: pembacaan JSON, parsing, dan permintaan terjemahan semua terjadi di browser Anda — konten asli tidak pernah menyentuh server kami. Permintaan mesin LLM langsung dari browser Anda ke endpoint API yang Anda konfigurasi (OpenAI, DeepSeek, dll.), dan API Key hanya disimpan di localStorage browser lokal. Cache terjemahan menggunakan IndexedDB browser dan mendukung pembaruan inkremental antar build — hanya kunci yang berubah memicu panggilan API baru, menghemat biaya."
         }
       ],
       "features": [
@@ -463,7 +464,7 @@
     },
     "dataParserFlare": {
       "title": "Konverter Flare",
-      "description": "Konversi bookmark browser dan format Flare"
+      "description": "Bookmark HTML ke Flare YAML (rata)"
     },
     "dataParserImgPrompt": {
       "title": "Generator Data IMGPrompt",

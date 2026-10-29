@@ -245,13 +245,14 @@
     "selectiveKey": "逐条翻译指定字段",
     "i18nMode": "i18n 模式（多语言合并）",
     "i18nModeExtra": "i18n 模式以源语言为基准（auto 默认为 en），并将所有目标语言的翻译结果合并至同一对象。",
+    "i18nSourceFieldMissing": "i18n 模式没有找到源语言字段「{field}」。请确认源语言，或检查 JSON 的字段结构。",
     "invalidJson": "JSON 格式错误，请检查语法",
     "nothingToProcess": "JSON 顶层是 null —— 格式合法，但没有可处理的对象或数组。",
     "notAnArray": "这个工具需要 JSON 数组，顶层不是数组。",
     "invalidPathKey": "路径或键名无效",
     "nonStringMatch": "匹配到的节点均非字符串，未做修改",
     "bigIntPrecision": "检测到超过安全范围的长整数，输出可能丢失精度",
-    "invalidOutputKey": "输出键名无效",
+    "invalidOutputKey": "输出键名无效（目标字段必须已存在）",
     "invalidInputKey": "输入键名无效",
     "inputKey": "输入键名",
     "outputKey": "输出键名",
@@ -355,7 +356,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "字幕翻译器",
-      "description": "批量翻译 SRT、ASS、VTT、SBV、LRC 字幕，支持 120+ 语言"
+      "description": "批量翻译 SRT、ASS、SSA、VTT、SBV、LRC 字幕，支持 120+ 语言"
     },
     "jsonTranslate": {
       "title": "JSON 多语言翻译",
@@ -393,7 +394,7 @@
         },
         {
           "q": "JSON 内容会上传到服务器吗？大文件会不会泄露隐私？",
-          "a": "完全前端处理：JSON 读取、解析、翻译请求都在浏览器内完成，原文不经过我们的服务器存储。LLM 引擎的请求直接从你的浏览器发往你配置的 API 端点（OpenAI、DeepSeek 等），API Key 仅保存在本地 localStorage。翻译缓存使用浏览器 IndexedDB，支持构建间的增量更新——只有改动过的 Key 会重新调用 API，节省成本。开源代码在 GitHub（rockbenben/json-translate）可审查或自部署。"
+          "a": "完全前端处理：JSON 读取、解析、翻译请求都在浏览器内完成，原文不经过我们的服务器存储。LLM 引擎的请求直接从你的浏览器发往你配置的 API 端点（OpenAI、DeepSeek 等），API Key 仅保存在本地 localStorage。翻译缓存使用浏览器 IndexedDB，支持构建间的增量更新——只有改动过的 Key 会重新调用 API，节省成本。"
         }
       ],
       "features": [
@@ -467,7 +468,7 @@
     },
     "dataParserFlare": {
       "title": "Flare 书签转换",
-      "description": "浏览器书签与 Flare 格式互转"
+      "description": "浏览器书签转 Flare YAML（扁平化导入）"
     },
     "dataParserImgPrompt": {
       "title": "IMGPrompt 数据生成",

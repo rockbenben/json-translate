@@ -245,13 +245,14 @@
     "selectiveKey": "Un campo en todas las entradas",
     "i18nMode": "Modo i18n (Fusionar idiomas)",
     "i18nModeExtra": "El modo i18n usa el idioma origen como base («auto» usa «en» por defecto) y fusiona todas las traducciones destino en el mismo objeto.",
+    "i18nSourceFieldMissing": "El modo i18n no encontró el campo del idioma de origen “{field}”. Revisa el idioma de origen o la estructura del JSON.",
     "invalidJson": "Formato JSON inválido, verifica sintaxis",
     "nothingToProcess": "El JSON de nivel superior es null: es JSON válido, pero no hay ningún objeto ni array con el que trabajar.",
     "notAnArray": "Esta herramienta necesita un array JSON; el nivel superior no es un array.",
     "invalidPathKey": "Ruta o clave inválida",
     "nonStringMatch": "Los nodos coincidentes no son cadenas de texto; no se modificó nada",
     "bigIntPrecision": "Se detectaron enteros fuera del rango seguro; la salida puede perder precisión",
-    "invalidOutputKey": "Clave de salida inválida",
+    "invalidOutputKey": "Clave de salida inválida (el campo destino debe existir)",
     "invalidInputKey": "Clave de entrada inválida",
     "inputKey": "Clave Entrada",
     "outputKey": "Clave Salida",
@@ -355,7 +356,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Traductor Subtítulos",
-      "description": "Traducción por lote SRT, ASS, VTT, SBV, LRC. 120+ idiomas."
+      "description": "Traducción por lote SRT, ASS, SSA, VTT, SBV, LRC. 120+ idiomas."
     },
     "jsonTranslate": {
       "title": "Traductor JSON i18n",
@@ -393,7 +394,7 @@
         },
         {
           "q": "¿El contenido JSON se sube a su servidor? ¿Es segura la privacidad para archivos grandes?",
-          "a": "Totalmente del lado del cliente: la lectura, el análisis y las solicitudes de traducción de JSON ocurren en tu navegador — el contenido original nunca toca nuestros servidores. Las solicitudes del motor LLM van directamente desde tu navegador al endpoint API que has configurado (OpenAI, DeepSeek, etc.), y las API Keys se almacenan solo en el localStorage local. La caché de traducción usa IndexedDB del navegador y admite actualizaciones incrementales entre builds — solo las claves modificadas activan nuevas llamadas API, ahorrando costes. El código fuente es de código abierto en GitHub (rockbenben/json-translate), para auto-hospedaje o auditar la implementación."
+          "a": "Totalmente del lado del cliente: la lectura, el análisis y las solicitudes de traducción de JSON ocurren en tu navegador — el contenido original nunca toca nuestros servidores. Las solicitudes del motor LLM van directamente desde tu navegador al endpoint API que has configurado (OpenAI, DeepSeek, etc.), y las API Keys se almacenan solo en el localStorage local. La caché de traducción usa IndexedDB del navegador y admite actualizaciones incrementales entre builds — solo las claves modificadas activan nuevas llamadas API, ahorrando costes."
         }
       ],
       "features": [
@@ -463,7 +464,7 @@
     },
     "dataParserFlare": {
       "title": "Convertidor Flare",
-      "description": "Conversión marcadores navegador y formato Flare"
+      "description": "Marcadores HTML a Flare YAML (aplanado)"
     },
     "dataParserImgPrompt": {
       "title": "Generador Datos IMGPrompt",

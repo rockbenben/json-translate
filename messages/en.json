@@ -245,13 +245,14 @@
     "selectiveKey": "One field across all entries",
     "i18nMode": "i18n Mode (Merge Languages)",
     "i18nModeExtra": "i18n mode uses source language as base (auto defaults to en) and merges all target language translations into the same object.",
+    "i18nSourceFieldMissing": "i18n mode couldn't find a source-language field “{field}”. Check the source language or the JSON structure.",
     "invalidJson": "Invalid JSON format",
     "nothingToProcess": "Top-level JSON is null — it is valid JSON, but there is no object or array to work on.",
     "notAnArray": "This tool needs a JSON array; the top level is not an array.",
     "invalidPathKey": "Invalid path or key",
     "nonStringMatch": "Matched nodes are not string values; nothing was modified",
     "bigIntPrecision": "Integers beyond the safe range detected; the output may lose precision",
-    "invalidOutputKey": "Invalid output key",
+    "invalidOutputKey": "Invalid output key (the target field must already exist)",
     "invalidInputKey": "Invalid input key",
     "inputKey": "Input key",
     "outputKey": "Output key",
@@ -355,7 +356,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Subtitle Translator",
-      "description": "Batch translate SRT, ASS, VTT, SBV, LRC subtitles. 120+ languages"
+      "description": "Batch translate SRT, ASS, SSA, VTT, SBV, LRC subtitles. 120+ languages"
     },
     "jsonTranslate": {
       "title": "JSON Multi-Language Translator",
@@ -393,7 +394,7 @@
         },
         {
           "q": "Are JSON contents uploaded to your server? Is privacy safe for large files?",
-          "a": "Fully client-side: JSON reading, parsing, and translation requests all happen in your browser — original content never touches our servers. LLM engine requests go directly from your browser to your configured API endpoint (OpenAI, DeepSeek, etc.), and API keys are stored only in local browser storage. Translation cache uses browser IndexedDB and supports incremental updates across builds — only changed keys trigger new API calls, saving cost. Source code is open on GitHub (rockbenben/json-translate) for self-hosting or auditing."
+          "a": "Fully client-side: JSON reading, parsing, and translation requests all happen in your browser — original content never touches our servers. LLM engine requests go directly from your browser to your configured API endpoint (OpenAI, DeepSeek, etc.), and API keys are stored only in local browser storage. Translation cache uses browser IndexedDB and supports incremental updates across builds — only changed keys trigger new API calls, saving cost."
         }
       ],
       "features": [
@@ -463,7 +464,7 @@
     },
     "dataParserFlare": {
       "title": "Flare Bookmark Converter",
-      "description": "Convert bookmarks to/from Flare format"
+      "description": "Convert bookmark HTML to Flare YAML (flattened)"
     },
     "dataParserImgPrompt": {
       "title": "IMGPrompt Data Gen",

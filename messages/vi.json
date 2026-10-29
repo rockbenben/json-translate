@@ -245,13 +245,14 @@
     "selectiveKey": "Một trường trên mọi mục",
     "i18nMode": "Chế độ i18n (Gộp ngôn ngữ)",
     "i18nModeExtra": "Chế độ i18n sử dụng ngôn ngữ nguồn làm cơ sở (tự động mặc định en) và gộp tất cả các bản dịch đích vào cùng một đối tượng.",
+    "i18nSourceFieldMissing": "Chế độ i18n không tìm thấy trường ngôn ngữ nguồn “{field}”. Hãy kiểm tra ngôn ngữ nguồn hoặc cấu trúc JSON.",
     "invalidJson": "Định dạng JSON không hợp lệ, kiểm tra cú pháp",
     "nothingToProcess": "JSON cấp cao nhất là null — đây là JSON hợp lệ, nhưng không có đối tượng hay mảng nào để xử lý.",
     "notAnArray": "Công cụ này cần một mảng JSON; cấp cao nhất không phải là mảng.",
     "invalidPathKey": "Đường dẫn hoặc khóa không hợp lệ",
     "nonStringMatch": "Các nút khớp không phải là chuỗi; không có gì được sửa đổi",
     "bigIntPrecision": "Phát hiện số nguyên vượt phạm vi an toàn; kết quả có thể mất độ chính xác",
-    "invalidOutputKey": "Khóa đầu ra không hợp lệ",
+    "invalidOutputKey": "Khóa đầu ra không hợp lệ (trường đích phải tồn tại trước)",
     "invalidInputKey": "Khóa đầu vào không hợp lệ",
     "inputKey": "Khóa đầu vào",
     "outputKey": "Khóa đầu ra",
@@ -355,7 +356,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Trình Dịch Phụ Đề",
-      "description": "Dịch hàng loạt SRT, ASS, VTT, SBV, LRC. 120+ ngôn ngữ."
+      "description": "Dịch hàng loạt SRT, ASS, SSA, VTT, SBV, LRC. 120+ ngôn ngữ."
     },
     "jsonTranslate": {
       "title": "Trình Dịch JSON i18n",
@@ -393,7 +394,7 @@
         },
         {
           "q": "Nội dung JSON có được gửi lên server của bạn không? File lớn có đảm bảo riêng tư?",
-          "a": "Hoàn toàn xử lý phía client: việc đọc JSON, phân tích cú pháp và gửi yêu cầu dịch đều diễn ra trong trình duyệt của bạn — nội dung gốc không bao giờ đi qua server của chúng tôi. Các yêu cầu đến engine LLM được gửi trực tiếp từ trình duyệt của bạn đến endpoint API mà bạn cấu hình (OpenAI, DeepSeek, v.v.), và API Key chỉ được lưu trong localStorage cục bộ. Bộ nhớ đệm bản dịch dùng IndexedDB của trình duyệt và hỗ trợ cập nhật gia tăng giữa các bản build — chỉ những khóa thay đổi mới gọi API mới, giúp tiết kiệm chi phí. Mã nguồn mở trên GitHub (rockbenben/json-translate)."
+          "a": "Hoàn toàn xử lý phía client: việc đọc JSON, phân tích cú pháp và gửi yêu cầu dịch đều diễn ra trong trình duyệt của bạn — nội dung gốc không bao giờ đi qua server của chúng tôi. Các yêu cầu đến engine LLM được gửi trực tiếp từ trình duyệt của bạn đến endpoint API mà bạn cấu hình (OpenAI, DeepSeek, v.v.), và API Key chỉ được lưu trong localStorage cục bộ. Bộ nhớ đệm bản dịch dùng IndexedDB của trình duyệt và hỗ trợ cập nhật gia tăng giữa các bản build — chỉ những khóa thay đổi mới gọi API mới, giúp tiết kiệm chi phí."
         }
       ],
       "features": [
@@ -463,7 +464,7 @@
     },
     "dataParserFlare": {
       "title": "Trình chuyển đổi Flare",
-      "description": "Chuyển đổi bookmark trình duyệt và định dạng Flare"
+      "description": "Bookmark HTML sang Flare YAML (làm phẳng)"
     },
     "dataParserImgPrompt": {
       "title": "Trình tạo dữ liệu IMGPrompt",

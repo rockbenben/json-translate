@@ -245,13 +245,14 @@
     "selectiveKey": "Tüm kayıtlarda tek alan",
     "i18nMode": "i18n Modu (Dilleri Birleştir)",
     "i18nModeExtra": "i18n modu kaynak dili temel alır (otomatik varsayılan en) ve tüm hedef çevirileri aynı nesnede birleştirir.",
+    "i18nSourceFieldMissing": "i18n modu “{field}” kaynak dil alanını bulamadı. Kaynak dili veya JSON yapısını kontrol edin.",
     "invalidJson": "Geçersiz JSON formatı, sözdizimini kontrol edin",
     "nothingToProcess": "En üst düzey JSON null — geçerli bir JSON, ancak üzerinde çalışacak bir nesne veya dizi yok.",
     "notAnArray": "Bu araç bir JSON dizisi gerektirir; en üst düzey dizi değil.",
     "invalidPathKey": "Geçersiz yol veya anahtar",
     "nonStringMatch": "Eşleşen düğümler dize değil; hiçbir şey değiştirilmedi",
     "bigIntPrecision": "Güvenli aralığın ötesinde tamsayılar algılandı; çıktıda hassasiyet kaybolabilir",
-    "invalidOutputKey": "Geçersiz çıkış anahtarı",
+    "invalidOutputKey": "Geçersiz çıkış anahtarı (hedef alan zaten mevcut olmalı)",
     "invalidInputKey": "Geçersiz giriş anahtarı",
     "inputKey": "Giriş Anahtarı",
     "outputKey": "Çıkış Anahtarı",
@@ -355,7 +356,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Altyazı Çevirici",
-      "description": "Toplu SRT, ASS, VTT, SBV, LRC çevirisi. 120+ dil."
+      "description": "Toplu SRT, ASS, SSA, VTT, SBV, LRC çevirisi. 120+ dil."
     },
     "jsonTranslate": {
       "title": "i18n JSON Çevirici",
@@ -393,7 +394,7 @@
         },
         {
           "q": "JSON içerikleri sunucunuza yükleniyor mu? Büyük dosyalar için gizlilik güvenli mi?",
-          "a": "Tamamen istemci tarafında: JSON okuma, ayrıştırma ve çeviri istekleri tarayıcınızda gerçekleşir — orijinal içerik sunucularımıza hiçbir zaman ulaşmaz. LLM motor istekleri doğrudan tarayıcınızdan yapılandırdığınız API uç noktasına (OpenAI, DeepSeek vb.) gider ve API Key'ler yalnızca yerel localStorage'da saklanır. Çeviri önbelleği tarayıcı IndexedDB'sini kullanır ve derlemeler arası artımlı güncellemeleri destekler — yalnızca değişen anahtarlar yeni API çağrıları tetikler, böylece maliyet düşer. Kaynak kod GitHub'da (rockbenben/json-translate)."
+          "a": "Tamamen istemci tarafında: JSON okuma, ayrıştırma ve çeviri istekleri tarayıcınızda gerçekleşir — orijinal içerik sunucularımıza hiçbir zaman ulaşmaz. LLM motor istekleri doğrudan tarayıcınızdan yapılandırdığınız API uç noktasına (OpenAI, DeepSeek vb.) gider ve API Key'ler yalnızca yerel localStorage'da saklanır. Çeviri önbelleği tarayıcı IndexedDB'sini kullanır ve derlemeler arası artımlı güncellemeleri destekler — yalnızca değişen anahtarlar yeni API çağrıları tetikler, böylece maliyet düşer."
         }
       ],
       "features": [
@@ -463,7 +464,7 @@
     },
     "dataParserFlare": {
       "title": "Flare Dönüştürücü",
-      "description": "Tarayıcı yer imleri ve Flare formatı dönüşümü"
+      "description": "Yer imi HTML'ini Flare YAML'ye dönüştür (düz)"
     },
     "dataParserImgPrompt": {
       "title": "IMGPrompt Veri Oluşturucu",

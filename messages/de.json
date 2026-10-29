@@ -245,13 +245,14 @@
     "selectiveKey": "Ein Feld über alle Einträge",
     "i18nMode": "i18n-Modus (Sprachen zusammenführen)",
     "i18nModeExtra": "Der i18n-Modus verwendet die Quellsprache als Basis (auto ist standardmäßig en) und führt alle Zielsprachenübersetzungen in dasselbe Objekt zusammen.",
+    "i18nSourceFieldMissing": "Der i18n-Modus hat kein Feld für die Ausgangssprache „{field}“ gefunden. Prüfe die Ausgangssprache oder die JSON-Struktur.",
     "invalidJson": "Ungültiges JSON-Format, bitte Syntax prüfen",
     "nothingToProcess": "JSON auf oberster Ebene ist null — gültiges JSON, aber es gibt kein Objekt oder Array zum Bearbeiten.",
     "notAnArray": "Dieses Werkzeug braucht ein JSON-Array; die oberste Ebene ist kein Array.",
     "invalidPathKey": "Ungültiger Pfad oder Schlüsselname",
     "nonStringMatch": "Die gefundenen Knoten sind keine Zeichenketten; nichts wurde geändert",
     "bigIntPrecision": "Ganzzahlen außerhalb des sicheren Bereichs erkannt; die Ausgabe kann an Präzision verlieren",
-    "invalidOutputKey": "Ungültiger Ausgabeschlüssel",
+    "invalidOutputKey": "Ungültiger Ausgabeschlüssel (das Zielfeld muss bereits existieren)",
     "invalidInputKey": "Ungültiger Eingabeschlüssel",
     "inputKey": "Eingabeschlüssel",
     "outputKey": "Ausgabeschlüssel",
@@ -355,7 +356,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "Untertitel-Übersetzer",
-      "description": "Batch-Übersetzung für SRT, ASS, VTT, SBV, LRC. 120+ Sprachen."
+      "description": "Batch-Übersetzung für SRT, ASS, SSA, VTT, SBV, LRC. 120+ Sprachen."
     },
     "jsonTranslate": {
       "title": "i18n JSON-Übersetzer",
@@ -393,7 +394,7 @@
         },
         {
           "q": "Werden JSON-Inhalte auf Ihren Server hochgeladen? Ist der Datenschutz bei großen Dateien sicher?",
-          "a": "Vollständig clientseitig: JSON-Lesen, Parsen und Übersetzungsanfragen erfolgen ausschließlich in Ihrem Browser — Originalinhalte berühren niemals unsere Server. LLM-Engine-Anfragen gehen direkt von Ihrem Browser an Ihren konfigurierten API-Endpunkt (OpenAI, DeepSeek usw.), API Keys werden nur im lokalen localStorage gespeichert. Der Übersetzungs-Cache nutzt browserbasiertes IndexedDB und unterstützt inkrementelle Updates zwischen Builds — nur geänderte Schlüssel lösen neue API-Aufrufe aus und sparen Kosten. Der Quellcode ist auf GitHub offen (rockbenben/json-translate)."
+          "a": "Vollständig clientseitig: JSON-Lesen, Parsen und Übersetzungsanfragen erfolgen ausschließlich in Ihrem Browser — Originalinhalte berühren niemals unsere Server. LLM-Engine-Anfragen gehen direkt von Ihrem Browser an Ihren konfigurierten API-Endpunkt (OpenAI, DeepSeek usw.), API Keys werden nur im lokalen localStorage gespeichert. Der Übersetzungs-Cache nutzt browserbasiertes IndexedDB und unterstützt inkrementelle Updates zwischen Builds — nur geänderte Schlüssel lösen neue API-Aufrufe aus und sparen Kosten."
         }
       ],
       "features": [
@@ -463,7 +464,7 @@
     },
     "dataParserFlare": {
       "title": "Flare Lesezeichen-Konverter",
-      "description": "Browser-Lesezeichen und Flare-Format konvertieren"
+      "description": "Lesezeichen-HTML zu Flare-YAML (flachgestellt)"
     },
     "dataParserImgPrompt": {
       "title": "IMGPrompt Datengenerator",

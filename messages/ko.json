@@ -245,13 +245,14 @@
     "selectiveKey": "각 항목의 지정 필드 번역",
     "i18nMode": "i18n 모드 (다국어 병합)",
     "i18nModeExtra": "i18n 모드는 원본 언어를 기준(auto는 기본값 en)으로 하며, 모든 목표 언어의 번역 결과를 동일한 객체에 병합합니다.",
+    "i18nSourceFieldMissing": "i18n 모드에서 소스 언어 필드 “{field}”를 찾지 못했습니다. 소스 언어 또는 JSON 구조를 확인하세요.",
     "invalidJson": "JSON 형식 오류, 문법을 확인하세요",
     "nothingToProcess": "최상위 JSON이 null입니다. 형식은 올바르지만 처리할 객체나 배열이 없습니다.",
     "notAnArray": "이 도구는 JSON 배열이 필요합니다. 최상위 수준이 배열이 아닙니다.",
     "invalidPathKey": "경로 또는 키 이름이 유효하지 않습니다",
     "nonStringMatch": "일치한 노드가 문자열이 아니므로 수정되지 않았습니다",
     "bigIntPrecision": "안전 범위를 초과하는 정수가 감지되었습니다. 출력에서 정밀도가 손실될 수 있습니다",
-    "invalidOutputKey": "출력 키 이름이 유효하지 않습니다",
+    "invalidOutputKey": "출력 키 이름이 유효하지 않습니다 (대상 필드가 이미 있어야 합니다)",
     "invalidInputKey": "입력 키 이름이 유효하지 않습니다",
     "inputKey": "입력 키 이름",
     "outputKey": "출력 키 이름",
@@ -355,7 +356,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "자막 번역기",
-      "description": "SRT, ASS, VTT, SBV, LRC 자막 일괄 번역, 120개 이상 언어 지원"
+      "description": "SRT, ASS, SSA, VTT, SBV, LRC 자막 일괄 번역, 120개 이상 언어 지원"
     },
     "jsonTranslate": {
       "title": "i18n JSON 번역",
@@ -393,11 +394,11 @@
         },
         {
           "q": "JSON 내용이 서버에 업로드되나요? 대용량 파일도 개인정보가 안전한가요?",
-          "a": "완전히 클라이언트 측 처리: JSON 읽기, 파싱, 번역 요청이 모두 브라우저 내에서 완료되며 원본은 당사 서버를 거치지 않습니다. LLM 엔진 요청은 사용자의 브라우저에서 직접 설정된 API 엔드포인트(OpenAI, DeepSeek 등)로 전송되며 API Key는 로컬 localStorage에만 저장됩니다. 번역 캐시는 브라우저 IndexedDB를 사용하며 빌드 간 증분 업데이트를 지원합니다——변경된 키만 API를 재호출하여 비용을 절약합니다. 소스 코드는 GitHub(rockbenben/json-translate)에 공개되어 있어 감사하거나 자체 호스팅할 수 있습니다."
+          "a": "완전히 클라이언트 측 처리: JSON 읽기, 파싱, 번역 요청이 모두 브라우저 내에서 완료되며 원본은 당사 서버를 거치지 않습니다. LLM 엔진 요청은 사용자의 브라우저에서 직접 설정된 API 엔드포인트(OpenAI, DeepSeek 등)로 전송되며 API Key는 로컬 localStorage에만 저장됩니다. 번역 캐시는 브라우저 IndexedDB를 사용하며 빌드 간 증분 업데이트를 지원합니다——변경된 키만 API를 재호출하여 비용을 절약합니다."
         }
       ],
       "features": [
-        "25개 이상의 번역 엔진 지원 (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
+        "30개 이상의 번역 엔진 지원 (Google, DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT)",
         "JSONPath 매칭을 통한 정확한 키 타겟팅",
         "다국어 일괄 생성 (en.json, ja.json, ko.json 등)",
         "번역 중 키 이름 변경 (키 매핑 모드)",
@@ -463,7 +464,7 @@
     },
     "dataParserFlare": {
       "title": "Flare 북마크 변환",
-      "description": "브라우저 북마크와 Flare 형식 상호 변환"
+      "description": "북마크 HTML을 Flare YAML로 변환 (평면화)"
     },
     "dataParserImgPrompt": {
       "title": "IMGPrompt 생성기",

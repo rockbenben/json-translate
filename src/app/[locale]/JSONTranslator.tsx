@@ -12,8 +12,9 @@ import useFileUpload from "@/app/hooks/useFileUpload";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useTextStats } from "@/app/hooks/useTextStats";
 import { useExportFilename } from "@/app/hooks/useExportFilename";
+import { useRevealResult } from "@/app/hooks/useRevealResult";
 
-import { pairingAncestors, filterObjectPropertyMatches, downloadFile, describeError, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, applyRemoveCharsToLines, getFileTypePresetConfig, splitTopLevelCommas } from "@/app/utils";
+import { pairingAncestors, filterObjectPropertyMatches, downloadFile, describeError, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, applyRemoveCharsToLines, getFileTypePresetConfig, splitTopLevelCommas, joinLanguageCount } from "@/app/utils";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
 import { useLanguageOptions } from "@/app/components/languages";
 import LanguageSelector from "@/app/components/LanguageSelector";
@@ -88,18 +89,36 @@ const JSONTranslator = () => {
     setRequestTimeoutSec,
     runTranslation,
     reportLangFailure,
+    languageConfigVersion,
   } = useTranslationContext();
 
-  // 运行中锁住页面级「导出目录」入口:写入是每个文件现读句柄,跑到一半改目录
-  // 会把同一批产物劈进两个文件夹。控件在 ToolPage 里,prop 传不上去,故用环境锁。
   useLockExportFolder(isTranslating);
 
-  // 落盘 —— 与 chinese-conversion-directExport 对齐;本文件其余 9 个设置本来就全部落盘,
+  // 落盘 —— 与 chinese-conversion-directExport 对齐;本文件其余 8 个设置本来就全部落盘,
   // 只漏了这一个。
   const [directExport, setDirectExport] = useLocalStorage("json-translate-directExport", false);
   const [translationResults, setTranslationResults] = useState<Record<string, string>>({}); // Store results by language
 
   const [translateMode, setTranslateMode] = useLocalStorage<TranslateMode>("json-translate-mode", "allKeys"); // 翻译模式状态：'allKeys', 'nodeKeys', 'keyMapping', "selectiveKey", 'i18nMode'
+
+  // i18n + 多语言的合并结果存在本地 translationResults，且含所有目标语种；
+  // hook 只清 translatedText，不会碰它。语言/模式变化时若不清，移除一个语种后
+  // 「导出所有文件」仍会把旧 combined（含已移除语种）导出去。其它模式的卡片是
+  // 按语种独立、仍对应选中的语种，保持原行为。
+  //
+  // ⚠ 判据不在本页：hook 才知道语言配置【是否真的变了】(多语言弹层里什么都没
+  // 改就点「应用」不算变 —— hook 的 setter 会直接 return)。本页自己比一次就是
+  // 第二套判据,漂移出「没改也清」的坏结果:combined 被清空,「导出所有文件」
+  // 的入口随之消失,而屏幕上还留着译文 —— 要拿回那个入口只能重跑整轮 N 语种
+  // 翻译。跟着 hook 的版本号走,判据只此一处。
+  //
+  // 用「渲染期调整状态」而不是 effect:effect 里同步 setState 会多一次级联
+  // 渲染(react-hooks/set-state-in-effect),这里每次语言变更本来就只多一次。
+  const [seenConfigVersion, setSeenConfigVersion] = useState(languageConfigVersion);
+  if (seenConfigVersion !== languageConfigVersion) {
+    setSeenConfigVersion(languageConfigVersion);
+    if (translateMode === "i18nMode") setTranslationResults({});
+  }
   const [nodeKeysPath, setNodeKeysPath] = useLocalStorage("json-translate-nodeKeysPath", ""); // 局部节点路径（nodeKeys mode）
   const [showSimpleInput, setShowSimpleInput] = useLocalStorage<boolean>("json-translate-showSimpleInput", true);
   const [simpleInputKey, setSimpleInputKey] = useLocalStorage<string>("json-translate-simpleInputKey", "");
@@ -113,6 +132,11 @@ const JSONTranslator = () => {
 
   const sourceStats = useTextStats(sourceText);
   const resultStats = useTextStats(translatedText);
+  const hasVisibleResult = !directExport && Boolean(translatedText || (multiLanguageMode && Object.keys(translationResults).length > 0));
+  // 有失败时不自动滚到结果：失败面板在结果上方，滚过去会把「哪几行失败 / 重试」
+  // 挤出视野，让一次部分失败看起来像全成功。
+  // 取消后保留进度条作为续跑凭据，不把用户带到可能存在的半成品结果上。
+  const resultRef = useRevealResult(isTranslating, hasVisibleResult && !(failedCount > 0 || failedLangs.length > 0 || runHadFailures) && !isCancelRequested());
 
   // removeChars must clean ONLY translated TEXT — never keys or JSON structure.
   // The old code applied it to the whole JSON.stringify output, so a removeChars
@@ -166,6 +190,7 @@ const JSONTranslator = () => {
     // 使用选择的源语言作为 i18n 源字段
     const sourceField = sourceLanguage === "auto" ? "en" : sourceLanguage;
     const nodes: CollectedNode[] = [];
+    let sourceFieldFound = false;
 
     const processObject = (obj: JsonValue) => {
       if (typeof obj !== "object" || obj === null) return;
@@ -181,8 +206,11 @@ const JSONTranslator = () => {
       // 只收目标语言字段不存在的节点 —— 收集时判断与旧版任务内判断等价:
       // 语言循环是串行的,收集发生在上一语言全部写回之后。
       const sourceValue = record[sourceField];
-      if (typeof sourceValue === "string" && record[currentTargetLang] == null) {
-        nodes.push({ value: sourceValue, write: (v) => (record[currentTargetLang] = v) });
+      if (typeof sourceValue === "string") {
+        sourceFieldFound = true;
+        if (record[currentTargetLang] == null) {
+          nodes.push({ value: sourceValue, write: (v) => (record[currentTargetLang] = v) });
+        }
       }
 
       // 递归处理子对象
@@ -190,6 +218,15 @@ const JSONTranslator = () => {
     };
 
     processObject(jsonObject);
+    // 一个源字段都没找到时，原样返回 + 绿色完成会让“选错源语言 / JSON 不是
+    // i18n 结构”看起来像成功。交给 collectSafely 报成一条配置错误。
+    if (!sourceFieldFound) {
+      // 报错发生在用户最需要答案的时刻：附上这个模式要求的形状（字面量，
+      // 不新增翻译键）。最常见的误解是按语言分组（{"en":{...}}）也走 i18n 模式。
+      // 用 LRI/PDI 把字面量钉成 LTR：这条走 message.error 的普通字符串，ar 的
+      // RTL 段落会把花括号/引号重排 —— 而它正是卡住时唯一能看到的形状提示。
+      throw new Error(`${tJson("i18nSourceFieldMissing", { field: sourceField })} ${t("example")}: \u2066{"key": {"${sourceField}": "text"}}\u2069`);
+    }
     return nodes;
   };
 
@@ -428,7 +465,11 @@ const JSONTranslator = () => {
 
     if (currentTargetLang && multiLanguageMode) {
       const content = translationResults[currentTargetLang];
-      const downloadFileName = generateFileName(fileName, currentTargetLang, "json", multiLanguageMode);
+      // "combined" 是 i18n 模式合并产物的内部哨兵，不是语种码：直接当 lang
+      // 拼进文件名会得到 translated_i18n.combined.json，把内部术语暴露给用户。
+      // 合并产物本来就只有一份，不需要语种后缀（与自动导出那条路径一致）。
+      const isCombined = currentTargetLang === "combined";
+      const downloadFileName = generateFileName(fileName, isCombined ? "i18n" : currentTargetLang, "json", !isCombined);
       // 回传【实际写入名】:导出目录下同名会让路成 `x (1).json`,聚合 toast 报的
       // 就是这个返回值,复述请求名会让用户去找不存在的文件
       return (await downloadFile(content, downloadFileName, "application/json;charset=utf-8")).fileName;
@@ -461,7 +502,12 @@ const JSONTranslator = () => {
 
     try {
       const originalJsonObject = parseJson(sourceText);
-      if (originalJsonObject === null) return;
+      if (originalJsonObject === null) {
+        // parseJson 已经弹了错误/提示;不标记失败的话 runTranslation 会返回 true,
+        // 紧跟着再弹一条绿色「处理完成」,与错误提示同屏自相矛盾。
+        markRunHadFailures();
+        return;
+      }
 
       setSourceText(JSON.stringify(originalJsonObject, null, 2));
 
@@ -474,8 +520,23 @@ const JSONTranslator = () => {
 
       if (multiLanguageMode && targetLangs.length === 0) {
         message.error(t("noTargetLanguage"));
+        markRunHadFailures();
         return;
       }
+
+      // 收集器抛的是【配置错误】(坏 JSONPath / 空映射 / 非法字段),不是某个
+      // 目标语言翻挂了。把它交给 reportLangFailure 会冒出「某语言的所有批次
+      // 都翻挂了」的失败面板 + 一个必然再失败的重试按钮;这里单独报错并中止，
+      // 不伪造语言级失败。
+      const collectSafely = (collect: () => CollectedNode[]): CollectedNode[] | null => {
+        try {
+          return collect();
+        } catch (error: unknown) {
+          message.error(describeError(error, t), 10);
+          markRunHadFailures();
+          return null;
+        }
+      };
 
       // 这里【不】手动推非零进度。引擎在真正开跑时自己会推(runTranslateLines
       // 的 `ctx.onProgress?.(0.5, …)`),而本地先推一脚会让末尾 `p > 0 ? 100 : p`
@@ -496,7 +557,9 @@ const JSONTranslator = () => {
           // 这里挡住的是【下一个语言】重新开跑。
           if (isCancelRequested()) break;
           try {
-            await translateCollected(collectI18n(jsonObject, currentTargetLang), currentTargetLang, langIndex, targetLangs.length);
+            const nodes = collectSafely(() => collectI18n(jsonObject, currentTargetLang));
+            if (!nodes) return;
+            await translateCollected(nodes, currentTargetLang, langIndex, targetLangs.length);
           } catch (error: unknown) {
             reportLangFailure(error, currentTargetLang);
           }
@@ -535,12 +598,14 @@ const JSONTranslator = () => {
             const root: { v: JsonValue } = { v: JSON.parse(JSON.stringify(originalJsonObject)) };
 
             // 收集器只做遍历与回写定位;编排全在 translateCollected → translateBatch。
-            let nodes: CollectedNode[];
-            if (translateMode === "allKeys") nodes = collectAllKeys(root);
-            else if (translateMode === "nodeKeys") nodes = collectNodeKeys(root.v, nodeKeysPath);
-            else if (translateMode === "keyMapping") nodes = collectKeyMapping(root.v);
-            else if (translateMode === "selectiveKey") nodes = collectSelectiveKey(root.v);
-            else nodes = collectI18n(root.v, currentTargetLang);
+            const nodes = collectSafely(() => {
+              if (translateMode === "allKeys") return collectAllKeys(root);
+              if (translateMode === "nodeKeys") return collectNodeKeys(root.v, nodeKeysPath);
+              if (translateMode === "keyMapping") return collectKeyMapping(root.v);
+              if (translateMode === "selectiveKey") return collectSelectiveKey(root.v);
+              return collectI18n(root.v, currentTargetLang);
+            });
+            if (!nodes) return;
             await translateCollected(nodes, currentTargetLang, langIndex, targetLangs.length);
 
             // removeChars is applied per-translation (applyRemoveChars at each
@@ -611,11 +676,14 @@ const JSONTranslator = () => {
           exportedFiles.push(fileName);
         } catch (error) {
           console.error(`${langCode} Export Failure:`, error);
-          failedLabels.push(sourceOptions.find((option) => option.value === langCode)?.label || langCode);
+          // "combined" 是内部哨兵，不是语言码；失败提示不能把它原样吐给用户。
+          failedLabels.push(langCode === "combined" ? tJson("i18nMode") : sourceOptions.find((option) => option.value === langCode)?.label || langCode);
         }
       }
       if (exportedFiles.length > 0) {
-        message.success(`${exportedFiles.length} ${t("exportedFile")}: ${exportedFiles.join(", ")}`, 10);
+        // 不要在「已导出」前面拼计数：zh 会读成「1 已导出: …」，其余语种同样
+        // 缺量词/动词。列表本身已经说明导出几个。
+        message.success(`${t("exportedFile")}: ${exportedFiles.join(", ")}`, 10);
       }
       if (failedLabels.length > 0) {
         message.warning(t("partialExportFailed", { items: failedLabels.join(", ") }), 10);
@@ -667,8 +735,8 @@ const JSONTranslator = () => {
             <Divider />
 
             <Flex gap="small" wrap className="mt-auto pt-4">
-              <Button type="primary" size="large" onClick={handleTranslate} loading={isTranslating} icon={<GlobalOutlined spin={isTranslating} aria-hidden />} className="flex-1">
-                {multiLanguageMode ? `${t("translate")} | ${t("totalLanguages")}${targetLanguages.length || 0}` : t("translate")}
+              <Button type="primary" size="large" onClick={handleTranslate} loading={isTranslating} icon={<GlobalOutlined spin={isTranslating} aria-hidden />} className="flex-1" style={{ whiteSpace: "normal", height: "auto", minHeight: 40 }}>
+                {multiLanguageMode ? `${t("translate")} | ${joinLanguageCount(t("totalLanguages"), targetLanguages.length || 0)}` : t("translate")}
               </Button>
 
               {multiLanguageMode && Object.keys(translationResults).length > 0 && (
@@ -719,6 +787,10 @@ const JSONTranslator = () => {
                     size="small"
                     disabled={isTranslating}
                     onClick={async () => {
+                      // 导入若带了语言/目标集合/模式,hook 会报一次「语言配置变了」
+                      // (languageConfigVersion),页面据此作废 i18n 合并结果。
+                      // 纯服务商/密钥导入不动语言,合并结果仍对应当前设置 ——
+                      // 那时清掉它等于逼用户重跑整轮 N 语种翻译。
                       await importSettings();
                     }}
                     aria-label={t("importSettingTooltip")}
@@ -768,7 +840,12 @@ const JSONTranslator = () => {
                       <Form.Item className="!mb-1">
                         <Select
                           value={translateMode}
-                          onChange={setTranslateMode}
+                          onChange={(mode) => {
+                            setTranslateMode(mode);
+                            // 结果区不显示模式，切换后旧产物会被当成新模式的输出
+                            // （例如全局翻译的结果留在 i18n 模式下面）。换模式即作废。
+                            clearResults();
+                          }}
                           options={[
                             { label: tJson("allKeys"), value: "allKeys" },
                             { label: tJson("nodeKeys"), value: "nodeKeys" },
@@ -783,7 +860,7 @@ const JSONTranslator = () => {
                       {/* Mode-specific configurations */}
                       {translateMode === "keyMapping" && (
                         <Section style={{ marginBottom: token.marginMD }}>
-                          <Flex justify="space-between" align="center" className="!mb-2">
+                          <Flex component="label" className="cursor-pointer !mb-2" justify="space-between" align="center">
                             <Text type="secondary">{tJson("keyMapping")}</Text>
                             <Tooltip title={tJson("keyMappingTooltip")} placement="top">
                               <Switch
@@ -838,8 +915,19 @@ const JSONTranslator = () => {
 
                       {translateMode === "i18nMode" && (
                         <Section style={{ marginBottom: token.marginMD }}>
-                          <Text type="secondary" style={{ fontSize: token.fontSizeSM }}>
+                          <Text type="secondary" style={{ display: "block", fontSize: token.fontSizeSM }}>
                             {tJson("i18nModeExtra")}
+                          </Text>
+                          {/* 模式只认「每个键内带语言字段」的结构；最常见的
+                              {en:{…}} 分语言写法会报「找不到 en」—— 不给形状，
+                              用户会以为工具坏了。示例用字面量（不进翻译文件）。
+                              代码字面量必须钉住 LTR：RTL 界面下花括号是中性字符，
+                              跟着段落方向走会把示例排成看不懂的样子。 */}
+                          <Text
+                            type="secondary"
+                            dir="ltr"
+                            style={{ display: "block", direction: "ltr", textAlign: "left", fontFamily: "var(--font-mono)", fontSize: token.fontSizeSM }}>
+                            {`${t("example")}: {"key": {"en": "text", "zh": "文本"}}`}
                           </Text>
                         </Section>
                       )}
@@ -869,7 +957,7 @@ const JSONTranslator = () => {
                       useCache={useCache}
                       setUseCache={setUseCache}>
                       {/* Component-specific settings */}
-                      <Flex justify="space-between" align="center">
+                      <Flex component="label" className="cursor-pointer" justify="space-between" align="center">
                         <Tooltip title={t("directExportTooltip")}>
                           <Text>{t("directExport")}</Text>
                         </Tooltip>
@@ -889,7 +977,7 @@ const JSONTranslator = () => {
 
       {/* Results Section */}
       {!directExport && (translatedText || (multiLanguageMode && Object.keys(translationResults).length > 0)) && (
-        <div className="mt-6">
+        <div className="mt-6" ref={resultRef}>
           {multiLanguageMode && translateMode !== "i18nMode"
             ? renderMultiLanguageResults()
             : translatedText && (

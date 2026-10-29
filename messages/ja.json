@@ -245,13 +245,14 @@
     "selectiveKey": "各項目の指定フィールドを翻訳",
     "i18nMode": "i18nモード（多言語統合）",
     "i18nModeExtra": "i18nモードは翻訳元言語を基準（autoはデフォルトでen）とし、すべての翻訳先言語の翻訳結果を同一オブジェクトに統合します。",
+    "i18nSourceFieldMissing": "i18n モードでソース言語のフィールド「{field}」が見つかりませんでした。ソース言語または JSON の構造を確認してください。",
     "invalidJson": "JSON形式エラー、構文を確認してください",
     "nothingToProcess": "トップレベルの JSON が null です。JSON としては有効ですが、処理できるオブジェクトや配列がありません。",
     "notAnArray": "このツールは JSON 配列が必要です。トップレベルが配列ではありません。",
     "invalidPathKey": "パスまたはキー名が無効です",
     "nonStringMatch": "一致したノードは文字列ではないため、変更されませんでした",
     "bigIntPrecision": "安全な範囲を超える整数が検出されました。出力で精度が失われる可能性があります",
-    "invalidOutputKey": "出力キー名が無効です",
+    "invalidOutputKey": "出力キー名が無効です（ターゲットフィールドが既に存在する必要があります）",
     "invalidInputKey": "入力キー名が無効です",
     "inputKey": "入力キー名",
     "outputKey": "出力キー名",
@@ -355,7 +356,7 @@
   "tools": {
     "subtitleTranslator": {
       "title": "字幕翻訳機",
-      "description": "SRT、ASS、VTT、SBV、LRC字幕を一括翻訳、120以上の言語に対応"
+      "description": "SRT、ASS、SSA、VTT、SBV、LRC字幕を一括翻訳、120以上の言語に対応"
     },
     "jsonTranslate": {
       "title": "i18n JSON翻訳",
@@ -393,7 +394,7 @@
         },
         {
           "q": "JSON の内容はサーバーにアップロードされますか？大きなファイルでもプライバシーは安全ですか？",
-          "a": "完全にクライアントサイドで処理：JSON の読み込み、解析、翻訳リクエストはすべてブラウザ内で完結し、原文は当社のサーバーを経由しません。LLM エンジンのリクエストはあなたのブラウザから直接、設定した API エンドポイント（OpenAI、DeepSeek など）に送られ、API Key はローカルの localStorage にのみ保存されます。翻訳キャッシュはブラウザの IndexedDB を使用し、ビルド間の増分更新に対応——変更されたキーのみが API を再呼び出しするため、コストを節約できます。ソースコードは GitHub（rockbenben/json-translate）でオープンソース公開されており、セルフホスティングや実装の監査が可能です。"
+          "a": "完全にクライアントサイドで処理：JSON の読み込み、解析、翻訳リクエストはすべてブラウザ内で完結し、原文は当社のサーバーを経由しません。LLM エンジンのリクエストはあなたのブラウザから直接、設定した API エンドポイント（OpenAI、DeepSeek など）に送られ、API Key はローカルの localStorage にのみ保存されます。翻訳キャッシュはブラウザの IndexedDB を使用し、ビルド間の増分更新に対応——変更されたキーのみが API を再呼び出しするため、コストを節約できます。"
         }
       ],
       "features": [
@@ -463,7 +464,7 @@
     },
     "dataParserFlare": {
       "title": "Flareブックマーク変換",
-      "description": "ブラウザブックマークとFlare形式の相互変換"
+      "description": "ブックマーク HTML を Flare YAML に変換（フラット化）"
     },
     "dataParserImgPrompt": {
       "title": "IMGPromptデータ生成",
