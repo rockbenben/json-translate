@@ -16,7 +16,7 @@
 
 Feed a locale file to a general-purpose translator and it happily translates your keys too — `"submit"` becomes `"soumettre"`, your nesting collapses, and the file no longer loads. JSON Translate walks the tree locally and sends **only the string values**; keys, hierarchy, arrays, and non-string types are never in the request to begin with.
 
-**JSON Translate** is a free, browser-based JSON localization tool for next-intl, i18next, vue-i18n, react-intl, and any other key-value structure. Five modes decide *what* gets translated — everything, a JSONPath subtree, named keys, one field across every entry, or all languages merged into one file — then connect 9 traditional translation APIs (DeepL, Google, Azure, DeepLX, Qwen-MT, TranslateGemma, MiLMMT, GTX, Edge) or 26 LLM providers and gateways and translate into 120+ languages, several at once. Everything runs locally in your browser; source content and API keys never touch a server. A [CLI](#command-line) drives the same engine headlessly when you'd rather script it.
+**JSON Translate** is a free, browser-based JSON localization tool for next-intl, i18next, vue-i18n, react-intl, and any other key-value structure. Five modes decide *what* gets translated — everything, a JSONPath subtree, named keys, one field across every entry, or all languages merged into one file — then connect 9 traditional translation APIs (DeepL, Google, Azure, DeepLX, Qwen-MT, TranslateGemma, MiLMMT, GTX, Edge) or 27 LLM providers and gateways and translate into 120+ languages, several at once. Everything runs locally in your browser; source content and API keys never touch a server. A [CLI](#command-line) drives the same engine headlessly when you'd rather script it.
 
 👉 **Try it online**: <https://tools.newzone.top/en/json-translate>
 
@@ -67,12 +67,12 @@ Existing target-language fields are skipped rather than overwritten, so re-runni
 - **Context-Aware Translation** (LLM only): Surrounding values sent as context for better coherence and terminology consistency.
 - **Unlimited Caching** (IndexedDB): Every translated value is cached locally with no browser-storage size limit — only changed strings cost an API call on the next run.
 - **Command Line**: `yarn cli` runs the same engine and cache from a terminal — see [Command Line](#command-line).
-- **Multi-Locale UI**: Powered by next-intl, with full UI translation across 18 languages.
+- **Multi-Locale UI**: Powered by next-intl, with full UI translation across 19 languages.
 - **Private by Design**: Fully client-side — source content and API keys stay in your browser; LLM requests go directly from your browser to the API endpoint you configure.
 
 ## Translation APIs
 
-Supports **9 traditional MT APIs** and **26 LLM providers and gateways**.
+Supports **9 traditional MT APIs** and **27 LLM providers and gateways**.
 
 ### Traditional APIs
 
@@ -96,7 +96,7 @@ GTX and Edge need no configuration at all — they are the zero-setup defaults, 
 
 ### Gateways
 
-**OpenRouter**, **OpenCode Zen**, **TokenHub (Tencent)**, **Groq**, **Cerebras**, **SiliconFlow**, **Atlas Cloud**, **Nvidia NIM**, **Azure OpenAI**, plus any **Custom (OpenAI-compatible)** endpoint (Ollama / LM Studio / vLLM / LiteLLM / Together AI / Fireworks AI etc.).
+**OpenRouter**, **OpenCode Zen**, **OpenCode Go**, **TokenHub (Tencent)**, **Groq**, **Cerebras**, **SiliconFlow**, **Atlas Cloud**, **Nvidia NIM**, **Azure OpenAI**, plus any **Custom (OpenAI-compatible)** endpoint (Ollama / LM Studio / vLLM / LiteLLM / Together AI / Fireworks AI etc.).
 
 Providers walled off from browsers by CORS can be routed through an API relay. The built-in relay works out of the box; **API Settings → Relay address** points every relayed provider at your own deployment of the relay Worker instead.
 
@@ -157,7 +157,7 @@ Output lands beside the input (or in `-o <dir>`) as `en.zh.json`.
 | Option | Meaning |
 | --- | --- |
 | `-i, --input <file>` | Input file. Repeatable. |
-| `-t, --to <lang>` | Target language. Repeatable. Default `zh`. |
+| `-t, --to <lang>` | Target language. Repeatable. Default: settings file, else `zh`. |
 | `-f, --from <lang>` | Source language. Default `auto`. |
 | `-m, --method <id>` | Service id. Default `gtxFreeAPI`; `--list-methods` prints them all. |
 | `-s, --settings <file>` | Settings JSON exported from the web UI (keys, prompts, glossary, retry…). |
@@ -169,7 +169,7 @@ Output lands beside the input (or in `-o <dir>`) as `en.zh.json`.
 
 ⚠️ The CLI requires **strict JSON**. The web app additionally accepts JSON5 (trailing commas, comments); a hand-edited locale file that translates fine in the browser will be rejected here rather than silently rewritten.
 
-JSON is not the only input: the same command handles subtitles (`.srt`, `.ass`, `.vtt`, `.lrc`, `.sbv` — timecodes stripped locally) and Markdown (`.md`, `.markdown`, `.mdx` — code blocks, links, and LaTeX protected by default). `yarn cli --list-formats` prints the mapping, `yarn cli --help` the full option list.
+JSON is not the only input: the same command handles subtitles (`.srt`, `.ass`, `.ssa`, `.vtt`, `.lrc`, `.sbv` — timecodes stripped locally) and Markdown (`.md`, `.markdown`, `.mdx` — code blocks, links, and LaTeX protected by default). `yarn cli --list-formats` prints the mapping, `yarn cli --help` the full option list.
 
 Runs are resumable: every translated value is cached, so re-running after a `Ctrl-C`, a rate-limit wall, or a handful of failed values only pays for what is still missing.
 
