@@ -13,8 +13,9 @@ import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { useTextStats } from "@/app/hooks/useTextStats";
 import { useExportFilename } from "@/app/hooks/useExportFilename";
 import { useRevealResult } from "@/app/hooks/useRevealResult";
+import { estimateZipBytes, finalizeBatchZip, ZIP_MAX_ESTIMATED_BYTES, type ZipEntry, zipEntriesBytes } from "@/app/hooks/translation/batchZip";
 
-import { pairingAncestors, filterObjectPropertyMatches, downloadFile, describeError, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, applyRemoveCharsToLines, getFileTypePresetConfig, splitTopLevelCommas, joinLanguageCount } from "@/app/utils";
+import { pairingAncestors, filterObjectPropertyMatches, downloadFile, describeError, describeExport, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, applyRemoveCharsToLines, getFileTypePresetConfig, splitTopLevelCommas, joinLanguageCount } from "@/app/utils";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
 import { useLanguageOptions } from "@/app/components/languages";
 import LanguageSelector from "@/app/components/LanguageSelector";
@@ -22,6 +23,7 @@ import ApiStatusBlock from "@/app/components/ApiStatusBlock";
 import { useTranslationContext } from "@/app/components/TranslationContext";
 import ResultCard from "@/app/components/ResultCard";
 import Section from "@/app/components/styled/Section";
+import ToggleRow from "@/app/components/styled/ToggleRow";
 import TranslationProgressStrip from "@/app/components/TranslationProgressStrip";
 import AdvancedTranslationSettings from "@/app/components/AdvancedTranslationSettings";
 import TranslateFailurePanel from "@/app/components/TranslateFailurePanel";
@@ -29,11 +31,15 @@ import TranslateFailurePanel from "@/app/components/TranslateFailurePanel";
 import MultiLanguageSettingsModal from "@/app/components/MultiLanguageSettingsModal";
 import UploadSourceCard from "@/app/components/UploadSourceCard";
 import { useLockExportFolder } from "@/app/components/ExportFolder";
-import { describeExport } from "@/app/hooks/useFileExport";
 
 const { Text } = Typography;
 
 const uploadFileTypes = getFileTypePresetConfig("jsonText");
+
+// JSON 产物的 MIME —— 只有这一份。这不是装饰:ZIP 打包失败时产物会被逐个写出去,
+// 那条路上只有条目自带的 mimeType 能说明「这个文件本来是 JSON」(文件名可以被
+// 导出命名规则改成别的后缀,只剩文件名能猜的话,JSON 会被当成纯文本存下来)。
+const JSON_MIME = "application/json;charset=utf-8";
 
 type TranslateMode = "allKeys" | "nodeKeys" | "keyMapping" | "selectiveKey" | "i18nMode";
 
@@ -72,10 +78,12 @@ const JSONTranslator = () => {
     clearFailures,
     markRunHadFailures,
     runHadFailures,
+    hadRunFailures,
     runRetry,
     isScopedRetry,
     getActiveTargetLangs,
     isTranslating,
+    isDisposed,
     handleLanguageChange,
     handleSwapLanguages,
     requestCancel,
@@ -97,6 +105,9 @@ const JSONTranslator = () => {
   // 落盘 —— 与 chinese-conversion-directExport 对齐;本文件其余 8 个设置本来就全部落盘,
   // 只漏了这一个。
   const [directExport, setDirectExport] = useLocalStorage("json-translate-directExport", false);
+  // 默认关：多语言默认仍逐文件落盘，ZIP 只给「一次上百个语种、浏览器会拦
+  // 连续下载」的场景。i18nMode 的合并产物本来就只有一份，不受它影响。
+  const [zipMultiLanguage, setZipMultiLanguage] = useLocalStorage<boolean>("json-translate-zipMultiLanguage", false);
   const [translationResults, setTranslationResults] = useState<Record<string, string>>({}); // Store results by language
 
   const [translateMode, setTranslateMode] = useLocalStorage<TranslateMode>("json-translate-mode", "allKeys"); // 翻译模式状态：'allKeys', 'nodeKeys', 'keyMapping', "selectiveKey", 'i18nMode'
@@ -460,24 +471,42 @@ const JSONTranslator = () => {
     return nodes;
   };
 
-  const handleExportFile = async (currentTargetLang: string | null = null) => {
-    const fileName = multipleFiles[0]?.name || (translateMode === "i18nMode" ? "translated_i18n.json" : "translated.json");
+  // 产物内容与文件名只在这里组装一次：逐文件下载、ZIP 打包、Export All 都读它，
+  // 免得三条路径各拼一次文件名后漂移。
+  const buildExportArtifact = (currentTargetLang: string | null = null): { content: string; fileName: string } => {
+    // 兜底名只用 translated.json：`.i18n` 段由 generateFileName 的
+    // disambiguate 统一注入 —— 兜底名自己带一段的话会叠成
+    // translated.i18n.i18n.json。
+    const fileName = multipleFiles[0]?.name || "translated.json";
+
+    // "combined" 是 i18n 模式合并产物的内部哨兵，不是语种码：直接当 lang
+    // 拼进文件名会得到 translated.combined.json，把内部术语暴露给用户。
+    // 合并产物用 `.i18n` 段标记（data.i18n.json）—— 与逐语种的 `.ja` 同一套
+    // 点分规则。不带这个段的话，默认模板下它就叫 data.json，与源文件同名：
+    // 导出到源文件所在目录时用户分不清哪份是译文，导出目录里还会让路成 (1)。
+    //
+    // ⚠ 三个入口里只有 Export All / 逐卡带 "combined"，结果卡自己的导出按钮
+    // 不带参数 —— 无参路径不能落进下面的单语言分支，那会拿 targetLanguage 给
+    // 一份【含全部语种】的文件命名（translated.zh.json），名字在撒谎。
+    // 判据是「无参 + i18n 合并模式」，只在多语言下成立：i18n 单语言模式的
+    // 产物确实只含一种语言，仍走单语言分支（data.json）。
+    const isCombined = currentTargetLang === "combined" || (currentTargetLang === null && translateMode === "i18nMode" && multiLanguageMode);
+    if (isCombined) {
+      return { content: translationResults.combined ?? translatedText, fileName: generateFileName(fileName, "i18n", "json", true) };
+    }
 
     if (currentTargetLang && multiLanguageMode) {
-      const content = translationResults[currentTargetLang];
-      // "combined" 是 i18n 模式合并产物的内部哨兵，不是语种码：直接当 lang
-      // 拼进文件名会得到 translated_i18n.combined.json，把内部术语暴露给用户。
-      // 合并产物本来就只有一份，不需要语种后缀（与自动导出那条路径一致）。
-      const isCombined = currentTargetLang === "combined";
-      const downloadFileName = generateFileName(fileName, isCombined ? "i18n" : currentTargetLang, "json", !isCombined);
-      // 回传【实际写入名】:导出目录下同名会让路成 `x (1).json`,聚合 toast 报的
-      // 就是这个返回值,复述请求名会让用户去找不存在的文件
-      return (await downloadFile(content, downloadFileName, "application/json;charset=utf-8")).fileName;
-    } else {
-      // Export single language result - use generateFileName with targetLanguage
-      const downloadFileName = generateFileName(fileName, targetLanguage, "json", multiLanguageMode);
-      return (await downloadFile(translatedText, downloadFileName, "application/json;charset=utf-8")).fileName;
+      return { content: translationResults[currentTargetLang], fileName: generateFileName(fileName, currentTargetLang, "json", true) };
     }
+    // Export single language result - use generateFileName with targetLanguage
+    return { content: translatedText, fileName: generateFileName(fileName, targetLanguage, "json", multiLanguageMode) };
+  };
+
+  const handleExportFile = async (currentTargetLang: string | null = null) => {
+    const artifact = buildExportArtifact(currentTargetLang);
+    // 回传【实际写入名】:导出目录下同名会让路成 `x (1).json`,聚合 toast 报的
+    // 就是这个返回值,复述请求名会让用户去找不存在的文件
+    return (await downloadFile(artifact.content, artifact.fileName, JSON_MIME)).fileName;
   };
 
   // 作废上一轮翻译产物:Clear All 与换/删上传文件时调用,使单语/多语言译文结果、
@@ -523,6 +552,35 @@ const JSONTranslator = () => {
         markRunHadFailures();
         return;
       }
+
+      // ZIP 只影响「多语言 + 非 i18n 合并模式」的实际下载：i18nMode 只有一份
+      // 合并产物；directExport 关闭时由 Export All 按真实内容判断体积。
+      const zipWanted = directExport && zipMultiLanguage && multiLanguageMode && translateMode !== "i18nMode" && targetLangs.length > 1;
+      const estimatedZipBytes = zipWanted ? estimateZipBytes(sourceText, targetLangs.length, "json") : 0;
+      const zipActive = zipWanted && estimatedZipBytes <= ZIP_MAX_ESTIMATED_BYTES;
+      const zipEntries: ZipEntry[] = [];
+      if (zipWanted && !zipActive) {
+        message.warning(
+          t("zipTooLarge", {
+            size: Math.ceil(estimatedZipBytes / (1024 * 1024)),
+            limit: Math.ceil(ZIP_MAX_ESTIMATED_BYTES / (1024 * 1024)),
+          }),
+          10,
+        );
+      }
+      // 早退（配置错误）也要把已完成的语种交出去：逐文件模式在那一瞬间已经下过
+      // 成功的文件，ZIP 模式不能反而把整轮产物丢掉。
+      const flushZip = async (hasFailures: boolean) => {
+        if (!zipActive || zipEntries.length === 0 || isDisposed()) return;
+        await finalizeBatchZip({
+          entries: zipEntries,
+          sourceFileName: multipleFiles[0]?.name || "translated.json",
+          isRetry: isScopedRetry(),
+          hasFailures,
+          t,
+          message,
+        });
+      };
 
       // 收集器抛的是【配置错误】(坏 JSONPath / 空映射 / 非法字段),不是某个
       // 目标语言翻挂了。把它交给 reportLangFailure 会冒出「某语言的所有批次
@@ -581,10 +639,11 @@ const JSONTranslator = () => {
           // generateFileName 与其它导出路径一致,尊重用户在高级设置里配置的
           // 导出文件名模板(此前这条路径手拼文件名,模板被无声忽略)。
           const fileName = multipleFiles[0]?.name || `translated.json`;
-          // i18n mode merges ALL languages into ONE file → no collision, so no
-          // lang disambiguation (would produce a stray "_i18n" suffix).
-          const downloadFileName = generateFileName(fileName, "i18n", "json", false);
-          const written = await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
+          // i18n mode merges ALL languages into ONE file → no collision, but the
+          // `.i18n` segment is still needed: with the default `{name}.{ext}`
+          // template the merged artifact would be named exactly like the source.
+          const downloadFileName = generateFileName(fileName, "i18n", "json", true);
+          const written = await downloadFile(resultText, downloadFileName, JSON_MIME);
 
           message.success(describeExport(t, written));
         }
@@ -605,7 +664,10 @@ const JSONTranslator = () => {
               if (translateMode === "selectiveKey") return collectSelectiveKey(root.v);
               return collectI18n(root.v, currentTargetLang);
             });
-            if (!nodes) return;
+            if (!nodes) {
+              await flushZip(true);
+              return;
+            }
             await translateCollected(nodes, currentTargetLang, langIndex, targetLangs.length);
 
             // removeChars is applied per-translation (applyRemoveChars at each
@@ -617,12 +679,15 @@ const JSONTranslator = () => {
 
             // If direct export is enabled, download the file immediately
             if (directExport) {
-              const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
               const fileName = multipleFiles[0]?.name || `translated.json`;
               const downloadFileName = generateFileName(fileName, currentTargetLang, "json", multiLanguageMode);
-              const written = await downloadFile(resultText, downloadFileName, "application/json;charset=utf-8");
-
-              message.success(`${langLabel} ${describeExport(t, written)}`);
+              if (zipActive) {
+                zipEntries.push({ name: downloadFileName, content: resultText });
+              } else {
+                const langLabel = sourceOptions.find((option) => option.value === currentTargetLang)?.label || currentTargetLang;
+                const written = await downloadFile(resultText, downloadFileName, JSON_MIME);
+                message.success(`${langLabel} ${describeExport(t, written)}`);
+              }
             }
           } catch (error: unknown) {
             reportLangFailure(error, currentTargetLang);
@@ -641,6 +706,7 @@ const JSONTranslator = () => {
         setTranslatedText(allResults[targetLanguage]);
       }
 
+      await flushZip(isCancelRequested() || hadRunFailures());
     } catch (error: unknown) {
       console.error("Translation process error:", error);
       if (isCascadedAbort(error)) {
@@ -669,7 +735,42 @@ const JSONTranslator = () => {
       // keeps prior successful langs in translationResults via merge, so a lang the
       // user deselected between runs must not resurface as an exported file. Keep
       // "combined" — i18nMode's single merged artifact, not a lang code.
-      const languageCodes = Object.keys(translationResults).filter((c) => c === "combined" || targetLanguages.includes(c));
+      // ⚠ 只在【当前就是 i18n 模式】时才算数:换模式不跑一遍的话,上一轮 i18n
+      // 模式留下的 combined 还在里面 —— 混进这轮的产物清单,用户会拿到一份
+      // 上一轮的旧合并件(打包时它也会进 ZIP)。
+      const languageCodes = Object.keys(translationResults).filter((c) => (c === "combined" ? translateMode === "i18nMode" : targetLanguages.includes(c)));
+
+      // i18nMode 的合并产物只有一份，打包只会多一层壳；其余多语言模式的多份产物按
+      // 【真实内容】算体积 —— 那与运行期那条路是同一个量纲（都是最终产物的字节数，
+      // 运行期拿的是发请求前的保守代理）。两条路的差别只在【什么时候拒绝】：
+      // 运行期早拒绝能省下一整轮等待，这里产物已经成形，迟拒绝没有收益 ——
+      // 退回逐文件下载反而会被浏览器的多文件下载拦下。
+      if (zipMultiLanguage && translateMode !== "i18nMode" && languageCodes.length > 1) {
+        const entries = languageCodes.map((code) => {
+          const artifact = buildExportArtifact(code);
+          return { name: artifact.fileName, content: artifact.content };
+        });
+        const bytes = zipEntriesBytes(entries);
+        if (bytes <= ZIP_MAX_ESTIMATED_BYTES) {
+          await finalizeBatchZip({
+            entries,
+            sourceFileName: multipleFiles[0]?.name || "translated.json",
+            isRetry: false,
+            hasFailures: hadRunFailures() || failedLangs.length > 0,
+            t,
+            message,
+          });
+          return;
+        }
+        message.warning(
+          t("zipTooLarge", {
+            size: Math.ceil(bytes / (1024 * 1024)),
+            limit: Math.ceil(ZIP_MAX_ESTIMATED_BYTES / (1024 * 1024)),
+          }),
+          10,
+        );
+      }
+
       for (const langCode of languageCodes) {
         try {
           const fileName = await handleExportFile(langCode);
@@ -811,6 +912,7 @@ const JSONTranslator = () => {
                 handleSwapLanguages={handleSwapLanguages}
                 setTargetLanguages={setTargetLanguages}
                 setMultiLanguageMode={setMultiLanguageMode}
+                translationMethod={translationMethod}
                 disabled={isTranslating}
               />
             </Form>
@@ -957,11 +1059,19 @@ const JSONTranslator = () => {
                       useCache={useCache}
                       setUseCache={setUseCache}>
                       {/* Component-specific settings */}
-                      <Flex component="label" className="cursor-pointer" justify="space-between" align="center">
-                        <Tooltip title={t("directExportTooltip")}>
-                          <Text>{t("directExport")}</Text>
-                        </Tooltip>
-                        <Switch size="small" checked={directExport} onChange={setDirectExport} aria-label={t("directExport")} />
+                      <Flex vertical gap="small">
+                        <Flex component="label" className="cursor-pointer" justify="space-between" align="center">
+                          <Tooltip title={t("directExportTooltip")}>
+                            <Text>{t("directExport")}</Text>
+                          </Tooltip>
+                          <Switch size="small" checked={directExport} onChange={setDirectExport} aria-label={t("directExport")} />
+                        </Flex>
+                        {/* i18nMode 把全部语种合并成一份产物，打包只会多一层壳。 */}
+                        {multiLanguageMode && translateMode !== "i18nMode" && (
+                          <ToggleRow label={t("zipMultiLanguage")} tooltip={t("zipMultiLanguageTooltip")}>
+                            <Switch size="small" checked={zipMultiLanguage} onChange={setZipMultiLanguage} disabled={isTranslating} aria-label={t("zipMultiLanguage")} />
+                          </ToggleRow>
+                        )}
                       </Flex>
                     </AdvancedTranslationSettings>
                   ),
@@ -1003,6 +1113,7 @@ const JSONTranslator = () => {
         targetLanguages={targetLanguages}
         setTargetLanguages={setTargetLanguages}
         setMultiLanguageMode={setMultiLanguageMode}
+        sourceLanguage={sourceLanguage}
       />
     </Spin>
   );
