@@ -37,7 +37,7 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
       {keyMappings.map((mapping, index) => (
         <Flex key={mapping.id} align="center" gap="small" wrap>
           {/* addon 命名字段、placeholder 举例：两者原本都填 t("inputKey")，
-              屏幕上并排出现两遍同一句「输入键名」。 */}
+              屏幕上并排出现两遍同一句「原字段」。 */}
           <Space.Compact className="flex-1" style={{ minWidth: 140 }}>
             <Space.Addon>
               <Typography.Text type="secondary" className="!text-xs">

@@ -71,3 +71,46 @@ export const stripJsonWrapper = (input: string): string => {
   }
   throw new Error("JSON format error: missing a valid outer wrapper. / JSON 格式错误：缺少有效的外层包裹结构，请检查格式。");
 };
+
+// Separators and operators in an unquoted recursive JSONPath. Other punctuation
+// (e.g. "$schema", "C++", "part/one") and Unicode names can be inserted as-is.
+const FIELD_PATH_SYNTAX = /[.,，\[\];^~'"]|#\d|^(?:[$*]$|[`@(]|\?\(|-?\d*:-?\d*(?::\d*)?$)/;
+
+/**
+ * 收集 JSON 里【值是字符串】的字段名,去重,保持首次出现顺序。
+ *
+ * 用途:json-translate 键映射模式的字段快选 chips —— 手打字段名会 typo,
+ * 点一下就能加进输入框。
+ *
+ * ⚠ 三个判据,都不是"节省 chips"那种装饰性理由:
+ *  1. 必须是字符串值。收集器只翻字符串值,列出 count/ok 这类键会让用户点出
+ *     一个【不会被翻译】的字段 —— 点了没反应还不知道为什么。
+ *  2. 快选把键名直接写进逗号分隔的 JSONPath 输入框，排除会被拆分或解释成路径的名字。
+ *     例如 "a.b" 会指向嵌套字段，"a，b" 会被拆成两项。
+ *  3. 递归走对象【与】数组。json-value-swapper 的 availableKeys 只收
+ *     Array.isArray 的扁平根,嵌套对象(a.b[].c)一个字段都列不出 —— 而嵌套
+ *     正是最常见的形状。
+ *
+ * 解析失败(用户还在敲、JSON 半完整)返回 [] 而不是抛:调用点在渲染期,
+ * 抛错会把整个工具页炸掉。
+ */
+export const collectStringFieldNames = (input: string): string[] => {
+  const keys = new Set<string>();
+  const walk = (value: JsonValue): void => {
+    if (Array.isArray(value)) {
+      value.forEach(walk);
+      return;
+    }
+    if (!isJsonObject(value)) return;
+    for (const [key, child] of Object.entries(value)) {
+      if (typeof child === "string" && key && key === key.trim() && !FIELD_PATH_SYNTAX.test(key)) keys.add(key);
+      if (typeof child === "object" && child !== null) walk(child);
+    }
+  };
+  try {
+    walk(preprocessJson(input));
+  } catch {
+    return [];
+  }
+  return Array.from(keys);
+};

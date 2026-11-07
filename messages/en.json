@@ -249,7 +249,7 @@
     "copyNode": "Copy node",
     "allKeys": "Global translation (all keys)",
     "nodeKeys": "Keys under a specific node",
-    "keyMapping": "Specify keys (multi-support)",
+    "keyMapping": "Translate selected fields only",
     "selectiveKey": "One field across all entries",
     "i18nMode": "i18n Mode (Merge Languages)",
     "i18nModeExtra": "i18n mode uses source language as base (auto defaults to en) and merges all target language translations into the same object.",
@@ -260,28 +260,30 @@
     "invalidPathKey": "Invalid path or key",
     "nonStringMatch": "Matched nodes are not string values; nothing was modified",
     "bigIntPrecision": "Integers beyond the safe range detected; the output may lose precision",
-    "invalidOutputKey": "Invalid output key (the target field must already exist)",
-    "invalidInputKey": "Invalid input key",
-    "inputKey": "Input key",
-    "outputKey": "Output key",
+    "invalidOutputKey": "Invalid target field (target field must already exist)",
+    "invalidInputKey": "Invalid source field",
+    "inputKey": "Source field",
+    "outputKey": "Target field",
     "inputKeyExample": "e.g. en.prompt",
     "outputKeyExample": "e.g. ar.prompt",
     "deleteMapping": "Delete mapping",
     "addMapping": "Add mapping",
-    "inputOutputKeyMissing": "Input and output keys cannot be empty",
+    "inputOutputKeyMissing": "Source and target fields cannot be empty",
     "fieldNameMissing": "The matching and update field names cannot be empty.",
-    "keyToTranslate": "Key to translate",
+    "keyToTranslate": "Fields to translate",
+    "quickPickKeys": "Translatable fields in this JSON — click to add",
+    "keyToTranslateExtra": "Only the fields listed here are translated; every other field (original text, references, colors, etc.) is kept verbatim. Separate multiple fields with commas. Ideal for language-learning material where the original and translated fields sit side by side",
     "multiValueHint": "Separate multiple values with commas",
-    "startKey": "Start key",
-    "invalidStartKey": "Invalid start key",
+    "startKey": "Start entry",
+    "invalidStartKey": "Invalid start entry",
     "StartKeyExtra": "Optional. Start from this entry; leave blank to start from the first",
     "fieldToTranslate": "Field to translate",
     "fieldToTranslateExtra": "Translates this field inside each entry; separate multiple fields with commas. If any listed field is missing, the whole run fails. The JSON must be two levels: entry → object",
     "nodeToTranslate": "Node to translate",
     "nodeToTranslateExtra": "When using node name, matches only first-level children",
-    "keyMappingTooltip": "Toggle mode: original key (A→A) vs mapping (A→B)",
-    "toggleKeyMapping": "Switch to mapping mode",
-    "toggleKeyOriginal": "Switch to original key mode"
+    "keyMappingTooltip": "Only the listed fields are translated; every other field (original text, references, colors, etc.) is kept verbatim. Original-field mode uses the same field name (A→A), mapping mode can convert field names (A→B)",
+    "toggleKeyMapping": "Mapping",
+    "toggleKeyOriginal": "Original"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "Configuration reset to defaults",
@@ -374,7 +376,7 @@
       "faq": [
         {
           "q": "Which translation engines and file sizes does this JSON translator support?",
-          "a": "Browser-side JSON i18n translator: source never leaves your machine, API key stays in localStorage. Supports 30+ engines: Google free tier (zero config), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, plus any OpenAI-compatible endpoint (Ollama / LM Studio / vLLM self-hosted). Five translate modes: all keys, specified-node (JSONPath), specified-key, selective-key, and i18n multi-language merge. IndexedDB cache gives incremental builds — only changed keys re-call the API."
+          "a": "Browser-side JSON i18n translator: source never leaves your machine, API key stays in localStorage. Supports 30+ engines: Google free tier (zero config), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, plus any OpenAI-compatible endpoint (Ollama / LM Studio / vLLM self-hosted). Five translate modes: all keys, specified-node (JSONPath), selected fields only, one field per entry, and i18n multi-language merge. IndexedDB cache gives incremental builds — only changed keys re-call the API."
         },
         {
           "q": "Should I use machine translation or AI/LLM for translating JSON? How do I choose?",
@@ -382,7 +384,7 @@
         },
         {
           "q": "Does it support next-intl, i18next, vue-i18n, and react-intl JSON formats?",
-          "a": "Yes to all. next-intl and vue-i18n nested object structures, i18next flat-key namespaces, and react-intl ICU MessageFormat placeholders are all handled correctly. Placeholders like {name}, {count, plural, ...}, {0} are preserved verbatim during translation. Use 'Specified Keys' mode to translate only values without touching keys, or 'i18n Mode' to aggregate multiple languages directly into the source JSON (e.g. {en: \"Settings\", zh: \"设置\"} structure)."
+          "a": "Yes to all. next-intl and vue-i18n nested object structures, i18next flat-key namespaces, and react-intl ICU MessageFormat placeholders are all handled correctly. Placeholders like {name}, {count, plural, ...}, {0} are preserved verbatim during translation. Use 'Translate selected fields only' mode to translate only values without touching keys, or 'i18n Mode' to aggregate multiple languages directly into the source JSON (e.g. {en: \"Settings\", zh: \"设置\"} structure)."
         },
         {
           "q": "How do I translate JSON into multiple languages at once?",
@@ -390,7 +392,7 @@
         },
         {
           "q": "How do I use JSONPath to translate only specific nodes? For example, only product name fields.",
-          "a": "'Specified Nodes' mode accepts standard JSONPath expressions: `$.products[*].name` translates every product's name field, `$..title` recursively translates all title fields; multiple paths are comma-separated. Combined with the advanced mapping mode of 'Specified Keys', you can also write translation results to new fields (e.g. `name` → `name_zh`) while preserving the original. Caveat: key names containing dots (.) are misread as nested paths — best avoided."
+          "a": "'Specified Nodes' mode accepts standard JSONPath expressions: `$.products[*].name` translates every product's name field, `$..title` recursively translates all title fields; multiple paths are comma-separated. Combined with the advanced mapping mode of 'Translate selected fields only', you can also write translation results to new fields (e.g. `name` → `name_zh`) while preserving the original. Caveat: key names containing dots (.) are misread as nested paths — best avoided."
         },
         {
           "q": "Will JSON keys and nesting structure break after translation?",

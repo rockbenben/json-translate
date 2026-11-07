@@ -249,8 +249,8 @@
     "copyNode": "ノードをコピー",
     "allKeys": "全体翻訳（すべてのキーと値）",
     "nodeKeys": "指定ノード下のキーと値",
-    "keyMapping": "指定キー名（複数可）",
-    "selectiveKey": "各項目の指定フィールドを翻訳",
+    "keyMapping": "選択したフィールドのみ翻訳",
+    "selectiveKey": "項目ごとに翻訳（ブレークポイント対応）",
     "i18nMode": "i18nモード（多言語統合）",
     "i18nModeExtra": "i18nモードは翻訳元言語を基準（autoはデフォルトでen）とし、すべての翻訳先言語の翻訳結果を同一オブジェクトに統合します。",
     "i18nSourceFieldMissing": "i18n モードでソース言語のフィールド「{field}」が見つかりませんでした。ソース言語または JSON の構造を確認してください。",
@@ -260,28 +260,30 @@
     "invalidPathKey": "パスまたはキー名が無効です",
     "nonStringMatch": "一致したノードは文字列ではないため、変更されませんでした",
     "bigIntPrecision": "安全な範囲を超える整数が検出されました。出力で精度が失われる可能性があります",
-    "invalidOutputKey": "出力キー名が無効です（ターゲットフィールドが既に存在する必要があります）",
-    "invalidInputKey": "入力キー名が無効です",
-    "inputKey": "入力キー名",
-    "outputKey": "出力キー名",
+    "invalidOutputKey": "対象フィールドが無効です（対象フィールドが既に存在する必要があります）",
+    "invalidInputKey": "元のフィールドが無効です",
+    "inputKey": "元のフィールド",
+    "outputKey": "対象フィールド",
     "inputKeyExample": "例：en.prompt",
     "outputKeyExample": "例：ar.prompt",
     "deleteMapping": "マッピングを削除",
     "addMapping": "マッピングを追加",
-    "inputOutputKeyMissing": "入力キーと出力キーは空にできません",
+    "inputOutputKeyMissing": "元のフィールドと対象フィールドは必須です",
     "fieldNameMissing": "照合フィールド名と更新フィールド名は空にできません。",
-    "keyToTranslate": "翻訳対象キー名",
+    "keyToTranslate": "翻訳対象フィールド",
+    "quickPickKeys": "この JSON で翻訳可能なフィールド — クリックで追加",
+    "keyToTranslateExtra": "ここに列挙したフィールドのみを翻訳し、他のフィールド（原文・参照・色など）はそのまま保持します。複数フィールドはカンマで区切ってください。原文フィールドと訳文フィールドが並ぶ語学学習教材に最適です",
     "multiValueHint": "複数の値はカンマで区切ってください",
-    "startKey": "開始キー名",
-    "invalidStartKey": "開始キー名が無効です",
+    "startKey": "開始項目",
+    "invalidStartKey": "開始項目が無効です",
     "StartKeyExtra": "任意。この項目から翻訳を開始します。空欄なら先頭から",
     "fieldToTranslate": "翻訳対象フィールド",
     "fieldToTranslateExtra": "各項目内のこのフィールドを翻訳します。複数指定はカンマ区切り。1 つでも存在しないフィールドがあると全体がエラーになります。JSON は「項目 → オブジェクト」の 2 階層である必要があります",
     "nodeToTranslate": "翻訳対象ノード",
     "nodeToTranslateExtra": "ノード名を使用する場合、第1レベルの子ノードのみ一致します",
-    "keyMappingTooltip": "翻訳モード切替：元キーモードは同じキー名を使用（A→A）、マッピングモードはキー名を変換可能（A→B）",
-    "toggleKeyMapping": "マッピングモードに切替",
-    "toggleKeyOriginal": "元キーモードに切替"
+    "keyMappingTooltip": "選択したフィールドのみを翻訳し、他のフィールド（原文・参照・色など）はそのまま保持します。元フィールドモードは同じフィールド名を保持（A→A）、マッピングモードはフィールド名を変換可能（A→B）",
+    "toggleKeyMapping": "マッピング",
+    "toggleKeyOriginal": "元フィールド"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "設定をデフォルトに戻しました",
@@ -368,13 +370,13 @@
     },
     "jsonTranslate": {
       "title": "i18n JSON翻訳",
-      "description": "i18n 言語ファイルを一括翻訳、JSONPath マッチとキー名マッピングに対応",
+      "description": "i18n 言語ファイルを一括翻訳、JSONPath マッチとフィールドマッピングに対応",
       "metaTitle": "JSON 翻訳ツール - i18n 多言語一括翻訳、JSONPath 精密指定",
-      "metaDescription": "JSON i18n 翻訳、DeepSeek/Claude/GPT など 30+ エンジン、全体・JSONPath・キー・多言語・統合の 5 モード。",
+      "metaDescription": "JSON i18n 翻訳、DeepSeek/Claude/GPT など 30+ エンジン、全体・JSONPath・選択フィールド・項目ごと・統合の 5 モード。",
       "faq": [
         {
           "q": "JSON 翻訳ツールは、どの翻訳エンジンとファイルサイズに対応していますか？",
-          "a": "ブラウザ内で動作する JSON 国際化翻訳ツール。原文はサーバーに送信されず、API キーはローカル localStorage のみに保存。30+ のエンジンに対応：Google 無料版（設定不要）、DeepSeek、Claude、GPT、Gemini、DeepL、Azure、Qwen-MT、および任意の OpenAI 互換エンドポイント（Ollama / LM Studio / vLLM セルフホスト）。グローバル、指定ノード（JSONPath）、指定キー名、選択的キー、i18n 多言語集約の 5 種類のモード。IndexedDB キャッシュで増分翻訳——変更されたキーだけ再翻訳します。"
+          "a": "ブラウザ内で動作する JSON 国際化翻訳ツール。原文はサーバーに送信されず、API キーはローカル localStorage のみに保存。30+ のエンジンに対応：Google 無料版（設定不要）、DeepSeek、Claude、GPT、Gemini、DeepL、Azure、Qwen-MT、および任意の OpenAI 互換エンドポイント（Ollama / LM Studio / vLLM 自前デプロイ）。全体、ノード指定（JSONPath）、選択したフィールドのみ翻訳、項目ごとの翻訳、i18n多言語集約の 5 つのモードを提供。IndexedDB キャッシュによる増量翻訳に対応し、変更されたキーのみ再翻訳するため、トークン消費を抑えられます。"
         },
         {
           "q": "JSON 翻訳には機械翻訳と AI 翻訳のどちらを使う？選び方は？",
@@ -382,7 +384,7 @@
         },
         {
           "q": "next-intl、i18next、vue-i18n、react-intl などの i18n フレームワークの JSON 形式に対応していますか？",
-          "a": "すべて対応しています。next-intl と vue-i18n のネストオブジェクト構造、i18next のフラットキー名前空間、react-intl の ICU MessageFormat プレースホルダーをすべて正しく処理します。`{name}`、`{count, plural, ...}`、`{0}` などのプレースホルダーは翻訳時に保持され書き換えられません。「キー名指定」モードでキーを変更せず値だけを翻訳するか、「i18n モード」で元の JSON に直接複数言語を集約（例：`{en: \"Settings\", zh: \"设置\"}` 構造）するのがおすすめです。"
+          "a": "すべて対応しています。next-intl と vue-i18n のネストオブジェクト構造、i18next のフラットキー名前空間、react-intl の ICU MessageFormat プレースホルダーをすべて正しく処理します。`{name}`、`{count, plural, ...}`、`{0}` などのプレースホルダーは翻訳時に保持され、書き換えられません。「選択したフィールドのみ翻訳」モードでキーを変更せず値のみ翻訳するか、「i18n モード」で元の JSON に直接多言語を集約（例：`{en: \"Settings\", zh: \"设置\"}` 構造）することをおすすめします。"
         },
         {
           "q": "JSON を一度に複数の言語に翻訳できますか？",
@@ -390,7 +392,7 @@
         },
         {
           "q": "JSONPath で特定のノードだけを翻訳するには？例えば商品名のフィールドだけを翻訳したい場合。",
-          "a": "「ノード指定」モードは標準の JSONPath 式を受け付けます：`$.products[*].name` で全商品の name フィールドを翻訳、`$..title` で再帰的にすべての title フィールドを翻訳。複数のパスはカンマ区切りです。「キー名指定」の高度なマッピングモードと組み合わせれば、翻訳結果を新しいフィールド（例：`name` → `name_zh`）に書き込み原文を保持できます。注意：ドット（.）を含むキー名はネストパスと誤認されるため避けてください。"
+          "a": "「ノード指定」モードは標準の JSONPath 式を受け付けます：`$.products[*].name` で全商品の name フィールドを翻訳、`$..title` で再帰的にすべての title フィールドを翻訳。複数のパスはカンマ区切りです。「選択したフィールドのみ翻訳」の高度なマッピングモードと組み合わせれば、翻訳結果を新しいフィールド（例：`name` → `name_ja`）に書き込みつつ原文を保持することも可能です。注意：キー名にドット（.）が含まれるとネストパスと誤認されるため、避けることをおすすめします。"
         },
         {
           "q": "翻訳後に JSON のキー名やネスト構造は壊れますか？",
@@ -455,7 +457,7 @@
       "description": "フィールド値のマッピングと移行、JSONPath位置特定に対応"
     },
     "jsonValueSwapper": {
-      "title": "JSONキー値交換",
+      "title": "JSONフィールド値交換",
       "description": "2つのフィールドの値をワンクリックで交換"
     },
     "jsonNodeInserter": {
@@ -484,7 +486,7 @@
     },
     "braceExpander": {
       "title": "ブレース展開",
-      "description": "1 行のテンプレートから完全なリストへ一括展開（bash のブレース展開と同じ構文）"
+      "description": "1 行のテンプレートから完全なリストへ一括展開（Bash のブレース展開に対応）"
     }
   },
   "navigation": {

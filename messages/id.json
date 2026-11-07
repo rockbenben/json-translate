@@ -249,8 +249,8 @@
     "copyNode": "Salin Node",
     "allKeys": "Terjemahan Global (Semua kunci)",
     "nodeKeys": "Kunci di bawah node tertentu",
-    "keyMapping": "Tentukan Kunci (mendukung banyak kunci)",
-    "selectiveKey": "Satu bidang di semua entri",
+    "keyMapping": "Hanya terjemahkan bidang yang dipilih",
+    "selectiveKey": "Terjemahkan per entri (per item / breakpoint)",
     "i18nMode": "Mode i18n (Gabungkan bahasa)",
     "i18nModeExtra": "Mode i18n menggunakan bahasa sumber sebagai dasar (otomatis default en) dan menggabungkan semua terjemahan target ke dalam objek yang sama.",
     "i18nSourceFieldMissing": "Mode i18n tidak menemukan kolom bahasa sumber “{field}”. Periksa bahasa sumber atau struktur JSON.",
@@ -260,28 +260,30 @@
     "invalidPathKey": "Jalur atau kunci tidak valid",
     "nonStringMatch": "Node yang cocok bukan string; tidak ada yang diubah",
     "bigIntPrecision": "Terdeteksi bilangan bulat di luar rentang aman; keluaran dapat kehilangan presisi",
-    "invalidOutputKey": "Kunci output tidak valid (bidang target harus sudah ada)",
-    "invalidInputKey": "Kunci input tidak valid",
-    "inputKey": "Kunci Input",
-    "outputKey": "Kunci Output",
+    "invalidOutputKey": "Bidang target tidak valid (bidang target harus sudah ada)",
+    "invalidInputKey": "Bidang sumber tidak valid",
+    "inputKey": "Bidang sumber",
+    "outputKey": "Bidang target",
     "inputKeyExample": "mis. en.prompt",
     "outputKeyExample": "mis. ar.prompt",
     "deleteMapping": "Hapus Pemetaan",
     "addMapping": "Tambah Pemetaan",
-    "inputOutputKeyMissing": "Kunci input dan output tidak boleh kosong",
+    "inputOutputKeyMissing": "Bidang sumber dan target tidak boleh kosong",
     "fieldNameMissing": "Nama bidang pencocokan dan pembaruan tidak boleh kosong.",
-    "keyToTranslate": "Kunci untuk Diterjemahkan",
+    "keyToTranslate": "Bidang untuk diterjemahkan",
+    "quickPickKeys": "Bidang yang dapat diterjemahkan di JSON ini — klik untuk menambah",
+    "keyToTranslateExtra": "Hanya bidang yang tercantum di sini yang diterjemahkan; bidang lain (teks asli, referensi, warna, dll.) tetap seperti semula. Pisahkan beberapa bidang dengan koma. Cocok untuk materi pembelajaran bahasa ketika bidang asli dan terjemahan berada berdampingan",
     "multiValueHint": "Pisahkan beberapa nilai dengan koma",
-    "startKey": "Kunci Awal",
-    "invalidStartKey": "Kunci awal tidak valid",
+    "startKey": "Entri awal",
+    "invalidStartKey": "Entri awal tidak valid",
     "StartKeyExtra": "Opsional. Mulai dari entri ini; kosongkan untuk mulai dari yang pertama",
     "fieldToTranslate": "Bidang untuk Diterjemahkan",
     "fieldToTranslateExtra": "Menerjemahkan bidang ini di dalam setiap entri; pisahkan beberapa bidang dengan koma. Jika salah satu bidang tidak ada, seluruh proses gagal. JSON harus dua tingkat: entri → objek",
     "nodeToTranslate": "Node untuk Diterjemahkan",
     "nodeToTranslateExtra": "Dengan nama node, hanya anak tingkat pertama yang cocok",
-    "keyMappingTooltip": "Ganti Mode: Kunci Asli (A→A) vs Pemetaan (A→B)",
-    "toggleKeyMapping": "Beralih ke Mode Pemetaan",
-    "toggleKeyOriginal": "Beralih ke Mode Kunci Asli"
+    "keyMappingTooltip": "Hanya bidang yang dipilih yang diterjemahkan; bidang lainnya (teks asli, referensi, warna, dll.) dipertahankan apa adanya. Mode bidang asli mempertahankan nama bidang yang sama (A→A), mode pemetaan dapat mengubah nama bidang (A→B)",
+    "toggleKeyMapping": "Pemetaan",
+    "toggleKeyOriginal": "Asli"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "Konfigurasi disetel ulang ke default",
@@ -368,13 +370,13 @@
     },
     "jsonTranslate": {
       "title": "Penerjemah JSON i18n",
-      "description": "Terjemahan file bahasa i18n batch, dengan pencocokan JSONPath dan pemetaan kunci",
+      "description": "Terjemahan file bahasa i18n batch, dengan pencocokan JSONPath dan pemetaan bidang",
       "metaTitle": "Penerjemah JSON | Terjemahan Batch i18n dengan JSONPath",
-      "metaDescription": "Penerjemah JSON i18n dengan 30+ mesin AI: DeepSeek, Claude, GPT, DeepL. Mode: global, JSONPath, kunci, multi-target, agregasi.",
+      "metaDescription": "Penerjemah JSON i18n dengan 30+ mesin AI: DeepSeek, Claude, GPT, DeepL. Mode: global, JSONPath, bidang terpilih, entri, agregasi.",
       "faq": [
         {
           "q": "Mesin terjemahan dan ukuran file apa yang didukung oleh penerjemah JSON ini?",
-          "a": "Penerjemah JSON i18n sisi browser: sumber tidak pernah meninggalkan mesin Anda, kunci API tetap di localStorage. 30+ mesin: versi gratis Google (tanpa konfigurasi), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, ditambah endpoint kompatibel OpenAI mana saja (Ollama / LM Studio / vLLM self-hosted). Lima mode: semua kunci, node-tertentu (JSONPath), kunci-tertentu, kunci-selektif, penggabungan multibahasa i18n. Cache IndexedDB untuk build inkremental — hanya kunci yang berubah memanggil API kembali."
+          "a": "Penerjemah JSON i18n sisi peramban: sumber tidak pernah meninggalkan mesin Anda, kunci API tetap di localStorage. 30+ mesin: Google versi gratis (tanpa konfigurasi), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, ditambah titik akhir yang kompatibel dengan OpenAI (Ollama / LM Studio / vLLM mandiri). Lima mode: semua kunci, simpul tertentu (JSONPath), Terjemahkan hanya bidang yang dipilih, Terjemahkan per entri, dan penggabungan multibahasa i18n. Cache IndexedDB untuk build inkremental — hanya kunci yang diubah yang memanggil API lagi."
         },
         {
           "q": "Untuk menerjemahkan JSON, pakai mesin terjemahan atau AI/LLM? Bagaimana memilihnya?",
@@ -382,7 +384,7 @@
         },
         {
           "q": "Apakah mendukung format JSON dari framework i18n seperti next-intl, i18next, vue-i18n, dan react-intl?",
-          "a": "Semua didukung. Struktur objek bertingkat next-intl dan vue-i18n, namespace kunci datar i18next, dan placeholder ICU MessageFormat react-intl semua ditangani dengan benar. Placeholder seperti `{name}`, `{count, plural, ...}`, `{0}` dipertahankan apa adanya saat diterjemahkan. Gunakan mode 'Kunci Tertentu' untuk hanya menerjemahkan nilai tanpa menyentuh kunci, atau 'Mode i18n' untuk menggabungkan beberapa bahasa langsung ke JSON sumber (mis. struktur `{en: \"Settings\", zh: \"设置\"}`)."
+          "a": "Ya untuk semuanya. Struktur objek bersarang next-intl dan vue-i18n, namespace flat-key i18next, dan placeholder ICU MessageFormat react-intl semuanya ditangani dengan benar. Placeholder seperti `{name}`, `{count, plural, ...}`, `{0}` dipertahankan selama terjemahan. Gunakan mode 'Terjemahkan hanya bidang yang dipilih' untuk menerjemahkan nilai tanpa mengubah kunci, atau 'Mode i18n' untuk menggabungkan beberapa bahasa langsung ke dalam JSON sumber (misalnya struktur `{en: \"Settings\", zh: \"设置\"}`)."
         },
         {
           "q": "Bisakah menerjemahkan JSON ke banyak bahasa sekaligus?",
@@ -390,7 +392,7 @@
         },
         {
           "q": "Bagaimana menggunakan JSONPath untuk menerjemahkan hanya node tertentu? Misalnya hanya field name produk?",
-          "a": "Mode 'Node Tertentu' menerima ekspresi JSONPath standar: `$.products[*].name` menerjemahkan field name setiap produk, `$..title` menerjemahkan semua field title secara rekursif; beberapa path dipisah dengan koma. Digabung dengan mode mapping lanjutan dari 'Kunci Tertentu', Anda juga bisa menulis hasil terjemahan ke field baru (mis. `name` → `name_zh`) sambil mempertahankan teks asli. Catatan: nama kunci yang mengandung titik (.) akan disalahartikan sebagai path bertingkat — sebaiknya dihindari."
+          "a": "Mode 'Simpul yang Ditentukan' menerima ekspresi JSONPath standar: `$.products[*].name` menerjemahkan bidang name setiap produk, `$..title` menerjemahkan semua bidang title secara rekursif; beberapa jalur dipisahkan dengan koma. Dikombinasikan dengan mode pemetaan lanjutan dari 'Terjemahkan hanya bidang yang dipilih', Anda juga dapat menulis hasil ke bidang baru (misalnya `name` → `name_id`) sambil mempertahankan yang asli. Peringatan: nama kunci yang mengandung titik (.) disalahartikan sebagai jalur bersarang — sebaiknya dihindari."
         },
         {
           "q": "Apakah kunci dan struktur JSON tetap setelah diterjemahkan?",
@@ -455,7 +457,7 @@
       "description": "Pemetaan dan migrasi nilai dengan JSONPath"
     },
     "jsonValueSwapper": {
-      "title": "Penukar Nilai JSON",
+      "title": "Penukar Nilai Bidang JSON",
       "description": "Tukar nilai dua bidang dengan satu klik"
     },
     "jsonNodeInserter": {
@@ -484,7 +486,7 @@
     },
     "braceExpander": {
       "title": "Ekspander Kurung Kurawal",
-      "description": "Kembangkan satu templat menjadi daftar lengkap, sintaks brace bash"
+      "description": "Kembangkan satu templat menjadi daftar lengkap, kompatibel dengan ekspansi kurung kurawal Bash"
     }
   },
   "navigation": {

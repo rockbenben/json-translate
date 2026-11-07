@@ -249,8 +249,8 @@
     "copyNode": "노드 복사",
     "allKeys": "전체 번역 (모든 키-값)",
     "nodeKeys": "지정 노드 하위 키-값",
-    "keyMapping": "지정 키 이름 (다중 지원)",
-    "selectiveKey": "각 항목의 지정 필드 번역",
+    "keyMapping": "선택한 필드만 번역",
+    "selectiveKey": "항목별 번역(항목/중단점 기준)",
     "i18nMode": "i18n 모드 (다국어 병합)",
     "i18nModeExtra": "i18n 모드는 원본 언어를 기준(auto는 기본값 en)으로 하며, 모든 목표 언어의 번역 결과를 동일한 객체에 병합합니다.",
     "i18nSourceFieldMissing": "i18n 모드에서 소스 언어 필드 “{field}”를 찾지 못했습니다. 소스 언어 또는 JSON 구조를 확인하세요.",
@@ -260,28 +260,30 @@
     "invalidPathKey": "경로 또는 키 이름이 유효하지 않습니다",
     "nonStringMatch": "일치한 노드가 문자열이 아니므로 수정되지 않았습니다",
     "bigIntPrecision": "안전 범위를 초과하는 정수가 감지되었습니다. 출력에서 정밀도가 손실될 수 있습니다",
-    "invalidOutputKey": "출력 키 이름이 유효하지 않습니다 (대상 필드가 이미 있어야 합니다)",
-    "invalidInputKey": "입력 키 이름이 유효하지 않습니다",
-    "inputKey": "입력 키 이름",
-    "outputKey": "출력 키 이름",
+    "invalidOutputKey": "대상 필드가 유효하지 않습니다(대상 필드가 이미 존재해야 합니다)",
+    "invalidInputKey": "원본 필드가 유효하지 않습니다",
+    "inputKey": "원본 필드",
+    "outputKey": "대상 필드",
     "inputKeyExample": "예: en.prompt",
     "outputKeyExample": "예: ar.prompt",
     "deleteMapping": "매핑 삭제",
     "addMapping": "매핑 추가",
-    "inputOutputKeyMissing": "입력 및 출력 키 이름은 비워둘 수 없습니다",
+    "inputOutputKeyMissing": "원본 필드와 대상 필드는 비워 둘 수 없습니다",
     "fieldNameMissing": "일치 필드 이름과 업데이트 필드 이름은 비워둘 수 없습니다.",
-    "keyToTranslate": "번역할 키 이름",
+    "keyToTranslate": "번역할 필드",
+    "quickPickKeys": "이 JSON에서 번역 가능한 필드 — 클릭하여 추가",
+    "keyToTranslateExtra": "여기에 나열한 필드만 번역하고, 다른 필드(원문·참조·색상 등)는 그대로 유지합니다. 여러 필드는 쉼표로 구분하세요. 원문 필드와 번역문 필드가 나란히 있는 어학 학습 자료에 적합합니다",
     "multiValueHint": "여러 값은 쉼표로 구분하세요",
-    "startKey": "시작 키 이름",
-    "invalidStartKey": "시작 키 이름이 유효하지 않습니다",
+    "startKey": "시작 항목",
+    "invalidStartKey": "시작 항목이 유효하지 않습니다",
     "StartKeyExtra": "선택 사항. 이 항목부터 번역합니다. 비우면 처음부터",
     "fieldToTranslate": "번역할 필드",
     "fieldToTranslateExtra": "각 항목 안의 이 필드를 번역합니다. 여러 필드는 쉼표로 구분하세요. 나열한 필드 중 하나라도 없으면 전체가 실패합니다. JSON이 '항목 → 객체' 2단 구조여야 합니다",
     "nodeToTranslate": "번역할 노드",
     "nodeToTranslateExtra": "노드 이름 사용 시 1단계 자식 노드만 매칭",
-    "keyMappingTooltip": "번역 모드 전환: 원본 키 모드는 동일한 키 이름 사용(A→A), 매핑 모드는 키 이름 변환 가능(A→B)",
-    "toggleKeyMapping": "매핑 모드로 전환",
-    "toggleKeyOriginal": "원본 키 모드로 전환"
+    "keyMappingTooltip": "선택한 필드만 번역하고 나머지 필드(원문, 참조, 색상 등)는 그대로 유지합니다. 원본 필드 모드는 동일한 필드명을 유지하고(A→A), 매핑 모드는 필드명을 변환할 수 있습니다(A→B)",
+    "toggleKeyMapping": "매핑",
+    "toggleKeyOriginal": "원본 필드"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "설정을 기본값으로 되돌렸습니다",
@@ -368,13 +370,13 @@
     },
     "jsonTranslate": {
       "title": "i18n JSON 번역",
-      "description": "i18n 언어 파일 일괄 번역, JSONPath 매칭 및 키 이름 매핑 지원",
+      "description": "i18n 언어 파일 일괄 번역, JSONPath 매칭 및 필드 매핑 지원",
       "metaTitle": "JSON 번역 도구 - i18n 다국어 일괄 번역, JSONPath 정밀 지정",
-      "metaDescription": "JSON i18n 번역기, DeepSeek/Claude/GPT 등 30+ AI 엔진, 전역·JSONPath·키·다중·병합 5가지 모드.",
+      "metaDescription": "JSON i18n 번역기, DeepSeek/Claude/GPT 등 30+ AI 엔진, 전역·JSONPath·선택 필드·항목별·병합 5가지 모드.",
       "faq": [
         {
           "q": "이 JSON 번역 도구는 어떤 번역 엔진과 파일 크기를 지원하나요?",
-          "a": "브라우저에서 실행되는 JSON 국제화 번역 도구로, 원본은 서버에 전송되지 않고 API 키는 로컬 localStorage에만 저장됩니다. 30+ 엔진 지원: Google 무료 버전(설정 불필요), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, 그리고 모든 OpenAI 호환 엔드포인트(Ollama / LM Studio / vLLM 셀프호스팅). 전체, 지정 노드(JSONPath), 지정 키 이름, 선택적 키, i18n 다국어 집계 5가지 번역 모드 제공. IndexedDB 캐시로 증분 번역 — 변경된 키만 다시 API 호출."
+          "a": "브라우저에서 실행되는 JSON 국제화 번역 도구로, 원본은 서버에 전송되지 않고 API 키는 로컬 localStorage에만 저장됩니다. 30+ 엔진 지원: Google 무료 버전(설정 불필요), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT 및 모든 OpenAI 호환 엔드포인트(Ollama / LM Studio / vLLM 자체 호스팅). 전역, 노드 지정(JSONPath), 선택한 필드만 번역, 항목별 번역, i18n 다국어 병합 5가지 모드 제공; IndexedDB 캐시를 통한 증분 번역으로 변경된 키만 다시 호출하여 토큰을 절약합니다."
         },
         {
           "q": "JSON 번역은 기계 번역과 AI 번역 중 무엇을 쓸까요? 어떻게 골라야 할까요?",
@@ -382,7 +384,7 @@
         },
         {
           "q": "next-intl, i18next, vue-i18n, react-intl 같은 i18n 프레임워크의 JSON 형식을 지원하나요?",
-          "a": "모두 지원합니다. next-intl과 vue-i18n의 중첩 객체 구조, i18next의 평면 키 네임스페이스, react-intl의 ICU MessageFormat 자리표시자를 모두 정확히 처리합니다. `{name}`, `{count, plural, ...}`, `{0}` 같은 자리표시자는 번역 시 그대로 보존되며 변경되지 않습니다. '키 이름 지정' 모드로 키를 건드리지 않고 값만 번역하거나, 'i18n 모드'로 원본 JSON에 여러 언어를 직접 집계(예: `{en: \"Settings\", zh: \"设置\"}` 구조)할 수 있습니다."
+          "a": "모두 지원합니다. next-intl과 vue-i18n의 중첩 객체 구조, i18next의 평면 키 네임스페이스, react-intl의 ICU MessageFormat 자리표시자를 모두 정확히 처리합니다. `{name}`, `{count, plural, ...}`, `{0}` 등의 자리표시자는 번역 시 유지되며 변경되지 않습니다. '선택한 필드만 번역' 모드로 키를 건드리지 않고 값만 번역하거나, 'i18n 모드'로 원본 JSON에 다국어를 직접 병합(예: `{en: \"Settings\", zh: \"设置\"}` 구조)하는 것을 권장합니다."
         },
         {
           "q": "JSON을 한 번에 여러 언어로 번역할 수 있나요?",
@@ -390,7 +392,7 @@
         },
         {
           "q": "JSONPath로 특정 노드만 번역하려면? 예를 들어 상품 이름 필드만 번역하고 싶을 때.",
-          "a": "'노드 지정' 모드는 표준 JSONPath 표현식을 지원합니다: `$.products[*].name`은 모든 상품의 name 필드를 번역하고, `$..title`은 모든 title 필드를 재귀적으로 번역합니다. 여러 경로는 쉼표로 구분합니다. '키 이름 지정'의 고급 매핑 모드와 결합하면 번역 결과를 새 필드(예: `name` → `name_zh`)에 저장하고 원본을 보존할 수 있습니다. 주의: 점(.)이 포함된 키 이름은 중첩 경로로 잘못 인식되므로 피하는 것이 좋습니다."
+          "a": "'노드 지정' 모드는 표준 JSONPath 표현식을 지원합니다: `$.products[*].name`은 모든 상품의 name 필드를 번역하고, `$..title`은 모든 title 필드를 재귀적으로 번역합니다. 여러 경로는 쉼표로 구분합니다. '선택한 필드만 번역'의 고급 매핑 모드와 결합하여 번역 결과를 새 필드(예: `name` → `name_ko`)에 기록하면서 원본을 보존할 수도 있습니다. 주의: 키 이름에 점(.)이 포함되면 중첩 경로로 잘못 인식될 수 있으므로 피하는 것이 좋습니다."
         },
         {
           "q": "번역 후 JSON 키와 중첩 구조가 깨지나요?",
@@ -455,7 +457,7 @@
       "description": "필드 값 매핑 및 마이그레이션, JSONPath 위치 지정 지원"
     },
     "jsonValueSwapper": {
-      "title": "JSON 키 값 교환",
+      "title": "JSON 필드 값 교환",
       "description": "두 필드의 값 원클릭 교환"
     },
     "jsonNodeInserter": {
@@ -484,7 +486,7 @@
     },
     "braceExpander": {
       "title": "중괄호 확장",
-      "description": "템플릿 한 줄로 완전한 목록을 일괄 생성 — bash 중괄호 확장 문법 그대로"
+      "description": "템플릿 한 줄로 완전한 목록을 일괄 생성 — Bash 중괄호 확장과 호환"
     }
   },
   "navigation": {

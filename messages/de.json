@@ -249,8 +249,8 @@
     "copyNode": "Knoten kopieren",
     "allKeys": "Globale Übersetzung (Alle Schlüssel-Werte)",
     "nodeKeys": "Schlüssel unter bestimmtem Knoten",
-    "keyMapping": "Schlüssel angeben (mehrere möglich)",
-    "selectiveKey": "Ein Feld über alle Einträge",
+    "keyMapping": "Nur ausgewählte Felder übersetzen",
+    "selectiveKey": "Eintragsweise Übersetzung (pro Eintrag / Checkpoint)",
     "i18nMode": "i18n-Modus (Sprachen zusammenführen)",
     "i18nModeExtra": "Der i18n-Modus verwendet die Quellsprache als Basis (auto ist standardmäßig en) und führt alle Zielsprachenübersetzungen in dasselbe Objekt zusammen.",
     "i18nSourceFieldMissing": "Der i18n-Modus hat kein Feld für die Ausgangssprache „{field}“ gefunden. Prüfe die Ausgangssprache oder die JSON-Struktur.",
@@ -260,28 +260,30 @@
     "invalidPathKey": "Ungültiger Pfad oder Schlüsselname",
     "nonStringMatch": "Die gefundenen Knoten sind keine Zeichenketten; nichts wurde geändert",
     "bigIntPrecision": "Ganzzahlen außerhalb des sicheren Bereichs erkannt; die Ausgabe kann an Präzision verlieren",
-    "invalidOutputKey": "Ungültiger Ausgabeschlüssel (das Zielfeld muss bereits existieren)",
-    "invalidInputKey": "Ungültiger Eingabeschlüssel",
-    "inputKey": "Eingabeschlüssel",
-    "outputKey": "Ausgabeschlüssel",
+    "invalidOutputKey": "Ungültiges Zielfeld (Zielfeld muss bereits existieren)",
+    "invalidInputKey": "Ungültiges Quellfeld",
+    "inputKey": "Quellfeld",
+    "outputKey": "Zielfeld",
     "inputKeyExample": "z. B. en.prompt",
     "outputKeyExample": "z. B. ar.prompt",
     "deleteMapping": "Mapping löschen",
     "addMapping": "Mapping hinzufügen",
-    "inputOutputKeyMissing": "Eingabe- und Ausgabeschlüssel dürfen nicht leer sein",
+    "inputOutputKeyMissing": "Quell- und Zielfeld dürfen nicht leer sein",
     "fieldNameMissing": "Die Namen der Zuordnungs- und Aktualisierungsfelder dürfen nicht leer sein.",
-    "keyToTranslate": "Zu übersetzender Schlüssel",
+    "keyToTranslate": "Zu übersetzende Felder",
+    "quickPickKeys": "Übersetzbare Felder in diesem JSON — zum Hinzufügen klicken",
+    "keyToTranslateExtra": "Nur die hier aufgezählten Felder werden übersetzt; alle anderen Felder (Originaltext, Referenzen, Farben usw.) bleiben unverändert. Mehrere Felder bitte durch Kommas trennen. Ideal für Sprachlernmaterial, bei dem Original- und Übersetzungsfelder nebeneinander liegen",
     "multiValueHint": "Mehrere Werte bitte durch Kommas trennen",
-    "startKey": "Startschlüssel",
-    "invalidStartKey": "Ungültiger Startschlüssel",
+    "startKey": "Starteintrag",
+    "invalidStartKey": "Ungültiger Starteintrag",
     "StartKeyExtra": "Optional. Ab diesem Eintrag beginnen; leer lassen für den ersten",
     "fieldToTranslate": "Zu übersetzendes Feld",
     "fieldToTranslateExtra": "Übersetzt dieses Feld in jedem Eintrag; mehrere Felder mit Kommas trennen. Fehlt eines der genannten Felder, schlägt der gesamte Lauf fehl. Das JSON muss zweistufig sein: Eintrag → Objekt",
     "nodeToTranslate": "Zu übersetzender Knoten",
     "nodeToTranslateExtra": "Bei Verwendung von Knotennamen werden nur direkte Unterknoten abgeglichen",
-    "keyMappingTooltip": "Übersetzungsmodus umschalten: Originalschlüssel-Modus verwendet gleiche Schlüsselnamen (A→A), Mapping-Modus erlaubt Schlüsselnamen-Konvertierung (A→B)",
-    "toggleKeyMapping": "In Mapping-Modus wechseln",
-    "toggleKeyOriginal": "In Originalschlüssel-Modus wechseln"
+    "keyMappingTooltip": "Nur die ausgewählten Felder werden übersetzt; alle anderen Felder (Originaltext, Referenzen, Farben usw.) bleiben unverändert erhalten. Der Quellfeldmodus behält denselben Feldnamen bei (A→A), der Zuordnungsmodus kann Feldnamen umwandeln (A→B)",
+    "toggleKeyMapping": "Mapping",
+    "toggleKeyOriginal": "Original"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "Konfiguration auf Standardwerte zurückgesetzt",
@@ -368,13 +370,13 @@
     },
     "jsonTranslate": {
       "title": "i18n JSON-Übersetzer",
-      "description": "i18n-Sprachdateien im Batch übersetzen, mit JSONPath-Abgleich und Schlüssel-Mapping",
+      "description": "i18n-Sprachdateien im Batch übersetzen, mit JSONPath-Abgleich und Feld-Mapping",
       "metaTitle": "JSON-Übersetzer | i18n Stapelübersetzung mit JSONPath",
-      "metaDescription": "JSON-i18n-Übersetzer, 30+ KI-Engines: DeepSeek, Claude, GPT, DeepL. Modi: global, JSONPath, Schlüssel, Multi-Ziel, Aggregation.",
+      "metaDescription": "JSON-i18n-Übersetzer, 30+ KI-Engines: DeepSeek, Claude, GPT, DeepL. Modi: global, JSONPath, ausgewählte Felder, Einträge, Aggregation.",
       "faq": [
         {
           "q": "Welche Übersetzungs-Engines und Dateigrößen unterstützt dieser JSON-Übersetzer?",
-          "a": "Browser-seitiger JSON-i18n-Übersetzer: Quelle verlässt nie Ihren Rechner, API-Key bleibt in localStorage. 30+ Engines: Googles Gratis-Version (Zero-Config), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, plus jeder OpenAI-kompatible Endpunkt (Ollama / LM Studio / vLLM self-hosted). Fünf Modi: alle Keys, spezifizierter Knoten (JSONPath), spezifizierter Key, selektiver Key, i18n-Mehrsprachen-Merge. IndexedDB-Cache für inkrementelle Builds — nur geänderte Keys rufen die API erneut auf."
+          "a": "Browser-seitiger JSON-i18n-Übersetzer: Quelle verlässt nie Ihren Rechner, API-Key bleibt in localStorage. 30+ Engines: Googles Gratis-Version (Zero-Config), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT und alle OpenAI-kompatiblen Endpunkte (Ollama / LM Studio / vLLM self-hosted). Fünf Modi: alle Schlüssel, Knoten-spezifisch (JSONPath), Nur ausgewählte Felder übersetzen, Eintragsweise Übersetzung und i18n-Mehrsprachen-Zusammenführung. IndexedDB-Cache für inkrementelle Builds – nur geänderte Schlüssel rufen die API erneut auf."
         },
         {
           "q": "JSON-Übersetzung: Maschinelle Übersetzung oder KI/LLM verwenden? Wie wählt man?",
@@ -382,7 +384,7 @@
         },
         {
           "q": "Werden die JSON-Formate von next-intl, i18next, vue-i18n und react-intl unterstützt?",
-          "a": "Ja, alle. Die verschachtelten Objektstrukturen von next-intl und vue-i18n, die Flat-Key-Namespaces von i18next und die ICU-MessageFormat-Platzhalter von react-intl werden korrekt verarbeitet. Platzhalter wie {name}, {count, plural, ...}, {0} bleiben bei der Übersetzung unverändert. Nutzen Sie den Modus „Bestimmte Schlüssel\", um nur Werte zu übersetzen, ohne Schlüssel anzufassen, oder den „i18n-Modus\", um mehrere Sprachen direkt im Quell-JSON zu aggregieren (z. B. Struktur {en: \"Settings\", zh: \"设置\"})."
+          "a": "Ja, alle. Die verschachtelten Objektstrukturen von next-intl und vue-i18n, die Flat-Key-Namespaces von i18next und die ICU-MessageFormat-Platzhalter von react-intl werden korrekt verarbeitet. Platzhalter wie `{name}`, `{count, plural, ...}`, `{0}` bleiben bei der Übersetzung erhalten. Nutzen Sie den Modus „Nur ausgewählte Felder übersetzen“, um nur Werte ohne Änderung der Schlüssel zu übersetzen, oder den „i18n-Modus“, um mehrere Sprachen direkt im Quell-JSON zusammenzuführen (z. B. `{en: \"Settings\", zh: \"设置\"}`)."
         },
         {
           "q": "Kann ich JSON gleichzeitig in mehrere Sprachen übersetzen?",
@@ -390,7 +392,7 @@
         },
         {
           "q": "Wie übersetze ich mit JSONPath nur bestimmte Knoten? Zum Beispiel nur Produktnamenfelder.",
-          "a": "Der Modus „Bestimmte Knoten\" akzeptiert Standard-JSONPath-Ausdrücke: `$.products[*].name` übersetzt das name-Feld jedes Produkts, `$..title` übersetzt rekursiv alle title-Felder; mehrere Pfade werden durch Komma getrennt. Kombiniert mit dem erweiterten Mapping-Modus von „Bestimmte Schlüssel\" können Sie Übersetzungsergebnisse auch in neue Felder schreiben (z. B. `name` → `name_zh`) und das Original erhalten. Achtung: Schlüsselnamen mit Punkten (.) werden als verschachtelte Pfade fehlinterpretiert — vermeiden."
+          "a": "Der Modus „Bestimmte Knoten“ akzeptiert Standard-JSONPath-Ausdrücke: `$.products[*].name` übersetzt das name-Feld jedes Produkts, `$..title` übersetzt rekursiv alle title-Felder; mehrere Pfade werden durch Kommas getrennt. In Kombination mit dem erweiterten Mapping-Modus von „Nur ausgewählte Felder übersetzen“ können Sie Übersetzungsergebnisse auch in neue Felder schreiben (z. B. `name` → `name_de`), während das Original erhalten bleibt. Hinweis: Schlüsselnamen mit Punkten (.) werden als verschachtelte Pfade fehlinterpretiert – bitte vermeiden."
         },
         {
           "q": "Bleiben JSON-Schlüssel und Verschachtelung nach der Übersetzung erhalten?",
@@ -455,7 +457,7 @@
       "description": "Feldwert-Mapping und Migration mit JSONPath"
     },
     "jsonValueSwapper": {
-      "title": "JSON-Wertetauscher",
+      "title": "JSON-Feldwertetauscher",
       "description": "Werte zweier Felder per Klick tauschen"
     },
     "jsonNodeInserter": {
@@ -484,7 +486,7 @@
     },
     "braceExpander": {
       "title": "Klammer-Expander",
-      "description": "Aus einer Vorlage die vollständige Liste erzeugen – Bash-Brace-Expansion"
+      "description": "Aus einer Vorlage die vollständige Liste erzeugen – kompatibel mit Bash-Brace-Expansion"
     }
   },
   "navigation": {

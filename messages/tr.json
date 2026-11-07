@@ -249,8 +249,8 @@
     "copyNode": "Düğümü Kopyala",
     "allKeys": "Küresel Çeviri (Tüm anahtarlar)",
     "nodeKeys": "Belirli düğüm altındaki anahtarlar",
-    "keyMapping": "Anahtarları Belirle (Çoklu destek)",
-    "selectiveKey": "Tüm kayıtlarda tek alan",
+    "keyMapping": "Yalnızca seçilen alanları çevir",
+    "selectiveKey": "Öğe bazında çeviri (öğe / kesme noktası)",
     "i18nMode": "i18n Modu (Dilleri Birleştir)",
     "i18nModeExtra": "i18n modu kaynak dili temel alır (otomatik varsayılan en) ve tüm hedef çevirileri aynı nesnede birleştirir.",
     "i18nSourceFieldMissing": "i18n modu “{field}” kaynak dil alanını bulamadı. Kaynak dili veya JSON yapısını kontrol edin.",
@@ -260,28 +260,30 @@
     "invalidPathKey": "Geçersiz yol veya anahtar",
     "nonStringMatch": "Eşleşen düğümler dize değil; hiçbir şey değiştirilmedi",
     "bigIntPrecision": "Güvenli aralığın ötesinde tamsayılar algılandı; çıktıda hassasiyet kaybolabilir",
-    "invalidOutputKey": "Geçersiz çıkış anahtarı (hedef alan zaten mevcut olmalı)",
-    "invalidInputKey": "Geçersiz giriş anahtarı",
-    "inputKey": "Giriş Anahtarı",
-    "outputKey": "Çıkış Anahtarı",
+    "invalidOutputKey": "Geçersiz hedef alan (hedef alan zaten mevcut olmalıdır)",
+    "invalidInputKey": "Geçersiz kaynak alan",
+    "inputKey": "Kaynak alan",
+    "outputKey": "Hedef alan",
     "inputKeyExample": "örn. en.prompt",
     "outputKeyExample": "örn. ar.prompt",
     "deleteMapping": "Haritalamayı Sil",
     "addMapping": "Haritalama Ekle",
-    "inputOutputKeyMissing": "Giriş ve çıkış anahtarları boş olamaz",
+    "inputOutputKeyMissing": "Kaynak ve hedef alanlar boş bırakılamaz",
     "fieldNameMissing": "Eşleştirme ve güncelleme alan adları boş olamaz.",
-    "keyToTranslate": "Çevrilecek Anahtar",
+    "keyToTranslate": "Çevrilecek alanlar",
+    "quickPickKeys": "Bu JSON'da çevrilebilir alanlar — eklemek için tıklayın",
+    "keyToTranslateExtra": "Yalnızca burada listelenen alanlar çevrilir; diğer tüm alanlar (orijinal metin, referanslar, renkler vb.) olduğu gibi kalır. Birden fazla alanı virgülle ayırın. Orijinal ve çevrilmiş alanların yan yana bulunduğu dil öğrenme materyalleri için idealdir",
     "multiValueHint": "Birden fazla değeri virgülle ayırın",
-    "startKey": "Başlangıç Anahtarı",
-    "invalidStartKey": "Geçersiz başlangıç anahtarı",
+    "startKey": "Başlangıç öğesi",
+    "invalidStartKey": "Geçersiz başlangıç öğesi",
     "StartKeyExtra": "İsteğe bağlı. Bu kayıttan başla; boş bırakırsanız ilkinden başlar",
     "fieldToTranslate": "Çevrilecek Alan",
     "fieldToTranslateExtra": "Her kaydın içindeki bu alanı çevirir; birden fazla alanı virgülle ayırın. Listelenen alanlardan biri yoksa işlemin tamamı başarısız olur. JSON iki katmanlı olmalı: kayıt → nesne",
     "nodeToTranslate": "Çevrilecek Düğüm",
     "nodeToTranslateExtra": "Düğüm adıyla, yalnızca birinci seviye alt öğeler eşleşir",
-    "keyMappingTooltip": "Mod Değiştir: Orijinal Anahtar (A→A) vs Haritalama (A→B)",
-    "toggleKeyMapping": "Haritalama Moduna Geç",
-    "toggleKeyOriginal": "Orijinal Anahtar Moduna Geç"
+    "keyMappingTooltip": "Yalnızca seçilen alanlar çevrilir; diğer tüm alanlar (orijinal metin, referanslar, renkler vb.) olduğu gibi korunur. Orijinal alan modu aynı alan adını korur (A→A), eşleme modu ise alan adını dönüştürebilir (A→B)",
+    "toggleKeyMapping": "Haritalama",
+    "toggleKeyOriginal": "Orijinal"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "Yapılandırma varsayılanlara sıfırlandı",
@@ -368,13 +370,13 @@
     },
     "jsonTranslate": {
       "title": "i18n JSON Çevirici",
-      "description": "Toplu i18n dil dosyası çevirisi, JSONPath eşleştirme ve anahtar eşleme ile",
+      "description": "Toplu i18n dil dosyası çevirisi, JSONPath eşleştirme ve alan eşleme ile",
       "metaTitle": "JSON Çevirici | JSONPath ile i18n Toplu Çeviri",
-      "metaDescription": "JSON i18n çevirmeni, 30+ AI motoru: DeepSeek, Claude, GPT, DeepL. Modlar: global, JSONPath, anahtar, çoklu hedef. next-intl.",
+      "metaDescription": "JSON i18n çevirmeni, 30+ AI motoru: DeepSeek, Claude, GPT, DeepL. Modlar: global, JSONPath, seçilen alanlar, öğe bazında, çoklu hedef.",
       "faq": [
         {
           "q": "Bu JSON çevirici hangi çeviri motorlarını ve dosya boyutlarını destekliyor?",
-          "a": "Tarayıcı tarafı JSON i18n çevirici: kaynak makinenizden hiç ayrılmaz, API anahtarı localStorage'da kalır. 30+ motor: Google ücretsiz sürümü (sıfır yapılandırma), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, artı herhangi bir OpenAI uyumlu uç nokta (Ollama / LM Studio / vLLM kendi kendine barındırılan). Beş mod: tüm anahtarlar, belirtilen düğüm (JSONPath), belirtilen anahtar, seçici anahtar, i18n çok dilli birleştirme. Artımlı yapılar için IndexedDB önbelleği — yalnızca değişen anahtarlar API'yi yeniden çağırır."
+          "a": "Tarayıcı tarafında çalışan JSON i18n çevirmeni: kaynak metin asla makinenizden ayrılmaz, API anahtarı yerel localStorage'da kalır. 30+ motor: Google ücretsiz (sıfır yapılandırma), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT ve herhangi bir OpenAI uyumlu uç nokta (Ollama / LM Studio / vLLM kendi kendine barındırılan). Beş mod: tüm anahtarlar, belirtilen düğüm (JSONPath), Yalnızca seçilen alanları çevir, Öğe bazında çeviri ve i18n çok dilli birleştirme. IndexedDB önbelleği ile artımlı yapılar — yalnızca değişen anahtarlar API'yi yeniden çağırır."
         },
         {
           "q": "JSON çevirmek için makine çevirisi mi AI/LLM çevirisi mi? Nasıl seçilir?",
@@ -382,7 +384,7 @@
         },
         {
           "q": "next-intl, i18next, vue-i18n ve react-intl JSON formatlarını destekliyor mu?",
-          "a": "Evet, tamamı desteklenir. next-intl ve vue-i18n'in iç içe nesne yapıları, i18next'in düz anahtar ad alanları ve react-intl'in ICU MessageFormat yer tutucuları doğru şekilde işlenir. `{name}`, `{count, plural, ...}`, `{0}` gibi yer tutucular çeviri sırasında olduğu gibi korunur. Anahtarlara dokunmadan yalnızca değerleri çevirmek için 'Belirtilen Anahtarlar' modunu kullanın veya birden fazla dili doğrudan kaynak JSON üzerinde birleştirmek için 'i18n Modu'nu kullanın (örn. `{en: \"Settings\", zh: \"设置\"}` yapısı)."
+          "a": "Evet, hepsi desteklenir. next-intl ve vue-i18n iç içe nesne yapıları, i18next düz anahtar ad alanları ve react-intl ICU MessageFormat yer tutucuları doğru şekilde işlenir. `{name}`, `{count, plural, ...}`, `{0}` gibi yer tutucular çeviri sırasında korunur. Anahtarlara dokunmadan yalnızca değerleri çevirmek için 'Yalnızca seçilen alanları çevir' modunu veya birden çok dili doğrudan kaynak JSON'da birleştirmek için 'i18n Modu'nu kullanın (örn. `{en: \"Settings\", zh: \"设置\"}` yapısı)."
         },
         {
           "q": "JSON'u aynı anda birden fazla dile çevirebilir miyim?",
@@ -390,7 +392,7 @@
         },
         {
           "q": "JSONPath ile yalnızca belirli düğümleri nasıl çevirebilirim? Örneğin sadece ürün adı alanlarını.",
-          "a": "'Belirtilen Düğümler' modu standart JSONPath ifadelerini kabul eder: `$.products[*].name` tüm ürünlerin name alanını çevirir, `$..title` tüm title alanlarını yinelemeli olarak çevirir; birden fazla yol virgülle ayrılır. 'Belirtilen Anahtarlar' modunun gelişmiş eşleme özelliğiyle birleştirildiğinde, çeviri sonuçlarını yeni alanlara da yazabilirsiniz (örn. `name` → `name_zh`) ve orijinali koruyabilirsiniz. Dikkat: nokta (.) içeren anahtar adları iç içe yol olarak algılanır — kaçınılmalıdır."
+          "a": "'Belirtilen Düğümler' modu standart JSONPath ifadelerini kabul eder: `$.products[*].name` her ürünün name alanını çevirir, `$..title` özyinelemeli olarak tüm title alanlarını çevirir; birden fazla yol virgülle ayrılır. 'Yalnızca seçilen alanları çevir' modunun gelişmiş eşleme moduyla birleştirildiğinde, çeviri sonuçlarını yeni alanlara (örn. `name` → `name_tr`) yazabilir ve orijinali koruyabilirsiniz. Dikkat: Nokta (.) içeren anahtar adları iç içe geçmiş yollar olarak yanlış yorumlanır — kaçınılmalıdır."
         },
         {
           "q": "Çeviriden sonra JSON anahtarları ve yapısı korunur mu?",
@@ -455,7 +457,7 @@
       "description": "JSONPath ile değer eşleme ve taşıma"
     },
     "jsonValueSwapper": {
-      "title": "JSON Değer Değiştirici",
+      "title": "JSON Alan Değeri Değiştirici",
       "description": "Tek tıkla iki alanın değerlerini değiştir"
     },
     "jsonNodeInserter": {
@@ -484,7 +486,7 @@
     },
     "braceExpander": {
       "title": "Süslü Parantez Genişletici",
-      "description": "Tek bir şablonu tam listeye genişletin, bash brace sözdizimi"
+      "description": "Tek bir şablonu tam listeye genişletin, Bash küme parantezi genişletmesiyle uyumlu"
     }
   },
   "navigation": {

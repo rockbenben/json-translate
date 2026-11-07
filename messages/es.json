@@ -249,8 +249,8 @@
     "copyNode": "Copiar Nodo",
     "allKeys": "Traducción Global (Todas las claves)",
     "nodeKeys": "Claves bajo nodo específico",
-    "keyMapping": "Especificar Claves (Soporte múltiple)",
-    "selectiveKey": "Un campo en todas las entradas",
+    "keyMapping": "Traducir solo campos seleccionados",
+    "selectiveKey": "Traducir por elemento (por entrada / punto de control)",
     "i18nMode": "Modo i18n (Fusionar idiomas)",
     "i18nModeExtra": "El modo i18n usa el idioma origen como base («auto» usa «en» por defecto) y fusiona todas las traducciones destino en el mismo objeto.",
     "i18nSourceFieldMissing": "El modo i18n no encontró el campo del idioma de origen “{field}”. Revisa el idioma de origen o la estructura del JSON.",
@@ -260,28 +260,30 @@
     "invalidPathKey": "Ruta o clave inválida",
     "nonStringMatch": "Los nodos coincidentes no son cadenas de texto; no se modificó nada",
     "bigIntPrecision": "Se detectaron enteros fuera del rango seguro; la salida puede perder precisión",
-    "invalidOutputKey": "Clave de salida inválida (el campo destino debe existir)",
-    "invalidInputKey": "Clave de entrada inválida",
-    "inputKey": "Clave Entrada",
-    "outputKey": "Clave Salida",
+    "invalidOutputKey": "Campo de destino no válido (el campo de destino ya debe existir)",
+    "invalidInputKey": "Campo de origen no válido",
+    "inputKey": "Campo de origen",
+    "outputKey": "Campo de destino",
     "inputKeyExample": "p. ej. en.prompt",
     "outputKeyExample": "p. ej. ar.prompt",
     "deleteMapping": "Borrar Mapeo",
     "addMapping": "Añadir Mapeo",
-    "inputOutputKeyMissing": "Claves de entrada y salida no pueden estar vacías",
+    "inputOutputKeyMissing": "Los campos de origen y destino no pueden estar vacíos",
     "fieldNameMissing": "Los nombres de los campos de coincidencia y de actualización no pueden estar vacíos.",
-    "keyToTranslate": "Clave a Traducir",
+    "keyToTranslate": "Campos a traducir",
+    "quickPickKeys": "Campos traducibles en este JSON — haz clic para añadir",
+    "keyToTranslateExtra": "Solo se traducen los campos listados aquí; el resto de los campos (texto original, referencias, colores, etc.) se mantiene tal cual. Separa varios campos con comas. Ideal para material de aprendizaje de idiomas donde los campos original y traducido coexisten",
     "multiValueHint": "Separa múltiples valores con comas",
-    "startKey": "Clave Inicio",
-    "invalidStartKey": "Clave inicio inválida",
+    "startKey": "Entrada inicial",
+    "invalidStartKey": "Entrada inicial no válida",
     "StartKeyExtra": "Opcional. Empieza desde esta entrada; déjalo vacío para empezar por la primera",
     "fieldToTranslate": "Campo a Traducir",
     "fieldToTranslateExtra": "Traduce este campo dentro de cada entrada; separa varios campos con comas. Si falta alguno de los campos indicados, falla toda la ejecución. El JSON debe tener dos niveles: entrada → objeto",
     "nodeToTranslate": "Nodo a Traducir",
     "nodeToTranslateExtra": "Con nombre de nodo, solo coinciden hijos de primer nivel",
-    "keyMappingTooltip": "Alternar Modo: Clave Original (A→A) vs Mapeo (A→B)",
-    "toggleKeyMapping": "Cambiar a Modo Mapeo",
-    "toggleKeyOriginal": "Cambiar a Modo Clave Original"
+    "keyMappingTooltip": "Solo se traducen los campos seleccionados; todos los demás campos (texto original, referencias, colores, etc.) se conservan intactos. El modo de campo original mantiene el mismo nombre de campo (A→A), mientras que el modo de asignación puede transformar el nombre del campo (A→B)",
+    "toggleKeyMapping": "Mapeo",
+    "toggleKeyOriginal": "Original"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "Configuración restablecida a los valores predeterminados",
@@ -368,13 +370,13 @@
     },
     "jsonTranslate": {
       "title": "Traductor JSON i18n",
-      "description": "Traducción por lote de archivos de idioma i18n, con coincidencia JSONPath y mapeo de claves",
+      "description": "Traducción por lote de archivos de idioma i18n, con coincidencia JSONPath y mapeo de campos",
       "metaTitle": "Traductor JSON | i18n traducción por lotes con JSONPath",
-      "metaDescription": "Traductor JSON i18n con 30+ motores IA: DeepSeek, Claude, GPT, DeepL. Modos: global, JSONPath, clave, multi-idioma, agregación.",
+      "metaDescription": "Traductor JSON i18n con 30+ motores IA: DeepSeek, Claude, GPT, DeepL. Modos: global, JSONPath, campos seleccionados, entradas, agregación.",
       "faq": [
         {
           "q": "¿Qué motores de traducción y tamaños de archivo admite este traductor JSON?",
-          "a": "Traductor JSON i18n del lado del navegador: la fuente nunca sale de tu máquina, la clave API permanece en localStorage. 30+ motores: versión gratuita de Google (cero configuración), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, más cualquier endpoint compatible con OpenAI (Ollama / LM Studio / vLLM autoalojado). Cinco modos: todas las claves, nodo-específico (JSONPath), clave-específica, clave-selectiva, fusión multilingüe i18n. Caché IndexedDB para compilaciones incrementales — solo las claves cambiadas vuelven a llamar a la API."
+          "a": "Traductor JSON i18n del lado del navegador: la fuente nunca sale de tu máquina, la clave API permanece en localStorage. 30+ motores: versión gratuita de Google (sin configuración), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, más cualquier endpoint compatible con OpenAI (Ollama / LM Studio / vLLM autoalojado). Cinco modos: todas las claves, nodo especificado (JSONPath), Traducir solo los campos seleccionados, Traducir por elemento y agregación multi-idioma i18n. La caché de IndexedDB permite compilaciones incrementales: solo las claves modificadas llaman a la API."
         },
         {
           "q": "Para traducir JSON, ¿usar traducción automática o traducción IA/LLM? ¿Cómo elegir?",
@@ -382,7 +384,7 @@
         },
         {
           "q": "¿Admite los formatos JSON de next-intl, i18next, vue-i18n y react-intl?",
-          "a": "Sí, todos. Las estructuras de objetos anidados de next-intl y vue-i18n, los espacios de nombres con claves planas de i18next y los marcadores ICU MessageFormat de react-intl se gestionan correctamente. Los marcadores como {name}, {count, plural, ...}, {0} se conservan literalmente durante la traducción. Usa el modo «Claves especificadas» para traducir solo los valores sin tocar las claves, o el «Modo i18n» para agregar varios idiomas directamente en el JSON fuente (por ejemplo estructura {en: \"Settings\", zh: \"设置\"})."
+          "a": "Sí, todos. Las estructuras de objetos anidados de next-intl y vue-i18n, los espacios de nombres con claves planas de i18next y los marcadores ICU MessageFormat de react-intl se procesan correctamente. Los marcadores como `{name}`, `{count, plural, ...}`, `{0}` se conservan intactos durante la traducción. Usa el modo «Traducir solo los campos seleccionados» para traducir solo valores sin tocar claves, o el «Modo i18n» para agregar varios idiomas directamente en el JSON original (por ejemplo `{en: \"Settings\", zh: \"设置\"}`)."
         },
         {
           "q": "¿Se puede traducir JSON a varios idiomas a la vez?",
@@ -390,7 +392,7 @@
         },
         {
           "q": "¿Cómo uso JSONPath para traducir solo nodos específicos? Por ejemplo, solo campos de nombre de producto.",
-          "a": "El modo «Nodos especificados» acepta expresiones JSONPath estándar: `$.products[*].name` traduce el campo name de cada producto, `$..title` traduce recursivamente todos los campos title; varias rutas se separan por comas. Combinado con el modo de mapeo avanzado de «Claves especificadas», también puedes escribir los resultados de traducción en nuevos campos (por ejemplo `name` → `name_zh`) conservando el original. Atención: los nombres de clave que contienen puntos (.) se interpretan erróneamente como rutas anidadas — evítalo."
+          "a": "El modo «Nodos especificados» acepta expresiones JSONPath estándar: `$.products[*].name` traduce el campo name de cada producto, `$..title` traduce recursivamente todos los campos title; varias rutas se separan por comas. Combinado con el modo de mapeo avanzado de «Traducir solo los campos seleccionados», también puedes escribir resultados en campos nuevos (por ejemplo `name` → `name_es`) conservando el original. Advertencia: los nombres de claves con puntos (.) se interpretan como rutas anidadas — mejor evitarlos."
         },
         {
           "q": "¿Se mantienen las claves y estructura JSON tras la traducción?",
@@ -455,7 +457,7 @@
       "description": "Mapeo y migración de valores con JSONPath"
     },
     "jsonValueSwapper": {
-      "title": "Intercambiador Valor JSON",
+      "title": "Intercambiador de Valores de Campos JSON",
       "description": "Intercambiar valores de dos campos en un clic"
     },
     "jsonNodeInserter": {
@@ -484,7 +486,7 @@
     },
     "braceExpander": {
       "title": "Expansor de llaves",
-      "description": "Expande una plantilla en una lista completa, sintaxis de bash"
+      "description": "Expande una plantilla en una lista completa, compatible con la expansión de llaves de Bash"
     }
   },
   "navigation": {

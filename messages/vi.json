@@ -249,8 +249,8 @@
     "copyNode": "Sao chép nút",
     "allKeys": "Dịch toàn cục (Tất cả các khóa)",
     "nodeKeys": "Khóa dưới nút cụ thể",
-    "keyMapping": "Chỉ định khóa (Hỗ trợ nhiều)",
-    "selectiveKey": "Một trường trên mọi mục",
+    "keyMapping": "Chỉ dịch các trường đã chọn",
+    "selectiveKey": "Dịch theo từng mục (theo mục / điểm ngắt)",
     "i18nMode": "Chế độ i18n (Gộp ngôn ngữ)",
     "i18nModeExtra": "Chế độ i18n sử dụng ngôn ngữ nguồn làm cơ sở (tự động mặc định en) và gộp tất cả các bản dịch đích vào cùng một đối tượng.",
     "i18nSourceFieldMissing": "Chế độ i18n không tìm thấy trường ngôn ngữ nguồn “{field}”. Hãy kiểm tra ngôn ngữ nguồn hoặc cấu trúc JSON.",
@@ -260,28 +260,30 @@
     "invalidPathKey": "Đường dẫn hoặc khóa không hợp lệ",
     "nonStringMatch": "Các nút khớp không phải là chuỗi; không có gì được sửa đổi",
     "bigIntPrecision": "Phát hiện số nguyên vượt phạm vi an toàn; kết quả có thể mất độ chính xác",
-    "invalidOutputKey": "Khóa đầu ra không hợp lệ (trường đích phải tồn tại trước)",
-    "invalidInputKey": "Khóa đầu vào không hợp lệ",
-    "inputKey": "Khóa đầu vào",
-    "outputKey": "Khóa đầu ra",
+    "invalidOutputKey": "Trường đích không hợp lệ (trường đích phải tồn tại từ trước)",
+    "invalidInputKey": "Trường nguồn không hợp lệ",
+    "inputKey": "Trường nguồn",
+    "outputKey": "Trường đích",
     "inputKeyExample": "ví dụ: en.prompt",
     "outputKeyExample": "ví dụ: ar.prompt",
     "deleteMapping": "Xóa ánh xạ",
     "addMapping": "Thêm ánh xạ",
-    "inputOutputKeyMissing": "Khóa đầu vào và đầu ra không được để trống",
+    "inputOutputKeyMissing": "Trường nguồn và trường đích không được để trống",
     "fieldNameMissing": "Tên trường khớp và trường cập nhật không được để trống.",
-    "keyToTranslate": "Khóa cần dịch",
+    "keyToTranslate": "Các trường cần dịch",
+    "quickPickKeys": "Các trường có thể dịch trong JSON này — nhấp để thêm",
+    "keyToTranslateExtra": "Chỉ các trường được liệt kê ở đây mới được dịch; mọi trường khác (văn bản gốc, tham chiếu, màu sắc, v.v.) giữ nguyên. Phân tách nhiều trường bằng dấu phẩy. Phù hợp với tài liệu học ngôn ngữ khi trường gốc và bản dịch nằm cạnh nhau",
     "multiValueHint": "Phân tách nhiều giá trị bằng dấu phẩy",
-    "startKey": "Khóa bắt đầu",
-    "invalidStartKey": "Khóa bắt đầu không hợp lệ",
+    "startKey": "Mục bắt đầu",
+    "invalidStartKey": "Mục bắt đầu không hợp lệ",
     "StartKeyExtra": "Tùy chọn. Bắt đầu từ mục này; để trống thì bắt đầu từ mục đầu",
     "fieldToTranslate": "Trường cần dịch",
     "fieldToTranslateExtra": "Dịch trường này bên trong mỗi mục; nhiều trường thì phân tách bằng dấu phẩy. Nếu thiếu bất kỳ trường nào đã liệt kê thì toàn bộ sẽ lỗi. JSON phải có hai cấp: mục → đối tượng",
     "nodeToTranslate": "Nút cần dịch",
     "nodeToTranslateExtra": "Với tên nút, chỉ các con cấp một khớp",
-    "keyMappingTooltip": "Chuyển chế độ: Khóa gốc (A→A) vs Ánh xạ (A→B)",
-    "toggleKeyMapping": "Chuyển sang Chế độ Ánh xạ",
-    "toggleKeyOriginal": "Chuyển sang Chế độ Khóa Gốc"
+    "keyMappingTooltip": "Chỉ dịch các trường đã chọn, tất cả các trường khác (văn bản gốc, tham chiếu, màu sắc, v.v.) được giữ nguyên. Chế độ trường gốc giữ nguyên tên trường (A→A), chế độ ánh xạ có thể chuyển đổi tên trường (A→B)",
+    "toggleKeyMapping": "Ánh xạ",
+    "toggleKeyOriginal": "Gốc"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "Đã đặt lại cấu hình về mặc định",
@@ -368,13 +370,13 @@
     },
     "jsonTranslate": {
       "title": "Trình Dịch JSON i18n",
-      "description": "Dịch tệp ngôn ngữ i18n hàng loạt, với đối sánh JSONPath và ánh xạ khóa",
+      "description": "Dịch tệp ngôn ngữ i18n hàng loạt, với đối sánh JSONPath và ánh xạ trường",
       "metaTitle": "Dịch JSON | Dịch i18n hàng loạt với JSONPath",
-      "metaDescription": "Trình dịch JSON i18n 30+ engine: DeepSeek, Claude, GPT, DeepL. Chế độ: global, JSONPath, khóa, đa đích, gộp. next-intl, i18next.",
+      "metaDescription": "Trình dịch JSON i18n 30+ engine: DeepSeek, Claude, GPT, DeepL. Chế độ: global, JSONPath, trường đã chọn, từng mục, gộp.",
       "faq": [
         {
           "q": "Trình dịch JSON này hỗ trợ những engine dịch và kích thước tệp nào?",
-          "a": "Trình dịch JSON i18n phía trình duyệt: nguồn không bao giờ rời máy bạn, API key vẫn ở localStorage. 30+ engine: Google bản miễn phí (không cần cấu hình), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, cùng mọi endpoint tương thích OpenAI (Ollama / LM Studio / vLLM tự host). Năm chế độ: tất cả khóa, theo nút chỉ định (JSONPath), theo khóa chỉ định, chọn lọc khóa, hợp nhất đa ngôn ngữ i18n. Bộ nhớ đệm IndexedDB cho build tăng dần — chỉ khóa thay đổi mới gọi lại API."
+          "a": "Trình dịch JSON i18n phía trình duyệt: nguồn không bao giờ rời máy bạn, API key vẫn ở localStorage. 30+ engine: Google bản miễn phí (không cần cấu hình), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, và bất kỳ endpoint nào tương thích OpenAI (Ollama / LM Studio / vLLM tự lưu trữ). Năm chế độ: tất cả khóa, nút chỉ định (JSONPath), Chỉ dịch các trường đã chọn, Dịch theo từng mục và gộp đa ngôn ngữ i18n. Bộ nhớ cache IndexedDB cho các bản dựng gia tăng — chỉ các khóa bị thay đổi mới gọi lại API."
         },
         {
           "q": "Để dịch JSON, dùng dịch máy hay AI/LLM? Chọn thế nào?",
@@ -382,7 +384,7 @@
         },
         {
           "q": "Có hỗ trợ định dạng JSON của next-intl, i18next, vue-i18n và react-intl không?",
-          "a": "Có, hỗ trợ tất cả. Cấu trúc đối tượng lồng nhau của next-intl và vue-i18n, không gian tên khóa phẳng của i18next, và các placeholder ICU MessageFormat của react-intl đều được xử lý chính xác. Các placeholder như `{name}`, `{count, plural, ...}`, `{0}` được giữ nguyên trong quá trình dịch. Dùng chế độ 'Khóa chỉ định' để chỉ dịch giá trị mà không động vào khóa, hoặc 'Chế độ i18n' để gộp nhiều ngôn ngữ trực tiếp vào JSON gốc (ví dụ cấu trúc `{en: \"Settings\", zh: \"设置\"}`)."
+          "a": "Có, hỗ trợ tất cả. Cấu trúc đối tượng lồng nhau của next-intl và vue-i18n, không gian tên khóa phẳng của i18next, và các placeholder ICU MessageFormat của react-intl đều được xử lý chính xác. Các placeholder như `{name}`, `{count, plural, ...}`, `{0}` được giữ nguyên khi dịch. Sử dụng chế độ 'Chỉ dịch các trường đã chọn' để chỉ dịch các giá trị mà không làm thay đổi khóa, hoặc 'Chế độ i18n' để gộp nhiều ngôn ngữ trực tiếp vào JSON gốc (ví dụ: cấu trúc `{en: \"Settings\", zh: \"设置\"}`)."
         },
         {
           "q": "Có thể dịch JSON sang nhiều ngôn ngữ cùng lúc?",
@@ -390,7 +392,7 @@
         },
         {
           "q": "Làm sao dùng JSONPath để chỉ dịch các nút cụ thể? Ví dụ chỉ trường tên sản phẩm.",
-          "a": "Chế độ 'Nút chỉ định' chấp nhận biểu thức JSONPath chuẩn: `$.products[*].name` dịch trường name của mọi sản phẩm, `$..title` đệ quy dịch toàn bộ trường title; nhiều đường dẫn cách nhau bằng dấu phẩy. Kết hợp với chế độ ánh xạ nâng cao của 'Khóa chỉ định', bạn còn có thể ghi kết quả dịch vào trường mới (ví dụ `name` → `name_zh`) trong khi giữ lại bản gốc. Lưu ý: tên khóa chứa dấu chấm (.) sẽ bị hiểu nhầm thành đường dẫn lồng — nên tránh."
+          "a": "Chế độ 'Nút chỉ định' chấp nhận biểu thức JSONPath chuẩn: `$.products[*].name` dịch trường name của mọi sản phẩm, `$..title` đệ quy dịch toàn bộ trường title; phân tách nhiều đường dẫn bằng dấu phẩy. Kết hợp với chế độ ánh xạ nâng cao của 'Chỉ dịch các trường đã chọn', bạn cũng có thể ghi kết quả vào các trường mới (ví dụ: `name` → `name_vi`) trong khi vẫn giữ nguyên bản gốc. Lưu ý: tên khóa chứa dấu chấm (.) sẽ bị đọc nhầm thành đường dẫn lồng nhau — nên tránh."
         },
         {
           "q": "Khóa và cấu trúc JSON có bị thay đổi sau khi dịch?",
@@ -455,7 +457,7 @@
       "description": "Ánh xạ và di chuyển giá trị với JSONPath"
     },
     "jsonValueSwapper": {
-      "title": "Trình hoán đổi Giá trị JSON",
+      "title": "Trình hoán đổi Giá trị Trường JSON",
       "description": "Hoán đổi giá trị hai trường bằng một cú nhấp chuột"
     },
     "jsonNodeInserter": {
@@ -484,7 +486,7 @@
     },
     "braceExpander": {
       "title": "Trình mở rộng dấu ngoặc nhọn",
-      "description": "Mở rộng một mẫu thành danh sách đầy đủ, cú pháp ngoặc của bash"
+      "description": "Mở rộng một mẫu thành danh sách đầy đủ, tương thích với khai triển ngoặc nhọn của Bash"
     }
   },
   "navigation": {

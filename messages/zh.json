@@ -249,8 +249,8 @@
     "copyNode": "复制节点",
     "allKeys": "全局翻译（所有键值对）",
     "nodeKeys": "指定节点下的键值对",
-    "keyMapping": "指定键名（支持多个）",
-    "selectiveKey": "逐条翻译指定字段",
+    "keyMapping": "只翻译选中的字段",
+    "selectiveKey": "逐条目翻译（按条目/断点）",
     "i18nMode": "i18n 模式（多语言合并）",
     "i18nModeExtra": "i18n 模式以源语言为基准（auto 默认为 en），并将所有目标语言的翻译结果合并至同一对象。",
     "i18nSourceFieldMissing": "i18n 模式没有找到源语言字段「{field}」。请确认源语言，或检查 JSON 的字段结构。",
@@ -260,28 +260,30 @@
     "invalidPathKey": "路径或键名无效",
     "nonStringMatch": "匹配到的节点均非字符串，未做修改",
     "bigIntPrecision": "检测到超过安全范围的长整数，输出可能丢失精度",
-    "invalidOutputKey": "输出键名无效（目标字段必须已存在）",
-    "invalidInputKey": "输入键名无效",
-    "inputKey": "输入键名",
-    "outputKey": "输出键名",
+    "invalidOutputKey": "目标字段无效（目标字段必须已存在）",
+    "invalidInputKey": "原字段无效",
+    "inputKey": "原字段",
+    "outputKey": "目标字段",
     "inputKeyExample": "例如：en.prompt",
     "outputKeyExample": "例如：ar.prompt",
     "deleteMapping": "删除映射",
     "addMapping": "添加映射",
-    "inputOutputKeyMissing": "输入和输出键名不能为空",
+    "inputOutputKeyMissing": "原字段和目标字段不能为空",
     "fieldNameMissing": "源数据与目标数据的匹配字段名、更新字段名都不能为空。",
-    "keyToTranslate": "待翻译键名",
+    "keyToTranslate": "待翻译字段",
+    "quickPickKeys": "当前 JSON 里可翻译的字段，点一下即可加入",
+    "keyToTranslateExtra": "只翻译列出的这些字段名，其余字段（原文、编号、颜色等）一律原样保留；多个字段用英文逗号分隔。适合语言学习材料：原文与译文字段并存，只翻译文那一侧",
     "multiValueHint": "多个值请用英文逗号分隔",
-    "startKey": "起始键名",
-    "invalidStartKey": "起始键名无效",
+    "startKey": "起始条目",
+    "invalidStartKey": "起始条目无效",
     "StartKeyExtra": "（可选）从这个条目开始翻译，留空则从第一条开始",
     "fieldToTranslate": "待翻译字段",
     "fieldToTranslateExtra": "取每个条目里的这个字段翻译，多个字段用逗号分隔；列出的字段只要有一个不存在就会整体报错。要求 JSON 是「条目 → 对象」两层结构",
     "nodeToTranslate": "待翻译节点",
     "nodeToTranslateExtra": "使用节点名称时，仅匹配一级子节点",
-    "keyMappingTooltip": "切换翻译模式：原键模式使用相同键名（A→A），映射模式可转换键名（A→B）",
-    "toggleKeyMapping": "切换到映射模式",
-    "toggleKeyOriginal": "切换到原键模式"
+    "keyMappingTooltip": "只翻译选中的这些字段，其余字段（含原文、编号、颜色等）全部原样保留。原字段模式保留相同字段名（A→A），映射模式可转换字段名（A→B）",
+    "toggleKeyMapping": "映射模式",
+    "toggleKeyOriginal": "原字段"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "已恢复默认配置",
@@ -368,13 +370,13 @@
     },
     "jsonTranslate": {
       "title": "JSON 多语言翻译",
-      "description": "批量翻译 i18n 语言包，支持 JSONPath 匹配和键名映射",
+      "description": "批量翻译 i18n 语言包，支持 JSONPath 匹配和字段映射",
       "metaTitle": "JSON 翻译工具 - i18n 多语言批量翻译，JSONPath 精准定位",
-      "metaDescription": "JSON i18n 翻译工具，DeepSeek/Claude/GPT 等 30+ 引擎，五种模式：全局、JSONPath、按键名、逐条字段、i18n 合并。",
+      "metaDescription": "JSON i18n 翻译工具，DeepSeek/Claude/GPT 等 30+ 引擎，五种模式：全局、JSONPath、选定字段、逐条目、i18n 合并。",
       "faq": [
         {
           "q": "这个 JSON 翻译工具支持哪些翻译引擎和文件大小？",
-          "a": "浏览器端运行的 JSON 国际化翻译工具，原文不经服务器、API Key 仅存本地 localStorage。支持 30+ 引擎：Google 免费版（零配置）、DeepSeek、Claude、GPT、Gemini、DeepL、Azure、Qwen-MT，以及任何 OpenAI 兼容端点（Ollama / LM Studio / vLLM 自部署）。提供全局、指定节点（JSONPath）、指定键名、逐条翻译指定字段、i18n 多语言聚合 5 种模式；IndexedDB 缓存做增量翻译，只重译变动的 Key，长 JSON 不重复消耗 token。"
+          "a": "浏览器端运行的 JSON 国际化翻译工具，原文不经服务器、API Key 仅存本地 localStorage。支持 30+ 引擎：Google 免费版（零配置）、DeepSeek、Claude、GPT、Gemini、DeepL、Azure、Qwen-MT，以及任何 OpenAI 兼容端点（Ollama / LM Studio / vLLM 自部署）。提供全局、指定节点（JSONPath）、只翻译选中的字段、逐条目翻译、i18n 多语言聚合 5 种模式；IndexedDB 缓存做增量翻译，只重译变动的 Key，长 JSON 不重复消耗 token。"
         },
         {
           "q": "翻译 JSON 用机器翻译还是 AI 翻译？怎么选最合适？",
@@ -382,7 +384,7 @@
         },
         {
           "q": "支持 next-intl、i18next、vue-i18n、react-intl 这些 i18n 框架的 JSON 格式吗？",
-          "a": "全部支持。next-intl 和 vue-i18n 的嵌套对象结构、i18next 的扁平 key 命名空间、react-intl 的 ICU MessageFormat 占位符都能正确处理。`{name}`、`{count, plural, ...}`、`{0}` 等占位符在翻译时会被保留不会被改写。建议用「指定键名」模式只翻译值不动 Key，或用「i18n 模式」直接在原 JSON 上聚合多语言（如 `{en: \"Settings\", zh: \"设置\"}` 结构）。"
+          "a": "全部支持。next-intl 和 vue-i18n 的嵌套对象结构、i18next 的扁平 key 命名空间、react-intl 的 ICU MessageFormat 占位符都能正确处理。`{name}`、`{count, plural, ...}`、`{0}` 等占位符在翻译时会被保留不会被改写。建议用「只翻译选中的字段」模式只翻译值不动 Key，或用「i18n 模式」直接在原 JSON 上聚合多语言（如 `{en: \"Settings\", zh: \"设置\"}` 结构）。"
         },
         {
           "q": "怎么把 JSON 一次翻译成多种语言？",
@@ -390,7 +392,7 @@
         },
         {
           "q": "用 JSONPath 怎么只翻译特定节点？比如只翻译商品名字段。",
-          "a": "「指定节点」模式接受标准 JSONPath 表达式：`$.products[*].name` 翻译所有商品的 name 字段，`$..title` 递归翻译所有 title 字段，多个路径用英文逗号分隔。配合「指定键名」的高级映射模式，还可以把翻译结果写入新字段（如 `name` → `name_zh`）而保留原文。注意：键名含点（.）会被误认为嵌套路径，建议避免。"
+          "a": "「指定节点」模式接受标准 JSONPath 表达式：`$.products[*].name` 翻译所有商品的 name 字段，`$..title` 递归翻译所有 title 字段，多个路径用英文逗号分隔。配合「只翻译选中的字段」的高级映射模式，还可以把翻译结果写入新字段（如 `name` → `name_zh`）而保留原文。注意：键名含点（.）会被误认为嵌套路径，建议避免。"
         },
         {
           "q": "JSON 翻译后键名和嵌套结构会乱吗？",
@@ -459,7 +461,7 @@
       "description": "字段值映射和迁移，支持 JSONPath 定位"
     },
     "jsonValueSwapper": {
-      "title": "JSON 键值互换",
+      "title": "JSON 字段值互换",
       "description": "一键交换两个字段的值"
     },
     "jsonNodeInserter": {
@@ -484,7 +486,7 @@
     },
     "braceExpander": {
       "title": "格式批量生成",
-      "description": "一行模板批量展开成完整清单，语法照抄 bash 花括号展开"
+      "description": "一行模板批量展开成完整清单，语法兼容 Bash 花括号展开"
     }
   },
   "navigation": {

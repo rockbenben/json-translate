@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { ConfigProvider, Row, Col, Button, Typography, Tooltip, Form, Input, Select, App, Card, Space, Spin, Flex, Divider, Switch, Collapse, theme } from "antd";
-import { SettingOutlined, ExportOutlined, ImportOutlined, GlobalOutlined, SaveOutlined, FileTextOutlined, ControlOutlined } from "@ant-design/icons";
+import { SettingOutlined, ExportOutlined, ImportOutlined, GlobalOutlined, SaveOutlined, FileTextOutlined, ControlOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { JSONPath } from "jsonpath-plus";
 import { useTranslations } from "next-intl";
 import type { JsonPathNode, JsonValue, KeyMapping, ValidMapping } from "@/app/types";
@@ -15,7 +15,7 @@ import { useExportFilename } from "@/app/hooks/useExportFilename";
 import { useRevealResult } from "@/app/hooks/useRevealResult";
 import { estimateZipBytes, finalizeBatchZip, ZIP_MAX_ESTIMATED_BYTES, type ZipEntry, zipEntriesBytes } from "@/app/hooks/translation/batchZip";
 
-import { pairingAncestors, filterObjectPropertyMatches, downloadFile, describeError, describeExport, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, applyRemoveCharsToLines, getFileTypePresetConfig, splitTopLevelCommas, joinLanguageCount } from "@/app/utils";
+import { pairingAncestors, filterObjectPropertyMatches, downloadFile, describeError, describeExport, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, applyRemoveCharsToLines, getFileTypePresetConfig, splitTopLevelCommas, joinLanguageCount, collectStringFieldNames } from "@/app/utils";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
 import { useLanguageOptions } from "@/app/components/languages";
 import LanguageSelector from "@/app/components/LanguageSelector";
@@ -158,6 +158,18 @@ const JSONTranslator = () => {
   // 实现与字幕工具/CLI 共用同一份(textUtils.applyRemoveCharsToLines)。
   const applyRemoveChars = (text: string): string => applyRemoveCharsToLines([text], removeChars)[0];
 
+  // ─── 键映射模式的字段快选 chips ────────────────────────────────────────
+  // 诉求来自外部反馈:「只翻 verseEn/en,把 verse/ar/ref 原样留着」——能力早就
+  // 在(收集器只收用户列出的键名),卡住的只是【手打字段名会 typo】。
+  // chips 快选消掉这一步:点击切换字段的选择,不覆盖其它已选字段。
+  //
+  // 收集逻辑在 jsonUtils.collectStringFieldNames(三个判据写在那边),这里只做
+  // memo 包装。⚠ 别再在这里内联一份遍历 —— 纯函数被单测直接打,内联版只能
+  // 靠渲染整棵翻译壳的 jsdom 测试间接覆盖,那棵树的 mock 成本高且脆。
+  const quickPickKeys = useMemo(() => translateMode === "keyMapping" && showSimpleInput ? collectStringFieldNames(sourceText) : [], [translateMode, showSimpleInput, sourceText]);
+  const selectedKeys = useMemo(() => new Set(splitTopLevelCommas(simpleInputKey).map((key) => key.trim()).filter(Boolean)), [simpleInputKey]);
+
+
   // ─── 收集 → 一次引擎调用 → 回写 ────────────────────────────────────────────
   // 五个模式 = 五个【收集器】,不是五个翻译循环。模式差异全是格式知识(遍历哪些
   // 节点、写回哪个字段),编排(并发/节流/重试/429 冷却/缓存/进度/失败面板)只有
@@ -293,19 +305,21 @@ const JSONTranslator = () => {
     return nodes;
   };
 
-  // 指定键名的映射翻译:配对校验后,inputKey 的值 → outputKey 的槽位
+  // 只翻译选中的字段的映射翻译:配对校验后,inputKey 的值 → outputKey 的槽位
   const collectKeyMapping = (jsonObject: JsonValue): CollectedNode[] => {
     const mappings: KeyMapping[] = showSimpleInput
-      ? simpleInputKey
-          .replace(/，/g, ",")
-          .split(",")
-          .map((k) => k.trim())
-          .filter(Boolean)
-          .map((key, index) => ({ inputKey: key, outputKey: key, id: index + 1 }))
+      ? Array.from(selectedKeys, (key, index) => ({ inputKey: key, outputKey: key, id: index + 1 }))
       : keyMappings;
 
-    const inputNodesMap = new Map<string, JsonPathNode[]>();
-    const outputNodesMap = new Map<string, JsonPathNode[]>();
+    const nodesByKey = new Map<string, JsonPathNode[]>();
+    const nodesForKey = (key: string) => {
+      const cached = nodesByKey.get(key);
+      if (cached) return cached;
+      const matches = JSONPath({ path: `$..${key}`, json: jsonObject, resultType: "all" }) as JsonPathNode[];
+      const nodes = filterObjectPropertyMatches(matches, key);
+      nodesByKey.set(key, nodes);
+      return nodes;
+    };
     const validMappings: ValidMapping[] = []; // 存储有效的映射
 
     for (const { id, inputKey, outputKey } of mappings) {
@@ -314,19 +328,8 @@ const JSONTranslator = () => {
         continue; // 跳过无效的映射，而不是抛出错误
       }
 
-      if (!inputNodesMap.has(inputKey)) {
-        const allInputNodes = JSONPath({ path: `$..${inputKey}`, json: jsonObject, resultType: "all" }) as JsonPathNode[];
-        const filteredInputNodes = filterObjectPropertyMatches(allInputNodes, inputKey);
-        inputNodesMap.set(inputKey, filteredInputNodes);
-      }
-      if (!outputNodesMap.has(outputKey)) {
-        const allOutputNodes = JSONPath({ path: `$..${outputKey}`, json: jsonObject, resultType: "all" }) as JsonPathNode[];
-        const filteredOutputNodes = filterObjectPropertyMatches(allOutputNodes, outputKey);
-        outputNodesMap.set(outputKey, filteredOutputNodes);
-      }
-
-      const inputNodes = inputNodesMap.get(inputKey)!;
-      const outputNodes = outputNodesMap.get(outputKey)!;
+      const inputNodes = nodesForKey(inputKey);
+      const outputNodes = nodesForKey(outputKey);
 
       if (inputNodes.length === 0) {
         console.warn(`Input key not found, skipping: ${inputKey}`);
@@ -969,19 +972,63 @@ const JSONTranslator = () => {
                                 size="small"
                                 checked={showSimpleInput}
                                 onChange={setShowSimpleInput}
-                                checkedChildren={tJson("toggleKeyMapping")}
-                                unCheckedChildren={tJson("toggleKeyOriginal")}
+                                checkedChildren={tJson("toggleKeyOriginal")}
+                                unCheckedChildren={tJson("toggleKeyMapping")}
                                 aria-label={tJson("keyMapping")}
                               />
                             </Tooltip>
                           </Flex>
 
                           {showSimpleInput ? (
-                            <Form.Item label={tJson("keyToTranslate")} className="!mb-0">
+                            <Form.Item
+                              label={tJson("keyToTranslate")}
+                              extra={tJson("keyToTranslateExtra")}
+                              className="!mb-0">
+                              {/* 快选与手输共用 simpleInputKey:点错后再次点击即可取消。 */}
+                              {quickPickKeys.length > 0 && (
+                                // ⚠ 滚动容器必须是 div,不是 Flex:Flex 是 flex
+                                // 容器,cap 高度时子项会被压缩而不是溢出滚动
+                                // (flex-shrink 默认 1),chips 会被挤变形。
+                                // 判据同 LiveTranslationResults / LanguageSelector:
+                                // maxHeight + overflowY:auto 的 div。
+                                <div style={{ maxHeight: 120, overflowY: "auto", overflowX: "hidden" }} className="mb-2">
+                                  {/* 标签独占一行、不跟 chips 抢宽度:19 语种里这个
+                                      标签在 328px rail 上能吃掉 60~240px(参照
+                                      bandGrid 标签列的实测量级),混排会让 chips 的
+                                      第一行被挤成半行。 */}
+                                  <Typography.Text type="secondary" style={{ display: "block", marginBottom: 4 }}>
+                                    <InfoCircleOutlined aria-hidden /> {tJson("quickPickKeys")}:
+                                  </Typography.Text>
+                                  <Flex wrap="wrap" gap="small" align="center">
+                                    {quickPickKeys.map((key) => {
+                                      // 判据是【输入框当前内容】而不是另开一个
+                                      // selected 数组:输入框才是唯一真相(用户可
+                                      // 手打),再存一份「已选」就是第二份真相,
+                                      // 两者会漂移(手打删掉一个字段后 chip 还高亮着)。
+                                      const alreadyPicked = selectedKeys.has(key);
+                                      return (
+                                        <Button
+                                          key={key}
+                                          size="small"
+                                          type={alreadyPicked ? "primary" : "default"}
+                                          aria-pressed={alreadyPicked}
+                                          onClick={() => {
+                                            const next = new Set(selectedKeys);
+                                            if (alreadyPicked) next.delete(key);
+                                            else next.add(key);
+                                            setSimpleInputKey([...next].join(","));
+                                          }}>
+                                          {key}
+                                        </Button>
+                                      );
+                                    })}
+                                  </Flex>
+                                </div>
+                              )}
                               <Input
                                 value={simpleInputKey}
                                 onChange={(e) => setSimpleInputKey(e.target.value)}
-                                placeholder={`${t("example")}: langName,object,attribute`}
+                                placeholder={`${t("example")}: nameEn,en,verseEn`}
                                 aria-label={tJson("keyToTranslate")}
                               />
                             </Form.Item>

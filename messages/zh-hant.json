@@ -249,8 +249,8 @@
     "copyNode": "複製節點",
     "allKeys": "全域翻譯（所有鍵值對）",
     "nodeKeys": "指定節點下的鍵值對",
-    "keyMapping": "指定鍵名（支援多個）",
-    "selectiveKey": "逐條翻譯指定欄位",
+    "keyMapping": "只翻譯選中的欄位",
+    "selectiveKey": "逐項目翻譯（按項目/斷點）",
     "i18nMode": "i18n 模式（多語言合併）",
     "i18nModeExtra": "i18n 模式以源語言為基準（auto 預設為 en），並將所有目標語言的翻譯結果合併至同一對象。",
     "i18nSourceFieldMissing": "i18n 模式找不到來源語言欄位「{field}」。請確認來源語言，或檢查 JSON 的欄位結構。",
@@ -260,28 +260,30 @@
     "invalidPathKey": "路徑或鍵名無效",
     "nonStringMatch": "匹配到的節點均非字串，未做修改",
     "bigIntPrecision": "偵測到超過安全範圍的長整數，輸出可能遺失精度",
-    "invalidOutputKey": "輸出鍵名無效（目標欄位必須已存在）",
-    "invalidInputKey": "輸入鍵名無效",
-    "inputKey": "輸入鍵名",
-    "outputKey": "輸出鍵名",
+    "invalidOutputKey": "目標欄位無效（目標欄位必須已存在）",
+    "invalidInputKey": "原欄位無效",
+    "inputKey": "原欄位",
+    "outputKey": "目標欄位",
     "inputKeyExample": "例如：en.prompt",
     "outputKeyExample": "例如：ar.prompt",
     "deleteMapping": "刪除映射",
     "addMapping": "加入映射",
-    "inputOutputKeyMissing": "輸入和輸出鍵名不能為空",
+    "inputOutputKeyMissing": "原欄位和目標欄位不能為空",
     "fieldNameMissing": "來源資料與目標資料的比對欄位名稱、更新欄位名稱都不能為空。",
-    "keyToTranslate": "待翻譯鍵名",
+    "keyToTranslate": "待翻譯欄位",
+    "quickPickKeys": "目前 JSON 中可翻譯的欄位，點一下即可加入",
+    "keyToTranslateExtra": "只翻譯列出的這些欄位名，其餘欄位（原文、編號、顏色等）一律原樣保留；多個欄位用英文逗號分隔。適合語言學習材料：原文與譯文欄位並存，只翻譯文那一側",
     "multiValueHint": "多個值請用英文逗號分隔",
-    "startKey": "起始鍵名",
-    "invalidStartKey": "起始鍵名無效",
+    "startKey": "起始項目",
+    "invalidStartKey": "起始項目無效",
     "StartKeyExtra": "（可選）從這個項目開始翻譯，留空則從第一條開始",
     "fieldToTranslate": "待翻譯欄位",
     "fieldToTranslateExtra": "取每個項目裡的這個欄位翻譯，多個欄位用逗號分隔；列出的欄位只要有一個不存在就會整體報錯。要求 JSON 是「項目 → 物件」兩層結構",
     "nodeToTranslate": "待翻譯節點",
     "nodeToTranslateExtra": "使用節點名稱時，僅匹配一級子節點",
-    "keyMappingTooltip": "切換翻譯模式：原鍵模式使用相同鍵名（A→A），映射模式可轉換鍵名（A→B）",
-    "toggleKeyMapping": "切換到映射模式",
-    "toggleKeyOriginal": "切換到原鍵模式"
+    "keyMappingTooltip": "只翻譯列出的這些欄位，其餘欄位（含原文、編號、顏色等）全部原樣保留。原欄位模式使用相同欄位名稱（A→A），映射模式可轉換欄位名稱（A→B）",
+    "toggleKeyMapping": "映射模式",
+    "toggleKeyOriginal": "原欄位"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "已恢復預設配置",
@@ -368,13 +370,13 @@
     },
     "jsonTranslate": {
       "title": "JSON 多語言翻譯",
-      "description": "批次翻譯 i18n 語言包，支援 JSONPath 匹配和鍵名映射",
+      "description": "批次翻譯 i18n 語言包，支援 JSONPath 匹配和欄位映射",
       "metaTitle": "JSON 翻譯工具 - i18n 多語言批次翻譯，JSONPath 精準定位",
-      "metaDescription": "JSON i18n 翻譯工具，DeepSeek/Claude/GPT 等 30+ 引擎，五種模式：全域、JSONPath、按鍵名、多語言一次產生、合併模式。",
+      "metaDescription": "JSON i18n 翻譯工具，DeepSeek/Claude/GPT 等 30+ 引擎，五種模式：全域、JSONPath、選定欄位、逐項目、合併模式。",
       "faq": [
         {
           "q": "這個 JSON 翻譯工具支援哪些翻譯引擎和檔案大小？",
-          "a": "瀏覽器端執行的 JSON 國際化翻譯工具，原文不經伺服器、API Key 僅存本地 localStorage。支援 30+ 引擎：Google 免費版（零設定）、DeepSeek、Claude、GPT、Gemini、DeepL、Azure、Qwen-MT，以及任何 OpenAI 相容端點（Ollama / LM Studio / vLLM 自部署）。提供全域、指定節點（JSONPath）、指定鍵名、選擇性 Key、i18n 多語言聚合 5 種模式；IndexedDB 快取做增量翻譯，只重譯變動的 Key，長 JSON 不重複消耗 token。"
+          "a": "瀏覽器端執行的 JSON 國際化翻譯工具，原文不經伺服器、API Key 僅存本地 localStorage。支援 30+ 引擎：Google 免費版（零設定）、DeepSeek、Claude、GPT、Gemini、DeepL、Azure、Qwen-MT，以及任何 OpenAI 相容端點（Ollama / LM Studio / vLLM 自部署）。提供全域、指定節點（JSONPath）、只翻譯選中的欄位、逐項目翻譯、i18n 多語言聚合 5 種模式；IndexedDB 快取做增量翻譯，只重譯變動的 Key，長 JSON 不重複消耗 token。"
         },
         {
           "q": "翻譯 JSON 用機器翻譯還是 AI 翻譯？怎麼選最合適？",
@@ -382,7 +384,7 @@
         },
         {
           "q": "支援 next-intl、i18next、vue-i18n、react-intl 這些 i18n 框架的 JSON 格式嗎？",
-          "a": "全部支援。next-intl 和 vue-i18n 的巢狀物件結構、i18next 的扁平 key 命名空間、react-intl 的 ICU MessageFormat 佔位符都能正確處理。`{name}`、`{count, plural, ...}`、`{0}` 等佔位符在翻譯時會被保留不會被改寫。建議用「指定鍵名」模式只翻譯值不動 Key，或用「i18n 模式」直接在原 JSON 上聚合多語言（如 `{en: \"Settings\", zh: \"設定\"}` 結構）。"
+          "a": "全部支援。next-intl 和 vue-i18n 的巢狀物件結構、i18next 的扁平 key 命名空間、react-intl 的 ICU MessageFormat 佔位符都能正確處理。`{name}`、`{count, plural, ...}`、`{0}` 等佔位符在翻譯時會被保留不會被改寫。建議用「只翻譯選中的欄位」模式只翻譯值不動 Key，或用「i18n 模式」直接在原 JSON 上聚合多語言（如 `{en: \"Settings\", zh: \"設定\"}` 結構）。"
         },
         {
           "q": "怎麼把 JSON 一次翻譯成多種語言？",
@@ -390,7 +392,7 @@
         },
         {
           "q": "用 JSONPath 怎麼只翻譯特定節點？比如只翻譯商品名稱欄位。",
-          "a": "「指定節點」模式接受標準 JSONPath 表達式：`$.products[*].name` 翻譯所有商品的 name 欄位，`$..title` 遞迴翻譯所有 title 欄位，多個路徑用英文逗號分隔。配合「指定鍵名」的進階對應模式，還可以把翻譯結果寫入新欄位（如 `name` → `name_zh`）而保留原文。注意：鍵名含點（.）會被誤認為巢狀路徑，建議避免。"
+          "a": "「指定節點」模式接受標準 JSONPath 表達式：`$.products[*].name` 翻譯所有商品的 name 欄位，`$..title` 遞迴翻譯所有 title 欄位，多個路徑用英文逗號分隔。配合「只翻譯選中的欄位」的進階對應模式，還可以把翻譯結果寫入新欄位（如 `name` → `name_zh`）而保留原文。注意：鍵名含點（.）會被誤認為巢狀路徑，建議避免。"
         },
         {
           "q": "JSON 翻譯後鍵名和巢狀結構會亂嗎？",
@@ -455,7 +457,7 @@
       "description": "欄位值映射和遷移，支援 JSONPath 定位"
     },
     "jsonValueSwapper": {
-      "title": "JSON 鍵值互換",
+      "title": "JSON 欄位值互換",
       "description": "一鍵交換兩個欄位的值"
     },
     "jsonNodeInserter": {
@@ -484,7 +486,7 @@
     },
     "braceExpander": {
       "title": "格式批次生成",
-      "description": "一行範本批次展開成完整清單，語法照抄 bash 大括號展開"
+      "description": "一行範本批次展開成完整清單，語法相容 Bash 花括號展開"
     }
   },
   "navigation": {

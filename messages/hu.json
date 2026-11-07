@@ -249,8 +249,8 @@
     "copyNode": "Csomópont másolása",
     "allKeys": "Teljes fordítás (minden kulcs)",
     "nodeKeys": "Kulcsok egy adott csomópont alatt",
-    "keyMapping": "Kulcsnevek megadása (több is)",
-    "selectiveKey": "Egy mező fordítása minden bejegyzésben",
+    "keyMapping": "Csak a kijelölt mezők fordítása",
+    "selectiveKey": "Bejegyzésenkénti fordítás (tételenként / töréspontonként)",
     "i18nMode": "i18n mód (nyelvek összefűzése)",
     "i18nModeExtra": "Az i18n mód a forrásnyelvet veszi alapul (az auto alapértelmezésben en), és az összes célnyelvi fordítást ugyanabba az objektumba fűzi.",
     "i18nSourceFieldMissing": "Az i18n mód nem találta a(z) „{field}” forrásnyelvi mezőt. Ellenőrizze a forrásnyelvet vagy a JSON szerkezetét.",
@@ -260,28 +260,30 @@
     "invalidPathKey": "Érvénytelen útvonal vagy kulcsnév",
     "nonStringMatch": "Az egyező csomópontok egyike sem szöveges érték; nem történt módosítás",
     "bigIntPrecision": "A biztonságos tartományon túli egészeket észleltünk; a kimenet pontosságot veszíthet",
-    "invalidOutputKey": "Érvénytelen kimeneti kulcs (a célmezőnek már léteznie kell)",
-    "invalidInputKey": "Érvénytelen bemeneti kulcsnév",
-    "inputKey": "Bemeneti kulcsnév",
-    "outputKey": "Kimeneti kulcsnév",
+    "invalidOutputKey": "Érvénytelen célmező (a célmezőnek már léteznie kell)",
+    "invalidInputKey": "Érvénytelen forrásmező",
+    "inputKey": "Forrásmező",
+    "outputKey": "Célmező",
     "inputKeyExample": "pl. en.prompt",
     "outputKeyExample": "pl. ar.prompt",
     "deleteMapping": "Leképezés törlése",
     "addMapping": "Leképezés hozzáadása",
-    "inputOutputKeyMissing": "A bemeneti és a kimeneti kulcsnév nem lehet üres",
+    "inputOutputKeyMissing": "A forrás- és célmezők nem lehetnek üresek",
     "fieldNameMissing": "A megfeleltetési és frissítési mezőnevek nem lehetnek üresek.",
-    "keyToTranslate": "Fordítandó kulcsnév",
+    "keyToTranslate": "Fordítandó mezők",
+    "quickPickKeys": "Fordítható mezők ebben a JSON-ban — kattints a hozzáadáshoz",
+    "keyToTranslateExtra": "Csak az itt felsorolt mezők fordulnak le; minden más mező (eredeti szöveg, hivatkozások, színek stb.) változatlanul marad. Több mezőt angol vesszővel válassz el. Ideális nyelvtanulási anyaghoz, ahol az eredeti és a lefordított mezők egymás mellett szerepelnek",
     "multiValueHint": "Több értéket angol vesszővel válassz el",
-    "startKey": "Kezdő kulcsnév",
-    "invalidStartKey": "Érvénytelen kezdő kulcsnév",
+    "startKey": "Kezdő bejegyzés",
+    "invalidStartKey": "Érvénytelen kezdő bejegyzés",
     "StartKeyExtra": "(Opcionális) Ettől a bejegyzéstől indul a fordítás; hagyd üresen az elsőtől kezdéshez",
     "fieldToTranslate": "Fordítandó mező",
     "fieldToTranslateExtra": "Az egyes bejegyzéseken belül ezt a mezőt fordítja; több mezőt vesszővel válassz el. Ha a felsorolt mezők bármelyike hiányzik, a teljes futás hibát jelez. A JSON-nak kétszintűnek kell lennie: bejegyzés → objektum",
     "nodeToTranslate": "Fordítandó csomópont",
     "nodeToTranslateExtra": "Csomópontnév használatakor csak az első szintű gyermekekre illeszkedik",
-    "keyMappingTooltip": "Fordítási mód váltása: az eredeti kulcs mód ugyanazt a kulcsnevet használja (A→A), a leképezés mód átírhatja (A→B)",
-    "toggleKeyMapping": "Váltás leképezés módra",
-    "toggleKeyOriginal": "Váltás eredeti kulcsmódra"
+    "keyMappingTooltip": "Csak a kijelölt mezők kerülnek lefordításra; minden más mező (eredeti szöveg, hivatkozások, színek stb.) változatlan marad. Az eredeti mező mód megtartja az azonos mezőnevet (A→A), a leképezési mód képes átalakítani a mezőnevet (A→B)",
+    "toggleKeyMapping": "Leképezés",
+    "toggleKeyOriginal": "Eredeti"
   },
   "TranslationSettings": {
     "resetConfigSuccess": "A konfiguráció visszaállítva az alapértelmezettekre",
@@ -368,13 +370,13 @@
     },
     "jsonTranslate": {
       "title": "JSON többnyelvű fordító",
-      "description": "i18n nyelvi fájlok kötegelt fordítása JSONPath egyezéssel és kulcsleképezéssel",
+      "description": "i18n nyelvi fájlok kötegelt fordítása JSONPath egyezéssel és mezőleképezéssel",
       "metaTitle": "JSON-fordító | i18n kötegelt fordítás JSONPath-tal",
-      "metaDescription": "JSON i18n fordító, 30+ AI motor (DeepSeek, Claude, GPT, DeepL). Módok: globális, JSONPath, kulcs, többcélnyelvi, összesítés.",
+      "metaDescription": "JSON i18n fordító, 30+ AI motor (DeepSeek, Claude, GPT, DeepL). Módok: globális, JSONPath, kijelölt mezők, bejegyzések, összesítés.",
       "faq": [
         {
           "q": "Mely fordítómotorokat és mekkora fájlméreteket támogat ez a JSON-fordító?",
-          "a": "Böngészőben futó JSON i18n fordító: a forrás soha nem hagyja el a gépedet, az API-kulcs a localStorage-ban marad. 30+ motort támogat: Google ingyenes szint (nulla konfiguráció), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT, valamint bármely OpenAI-kompatibilis végpont (saját üzemeltetésű Ollama / LM Studio / vLLM). Öt fordítási mód: minden kulcs, megadott csomópont (JSONPath), megadott kulcs, kiválasztott kulcs és i18n többnyelvű összefűzés. Az IndexedDB gyorsítótár növekményes buildet tesz lehetővé — csak a megváltozott kulcsok hívják újra az API-t."
+          "a": "Böngészőben futó JSON i18n fordító: a forrás soha nem hagyja el a gépedet, az API-kulcs a localStorage-ban marad. 30+ motort támogat: Google ingyenes (konfigurációmentes), DeepSeek, Claude, GPT, Gemini, DeepL, Azure, Qwen-MT és bármilyen OpenAI-kompatibilis végpont (Ollama / LM Studio / vLLM saját gépen). Öt mód: minden kulcs, megadott csomópont (JSONPath), Csak a kijelölt mezők fordítása, Bejegyzésenkénti fordítás és i18n többnyelvű összefűzés. IndexedDB gyorsítótár a növekményes buildekhez – csak a megváltozott kulcsok hívják újra az API-t."
         },
         {
           "q": "Gépi fordítást vagy AI/LLM-et használjak JSON fordításhoz? Hogyan válasszak?",
@@ -382,7 +384,7 @@
         },
         {
           "q": "Támogatja a next-intl, i18next, vue-i18n és react-intl JSON formátumokat?",
-          "a": "Mindegyiket igen. A next-intl és vue-i18n beágyazott objektumszerkezete, az i18next lapos kulcsú névterei és a react-intl ICU MessageFormat helyőrzői egyaránt helyesen vannak kezelve. A {name}, {count, plural, ...}, {0} típusú helyőrzők fordítás közben változatlanul megmaradnak. A „Megadott kulcsok” móddal csak az értékeket fordítod, a kulcsok érintetlenek maradnak, az „i18n mód” pedig közvetlenül a forrás-JSON-ba gyűjti több nyelv fordítását (pl. {en: \"Settings\", zh: \"设置\"} szerkezet)."
+          "a": "Mindegyiket igen. A next-intl és vue-i18n beágyazott objektumszerkezete, az i18next lapos kulcsú névterei és a react-intl ICU MessageFormat helyőrzői mind helyesen működnek. Az olyan helyőrzők, mint a `{name}`, `{count, plural, ...}`, `{0}` változatlanok maradnak a fordítás során. Használja a „Csak a kijelölt mezők fordítása” módot, ha csak az értékeket szeretné lefordítani a kulcsok módosítása nélkül, vagy az „i18n módot” több nyelv közvetlen összevonásához a forrás JSON-ban (pl. `{en: \"Settings\", zh: \"设置\"}` struktúra)."
         },
         {
           "q": "Hogyan fordíthatok JSON-t egyszerre több nyelvre?",
@@ -390,7 +392,7 @@
         },
         {
           "q": "Hogyan használjam a JSONPath-ot, hogy csak adott csomópontokat fordítsak? Például csak a terméknév mezőket.",
-          "a": "A „Megadott csomópontok” mód szabványos JSONPath-kifejezéseket fogad: a `$.products[*].name` minden termék neve mezőjét lefordítja, a `$..title` rekurzívan az összes title mezőt; több útvonalat vesszővel válassz el. A „Megadott kulcsok” haladó leképezés módjával az eredmény új mezőkbe is írható (pl. `name` → `name_zh`), miközben az eredeti megmarad. Figyelem: a pontot (.) tartalmazó kulcsneveket beágyazott útvonalként olvassa — jobb elkerülni."
+          "a": "A „Megadott csomópontok” mód szabványos JSONPath-kifejezéseket fogad: a `$.products[*].name` minden termék neve mezőjét lefordítja, a `$..title` rekurzívan minden title mezőt lefordít; több útvonal vesszővel választható el. A „Csak a kijelölt mezők fordítása” fejlett leképezési módjával kombinálva a fordítási eredményeket új mezőkbe is írhatja (pl. `name` → `name_hu`), miközben megőrzi az eredetit. Figyelmeztetés: a pontot (.) tartalmazó kulcsneveket a rendszer tévesen beágyazott útvonalként értelmezi – kerülje ezeket."
         },
         {
           "q": "Elromlik a fordítás után a JSON kulcsszerkezete és beágyazása?",
@@ -455,7 +457,7 @@
       "description": "Mezőértékek leképezése és migrálása JSONPath használatával"
     },
     "jsonValueSwapper": {
-      "title": "JSON értékcsere",
+      "title": "JSON mezőérték-felcserélő",
       "description": "Két mezőérték egykattintásos felcserélése"
     },
     "jsonNodeInserter": {
@@ -484,7 +486,7 @@
     },
     "braceExpander": {
       "title": "Zárójel-kiterjesztő",
-      "description": "Egy sablont teljes listává bontása, bash brace szintaxissal"
+      "description": "Egyetlen sablon kibontása teljes listává, Bash kapcsos zárójel-kifejtéssel kompatibilis"
     }
   },
   "navigation": {
