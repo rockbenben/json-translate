@@ -77,13 +77,14 @@ export const stripJsonWrapper = (input: string): string => {
 const FIELD_PATH_SYNTAX = /[.,，\[\];^~'"]|#\d|^(?:[$*]$|[`@(]|\?\(|-?\d*:-?\d*(?::\d*)?$)/;
 
 /**
- * 收集 JSON 里【值是字符串】的字段名,去重,保持首次出现顺序。
+ * 收集 JSON 里的字符串字段名及含字符串项的数组路径,去重,保持首次出现顺序。
  *
  * 用途:json-translate 键映射模式的字段快选 chips —— 手打字段名会 typo,
  * 点一下就能加进输入框。
  *
  * ⚠ 三个判据,都不是"节省 chips"那种装饰性理由:
- *  1. 必须是字符串值。收集器只翻字符串值,列出 count/ok 这类键会让用户点出
+ *  1. 必须能匹配字符串值。字符串数组用 key[*],混合数组的非字符串项由收集器跳过。
+ *     列出 count/ok 这类键会让用户点出
  *     一个【不会被翻译】的字段 —— 点了没反应还不知道为什么。
  *  2. 快选把键名直接写进逗号分隔的 JSONPath 输入框，排除会被拆分或解释成路径的名字。
  *     例如 "a.b" 会指向嵌套字段，"a，b" 会被拆成两项。
@@ -103,7 +104,11 @@ export const collectStringFieldNames = (input: string): string[] => {
     }
     if (!isJsonObject(value)) return;
     for (const [key, child] of Object.entries(value)) {
-      if (typeof child === "string" && key && key === key.trim() && !FIELD_PATH_SYNTAX.test(key)) keys.add(key);
+      if (key && key === key.trim() && !FIELD_PATH_SYNTAX.test(key)) {
+        if (typeof child === "string") keys.add(key);
+        // 数字键的通配路径还可能命中数组下标；末层过滤器无法区分其祖先。
+        else if (Array.isArray(child) && !/^\d+$/.test(key) && child.some((item) => typeof item === "string")) keys.add(`${key}[*]`);
+      }
       if (typeof child === "object" && child !== null) walk(child);
     }
   };
@@ -113,4 +118,51 @@ export const collectStringFieldNames = (input: string): string[] => {
     return [];
   }
   return Array.from(keys);
+};
+
+/** Rooted paths; arrays share a wildcard so repeated records produce one suggestion. */
+export const collectJsonPaths = (input: string, { stringsOnly = false, includeContainers = false } = {}): string[] => {
+  const paths = new Set<string>();
+  const walk = (value: JsonValue, path: string): boolean => {
+    if (typeof value !== "object" || value === null) {
+      const matches = !stringsOnly || typeof value === "string";
+      if (matches && path !== "$") paths.add(path);
+      return matches;
+    }
+    let hasMatch = false;
+    if (Array.isArray(value)) {
+      for (const child of value) hasMatch = walk(child, `${path}[*]`) || hasMatch;
+    } else {
+      for (const [key, child] of Object.entries(value)) {
+        // jsonpath-plus cannot reliably round-trip quotes/brackets in literal keys.
+        if (/[\[\]'"\\]/.test(key)) continue;
+        hasMatch = walk(child, `${path}['${key}']`) || hasMatch;
+      }
+    }
+    if (includeContainers && (hasMatch || !stringsOnly) && path !== "$") paths.add(path);
+    return hasMatch;
+  };
+  try { walk(preprocessJson(input), "$"); } catch { return []; }
+  return Array.from(paths);
+};
+
+/** Direct record fields, for tools whose operations do not traverse nested values. */
+export const collectJsonRecordKeys = (input: string): string[] => {
+  try {
+    const value = preprocessJson(input);
+    return Array.isArray(value) ? [...new Set(value.filter(isJsonObject).flatMap(Object.keys))] : [];
+  } catch { return []; }
+};
+
+/** Literal key names for recursive insertion (not JSONPath expressions). */
+export const collectJsonObjectKeys = (input: string): string[] => {
+  const keys = new Set<string>();
+  const walk = (value: JsonValue): void => {
+    if (Array.isArray(value)) value.forEach(walk);
+    else if (isJsonObject(value)) {
+      for (const [key, child] of Object.entries(value)) { keys.add(key); walk(child); }
+    }
+  };
+  try { walk(preprocessJson(input)); } catch { return []; }
+  return [...keys];
 };

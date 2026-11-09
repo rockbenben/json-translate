@@ -9,6 +9,9 @@
 
 const NUMERIC_KEY_REGEX = /^\d+$/;
 
+/** Keep explicit root paths; bare field names (including "$schema") stay recursive. */
+export const resolveJsonFieldPath = (path: string): string => /^\$(?:\.|\[|$)/.test(path) ? path : `$..${path}`;
+
 export const filterObjectPropertyMatches = <T extends { parent: unknown }>(results: T[], keyName: string): T[] => {
   // 末段非纯数字时对象属性与数组索引不可能混淆,原样返回。
   // 点分 key("en.prompt")取末段判断 —— JSONPath 匹配的叶节点键是末段。
@@ -44,16 +47,7 @@ export const splitTopLevelCommas = (s: string): string[] => {
 
 // 把映射 key("prompt"、"en.prompt"、"en[0].x"、"items[*].en")拆成有序段
 // 列表:点分段 + 括号段按出现位置展开("en[0].x" → ["en","[0]","x"])。
-const keySegments = (key: string): string[] =>
-  key.split(".").flatMap((part) => {
-    if (!part) return [];
-    const brackets: string[] = [];
-    const bare = part.replace(/\[[^\]]*\]/g, (m) => {
-      brackets.push(m);
-      return "";
-    });
-    return bare ? [bare, ...brackets] : brackets;
-  });
+const keySegments = (key: string): string[] => key.match(/\[[^\]]*\]|[^.[\]]+/g) ?? [];
 
 const stripTrailingSegments = (path: string, count: number): string => {
   let out = path;

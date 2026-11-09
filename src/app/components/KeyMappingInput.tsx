@@ -1,7 +1,8 @@
 "use client";
 
 import React, { memo } from "react";
-import { Button, Flex, Input, Space, Tooltip, Typography } from "antd";
+import { Button, Flex, Space, Tooltip, Typography } from "antd";
+import JSONFieldInput from "./JSONFieldInput";
 import { MinusCircleOutlined, PlusOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
 
@@ -10,9 +11,10 @@ import type { KeyMapping } from "@/app/types";
 interface KeyMappingInputProps {
   keyMappings: KeyMapping[];
   setKeyMappings: React.Dispatch<React.SetStateAction<KeyMapping[]>>;
+  suggestions?: string[];
 }
 
-const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], setKeyMappings }) => {
+const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], setKeyMappings, suggestions = [] }) => {
   const t = useTranslations("JSON");
 
   const deleteMapping = (id: number) => {
@@ -44,10 +46,11 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
                 {t("inputKey")}
               </Typography.Text>
             </Space.Addon>
-            <Input
+            <JSONFieldInput
+              suggestions={suggestions}
               value={mapping.inputKey}
               placeholder={t("inputKeyExample")}
-              onChange={(e) => handleInputChange(index, "inputKey", e.target.value)}
+              onChange={(value) => handleInputChange(index, "inputKey", value)}
               aria-label={`${t("inputKey")} ${index + 1}`}
               spellCheck={false}
             />
@@ -59,10 +62,11 @@ const KeyMappingInput: React.FC<KeyMappingInputProps> = ({ keyMappings = [], set
                 {t("outputKey")}
               </Typography.Text>
             </Space.Addon>
-            <Input
+            <JSONFieldInput
+              suggestions={suggestions}
               value={mapping.outputKey}
               placeholder={t("outputKeyExample")}
-              onChange={(e) => handleInputChange(index, "outputKey", e.target.value)}
+              onChange={(value) => handleInputChange(index, "outputKey", value)}
               aria-label={`${t("outputKey")} ${index + 1}`}
               spellCheck={false}
             />

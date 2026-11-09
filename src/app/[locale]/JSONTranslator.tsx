@@ -17,6 +17,9 @@ import { estimateZipBytes, finalizeBatchZip, ZIP_MAX_ESTIMATED_BYTES, type ZipEn
 
 import { pairingAncestors, filterObjectPropertyMatches, downloadFile, describeError, describeExport, isAbortError, isCascadedAbort, isNetworkError, stripJsonWrapper, applyRemoveCharsToLines, getFileTypePresetConfig, splitTopLevelCommas, joinLanguageCount, collectStringFieldNames } from "@/app/utils";
 import KeyMappingInput from "@/app/components/KeyMappingInput";
+import JSONFieldInput from "@/app/components/JSONFieldInput";
+import { collectJsonPaths, preprocessJson, isJsonObject } from "@/app/utils/jsonUtils";
+import { inspectSelectiveJson } from "./selectiveJson";
 import { useLanguageOptions } from "@/app/components/languages";
 import LanguageSelector from "@/app/components/LanguageSelector";
 import ApiStatusBlock from "@/app/components/ApiStatusBlock";
@@ -168,6 +171,14 @@ const JSONTranslator = () => {
   // 靠渲染整棵翻译壳的 jsdom 测试间接覆盖,那棵树的 mock 成本高且脆。
   const quickPickKeys = useMemo(() => translateMode === "keyMapping" && showSimpleInput ? collectStringFieldNames(sourceText) : [], [translateMode, showSimpleInput, sourceText]);
   const selectedKeys = useMemo(() => new Set(splitTopLevelCommas(simpleInputKey).map((key) => key.trim()).filter(Boolean)), [simpleInputKey]);
+  const nodeSuggestions = useMemo(() => translateMode === "nodeKeys" ? collectJsonPaths(sourceText, { stringsOnly: true, includeContainers: true }) : [], [sourceText, translateMode]);
+  const selectiveSuggestions = useMemo(() => {
+    if (translateMode !== "selectiveKey" || !sourceText.trim()) return null;
+    try {
+      return inspectSelectiveJson(preprocessJson(sourceText), selectiveStartKey);
+    } catch { return null; }
+  }, [sourceText, translateMode, selectiveStartKey]);
+  const selectiveStructureHint = tJson("selectiveStructureHint", { allMode: tJson("allKeys"), fieldMode: tJson("keyMapping"), nodeMode: tJson("nodeKeys") });
 
 
   // ─── 收集 → 一次引擎调用 → 回写 ────────────────────────────────────────────
@@ -289,20 +300,29 @@ const JSONTranslator = () => {
       throw new Error(`${tJson("invalidPathKey")}: ${jsonPath}`);
     }
 
-    const nodes: CollectedNode[] = [];
+    const leaves: JsonPathNode[] = [];
     for (const node of pathNodes) {
       // 路径解析到字符串叶节点(工具自带示例 $.store.book[*].title 即是)——
       // 直接收叶子。旧逻辑静默跳过非对象节点,整次运行零翻译却报成功;更早
       // 的版本靠装箱借道 allKeys,收集器形态下 setter 天然指向叶子,箱子不用装。
       if (typeof node.value === "string") {
-        nodes.push({ value: node.value, write: (v) => ((node.parent as Record<string, JsonValue>)[node.parentProperty] = v) });
+        leaves.push(node);
         continue;
       }
       if (typeof node.value !== "object" || node.value == null) continue;
       // 子树的根不会是字符串(上面那个分支已经把字符串叶子收走),用树内版本。
-      nodes.push(...collectStringLeaves(node.value as JsonValue));
+      leaves.push(...JSONPath({ path: "$..*", json: node.value, resultType: "all" }) as JsonPathNode[]);
     }
-    return nodes;
+    // Parent and child suggestions may overlap; translate each actual field only once.
+    const seen = new WeakMap<object, Set<string>>();
+    return leaves.filter((node) => {
+      if (typeof node.value !== "string") return false;
+      const properties = seen.get(node.parent) ?? new Set<string>();
+      if (properties.has(node.parentProperty)) return false;
+      properties.add(node.parentProperty);
+      seen.set(node.parent, properties);
+      return true;
+    }).map((node) => ({ value: node.value as string, write: (v) => (node.parent[node.parentProperty] = v) }));
   };
 
   // 只翻译选中的字段的映射翻译:配对校验后,inputKey 的值 → outputKey 的槽位
@@ -412,12 +432,11 @@ const JSONTranslator = () => {
 
   // 扁平 json，单一键名，可选择起始翻译节点
   const collectSelectiveKey = (jsonObject: JsonValue): CollectedNode[] => {
+    const inspection = inspectSelectiveJson(jsonObject, selectiveStartKey);
+    if (!inspection.supported) throw new Error(selectiveStructureHint);
+    if (inspection.startMissing) throw new Error(tJson("selectiveStartMissing", { key: selectiveStartKey }));
     if (selectiveField.trim() === "") {
       throw new Error(`${t("enter")} ${tJson("fieldToTranslate")}`);
-    }
-
-    if (typeof jsonObject !== "object" || jsonObject === null || Array.isArray(jsonObject)) {
-      throw new Error(tJson("invalidJson"));
     }
 
     const rootRecord = jsonObject as Record<string, Record<string, JsonValue>>;
@@ -444,10 +463,6 @@ const JSONTranslator = () => {
 
       // Find start index if selectiveStartKey is provided
       const startIndex = selectiveStartKey ? objectKeys.indexOf(selectiveStartKey) : 0;
-      if (selectiveStartKey && startIndex === -1) {
-        throw new Error(`${tJson("invalidStartKey")}: ${selectiveStartKey}`);
-      }
-
       // Get relevant keys (all keys if no start node, or keys from start index onwards)
       const relevantKeys = startIndex === -1 ? objectKeys : objectKeys.slice(startIndex);
 
@@ -457,7 +472,7 @@ const JSONTranslator = () => {
       const nodesToTranslate = relevantKeys
         .map((key) => ({
           key: key,
-          value: rootRecord[key]?.[inputKey],
+          value: isJsonObject(rootRecord[key]) ? rootRecord[key][inputKey] : undefined,
         }))
         .filter((node): node is { key: string; value: string } => typeof node.value === "string");
 
@@ -1033,18 +1048,22 @@ const JSONTranslator = () => {
                               />
                             </Form.Item>
                           ) : (
-                            <KeyMappingInput keyMappings={keyMappings} setKeyMappings={setKeyMappings} />
+                            <KeyMappingInput keyMappings={keyMappings} setKeyMappings={setKeyMappings} suggestions={collectStringFieldNames(sourceText)} />
                           )}
                         </Section>
                       )}
 
                       {translateMode === "selectiveKey" && (
                         <Section style={{ marginBottom: token.marginMD }}>
-                          <Form.Item label={tJson("startKey")} extra={tJson("StartKeyExtra")} className="!mb-1">
-                            <Input value={selectiveStartKey} onChange={(e) => setSelectiveStartKey(e.target.value)} placeholder={`${t("example")}: fetchError`} aria-label={tJson("startKey")} />
+                          <Text dir="ltr" style={{ display: "block", overflowWrap: "anywhere", marginBottom: token.marginXS }}>
+                            {`${t("example")}: {"item1": {"title": "Hello"}}`}
+                          </Text>
+                          {selectiveSuggestions && !selectiveSuggestions.supported && <Text type="warning" role="status">{selectiveStructureHint}</Text>}
+                          <Form.Item label={tJson("startKey")} htmlFor="json-selective-start" extra={tJson("StartKeyExtra")} validateStatus={selectiveSuggestions?.startMissing ? "warning" : undefined} help={selectiveSuggestions?.startMissing ? <span id="json-selective-start-hint">{tJson("selectiveStartMissing", { key: selectiveStartKey })}</span> : undefined} className="!mb-1">
+                            <JSONFieldInput id="json-selective-start" value={selectiveStartKey} onChange={setSelectiveStartKey} suggestions={selectiveSuggestions?.starts ?? []} placeholder={`${t("example")}: fetchError`} aria-label={tJson("startKey")} aria-describedby={selectiveSuggestions?.startMissing ? "json-selective-start-hint" : undefined} />
                           </Form.Item>
                           <Form.Item label={tJson("fieldToTranslate")} extra={tJson("fieldToTranslateExtra")} className="!mb-0">
-                            <Input value={selectiveField} onChange={(e) => setSelectiveField(e.target.value)} placeholder={`${t("example")}: message`} aria-label={tJson("fieldToTranslate")} />
+                            <JSONFieldInput value={selectiveField} onChange={setSelectiveField} suggestions={selectiveSuggestions?.fields ?? []} multiple placeholder={`${t("example")}: message`} aria-label={tJson("fieldToTranslate")} />
                           </Form.Item>
                         </Section>
                       )}
@@ -1052,9 +1071,11 @@ const JSONTranslator = () => {
                       {translateMode === "nodeKeys" && (
                         <Section style={{ marginBottom: token.marginMD }}>
                           <Form.Item label={tJson("nodeToTranslate")} extra={`${tJson("nodeToTranslateExtra")} ${tJson("multiValueHint")}`} className="!mb-0">
-                            <Input
+                            <JSONFieldInput
                               value={nodeKeysPath}
-                              onChange={(e) => setNodeKeysPath(e.target.value)}
+                              onChange={setNodeKeysPath}
+                              suggestions={nodeSuggestions}
+                              multiple
                               placeholder={`${t("example")}: content,data.title`}
                               aria-label={tJson("nodeToTranslate")}
                             />
